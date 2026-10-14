@@ -1,0 +1,40 @@
+name: CI
+
+# Chi `main` + PR: nhanh `claude/*` da chay `npm run do` o may ao truoc khi commit.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  kiem-tra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # Chay TRUOC moi thu: repo Public, lich su git khong sua duoc tu may ao — khoa lot vao la lo vinh vien.
+      - name: Khoa API lot vao git
+        run: npm run check:khoa
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Duong dan goc
+        run: npm run check:base

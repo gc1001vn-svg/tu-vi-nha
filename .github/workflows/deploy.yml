@@ -1,0 +1,67 @@
+name: Deploy
+
+# Dua ban build len GitHub Pages moi lan `main` doi.
+# May ao cua Claude chan het nha cung cap hosting, nen deploy giao cho may CI cua GitHub.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Chi can quyen cua chinh GITHUB_TOKEN, khong dung khoa ben ngoai nao.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  dung:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # GITHUB_TOKEN khong co quyen TAO Pages site (quoc-chien do 06/09): chu du an bat tay mot lan
+      # o Settings > Pages > Source: GitHub Actions. Bat roi thi buoc nay chi doc cau hinh.
+      - uses: actions/configure-pages@v5
+
+      - run: npm run build
+
+      - name: Duong dan goc
+        run: npm run check:base
+
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  dua-len:
+    needs: dung
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
+
+      # May ao cua Claude khong mo duoc trang that: buoc nay chay tren may CI va in ket qua ra nhat ky.
+      - name: Kiem trang da len
+        run: |
+          goc="${{ steps.deploy.outputs.page_url }}"
+          echo "Dia chi: $goc"
+          for duong in "" "manifest.webmanifest" "icons/icon-192.png"; do
+            ma=$(curl -s -o /tmp/tra -w '%{http_code}' --retry 5 --retry-delay 4 --retry-all-errors "${goc}${duong}")
+            echo "  ${duong:-/} -> HTTP $ma ($(wc -c </tmp/tra) byte)"
+            [ "$ma" = "200" ] || { echo "::error::${duong:-/} tra ve $ma"; exit 1; }
+          done
+          curl -s "$goc" | grep -o '<title>[^<]*</title>'
