@@ -35,7 +35,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
   Phá Toái 67 % · Linh Tinh 60 % · Hỏa Tinh 57 % · Thiên Khôi, Thiên Việt 42 % · Hóa Khoa 19 % · Hóa Kỵ 11 % · Thiên Trù 9 %.
 - Sao chỉ có ở một bên: chưa so. `ansaotuvi` cũng chỉ là MỘT cách an sao Việt — chuẩn cuối là lá số từ trang anh tin.
 
-**Đối chiếu altuvi.com (trang anh tin; ảnh anh chụp 14/10; 4 lá số ngày sinh giả — `scripts/doi-chieu/mau-altuvi.json`, `so-altuvi.*`):**
+**Đối chiếu altuvi.com (trang anh tin; ảnh anh chụp 14/10; 5 lá số ngày sinh giả — `scripts/doi-chieu/mau-altuvi.json`, `so-altuvi.*`):**
 
 | Ca | Sinh | `ansaotuvi` khớp | `iztro` khớp |
 |---|---|---|---|
@@ -43,19 +43,22 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 | B | Nữ 08/01/1997 giờ Mùi (30/11 âm) | 67/69 | 33/57 — từ chối ngày 30 âm VN, lùi lịch TQ thì lệch cả 14 chính tinh |
 | C | Nam 15/04/2023 giờ Tỵ (25/2 **nhuận**) | 67/69 | 43/57 — lệch cả Mệnh, Thân |
 | D | Nữ 15/06/1970 giờ Thìn | 63/69 | 52/57 |
-| **Tổng** | | **263/276 (95 %)** | **182/228 (80 %)** |
+| E | Nam 02/02/2001 giờ Mão (sau Tết, trước Lập Xuân) | 66/69 | 53/57 |
+| **Tổng** | | **329/345 (95 %)** | **235/285 (82 %)** |
 
-- Ngày âm khớp HND +7 cả 5 mốc (4 ca + 14/10/2026 = 5/9 Bính Ngọ). Mệnh, Thân `ansaotuvi` khớp Altuvi 4/4.
+- Ngày âm khớp HND +7 cả 6 mốc (5 ca + 14/10/2026 = 5/9 Bính Ngọ). Mệnh, Thân `ansaotuvi` khớp Altuvi 5/5.
 - **Kết luận: lõi tử vi theo `ansaotuvi` (chép sang TypeScript), không theo `iztro`.** Chỗ `ansaotuvi` khác Altuvi → theo Altuvi:
-  - **Thiên Giải** lệch cả 4 ca. Altuvi = khởi Thân tháng Giêng, đi thuận đến tháng sinh (khớp 4/4).
-  - **Phá Toái** lệch ca B, C. Altuvi = năm Tý Ngọ Mão Dậu → Tỵ · Dần Thân Tỵ Hợi → Dậu · Thìn Tuất Sửu Mùi → Sửu (khớp 4/4).
-  - **Hỏa Tinh, Linh Tinh** lệch ca A (năm Sửu, nam) — chưa rõ luật, đợt 2 tra.
+  - **Thiên Giải** lệch 4/5 ca. Altuvi = khởi Thân tháng Giêng, đi thuận đến tháng sinh (khớp 5/5).
+  - **Phá Toái** lệch ca B, C, E. Altuvi = năm Tý Ngọ Mão Dậu → Tỵ · Dần Thân Tỵ Hợi → Dậu · Thìn Tuất Sửu Mùi → Sửu (khớp 5/5).
+  - **Hỏa Tinh, Linh Tinh** lệch ca A, E (năm Sửu, Tỵ). Altuvi = khởi theo năm: Dần Ngọ Tuất (Hỏa Sửu, Linh Mão) · Thân Tý Thìn
+    (Dần, Tuất) · Tỵ Dậu Sửu (Mão, Tuất) · Hợi Mão Mùi (Dậu, Tuất); dương nam/âm nữ Hỏa thuận Linh nghịch, ngược lại thì đảo —
+    đếm tới giờ sinh (khớp 5/5, em tự suy từ 5 lá số).
   - **Năm Canh (ca D):** Altuvi Khôi Ngọ, Việt Dần · Hóa Khoa Thái Âm, Hóa Kỵ Thiên Đồng · Lưu Hà Thìn. `ansaotuvi` theo phái
     khác (Khôi Mùi, Việt Sửu, Khoa Đồng, Kỵ Âm, Lưu Hà Thân) → tuỳ chọn, mặc định Altuvi.
 - **Tháng nhuận:** Altuvi tính **cả tháng nhuận như tháng trước** (ca C: 25/2 nhuận → tháng 2), giống `ansaotuvi`.
   `iztro` cắt đôi tháng nhuận (sau ngày 15 sang tháng sau) → lệch.
 - Altuvi **không có ô nơi sinh**: ca D (Sài Gòn 1970, khi đó giờ +8) lấy đúng giờ nhập, không lùi 1 giờ → tuỳ chọn ở app.
-- Ca 5 (sau Tết, trước Lập Xuân) không cần: tử vi luôn lấy năm âm; ranh Lập Xuân chỉ đổi bát tự, Altuvi không có bát tự.
+- Ca E (sau Tết 24/01, trước Lập Xuân 04/02/2001): Altuvi lấy năm Tân Tỵ — tử vi tính năm theo Tết, đúng dự kiến.
 
 ## Thư viện — chỉ dùng để đối chiếu khi kiểm (không vào app)
 

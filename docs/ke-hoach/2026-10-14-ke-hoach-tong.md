@@ -24,7 +24,7 @@ Khung: Vite + TypeScript + PWA + vitest như `quoc-chien` (không React — lá 
 | 7 | Ảnh + AI trả phí: tướng mặt (đo trong máy), chỉ tay, hỏi đáp, lời tổng hợp mọi môn · khoá API nhập trên từng máy, không bao giờ vào repo, đặt hạn mức chi · ảnh lấy bằng nút chọn/chụp ảnh, không mở camera trực tiếp |
 | 8 | Kỳ Môn Độn Giáp (chép `kinqimen`), Huyền Không nhà, xin xăm, cân xương — chỉ khi đủ nguồn |
 
-Tử vi (đợt 2) — đã quyết bằng số đo 14/10, 4 lá số Altuvi: `ansaotuvi` khớp 263/276 sao, `iztro` 182/228 → chép `ansaotuvi`
+Tử vi (đợt 2) — đã quyết bằng số đo 14/10, 5 lá số Altuvi: `ansaotuvi` khớp 329/345 sao, `iztro` 235/285 → chép `ansaotuvi`
 (~2.100 dòng Python, MIT) sang TypeScript; chỗ lệch (Thiên Giải, Phá Toái, Hỏa/Linh, năm Canh) theo Altuvi — `docs/NGUON_MO.md`.
 
 Quy ước (chốt ở đợt 0): ranh năm Tết hay Lập Xuân từng môn · tuổi mụ · giờ Tý · tháng nhuận · giờ mặt trời thực ·
@@ -43,4 +43,4 @@ Giả sử A hỏng — ba lý do:
 
 Lùi bằng: mỗi đợt gộp `main` một lần, hỏng thì `git revert`. Dữ liệu người dùng không vào repo; app có xuất/nhập file sao lưu.
 KHÔNG làm: App Store · đăng nhập, máy chủ · thu phí · giải mộng ra số lô đề · Vệ Đà, Maya.
-Đã có: anh gật 14/10 · trang chuẩn altuvi.com, 4 ca mẫu (đủ). Cần anh: không có.
+Đã có: anh gật 14/10 · trang chuẩn altuvi.com, 5 ca mẫu (đủ). Cần anh: không có.
