@@ -3,7 +3,8 @@
 #   venv Python + ansaotuvi, 4 thu vien JS ghim dung ban nhu NGUON_MO, roi chay
 #   tv_py.py -> so.mjs -> lich.mjs -> so-altuvi.py + so-altuvi.mjs -> sinh_vang_am_lich.py (ghi tests/vang/).
 # Chay: bash scripts/doi-chieu/chay.sh [thu_muc_tam]   (mac dinh ${TMPDIR:-/tmp}/tu-vi-doi-chieu)
-# Mat bao lau (do 14/10/2026, may ao 4 nhan): THOI_GIAN
+# Mat bao lau (do 14/10/2026, may ao 4 nhan): lan dau 6 phut 48 giay (thu muc tam moi, cache npm/pip rong),
+#   chay lai 6 phut 42 giay. Gan het la so.mjs (383 giay, iztro lap 6.000 la so); cai dat chi vai giay.
 set -euo pipefail
 D="$(cd "$(dirname "$0")" && pwd)"
 S="${1:-${TMPDIR:-/tmp}/tu-vi-doi-chieu}"
