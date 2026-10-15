@@ -18,7 +18,7 @@ thư viện + số đo `docs/NGUON_MO.md` — đọc khi làm tới đúng môn,
 |---|---|
 | `npm ci` | chưa có `node_modules` |
 | `npm run do` | **luôn**, trước khi động vào mã và trước mỗi commit — số thước tự in, đừng chép vào đây |
-| `bash scripts/doi-chieu/chay.sh` | khi cần đo lại thư viện với nhau (cài Python/npm vào thư mục tạm, không đụng repo) |
+| `bash scripts/doi-chieu/chay.sh` | đo lại thư viện với nhau, ~7 phút (cài Python/npm vào thư mục tạm, không đụng repo) |
 | `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/sinh_am_doi_chieu.mjs` | khi nâng `lunar-typescript` — sinh lại âm Hán–Việt độc lập cho thước đối chiếu |
 | `python3 scripts/ve_icon.py` | vẽ lại icon (Thái cực + Bát quái, anh chọn 14/10) |
 

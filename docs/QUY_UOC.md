@@ -146,4 +146,4 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.
 2. Giờ đồng hồ thời dùng +8/+9 (miền Nam 1960–6/1975 và các giai đoạn ở bảng mục 7): app **tự lùi về +7** rồi mới tính; vẫn có tuỳ chọn giữ giờ nhập như Altuvi.
 3. Cung phi của người sinh giữa Tết và Lập Xuân: theo **Lập Xuân**.
-4. Ảnh lịch ngày 10/02 và 10/03/2026 (12 trực, hoàng đạo theo tiết hay tháng âm): **chờ anh chụp** — gộp vào lời nhờ chụp ở `docs/TIEN_DO.md`.
+4. Ảnh lịch 7 ngày (`docs/TIEN_DO.md` mục 3) — **chờ anh chụp**: biết 12 trực, hoàng đạo theo tiết hay tháng âm (10/02, 10/03/2026), và ngày âm trước 1968 tính theo +7 hay +8 (lịch Việt thời đó có thể theo +8 — `docs/NGUON_MO.md`). Tạm theo HND +7 (`CLAUDE.md` luật 3).

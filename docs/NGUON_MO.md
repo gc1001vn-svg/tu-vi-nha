@@ -13,7 +13,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 | `lunar-typescript` | 1.8.6 · MIT | **Chọn dùng (14/10)** — bản TypeScript của `lunar-javascript`, cùng tác giả, có sẵn khai kiểu. Chữ ra tiếng Trung → bảng Hán–Việt `src/loi/hanViet/` | 1, 3 | máy: 73.414 ngày 1900–2100 ra y hệt `lunar-javascript` 1.7.7 (42 hàm mỗi ngày; cửu tinh, bát tự, 13 giờ mỗi 7 ngày), **trừ** `getDayXiongSha` 300 ngày lộ mã i18n `sn.sanSang`, `sn.guiKu`, `sn.siLi`, `sn.daTui` thay cho 三丧 鬼哭 四离 大退 — lỗi thư viện, bảng Hán–Việt đỡ (`scripts/doi-chieu/so-lunar-ts.mjs`) |
 | `tyme4ts` | 1.5.3 · MIT | Bản mới của cùng tác giả `lunar` (cập nhật 03/10/2026) | 1, 3 | máy: chưa xem chức năng bát tự |
 | `@tuquet/lunar` | 0.1.0 · MIT | **Âm lịch Việt Nam — chọn dùng.** Khớp thuật toán HND (+7) mọi ngày 1901–2100 | 1 | máy: chạy 73.383 ngày. Mới (09/2026), một tác giả → nhỏ, chép vào repo được nếu bị bỏ |
-| `@dqcai/vn-lunar` | 1.0.1 · MIT | Âm lịch Việt Nam — **bỏ**: khác HND 987 ngày, rải 30 năm (1903–1967, 2054–2077) | — | máy |
+| `@dqcai/vn-lunar` | 1.0.1 · MIT | Âm lịch Việt Nam — **bỏ**: khác HND 987 ngày, rải 30 năm (1900–1967, 2054–2077) | — | máy |
 | `circular-natal-horoscope-js` | 1.1.0 · Unlicense | Lá số chiêm tinh Tây: hành tinh, cung nhà (nhiều hệ), góc chiếu. Cũ (2022), dựa `moment` | 6 | máy |
 | `astronomy-engine` | 2.1.19 · MIT | Vị trí Mặt Trời, Mặt Trăng, hành tinh (dự phòng/đối chiếu) | 6 | máy |
 | `@mediapipe/tasks-vision` | 1.1.0 · Apache-2.0 | Điểm mốc khuôn mặt, bàn tay — chạy ngay trong máy | 7 | máy; chạy trên iPhone thật: **chưa** |
@@ -25,6 +25,8 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 - HND giờ VN (+7) khác HND giờ Bắc Kinh (+8): **2.814 ngày** — lịch âm VN và TQ khác nhau thật.
 - `lunar-javascript` (lịch TQ) khác HND +7: **2.785 ngày** → **không dùng nó để ra ngày âm VN.**
 - `@tuquet/lunar` khác HND +7: **59 ngày, đều năm 1900** (vị trí tháng nhuận). `@dqcai/vn-lunar`: 987 ngày.
+- `ansaotuvi.S2L` (HND) và `@tuquet/lunar` trả **ngày âm 0** cho 07/05/2054 và 09/04/2062 (lỗi ở ranh tháng); bảng vàng `tests/vang/am-lich-hnd.json` ghi 30/3/2054, 30/2/2062 (khớp `lunar-javascript`) → đợt 1 chặn riêng 2 ngày này. Đo 15/10.
+- `@dqcai/vn-lunar` trước 1968 trùng HND **+8** (24.594 ngày, khác 211), 1968–2030 trùng +7: giống lịch Việt trước 1968 tính theo +8 (suy từ số, chưa có tài liệu) → chờ ảnh anh chụp (`docs/TIEN_DO.md`).
 - Mốc đã biết khớp: Tết 1985 VN 21/01 (TQ 20/02) · Tết 2007 VN 17/02 (TQ 18/02) · Tết 2026 cả hai 17/02.
 - Chưa có nguồn thứ ba độc lập (trang HND bị chặn) → đợt 0 nhờ anh chụp 3–5 trang lịch âm từ app anh tin.
 

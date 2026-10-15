@@ -9,3 +9,6 @@ check_ke_hoach.nguong=60
 check_ke_hoach.mien=2
 
 # 2026-10-14 dung moc dau tien, lay dung so dang chay. Chua noi lan nao.
+
+# 2026-10-15 them tran file doc dau phien (moi — chat hon khong co tran).
+doc_dau_phien.tong=1500
