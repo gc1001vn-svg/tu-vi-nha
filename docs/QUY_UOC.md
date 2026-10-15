@@ -3,12 +3,10 @@ File này chốt cách tính dùng chung cho mọi môn (âm lịch, tử vi, b�
 Người đọc: Claude các phiên sau. Đọc mục liên quan trước khi viết mã một môn; muốn làm khác thì sửa file này trước, kèm nguồn.
 Luật: chỗ các trường phái vênh nhau thì làm thành **một tuỳ chọn có mặc định** (bảng cuối file). Chuẩn cuối của tử vi là lá số Altuvi anh gửi, không phải thư viện.
 Tra 14/10/2026. Cột "Đã kiểm": **máy** = đọc mã hoặc chạy thử thư viện trong máy ảo; **web** = đoạn trích kết quả tìm kiếm (máy ảo chặn mở trang gốc). Ký hiệu A, M…, W… xem mục "Nguồn".
-
 ## 0. Nguyên tắc chung
 - Lịch âm luôn tính theo +7 (thuật toán Hồ Ngọc Đức, `@tuquet/lunar`) cho mọi năm [W13]. Hồ sơ lưu ngày dương + giờ đồng hồ + nơi sinh; ngày âm chỉ là kết quả tính ra.
 - Mốc thiên văn (sóc, tiết khí, Lập Xuân) thì so bằng thời khắc tuyệt đối; can chi ngày, chi giờ, ngày âm thì lấy theo đồng hồ +7 (đã đổi múi giờ, mục 7). `lunar-typescript` và `sxtwl` trả giờ tiết theo Bắc Kinh (+8): phải trừ 1 giờ, và đừng đưa giờ +8 vào để lấy can chi ngày (23:30 ở VN là 00:30 hôm sau ở Bắc Kinh) [M4, M5]. Ví dụ: Lập Xuân 2013 là 04/02 00:13 giờ Bắc Kinh, tức 03/02 23:13 giờ VN; báo VN ghi ngày 3/2 [W6].
 - Kết quả nào dùng tuỳ chọn khác mặc định thì ghi rõ tuỳ chọn đó ngay trên màn hình.
-
 ## 1. Ranh năm: Tết hay Lập Xuân
 | Môn | Mặc định | Tuỳ chọn khác | Vì sao chọn mặc định | Nguồn | Đã kiểm |
 |---|---|---|---|---|---|
@@ -22,7 +20,6 @@ Tra 14/10/2026. Cột "Đã kiểm": **máy** = đọc mã hoặc chạy thử t
 | Xem ngày | can chi ngày theo ngày dương; năm in trên lịch theo Tết; thần sát năm (Thái Tuế, Tam Sát…) theo Lập Xuân, **chưa chắc** | — | `getYearPositionTaiSui` mặc định Lập Xuân; chưa có nguồn thứ hai | M4 | máy |
 | Chiêm tinh | không dùng năm âm; mọi mốc theo giờ UTC | — | — | — | — |
 | Thần số học: năm cá nhân | 01/01 | sinh nhật | phần đông đổi số ngày 01/01 | W15 | web |
-
 ## 2. Ranh tháng: tháng âm (theo sóc) hay tháng tiết
 | Môn | Mặc định | Tuỳ chọn khác | Vì sao | Nguồn | Đã kiểm |
 |---|---|---|---|---|---|
@@ -33,12 +30,10 @@ Tra 14/10/2026. Cột "Đã kiểm": **máy** = đọc mã hoặc chạy thử t
 | Xem ngày: ngày kiêng ghi theo ngày âm (Tam Nương 3, 7, 13, 18, 22, 27; Nguyệt Kỵ 5, 14, 23) | tháng âm | — | quy tắc vốn ghi theo ngày âm | W18 | web |
 
 Ngày thử để chốt dòng 12 trực (máy, `lunar-typescript`). Ngày 10/02/2026 (23/12 âm): theo tiết là trực Trừ, ngày hắc đạo; theo tháng âm là trực Mãn, ngày hoàng đạo. Ngày 10/03/2026 (22/1 âm): theo tiết là trực Định; theo tháng âm là trực Chấp.
-
 ## 3. Tuổi mụ
 - **Tuổi mụ = năm âm của ngày xem − năm âm của ngày sinh + 1.** Cả hai năm đều tính theo Tết, lịch +7. Không dùng "tuổi dương + 1" (sai với người sinh trước Tết). Ví dụ, xem ngày 14/10/2026: người sinh 20/01/2001 (trước Tết 24/01/2001, nên năm âm là 2000) được 27 tuổi mụ; người sinh 02/02/2001 được 26.
 - Dùng cho Kim Lâu, Hoang Ốc, sao hạn, tiểu hạn tử vi và tuổi hiển thị. Tuỳ chọn khác: đổi tuổi ở sinh nhật âm (`iztro` `ageDivide:'birthday'`); chưa thấy nguồn Việt nên không làm.
 - Nguồn: W7 (tăng 1 tuổi mỗi Tết; năm hiện tại − năm sinh + 1), W21, M3 (`nominalAge`). Vênh: vài trang (mytour, hellobacsi) đoán theo tháng dương lúc sinh; bỏ cách đó. Đã kiểm: máy+web.
-
 ## 4. Giờ Tý (23:00–00:59)
 Tý muộn (晚子时/夜子时) là 23:00–23:59; Tý sớm (早子时) là 00:00–00:59. W8b gọi ngược hai tên này, nên đọc nguồn tiếng Anh phải để ý. Với người sinh giờ Tý muộn có 3 phái:
 
@@ -52,7 +47,6 @@ Tý muộn (晚子时/夜子时) là 23:00–23:59; Tý sớm (早子时) là 00
 - **Mặc định: phái A cho cả tử vi và bát tự**, vì một người chỉ có một ngày sinh (câu hỏi 1). Tử vi chỉ có A hoặc C, vì không dùng can giờ. Khi gọi `lunar-typescript` thì đặt `setSect(1)`; khi so với `sxtwl` thì đưa ngày hôm sau.
 - Altuvi: ô giờ có vẻ chọn theo 12 chi (mẫu ghi "Tỵ (9-11h)"), nên lấy đúng ngày nhập, không phân biệt sinh 23 giờ với sinh 0 giờ. Chưa tìm thấy nguồn tiếng Việt bàn rõ chuyện này, nên **chưa chắc**.
 - Xem ngày: can chi ngày in theo ngày dương (đổi lúc 00:00); giờ hoàng đạo của khung 23:00–23:59 xét theo ngày hôm sau (`getTimeTianShen`), **chưa chắc**.
-
 ## 5. Tháng nhuận
 | Môn | Mặc định | Tuỳ chọn khác | Nguồn | Đã kiểm |
 |---|---|---|---|---|
@@ -62,12 +56,10 @@ Tý muộn (晚子时/夜子时) là 23:00–23:59; Tý sớm (早子时) là 00
 | Ngày kiêng theo ngày âm | vẫn áp trong tháng nhuận, theo số ngày (em suy ra, **chưa chắc**) | — | W18 | web |
 
 Tuổi mụ, Kim Lâu, sao hạn, cung phi tính theo năm nên không bị tháng nhuận ảnh hưởng. Ô nhập ngày âm phải có dấu "nhuận". Tháng nhuận là tháng không có trung khí, mang số của tháng trước [W13].
-
 ## 6. Giờ mặt trời thực (真太阳时)
 - **Mặc định tắt cho mọi môn**: dùng giờ đồng hồ đã đổi về +7 (mục 7). Tuỳ chọn bật được cho tử vi và bát tự, theo công thức: giờ mặt trời = giờ +7 + 4 phút × (kinh độ − 105°) + phương trình thời gian [W16].
 - Vì sao tắt: Altuvi không có ô nơi sinh (ca D lấy đúng giờ nhập); `ansaotuvi`, `iztro` chỉ nhận chi giờ, không nhận kinh độ; `bazi_core` mặc định dùng giờ đồng hồ (`clockMode: civil`); tài liệu tiếng Trung coi đây là chuyện tuỳ phái [A, M2, M3, M6, W16]. Đã kiểm: máy+web.
 - Mức lệch ở VN (máy, `astronomy-engine`): phương trình thời gian năm 2026 chạy từ −14,2 phút (11/02) tới +16,4 phút (03/11). Cộng thêm phần do kinh độ: Hà Nội −11…+20 phút, TP.HCM −7…+23, Đà Nẵng −1…+29, Nha Trang +3…+33. Khi đang tắt mà giờ mặt trời rơi sang chi giờ khác thì báo như mục 8. Chiêm tinh không dùng mục này: luôn tính theo giờ UTC và toạ độ nơi sinh.
-
 ## 7. Múi giờ lịch sử Việt Nam
 | Từ (giờ địa phương) | Miền Bắc | Miền Nam (phía nam vĩ tuyến 17, từ 1955) |
 |---|---|---|
@@ -87,9 +79,8 @@ Tuổi mụ, Kim Lâu, sao hạn, cung phi tính theo năm nên không bị thá
 - Bảng VN **viết cứng trong `src/loi/`**, vì: `Intl` không có `Asia/Hanoi` (máy: Node 22 báo lỗi); `Asia/Ho_Chi_Minh` là giờ miền Nam, dùng cho Hà Nội 1960–1975 sẽ ra +8, sai (tz gợi ý `Asia/Bangkok` cho miền Bắc từ 1970); dữ liệu tz của VN vẫn còn được sửa (năm 2024 sửa mốc 1955). Nơi sinh ngoài VN thì lớp giao diện lấy độ lệch từ `Intl` rồi truyền vào lõi (lõi cấm dùng locale).
 - Giờ bị lặp hoặc bị bỏ lúc đổi múi (vd 22:00–24:00 ngày 01/09/1945 lặp hai lần; 23:00–24:00 ngày 31/12/1959 không tồn tại) thì hiện cả hai (mục 8).
 - Ngày âm ghi trong giấy tờ cũ có thể theo lịch +8. Miền Bắc tính lịch theo múi 7 từ 1968 [W11, W12]. Miền Nam ăn Tết Mậu Thân ngày 30/01/1968 [W14], đúng với lịch +8; lịch +7 ra 29/01 [M9]. Lịch +7 và lịch +8 khác nhau ở 539/13.879 ngày (1930–1967) và 120/2.720 ngày (01/1968–06/1975) [M9]. Vì vậy lấy ngày dương làm gốc; ai chỉ có ngày âm trước các mốc đó mà hai lịch ra khác nhau thì app hỏi lại.
-
 ## 8. Giờ sinh sát ranh (±15 phút)
-Giờ sinh (đã đổi về +7) cách một ranh không quá 15 phút thì tính cả hai bên và hiện cả hai kết quả, ghi rõ là ranh nào. Không có tuỳ chọn khác (kế hoạch tổng đã chốt). Các ranh lấy từ mục 1–7, nguồn ở các mục đó.
+Giờ sinh (đã đổi về +7) cách một ranh không quá 15 phút thì tính cả hai bên và hiện cả hai kết quả, ghi rõ là ranh nào. Không có tuỳ chọn khác (kế hoạch tổng đã chốt). Các ranh lấy từ mục 1–7, nguồn ở các mục đó. Thần số học chỉ dùng ngày dương nên không áp dụng.
 
 | Ranh | Mốc (giờ +7) | Môn bị ảnh hưởng |
 |---|---|---|
@@ -100,9 +91,6 @@ Giờ sinh (đã đổi về +7) cách một ranh không quá 15 phút thì tín
 | Tết | đầu ngày mùng 1 Giêng (23:00 đêm giao thừa nếu theo phái A) | tử vi, tuổi mụ, Kim Lâu, Hoang Ốc, Tam Tai, sao hạn, con giáp |
 | Chiêm tinh | lúc Mặt Trời, Mặt Trăng, cung Mọc đổi cung | chiêm tinh |
 | Múi giờ | giờ lặp hoặc bỏ lúc đổi múi; miền Bắc 1947–1954 (+7 hay +8) | mọi môn có dùng giờ |
-
-Thần số học chỉ dùng ngày dương nên không áp dụng.
-
 ## 9. Không rõ giờ sinh
 | Môn | Cách làm |
 |---|---|
@@ -113,12 +101,10 @@ Thần số học chỉ dùng ngày dương nên không áp dụng.
 | Kinh Dịch, bói Kiều, tarot, xin xăm, tướng mặt, chỉ tay | Không cần giờ sinh |
 
 Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungChu`); `iztro` bắt buộc có `timeIndex`; `lunar-typescript` tính khởi vận theo quy ước 3 ngày tới tiết = 1 năm, 6 giờ = 1 tháng.
-
 ## 10. Chữ (đã chốt; áp cho chữ hiện trong app và bảng dữ liệu)
 - Unicode NFC. Dấu thanh kiểu cũ như Altuvi và sách tử vi: Hỏa, Thủy, Hóa, Hòa (không viết Hoả, Thuỷ, Hoá, Hoà). Viết "Tỵ", "Kỷ", "Kỵ" (không viết Tị, Kỉ, Kị).
 - Tên riêng viết hoa mỗi chữ: can chi ("Giáp Tý"), sao và thần sát ("Thiên Đức"), tiết khí ("Lập Xuân"), trực, tú, nạp âm ("Hải Trung Kim"). Việc nên/kiêng và lời giải chỉ viết hoa chữ đầu ("Cúng tế").
 - Ngày viết dạng dd/mm/yyyy, giờ viết dạng 24h (07:05).
-
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -131,7 +117,6 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `namCaNhan` | `ngay0101` · `sinhNhat` | `ngay0101` | thần số học |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
-
 ## Nguồn
 **Máy** (cài vào thư mục tạm, không cài vào repo):
 - A: 5 lá số Altuvi (`scripts/doi-chieu/mau-altuvi.json`, so bằng `so-altuvi.*`). Ca E ra năm Tân Tỵ; ca A, B có ngày âm khớp lịch +7 (lịch +8 ra 24/1 và 29/11); ca C sinh 25/2 nhuận được tính tháng 2; ca D lấy đúng giờ nhập.
@@ -151,14 +136,11 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W9 https://vocus.cc/article/69c49d6ffd897800017aead7: cách chủ lưu là qua 23:00 đã đổi trụ ngày. W10 https://www.163.com/dy/article/EEB7TVDL0525AEBH.html: cổ pháp lấy 23:00 làm đầu ngày; chia ở 00:00 là cách có từ khi có đồng hồ Tây.
 - W11 https://tienphong.vn/xa-hoi/8102/Truoc-nam-1975-Viet-Nam-su-dung-2-mui-gio.html · W12 https://thuvienphapluat.vn/van-ban/Linh-vuc-khac/Quyet-dinh-121-CP-tinh-lich-quan-ly-lich-cua-Nha-nuoc-18212.aspx
 - W13 https://informatik.uni-leipzig.de/~duc/amlich/calrules_en.html (Hồ Ngọc Đức): lịch VN tính theo kinh tuyến 105°Đ; tháng không có trung khí là tháng nhuận. W14 https://www.cia.gov/readingroom/document/02008421: ở miền Nam, ngày 30/01/1968 là mùng 1 Tết.
-- W15 https://satyori.com/glossary/personal-year/ · https://roxyapi.com/tools/numerology/personal-year: năm cá nhân phần đông đổi ngày 01/01, một số phái đổi ở sinh nhật.
-- W16 https://glama.ai/mcp/servers/@spyfree/mingli-mcp/blob/30212c4c7b479c57f593ac609cf3dc1a0ebd27d6/docs/TRUE_SOLAR_TIME.md: giờ mặt trời thực = giờ địa phương theo kinh độ (4 phút mỗi độ) + phương trình thời gian; dùng hay không là tuỳ phái.
+- W15 https://satyori.com/glossary/personal-year/ · https://roxyapi.com/tools/numerology/personal-year: năm cá nhân phần đông đổi ngày 01/01, một số phái đổi ở sinh nhật. W16 https://glama.ai/mcp/servers/@spyfree/mingli-mcp/blob/30212c4c7b479c57f593ac609cf3dc1a0ebd27d6/docs/TRUE_SOLAR_TIME.md: giờ mặt trời thực = giờ địa phương theo kinh độ (4 phút mỗi độ) + phương trình thời gian; dùng hay không là tuỳ phái.
 - W17 https://blog.udn.com/PAESI15/178744882: tử vi gặp tháng nhuận thì nửa đầu tính tháng đó, nửa sau tính tháng sau (chỗ khác trong bài ghi cả tháng tính tháng sau); bát tự theo tiết nên không vướng tháng nhuận.
 - W18 https://fptshop.com.vn/tin-tuc/danh-gia/ngay-tam-nuong-la-ngay-gi-175689 · https://fptshop.com.vn/tin-tuc/danh-gia/ngay-nguyet-ky-la-gi-175380. W19 https://www.momo.vn/blog/nam-2026-tuoi-gi-bi-kip-chuan-bi-tai-chinh-c116dt2351 · https://vtcnews.vn/nam-2026-la-nam-con-gi-ar992583.html: năm Bính Ngọ kéo dài từ Tết 17/02/2026 tới 05/02/2027.
-- W20 https://muaban.net/blog/tuoi-1996-lam-nha-nam-2026-608394/ · https://fptshop.com.vn/tin-tuc/for-gamers/xem-tuoi-lam-nha-2026-209116: Kim Lâu, Hoang Ốc tính theo tuổi mụ (người sinh 1996, năm 2026 được 31 tuổi mụ).
-- W21 https://luatminhkhue.vn/bang-tinh-sao-han-va-cuu-dieu-nam-binh-ngo-2026.aspx · https://thuvienphapluat.vn/cong-dong-dan-luat/bang-sao-han-nam-2025-at-ty-cho-cac-tuoi-216641.html: lấy tuổi âm chia 9, nam và nữ đi vòng khác nhau.
+- W20 https://muaban.net/blog/tuoi-1996-lam-nha-nam-2026-608394/ · https://fptshop.com.vn/tin-tuc/for-gamers/xem-tuoi-lam-nha-2026-209116: Kim Lâu, Hoang Ốc tính theo tuổi mụ (người sinh 1996, năm 2026 được 31 tuổi mụ). W21 https://luatminhkhue.vn/bang-tinh-sao-han-va-cuu-dieu-nam-binh-ngo-2026.aspx · https://thuvienphapluat.vn/cong-dong-dan-luat/bang-sao-han-nam-2025-at-ty-cho-cac-tuoi-216641.html: lấy tuổi âm chia 9, nam và nữ đi vòng khác nhau.
 - W22 https://www.skillon.com/BaZi_FengShui_Q.cfm/topic/2747/tong-shu-12-day-officers · https://www.skillon.com/bazi-feng-shui.cfm/topic/90/Chinese-Almanac-Tong-Shu-and-the-12-Day-Officers: trực lấy từ chi ngày và chi tháng; hết tháng tiết thì tính lại từ đầu.
-
 ## Cần anh quyết
 1. Người sinh từ 23 giờ đến trước 12 giờ đêm: xem là **ngày hôm sau** (A, em đề xuất: sách xưa coi giờ Tý là đầu ngày mới, phần lớn phần mềm cũng làm vậy) hay **vẫn là ngày hôm đó** (B)?
 2. Người sinh ở miền Nam từ 1960 đến tháng 6/1975 (và vài giai đoạn trước 1955): đồng hồ hồi đó chạy nhanh hơn bây giờ 1 tiếng, có lúc 2 tiếng. App **tự lùi về giờ bây giờ** rồi mới xem (A, em đề xuất) hay **giữ đúng giờ ghi trong giấy** như trang Altuvi (B)?

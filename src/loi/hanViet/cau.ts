@@ -15,7 +15,7 @@ export const CAU = {
     '麋角解': { hv: 'Mi giác giải', nghia: 'Nai lớn (mi lộc) rụng sừng' },
     '水泉动': { hv: 'Thủy tuyền động', nghia: 'Mạch nước ngầm bắt đầu chuyển động, ấm dần lên' },
     // Tieu han
-    '雁北乡': { hv: 'Nhạn Bắc hướng', nghia: 'Chim nhạn bắt đầu quay về hướng Bắc', lyDo: '乡 ở đây dùng như 向 (hướng về) nên đọc “hướng” theo Thiều Chửu, nguồn đối chiếu chỉ ghi “hương”.' },
+    '雁北乡': { hv: 'Nhạn Bắc hướng', nghia: 'Chim nhạn bắt đầu quay về hướng Bắc', lyDo: 'Hai nguồn đối chiếu chỉ ghi âm "hương" cho 乡; ở đây 乡 dùng như 向 nên âm Hán–Việt là "hướng" (Thiều Chửu: một âm là hướng, như hướng Bắc 向北).' },
     '鹊始巢': { hv: 'Thước thủy sào', nghia: 'Chim khách (hỉ thước) bắt đầu làm tổ' },
     '雉始雊': { hv: 'Trĩ thủy cấu', nghia: 'Chim trĩ bắt đầu kêu gọi bạn tình' },
     // Dai han
@@ -45,7 +45,7 @@ export const CAU = {
     // Coc vu
     '萍始生': { hv: 'Bình thủy sinh', nghia: 'Bèo bắt đầu mọc trên mặt nước' },
     '鸣鸠拂其羽': { hv: 'Minh cưu phất kỳ vũ', nghia: 'Chim cu gáy vừa kêu vừa vỗ cánh, giũ lông' },
-    '戴胜降于桑': { hv: 'Đái thắng giáng vu tang', nghia: 'Chim đầu rìu (đái thắng) đậu xuống cây dâu', lyDo: 'Âm Hán–Việt của 戴 là “đái” theo Thiều Chửu, nguồn đối chiếu chỉ ghi âm “đội”.' },
+    '戴胜降于桑': { hv: 'Đái thắng giáng vu tang', nghia: 'Chim đầu rìu (đái thắng) đậu xuống cây dâu', lyDo: 'Hai nguồn đối chiếu chỉ ghi âm Nôm "đội" cho 戴; âm Hán–Việt là "đái" (bất cộng đái thiên 不共戴天).' },
     // Lap ha
     '蝼蝈鸣': { hv: 'Lâu quắc minh', nghia: 'Dế dũi (có sách nói là ếch nhái) bắt đầu kêu' },
     '蚯蚓出': { hv: 'Khưu dẫn xuất', nghia: 'Giun đất bò lên mặt đất' },
@@ -197,7 +197,7 @@ export const CAU = {
     '丑不冠带主不还乡': { hv: 'Sửu bất quan đới chủ bất hoàn hương', nghia: 'Ngày Sửu không nên làm lễ đội mũ, thắt đai (nhận chức), người ấy khó trở về quê' },
     '寅不祭祀神鬼不尝': { hv: 'Dần bất tế tự thần quỷ bất thường', nghia: 'Ngày Dần không nên cúng tế, thần linh không hưởng' },
     '卯不穿井水泉不香': { hv: 'Mão bất xuyên tỉnh thủy tuyền bất hương', nghia: 'Ngày Mão không nên đào giếng, nước giếng không trong ngọt' },
-    '辰不哭泣必主重丧': { hv: 'Thìn bất khốc khấp tất chủ trùng tang', nghia: 'Ngày Thìn không nên khóc lóc, ắt gặp trùng tang', lyDo: 'Âm Hán–Việt của 哭 là “khốc” theo Thiều Chửu, nguồn đối chiếu chỉ ghi “khóc”.' },
+    '辰不哭泣必主重丧': { hv: 'Thìn bất khốc khấp tất chủ trùng tang', nghia: 'Ngày Thìn không nên khóc lóc, ắt gặp trùng tang', lyDo: 'Hai nguồn đối chiếu chỉ ghi âm Nôm "khóc" cho 哭; âm Hán–Việt là "khốc" (thống khốc 痛哭).' },
     '巳不远行财物伏藏': { hv: 'Tỵ bất viễn hành tài vật phục tàng', nghia: 'Ngày Tỵ không nên đi xa, tiền của dễ thất lạc' },
     '午不苫盖屋主更张': { hv: 'Ngọ bất thiêm cái ốc chủ canh trương', nghia: 'Ngày Ngọ không nên lợp mái nhà, chủ nhà sẽ phải thay đổi, làm lại' },
     '未不服药毒气入肠': { hv: 'Mùi bất phục dược độc khí nhập tràng', nghia: 'Ngày Mùi không nên uống thuốc, độc khí vào ruột' },
