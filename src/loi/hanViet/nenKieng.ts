@@ -75,7 +75,7 @@ export const NEN_KIENG = {
     // Thu vien tra "无" khi danh sach nen (hoac kieng) rong.
     '无': { hv: 'Vô', nghia: 'Không có' },
     '造畜稠': { hv: 'Tạo súc trù', nghia: 'Làm chuồng gia súc' },
-    '捕捉': { hv: 'Bộ tróc', nghia: 'Bắt, diệt sâu bọ phá hoại' },
+    '捕捉': { hv: 'Bộ tróc', nghia: 'Bắt, diệt sâu bọ phá hoại', lyDo: 'Hai nguồn đối chiếu chỉ ghi âm Nôm "bắt" cho 捕; âm Hán–Việt là "bộ" (đãi bộ 逮捕).' },
     '安机械': { hv: 'An cơ giới', nghia: 'Lắp đặt máy móc' },
     '破屋': { hv: 'Phá ốc', nghia: 'Phá dỡ nhà' },
     '塞穴': { hv: 'Tắc huyệt', nghia: 'Bít lỗ, lấp hang (kiến, chuột)' },
@@ -125,7 +125,7 @@ export const NEN_KIENG = {
     '乘船': { hv: 'Thừa thuyền', nghia: 'Đi thuyền' },
     '问名': { hv: 'Vấn danh', nghia: 'Hỏi tên tuổi, xem tuổi đôi bên' },
     '分居': { hv: 'Phân cư', nghia: 'Ra ở riêng' },
-    '割蜜': { hv: 'Cát mật', nghia: 'Lấy mật ong' },
+    '割蜜': { hv: 'Cát mật', nghia: 'Lấy mật ong', lyDo: 'Hai nguồn đối chiếu chỉ ghi âm Nôm "cắt" cho 割; âm Hán–Việt là "cát" (cát cứ 割據).' },
     // Gac xa that sau khi phai gac tam (ngay thuong luong gap sao xau).
     '归岫': { hv: 'Quy tụ', nghia: 'Gác cố định xà nhà (sau khi gác tạm)' },
     '修门': { hv: 'Tu môn', nghia: 'Làm, sửa cửa' },

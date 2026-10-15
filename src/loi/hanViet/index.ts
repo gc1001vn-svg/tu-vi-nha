@@ -19,7 +19,7 @@ export interface Muc {
   readonly hv: string;
   /** Loi tieng Viet de hien khi `hv` kho hieu (viec nen/kieng, cau Banh To, con giap...). */
   readonly nghia?: string;
-  /** Vi sao `hv` khac am Han-Viet goc tung chu (vd "Mùi" cho 未) — thuoc doi chieu bo qua muc nay. */
+  /** Vi sao `hv` khac am nguon doi chieu: ten quen (vd "Mùi" cho 未) hay nguon chi ghi am Nom — thuoc doi chieu bo qua muc nay. */
   readonly lyDo?: string;
 }
 export type Bang = Readonly<Record<string, Muc>>;
