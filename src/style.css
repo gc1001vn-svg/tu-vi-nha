@@ -1,0 +1,25 @@
+:root {
+  color-scheme: dark;
+  --nen: #1b1210;
+  --chu: #f3e6d0;
+  --vang: #d9a441;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--nen);
+  color: var(--chu);
+}
+
+body {
+  margin: 0;
+  padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+
+h1 {
+  color: var(--vang);
+  font-size: 1.6rem;
+}
+
+.phien-ban {
+  opacity: 0.6;
+  font-size: 0.8rem;
+}

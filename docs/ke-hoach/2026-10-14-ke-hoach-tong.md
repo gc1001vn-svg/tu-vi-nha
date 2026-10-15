@@ -14,7 +14,7 @@ Khung: Vite + TypeScript + PWA + vitest như `quoc-chien` (không React — lá 
 
 | Đợt | Làm gì · xong là khi |
 |---|---|
-| 0 | Repo, đồ nghề, lệnh đo · chép kịch bản đối chiếu vào `scripts/doi-chieu/` · bảng Hán–Việt cho chữ ra của `lunar-javascript` · `docs/QUY_UOC.md` |
+| 0 | Repo, đồ nghề, lệnh đo · chép kịch bản đối chiếu vào `scripts/doi-chieu/` · bảng Hán–Việt cho chữ ra của `lunar-typescript` (bản TS của `lunar-javascript`) · `docs/QUY_UOC.md` |
 | 1 | Hồ sơ nhiều người + sao lưu file (xin lưu bền `navigator.storage.persist()`, nhắc sao lưu mỗi 30 ngày — iOS có thể xoá dữ liệu web) · âm lịch VN (`@tuquet/lunar`) · can chi, nạp âm, cung mệnh · màn "Hôm nay": giờ hoàng đạo, ngày tốt xấu theo tuổi, hướng thần tài, màu/số hợp ngày · "không rõ giờ sinh" · nơi sinh → múi giờ lịch sử · xong: 73.383 ngày khớp HND |
 | 2 | Tử vi: lá số, đại vận, lưu niên/nguyệt/nhật/thời · sao hạn Cửu Diệu + 8 hạn · xong: khớp 3.000 lá số mẫu + ảnh anh gửi |
 | 3 | Bát tự: tứ trụ, vượng suy, thập thần, đại vận · đặt tên con theo ngũ hành · xong: khớp `sxtwl` |
