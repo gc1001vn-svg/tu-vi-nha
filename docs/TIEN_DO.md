@@ -4,35 +4,39 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 19/10/2026 — **đợt 1 xong phần máy, gộp `main` 19/10** (kế hoạch `docs/ke-hoach/2026-10-19-dot-1.md`).
-Trang: https://gc1001vn-svg.github.io/tu-vi-nha/
+Cập nhật: 19/10/2026 tối — đợt 0, 1 xong; đợt "tăng tốc" (`docs/ke-hoach/2026-10-19-tang-toc.md`, 6 agent) gộp `main` 19/10.
+Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` từ nay kiểu dồn một commit (`git merge --squash`, mục 3).
 
 ## 1. Đang ở đâu
 
-- Đợt 0: khung, đồ nghề, bảng Hán–Việt, `QUY_UOC`. Đợt 1: ba thẻ "Hôm nay" · "Tra cứu" (bất kỳ ai, không lưu) ·
-  "Của tôi" (một hồ sơ, lưu trong máy + file sao lưu).
-- Lõi `src/loi/`: `amLich` (`@tuquet/lunar`, chặn "ngày 0") · `muiGio` (VN viết cứng) · `tinh` (63 tỉnh cũ) · `hoSo`
-  (ngày âm phái A, can chi, nạp âm, cung phi Lập Xuân, tuổi mụ, phương án sát ranh) · `homNay` (tiết/trực theo +7).
-- Giao diện `src/giaoDien/` (`cuaToi.ts` có cả Tra cứu), lưu `src/luuTru.ts` (localStorage, xuất/nhập file, nhắc 30 ngày, nhắc cài app).
-- Bảng vàng 1900 đã sửa: nhuận tháng 8 (bản cũ của `ansaotuvi` ghi 7, sai).
+- Ba thẻ: "Hôm nay" · "Tra cứu" (bất kỳ ai, không lưu) · "Của tôi" (một hồ sơ, lưu trong máy + file sao lưu). Anh chốt 19/10:
+  chỉ lưu hồ sơ của anh; lưu người nhà để đợt 9.
+- Anh thử iPhone lần 1 (19/10): app màn hình chính chạy, nhập hồ sơ được; chê ít thông tin, nhập phải bấm nhiều → đợt tăng tốc:
+  - Nhập gõ phím: ngày/giờ gõ số, tỉnh gõ không dấu/viết tắt có gợi ý (`src/loi/nhap.ts`).
+  - Hôm nay: nên/kiêng, sao tốt xấu, 28 tú, Bành Tổ, tuổi xung, giờ tốt hợp tuổi; trực/hoàng đạo theo **tháng âm** (anh chốt).
+  - Khối mỗi người (`src/giaoDien/khoi/`): tử vi lá số (Altuvi 345/345, 3.000 lá khớp `ansaotuvi`), năm nay (sao hạn, hạn,
+    Kim Lâu, Hoang Ốc, Tam Tai, Thái Tuế — khớp bảng báo 2026 144/144), bát tự + đại vận (khớp `sxtwl`), hướng Bát trạch,
+    tuổi hợp, thần số học, cung hoàng đạo, nhịp sinh học.
 
 ## 2. Việc kế
 
-- **Anh thử iPhone thật (lần 1 của kế hoạch tổng)** — cài app màn hình chính, thử thẻ "Tra cứu", nhập hồ sơ ở "Của tôi",
-  xuất file (Chia sẻ → Lưu vào Tệp), xoá, nhập lại. Chưa có xác nhận thì chưa mở đợt 2.
-- **Anh chốt 19/10:** tra được cho mọi người; chỉ lưu hồ sơ của anh, app tự tính cho anh theo giờ/ngày/tháng/năm. Mỗi
-  đợt sau thêm phần của môn đó vào "Hôm nay"/"Của tôi" và "Tra cứu". Lưu thêm người nhà: đợt 9 (sau cùng).
-- Đợt 2: tử vi (chép `ansaotuvi` sang TS, chỗ lệch theo Altuvi — `NGUON_MO`).
+- Anh thử iPhone lần 2: gõ phím (bàn phím số, Telex), lá số tử vi, sao lưu xuất → xoá → nhập (lần 1 chưa thử bước này).
+- Anh muốn "Của tôi" tự tính theo giờ/ngày/tháng/năm: còn thiếu lưu niên/nguyệt/nhật tử vi (`ansaotuvi` không có), lời giải.
+- Kế hoạch tổng còn: đợt 4 (Kinh Dịch, bói Kiều, xem ngày theo việc), 5 (la bàn, Lỗ Ban, phi tinh), 6 (chiêm tinh, tarot),
+  7 (AI), 8, 9 (người nhà). Lời giải mỗi mục mới một dòng.
 
 ## 3. Cần anh
 
-- Thử iPhone như mục 2 (chỉ hồ sơ của anh), chụp màn hình chỗ lỗi.
-- Ảnh lịch còn thiếu cho 21/01/1985, 10/02/2026, 10/03/2026: dòng "Trực" và "Ngày … Hoàng Đạo/Hắc Đạo" (trang chi tiết
-  ngày) + tên trang. Chưa có thì app giữ trực/hoàng đạo theo tiết, ghi "chưa chắc".
+- Ảnh ô giữa một lá số altuvi.com (chỗ Mệnh chủ, Thân chủ nếu có) — app đang theo sách, `ansaotuvi` tính khác.
+- Thử iPhone như mục 2, chụp chỗ lỗi.
+- Tuỳ anh: xoá nhánh `claude/determined-galileo-xz2mc5` trên GitHub khi xong việc — lịch sử nhánh còn một commit lộ ngày sinh
+  thật (19/10; `main` sạch vì gộp dồn; máy ảo không ghi đè lịch sử được).
 
 ## 4. Nợ, chỗ chưa chắc
 
-- Thần tài, hỷ thần theo `lunar-typescript`, chưa đối chiếu lịch Việt. Theo tuổi chưa xét hình, hại, phá, can khắc.
-- Tuỳ chọn `menhMauSo`, `thangXemNgay`… có trong lõi/`QUY_UOC`, chưa có màn chỉnh.
-- Không rõ giờ + sinh đêm 30 Tết sau 23:00: app lấy năm cũ (`QUY_UOC` mục 9).
-- `lunar-typescript` 1.8.6 lộ mã `sn.*` (bảng Hán–Việt đỡ). Bảng Hán–Việt cần người rành lịch đọc lại vài mục (Bành Tổ, lộc, 28 tú).
+- Mệnh chủ/Thân chủ chưa đối chiếu Altuvi; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
+- Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng, sao ngày theo hoàng lịch Trung Hoa (lịch Việt có hệ sao khác).
+- Thần tài, hỷ thần, hướng sát chưa có nguồn Việt; cung hoàng đạo theo bảng ngày cố định.
+- Tuỳ chọn trong `QUY_UOC` chưa có màn chỉnh. Mới thử Chromium, chưa thử Safari/WebKit.
+- `lunar-typescript` 1.8.6 lộ mã `sn.*` (bảng Hán–Việt đỡ); bảng cần người rành lịch đọc lại vài mục (Bành Tổ, lộc, 28 tú).
+- 19/10 chạy 6 agent cùng lúc chạm giới hạn phiên (5 giờ) một lần — chạy song song tối đa ~4.

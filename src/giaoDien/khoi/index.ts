@@ -5,7 +5,11 @@
  */
 import type { VeKhoi } from '../chung.ts';
 import { veKhoiBatTu } from './batTu.ts';
+import { veKhoiNamNay } from './namNay.ts';
+import { veKhoiHuong, veKhoiTuoiHop } from './phongThuy.ts';
 import { veKhoiHoangDao, veKhoiNhipSinhHoc, veKhoiThanSo } from './soHoc.ts';
 import { veKhoiTuVi } from './tuVi.ts';
 
-export const CAC_KHOI: readonly VeKhoi[] = [veKhoiTuVi, veKhoiBatTu, veKhoiThanSo, veKhoiHoangDao, veKhoiNhipSinhHoc];
+export const CAC_KHOI: readonly VeKhoi[] = [
+  veKhoiTuVi, veKhoiNamNay, veKhoiBatTu, veKhoiHuong, veKhoiTuoiHop, veKhoiThanSo, veKhoiHoangDao, veKhoiNhipSinhHoc,
+];
