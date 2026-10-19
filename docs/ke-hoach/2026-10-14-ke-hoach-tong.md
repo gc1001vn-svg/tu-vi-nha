@@ -1,12 +1,12 @@
 # Kế hoạch tổng — tu-vi-nha (bản 2, 14/10/2026)
 
-- Hỏi: ai dùng → Đáp: anh + gia đình
+- Hỏi: ai dùng → Đáp: anh trước; người nhà làm sau cùng (anh chốt 19/10 — đợt 9)
 - Hỏi: cài thế nào → Đáp: web cài lên màn hình chính iPhone (PWA); repo `tu-vi-nha`, công khai
 - Hỏi: lời giải → Đáp: văn soạn sẵn trước, AI sau
 - Hỏi: môn nào → Đáp: có hết; kế hoạch một lần cho tất cả, làm kỹ
 
 Việc: app xem mọi môn từ một hồ sơ (tên, giới tính, ngày giờ + nơi sinh, ảnh, hướng nhà), theo giờ/ngày/tháng/năm/cả đời.
-Xong là khi: trên iPhone, mỗi người nhà một hồ sơ; mọi môn ở bảng dưới ra kết quả khớp bộ ca kiểm; dữ liệu chỉ nằm trong máy.
+Xong là khi: trên iPhone, hồ sơ của anh (người nhà: đợt 9); mọi môn ở bảng dưới ra kết quả khớp bộ ca kiểm; dữ liệu chỉ nằm trong máy.
 
 Cách đo: `npm run do` (kiểm lỗi, kiểu, test, đóng gói) + bộ ca kiểm vàng từng môn, sinh từ thư viện đối chiếu độc lập
 (`docs/NGUON_MO.md` — đã chạy thử 3.000 lá số, 73.383 ngày âm) + ảnh chụp khổ iPhone. Anh thử máy thật 3 lần: sau đợt 1, 4, cuối.
@@ -17,12 +17,13 @@ Khung: Vite + TypeScript + PWA + vitest như `quoc-chien` (không React — lá 
 | 0 | Repo, đồ nghề, lệnh đo · chép kịch bản đối chiếu vào `scripts/doi-chieu/` · bảng Hán–Việt cho chữ ra của `lunar-typescript` (bản TS của `lunar-javascript`) · `docs/QUY_UOC.md` |
 | 1 | Hồ sơ nhiều người + sao lưu file (xin lưu bền `navigator.storage.persist()`, nhắc sao lưu mỗi 30 ngày — iOS có thể xoá dữ liệu web) · âm lịch VN (`@tuquet/lunar`) · can chi, nạp âm, cung mệnh · màn "Hôm nay": giờ hoàng đạo, ngày tốt xấu theo tuổi, hướng thần tài, màu/số hợp ngày · "không rõ giờ sinh" · nơi sinh → múi giờ lịch sử · xong: 73.383 ngày khớp HND |
 | 2 | Tử vi: lá số, đại vận, lưu niên/nguyệt/nhật/thời · sao hạn Cửu Diệu + 8 hạn · xong: khớp 3.000 lá số mẫu + ảnh anh gửi |
-| 3 | Bát tự: tứ trụ, vượng suy, thập thần, đại vận · đặt tên con theo ngũ hành · xong: khớp `sxtwl` |
+| 3 | Bát tự: tứ trụ, vượng suy, thập thần, đại vận · xong: khớp `sxtwl` |
 | 4 | Kinh Dịch (đồng xu, Mai Hoa) · bói Kiều · xem ngày theo việc (cưới, động thổ, khai trương, xuất hành, mua xe) |
-| 5 | Phong thủy: Bát trạch, la bàn (dự phòng nhập số độ), Kim Lâu/Hoang Ốc/Tam Tai, Lỗ Ban, phi tinh năm/tháng · hợp tuổi vợ chồng, làm ăn, sinh con |
+| 5 | Phong thủy: Bát trạch, la bàn (dự phòng nhập số độ), Kim Lâu/Hoang Ốc/Tam Tai, Lỗ Ban, phi tinh năm/tháng |
 | 6 | Chiêm tinh (lá số + theo ngày) · thần số học · tarot bản 1909 · nhịp sinh học |
 | 7 | Ảnh + AI trả phí: tướng mặt (đo trong máy), chỉ tay, hỏi đáp, lời tổng hợp mọi môn · khoá API nhập trên từng máy, không bao giờ vào repo, đặt hạn mức chi · ảnh lấy bằng nút chọn/chụp ảnh, không mở camera trực tiếp |
 | 8 | Kỳ Môn Độn Giáp (chép `kinqimen`), Huyền Không nhà, xin xăm, cân xương — chỉ khi đủ nguồn |
+| 9 | **Người nhà (sau cùng):** hồ sơ từng người dùng ở mọi môn · hợp tuổi vợ chồng, làm ăn, sinh con · đặt tên con theo ngũ hành · xem cả nhà một lượt |
 
 Tử vi (đợt 2) — đã quyết bằng số đo 14/10, 5 lá số Altuvi: `ansaotuvi` khớp 329/345 sao, `iztro` 235/285 → chép `ansaotuvi`
 (~2.100 dòng Python, MIT) sang TypeScript; chỗ lệch (Thiên Giải, Phá Toái, Hỏa/Linh, năm Canh) theo Altuvi — `docs/NGUON_MO.md`.

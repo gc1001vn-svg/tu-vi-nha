@@ -17,13 +17,15 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/
 
 ## 2. Việc kế
 
-- **Anh thử iPhone thật (lần 1 của kế hoạch tổng)** — cài app màn hình chính, thêm hồ sơ, xuất file (Chia sẻ → Lưu vào
-  Tệp), xoá, nhập lại. Chưa có xác nhận thì chưa mở đợt 2.
+- **Anh thử iPhone thật (lần 1 của kế hoạch tổng)** — cài app màn hình chính, nhập hồ sơ của anh, xuất file (Chia sẻ →
+  Lưu vào Tệp), xoá, nhập lại. Chưa có xác nhận thì chưa mở đợt 2.
+- **Anh chốt 19/10: làm cho một mình anh trước, người nhà dời xuống đợt 9 (sau cùng).** App vẫn giữ nhiều hồ sơ (không
+  sửa mã), các đợt sau chỉ cần chạy đúng với một hồ sơ.
 - Đợt 2: tử vi (chép `ansaotuvi` sang TS, chỗ lệch theo Altuvi — `NGUON_MO`).
 
 ## 3. Cần anh
 
-- Thử iPhone như mục 2, chụp màn hình chỗ lỗi.
+- Thử iPhone như mục 2 (chỉ hồ sơ của anh), chụp màn hình chỗ lỗi.
 - Ảnh lịch còn thiếu cho 21/01/1985, 10/02/2026, 10/03/2026: dòng "Trực" và "Ngày … Hoàng Đạo/Hắc Đạo" (trang chi tiết
   ngày) + tên trang. Chưa có thì app giữ trực/hoàng đạo theo tiết, ghi "chưa chắc".
 
