@@ -52,6 +52,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 | **Tổng** | | **329/345 (95 %)** | **235/285 (82 %)** |
 
 - Ngày âm khớp HND +7 cả 6 mốc (5 ca + 14/10/2026 = 5/9 Bính Ngọ). Mệnh, Thân `ansaotuvi` khớp Altuvi 5/5.
+- **Lõi tử vi TypeScript 19/10** (`src/loi/tuVi/laSo.ts`, chép `ansaotuvi` 0.1.28): 5 lá Altuvi **345/345**; 3.000 lá ngẫu nhiên (`scripts/doi-chieu/tu-vi-py.py` + `so-tu-vi.ts`): phái `ansaotuvi` khớp 3.000/3.000, phái `altuvi` chỉ lệch 4 nhóm đã định (Thiên Giải 2.719 lá, Phá Toái 2.018, Hỏa/Linh 758, năm Canh 338). Mệnh chủ theo chi cung Mệnh, Thân chủ theo chi năm (sách; `ansaotuvi` tra theo can năm) — **chưa chắc**, cần ảnh ô giữa lá số Altuvi. Lỗi thư viện không chép: độ sáng Thiên Hình/Thiên Riêu dính giữa các lá, Tuần/Triệt chỉ đánh dấu một cung, ô sinh khắc Thủy–Hỏa.
 - **Kết luận: lõi tử vi theo `ansaotuvi` (chép sang TypeScript), không theo `iztro`.** Chỗ `ansaotuvi` khác Altuvi → theo Altuvi:
   - **Thiên Giải** lệch 4/5 ca. Altuvi = khởi Thân tháng Giêng, đi thuận đến tháng sinh (khớp 5/5).
   - **Phá Toái** lệch ca B, C, E. Altuvi = năm Tý Ngọ Mão Dậu → Tỵ · Dần Thân Tỵ Hợi → Dậu · Thìn Tuất Sửu Mùi → Sửu (khớp 5/5).

@@ -138,6 +138,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `gioMatTroi` | bật · tắt | tắt | tử vi, bát tự |
 | `namCaNhan` | `ngay0101` · `sinhNhat` | `ngay0101` | thần số học |
 | `soChuDao` | `motLuot` · `rutGonRieng` | `motLuot` | thần số học |
+| `phaiTuVi` | `altuvi` · `ansaotuvi` | `altuvi` (luật 3) | tử vi: Thiên Giải, Phá Toái, Hỏa/Linh Tinh, năm Canh (Khôi, Việt, Hóa Khoa, Hóa Kỵ, Lưu Hà), Mệnh chủ/Thân chủ |
 | `menhMauSo` | `napAm` · `cungPhi` | `napAm` | màu, số hợp mệnh (màn "Hôm nay") |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
