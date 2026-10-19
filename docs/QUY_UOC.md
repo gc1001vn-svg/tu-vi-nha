@@ -106,6 +106,13 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Unicode NFC. Dấu thanh kiểu cũ như Altuvi và sách tử vi: Hỏa, Thủy, Hóa, Hòa (không viết Hoả, Thuỷ, Hoá, Hoà). Viết "Tỵ", "Kỷ", "Kỵ" (không viết Tị, Kỉ, Kị).
 - Tên riêng viết hoa mỗi chữ: can chi ("Giáp Tý"), sao và thần sát ("Thiên Đức"), tiết khí ("Lập Xuân"), trực, tú, nạp âm ("Hải Trung Kim"). Việc nên/kiêng và lời giải chỉ viết hoa chữ đầu ("Cúng tế").
 - Ngày viết dạng dd/mm/yyyy, giờ viết dạng 24h (07:05).
+## 11. Xem ngày theo tuổi, màu, số (màn "Hôm nay")
+- **Tuổi**: so chi ngày với chi năm sinh (năm âm theo Tết, mục 1). Lục xung (Tý–Ngọ, Sửu–Mùi, Dần–Thân, Mão–Dậu, Thìn–Tuất, Tỵ–Hợi) là xung, nên tránh việc lớn; lục hợp (Tý–Sửu, Dần–Hợi, Mão–Tuất, Thìn–Dậu, Tỵ–Thân, Ngọ–Mùi) và tam hợp (Thân Tý Thìn, Dần Ngọ Tuất, Tỵ Dậu Sửu, Hợi Mão Mùi) là hợp; còn lại bình thường. Chưa xét hình, hại, phá, can khắc. Nguồn: W23, W24. Đã kiểm: web.
+- **Hành ngày** = hành của nạp âm ngày (mytour ghi ngày Mậu Dần hành Thổ, Đinh Hợi hành Thổ — đúng nạp âm) [W25]. App ghi quan hệ hành ngày với hành mệnh: ngày sinh mệnh, mệnh sinh ngày, ngày khắc mệnh, mệnh khắc ngày, cùng hành. Lời giải Claude soạn lại.
+- **Màu theo ngày: không làm.** Cùng một ngày, mytour và báo Lâm Đồng gợi ý màu khác nhau cho cùng một mệnh [W25, W26]. App chỉ hiện **màu hợp mệnh**: màu bản mệnh + màu của hành sinh mệnh; màu kỵ là màu của hành khắc mệnh [W27]. Màu từng hành (các trang khớp): Kim trắng, xám, bạc · Mộc xanh lá · Thủy đen, xanh dương · Hỏa đỏ, hồng, tím, cam · Thổ vàng, nâu.
+- **Số hợp mệnh** (Lạc Thư): Thủy 0, 1 · Thổ 2, 5, 8 · Mộc 3, 4 · Kim 6, 7 · Hỏa 9; số hợp = số bản mệnh + số hành sinh mệnh (mytour: Kim hợp 6, 7 và 2, 5, 8; fptshop: Mộc hợp 0, 1, 3, 4) [W28]. Vênh: có trang gán số theo Hà Đồ (Kim 4, 9…) — không theo. Đã kiểm: web.
+- **Mệnh** dùng cho màu, số: nạp âm năm sinh, năm theo Tết (gumac, fptshop gọi "mệnh Kim/Mộc" theo nạp âm) [W27, W28]. Tuỳ chọn khác: hành của cung phi (mytour, báo Lâm Đồng dùng Nhất Bạch, Nhị Hắc…) [W25, W26].
+- **Tháng tiết của ngày** theo giờ +7: `lunar-typescript` lấy ngày giao tiết theo giờ Bắc Kinh, nên khi tiết rơi 23:00–23:59 giờ VN thì thư viện chậm một ngày. Máy (19/10): 1900–2100 có 102 ngày như vậy; ngoài 102 ngày đó trực, thần trực nhật của app khớp thư viện (so 9.579 ngày, `tests/HomNay.test.ts`).
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -116,6 +123,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `thangNhuanTuVi` | `thangTruoc` · `chia15` · `thangSau` | `thangTruoc` | tử vi |
 | `gioMatTroi` | bật · tắt | tắt | tử vi, bát tự |
 | `namCaNhan` | `ngay0101` · `sinhNhat` | `ngay0101` | thần số học |
+| `menhMauSo` | `napAm` · `cungPhi` | `napAm` | màu, số hợp mệnh (màn "Hôm nay") |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
 ## Nguồn
@@ -142,6 +150,10 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W18 https://fptshop.com.vn/tin-tuc/danh-gia/ngay-tam-nuong-la-ngay-gi-175689 · https://fptshop.com.vn/tin-tuc/danh-gia/ngay-nguyet-ky-la-gi-175380. W19 https://www.momo.vn/blog/nam-2026-tuoi-gi-bi-kip-chuan-bi-tai-chinh-c116dt2351 · https://vtcnews.vn/nam-2026-la-nam-con-gi-ar992583.html: năm Bính Ngọ kéo dài từ Tết 17/02/2026 tới 05/02/2027.
 - W20 https://muaban.net/blog/tuoi-1996-lam-nha-nam-2026-608394/ · https://fptshop.com.vn/tin-tuc/for-gamers/xem-tuoi-lam-nha-2026-209116: Kim Lâu, Hoang Ốc tính theo tuổi mụ (người sinh 1996, năm 2026 được 31 tuổi mụ). W21 https://luatminhkhue.vn/bang-tinh-sao-han-va-cuu-dieu-nam-binh-ngo-2026.aspx · https://thuvienphapluat.vn/cong-dong-dan-luat/bang-sao-han-nam-2025-at-ty-cho-cac-tuoi-216641.html: lấy tuổi âm chia 9, nam và nữ đi vòng khác nhau.
 - W22 https://www.skillon.com/BaZi_FengShui_Q.cfm/topic/2747/tong-shu-12-day-officers · https://www.skillon.com/bazi-feng-shui.cfm/topic/90/Chinese-Almanac-Tong-Shu-and-the-12-Day-Officers: trực lấy từ chi ngày và chi tháng; hết tháng tiết thì tính lại từ đầu.
+- W23 https://www.dienmayxanh.com/kinh-nghiem-hay/tam-hop-la-gi-tu-hanh-xung-la-gi-1588018: tam hợp, tứ hành xung, lục hợp. W24 https://baohatinh.vn/tv/lich-am-duong-ngay-2972026-gio-hoang-dao-tuoi-xung-va-viec-nen-luu-y-48277.html: lịch ngày ghi "lục hợp, tam hợp, xung, hình, hại" theo chi ngày.
+- W25 https://mytour.vn/vi/blog/doi-song/mau-sac-may-man-hom-nay-7-9-2025-theo-menh-giup-ban-thu-hut-tai-loc-va-tinh-duyen-mytour.html · https://mytour.vn/vi/blog/doi-song/kham-pha-mau-sac-may-man-hom-nay-15-9-2025-theo-phong-thuy-menh-chuan-trong-do-do-la-mau-sac-phu-hop-nhat-mytour.html: màu theo ngày, mệnh theo cửu tinh, hành ngày theo nạp âm. W26 https://baolamdong.vn/mau-sac-may-man-ngay-6112025-cho-tung-menh-theo-phong-thuy-400488.html: cùng cách gọi mệnh, màu khác mytour.
+- W27 https://gumac.vn/tin-tuc/menh-tho-hop-mau-gi · https://gumac.vn/tin-tuc/menh-moc-hop-mau-gi · https://fptshop.com.vn/tin-tuc/danh-gia/menh-kim-hop-mau-gi-169092: màu từng hành, màu tương sinh (Lộ Bàng Thổ hợp màu Hỏa, Đại Lâm Mộc hợp màu Thủy).
+- W28 https://fptshop.com.vn/tin-tuc/for-gamers/menh-moc-hop-so-nao-193888 · https://mytour.vn/vi/blog/bai-viet/menh-kim-hop-so-nao-mang-lai-phu-quy-tien-bac-doi-dao-cho-gia-chu.html: số theo hành (Lạc Thư).
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.
