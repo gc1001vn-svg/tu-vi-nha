@@ -26,8 +26,8 @@ Tra 14/10/2026. Cột "Đã kiểm": **máy** = đọc mã hoặc chạy thử t
 | Tử vi: tháng sinh, lưu nguyệt | tháng âm theo sóc (+7) | — | Altuvi ca B (sinh 30/11 âm), ca C (tháng nhuận) | A, M2, M3, W3 | máy+web |
 | Bát tự: trụ tháng, tuổi khởi vận | 12 tiết (Lập Xuân, Kinh Trập, Thanh Minh…), đúng thời khắc +7 | theo cả ngày tiết (`sxtwl`) | mọi nguồn cùng một ý | M4, M5, W17 | máy+web |
 | Cửu tinh tháng | tháng tiết, đúng thời khắc | theo ngày tiết (`getMonthNineStar` mặc định) | Huyền Không theo tiết | M4, W2 (chỉ thấy ghi bàn tháng có giờ bắt đầu) | máy |
-| Xem ngày: 12 trực, hoàng/hắc đạo ngày, thần sát theo tháng | tháng tiết (ngày giao tiết thuộc tháng mới) | tháng âm | `getZhiXing`, `getDayTianShen` tính theo tiết; Thông Thư lấy chi tháng theo tiết, sang tiết thì tính lại | M4, W22 | máy+web; **lịch Việt trên mạng theo tháng âm** (19/10, baohatinh, chogia, baolamdong, xemlicham: 10/02/2026 Mãn + Kim Đường Hoàng Đạo, 10/03/2026 Chấp, 08/10/2026 Phá, 07/11/2023 Nguy) → chờ anh chốt đổi mặc định |
-| Xem ngày: nên/kiêng (宜忌), cát thần/hung sát | như 12 trực: tháng tiết giờ +7 (`thangXemNgay`) | tháng âm | thư viện lấy tháng tiết theo ngày giao tiết giờ Bắc Kinh (`getMonthInGanZhi`, `getMonthZhiIndex`); app lệch đúng 102 ngày tiết rơi 23:xx giờ VN. Nên/kiêng, sao là hệ hoàng lịch Trung Hoa — lịch Việt trên mạng có sao khác (Thiên Quan, Thụ Tử, Lôi Công…), app ghi rõ | M4, qmrl888.com, wannianli.tianqi.com | máy+web |
+| Xem ngày: 12 trực, hoàng/hắc đạo ngày, thần sát theo tháng | **tháng âm** như lịch Việt (anh chốt 19/10) | tháng tiết (ngày giao tiết thuộc tháng mới — Thông Thư) | `getZhiXing`, `getDayTianShen` tính theo tiết; Thông Thư lấy chi tháng theo tiết, sang tiết thì tính lại | M4, W22 | máy+web; **lịch Việt trên mạng theo tháng âm** (19/10, baohatinh, chogia, baolamdong, xemlicham: 10/02/2026 Mãn + Kim Đường Hoàng Đạo, 10/03/2026 Chấp, 08/10/2026 Phá, 07/11/2023 Nguy) → anh chốt tháng âm 19/10 |
+| Xem ngày: nên/kiêng (宜忌), cát thần/hung sát | như 12 trực: tháng âm (`thangXemNgay`) | tháng tiết giờ +7 | thư viện lấy tháng tiết theo ngày giao tiết giờ Bắc Kinh (`getMonthInGanZhi`, `getMonthZhiIndex`); app lệch đúng 102 ngày tiết rơi 23:xx giờ VN. Nên/kiêng, sao là hệ hoàng lịch Trung Hoa — lịch Việt trên mạng có sao khác (Thiên Quan, Thụ Tử, Lôi Công…), app ghi rõ | M4, qmrl888.com, wannianli.tianqi.com | máy+web |
 | Can chi tháng in trên lịch (màn "Hôm nay") | **tháng âm**: tháng Giêng năm Ất Sửu = Mậu Dần (tính từ can năm âm + số tháng; tháng nhuận dùng can chi tháng trước) | — | Ảnh anh chụp 19/10: 21/01/1985 (trước Lập Xuân) lịch Việt ghi tháng Mậu Dần; `getMonthInGanZhi` ra Đinh Sửu (theo tiết) → không dùng hàm thư viện cho dòng này | ảnh | máy |
 | Xem ngày: ngày kiêng ghi theo ngày âm (Tam Nương 3, 7, 13, 18, 22, 27; Nguyệt Kỵ 5, 14, 23) | tháng âm | — | quy tắc vốn ghi theo ngày âm | W18 | web |
 
@@ -133,7 +133,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `gioTy` | `doiNgay23h` · `chiaDoiCanSau` · `chiaDoiCanNay` | `doiNgay23h` (anh chốt 15/10) | tử vi (chỉ giá trị thứ 1 và 3), bát tự |
 | `doiVeGio7` | có · không (giữ giờ nhập như Altuvi) | có (anh chốt 15/10) | mọi môn dùng giờ; chiêm tinh thì luôn đổi |
 | `namCungPhi` | `lapXuan` · `tet` | `lapXuan` (anh chốt 15/10) | Bát trạch |
-| `thangXemNgay` | `tiet` · `am` | `tiet` (chờ ảnh lịch anh chụp) | 12 trực, hoàng đạo, thần sát theo tháng |
+| `thangXemNgay` | `am` · `tiet` | `am` (anh chốt 19/10: khớp lịch Việt trên mạng) | 12 trực, hoàng đạo, thần sát theo tháng |
 | `thangNhuanTuVi` | `thangTruoc` · `chia15` · `thangSau` | `thangTruoc` | tử vi |
 | `gioMatTroi` | bật · tắt | tắt | tử vi, bát tự |
 | `namCaNhan` | `ngay0101` · `sinhNhat` | `ngay0101` | thần số học |
@@ -179,4 +179,5 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.
 2. Giờ đồng hồ thời dùng +8/+9 (miền Nam 1960–6/1975 và các giai đoạn ở bảng mục 7): app **tự lùi về +7** rồi mới tính; vẫn có tuỳ chọn giữ giờ nhập như Altuvi.
 3. Cung phi của người sinh giữa Tết và Lập Xuân: theo **Lập Xuân**.
-4. Ngày âm trước 1968: theo **+7** như trang anh tin (ảnh 19/10: 1938, 1965 khớp +7, lịch TQ lệch tháng) — `docs/NGUON_MO.md`. Người nhà nhớ ngày âm theo lịch thời đó (+8) có thể lệch ở ngày hai lịch vênh → app ưu tiên nhập ngày dương; chỉ có ngày âm thì cảnh báo ở các ngày vênh. Còn chờ ảnh: dòng "Trực" và ngày hoàng/hắc đạo của 21/01/1985, 10/02/2026, 10/03/2026 (12 trực theo tiết hay tháng âm).
+4. Ngày âm trước 1968: theo **+7** như trang anh tin (ảnh 19/10: 1938, 1965 khớp +7, lịch TQ lệch tháng) — `docs/NGUON_MO.md`. Người nhà nhớ ngày âm theo lịch thời đó (+8) có thể lệch ở ngày hai lịch vênh → app ưu tiên nhập ngày dương; chỉ có ngày âm thì cảnh báo ở các ngày vênh.
+5. (19/10) Trực, ngày hoàng/hắc đạo, nên/kiêng, sao theo tháng: theo **tháng âm** như lịch Việt trên mạng (baohatinh, chogia, baolamdong, xemlicham khớp 4/4 ngày thử) — không cần ảnh lịch nữa.

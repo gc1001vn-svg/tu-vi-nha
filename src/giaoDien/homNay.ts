@@ -66,7 +66,7 @@ export function veHomNay(toi: HoSo | undefined, moToi: () => void): HTMLElement 
     dong('Năm', n.canChiNam), dong('Tháng', n.canChiThang), dong('Ngày', n.canChiNgay),
     dong('Tiết', n.tiet),
     dong('Tốt/xấu', `${n.hoangDao ? 'Hoàng Đạo' : 'Hắc Đạo'} (${n.thienThan})`),
-    dong('Trực', n.truc, 'tính theo tháng tiết — chưa chắc, chờ ảnh lịch'),
+    dong('Trực', n.truc, 'tính theo tháng âm như lịch Việt'),
     dong('Giờ tốt', gio(n.gioHoangDao)),
     dong('Thần tài', n.thanTai), dong('Hỷ thần', n.hyThan),
     dong('Nạp âm', `${n.napAmNgay} (${n.hanhNgay})`),

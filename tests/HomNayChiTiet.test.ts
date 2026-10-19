@@ -102,7 +102,7 @@ describe('chiTietNgay', () => {
     const l = Solar.fromYmd(2023, 11, 7).getLunar();
     expect(phanThang(ngay('2023-11-07'))).toEqual(theoThang(l, Solar.fromYmd(2023, 11, 8).getLunar()));
     expect(phanThang(ngay('2023-11-07'))).not.toEqual(theoThang(l, l));
-    expect(chiTietNgay(ngay('2023-11-07')).kieng).toEqual(['Mọi việc đều không nên']);
+    expect(chiTietNgay(ngay('2023-11-07'), 'tiet').kieng).toEqual(['Mọi việc đều không nên']);
   });
 
   test('so thu vien 1900–2100: khop moi ngay tru ngay tiet roi 23:xx gio VN; ngay do theo thang moi; moi chuoi qua bang', () => {
@@ -117,7 +117,7 @@ describe('chiTietNgay', () => {
     const sai = /[\p{Script=Han}{}]|sn\./u;
     for (const jd of [...chon].filter((j) => j >= dau && j <= cuoi).sort((a, b) => a - b)) {
       const d = tuSoNgay(jd);
-      const c = chiTietNgay(d);
+      const c = chiTietNgay(d, 'tiet');
       const l = Solar.fromYmd(d.nam, d.thang, d.ngay).getLunar();
       const chuoi = [...c.nen, ...c.kieng, ...c.saoTot, ...c.saoXau, ...Object.values(c.tu28), ...c.banhTo, c.tuoiXung, c.huongSat];
       if (chuoi.some((s) => s === '' || sai.test(s))) lech.push(`${ymd(d)} con chu thu vien: ${chuoi.join(' | ')}`);
@@ -155,6 +155,7 @@ describe('lich Viet tren mang', () => {
     // chogia) · 07/11/2023 Nguy (baohatinh, chogia).
     const ca = [['2026-02-10', 'Mãn'], ['2026-03-10', 'Chấp'], ['2026-10-08', 'Phá'], ['2023-11-07', 'Nguy']] as const;
     expect(ca.map(([d]) => xemNgay(ngay(d), 'am').truc)).toEqual(ca.map(([, t]) => t));
-    expect(ca.map(([d]) => xemNgay(ngay(d)).truc)).toEqual(['Trừ', 'Định', 'Chấp', 'Phá']);
+    expect(ca.map(([d]) => xemNgay(ngay(d), 'tiet').truc)).toEqual(['Trừ', 'Định', 'Chấp', 'Phá']);
+    expect(ca.map(([d]) => xemNgay(ngay(d)).truc)).toEqual(ca.map(([, t]) => t)); // mac dinh = thang am = lich Viet
   });
 });
