@@ -1,9 +1,16 @@
 :root {
   color-scheme: dark;
   --nen: #1b1210;
+  --nen-the: #2a1d19;
+  --vien: #4a352d;
   --chu: #f3e6d0;
+  --mo: #c9b89e;
   --vang: #d9a441;
+  --xanh: #8fc28a;
+  --do: #e47a6a;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
   background: var(--nen);
   color: var(--chu);
 }
@@ -14,10 +21,74 @@ body {
     max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
 }
 
+#app { max-width: 640px; margin: 0 auto; }
+
 h1 {
   color: var(--vang);
   font-size: 1.6rem;
+  margin: 0 0 12px;
 }
+
+h2 { font-size: 1.15rem; margin: 0 0 8px; color: var(--vang); }
+p { margin: 6px 0; }
+
+button, select, input {
+  font: inherit;
+  color: var(--chu);
+  background: var(--nen-the);
+  border: 1px solid var(--vien);
+  border-radius: 10px;
+  min-height: 44px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+}
+
+button { cursor: pointer; }
+button.chinh { background: var(--vang); color: var(--nen); border-color: var(--vang); font-weight: 600; }
+button.nguy { color: var(--do); }
+button.nho { min-height: 32px; min-width: 32px; padding: 0 8px; }
+input[type='checkbox'] { min-height: 0; width: 22px; height: 22px; vertical-align: middle; }
+input:disabled { opacity: 0.5; }
+
+.cac-the { display: flex; gap: 8px; margin-bottom: 12px; }
+.cac-the button { flex: 1; }
+.cac-the button[aria-selected='true'] { background: var(--vang); color: var(--nen); font-weight: 600; }
+
+.the {
+  background: var(--nen-the);
+  border: 1px solid var(--vien);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.am { color: var(--vang); font-weight: 600; }
+.dong { display: flex; flex-wrap: wrap; gap: 4px 10px; padding: 4px 0; border-top: 1px solid var(--vien); }
+.nhan { color: var(--mo); min-width: 5.5em; }
+.ghi-chu { color: var(--mo); font-size: 0.85rem; flex-basis: 100%; }
+
+.nguoi { border-top: 1px solid var(--vien); padding: 8px 0; }
+.ten { font-weight: 600; }
+.nhan-quan-he { margin-left: 8px; padding: 2px 8px; border-radius: 8px; font-size: 0.85rem; background: var(--vien); }
+.nguoi.hop .nhan-quan-he { background: var(--xanh); color: var(--nen); }
+.nguoi.xung .nhan-quan-he { background: var(--do); color: var(--nen); }
+.mau { color: var(--mo); font-size: 0.95rem; }
+
+.canh-bao { color: var(--vang); font-size: 0.95rem; }
+.loi { color: var(--do); }
+.loi:empty { display: none; }
+
+.dai {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  border: 1px solid var(--vien); border-radius: 12px; padding: 8px 12px; margin-bottom: 10px; font-size: 0.95rem;
+}
+
+.nut-hang { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.form .cot, .form label.cot { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.form input[type='text'], .form input[type='date'], .form input[type='time'], .form select { width: 100%; }
+.ba-o { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 8px; }
+.ba-o input { width: 100%; }
+[hidden] { display: none !important; }
 
 .phien-ban {
   opacity: 0.6;

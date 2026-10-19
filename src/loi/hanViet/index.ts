@@ -36,3 +36,10 @@ export type Nhom = (typeof NHOM)[number];
 export const NHOM_CAU: ReadonlySet<Nhom> = new Set<Nhom>(['vatHau', 'thaiThan', 'banhTo', 'loc', 'nenKieng']);
 
 export const BANG = { ...CO_BAN, ...NEN_KIENG, ...THAN_SAT, ...CAU } satisfies Record<Nhom, Bang>;
+
+/** Am Han-Viet cua mot chuoi thu vien tra ra. Thieu muc la loi bang (thuoc `HanViet.test.ts` phai bat truoc). */
+export function hv(nhom: Nhom, chu: string): string {
+  const muc = (BANG[nhom] as Bang)[chu];
+  if (muc === undefined) throw new Error(`Bang Han-Viet thieu ${nhom}["${chu}"]`);
+  return muc.hv;
+}

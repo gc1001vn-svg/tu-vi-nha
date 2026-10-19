@@ -6,6 +6,11 @@ from importlib.metadata import version
 from ansaotuvi.Lich_HND import S2L
 
 MUI = 7
+# Nam 1900: S2L ra nhuan thang 7, dung la nhuan thang 8 — thang bat dau 24/09/1900 khong co trung khi (goc Mat
+# Troi dau thang va dau thang sau cung cung 6, getSunLongitude cua @tuquet/lunar mui +7); @tuquet/lunar va
+# lunar-typescript cung ra nhuan 8. Sua tay hai dau thang; 59 ngay 25/08–22/10/1900 vi vay khac S2L.
+SUA = {"1900-08-25": [1900, 8, 0], "1900-09-24": [1900, 8, 1]}
+SUA_TU, SUA_DEN = datetime.date(1900, 8, 25), datetime.date(1900, 10, 22)
 RA = pathlib.Path(__file__).resolve().parents[2] / "tests/vang/am-lich-hnd.json"
 MOT = datetime.timedelta(days=1)
 
@@ -26,10 +31,13 @@ for t in cac_ngay(datetime.date(1900, 1, 1), datetime.date(2101, 3, 1)):
         thang.append([t.isoformat(), y, m, nhuan])
         if y == 2101:
             break
+thang = [[x[0], *SUA[x[0]]] if x[0] in SUA else x for x in thang]
 nguon = (f"ansaotuvi {version('ansaotuvi')}, Lich_HND (thuat toan Ho Ngoc Duc), mui gio +{MUI}. "
          "Moi phan tu: [ngay duong mung 1, nam am, thang am, nhuan 0/1]; du nam am 1900-2100, phan tu cuoi la Tet 2101 "
          f"(chi de biet do dai thang truoc). S2L tra ngay am 0 o {', '.join(ngay0)} (ma HND goc chon nham lan trang moi): "
-         "bang tinh la ngay cuoi thang truoc. Sinh lai: bash scripts/doi-chieu/chay.sh")
+         "bang tinh la ngay cuoi thang truoc. Nam 1900 sua tay (SUA trong may sinh): ansaotuvi 0.1.28 S2L ra nhuan thang 7, "
+         "dung la nhuan thang 8 — thang bat dau 24/09/1900 khong co trung khi (goc Mat Troi dau thang va dau thang sau "
+         "cung cung 6, getSunLongitude cua @tuquet/lunar mui +7); @tuquet/lunar va lunar-typescript cung ra nhuan 8. Sinh lai: bash scripts/doi-chieu/chay.sh")
 RA.parent.mkdir(exist_ok=True)
 RA.write_text('{"nguon": ' + json.dumps(nguon) + ',\n"thang": [\n'
               + ",\n".join(json.dumps(x, separators=(",", ":")) for x in thang) + "\n]}\n")
@@ -48,5 +56,5 @@ print(f"Vàng lịch âm: {len(bang)} đầu tháng {bang[0][0]} → {bang[-1][0
       f"Tết 1985/2007/2026: {', '.join(x[0] for x in bang if x[1] in (1985, 2007, 2026) and x[2:] == [1, 0])} · "
       f"suy lại từng ngày 01/02/1900–31/12/2100 so với S2L(.., {MUI}): khớp {tong - len(lech)}/{tong}"
       + (" · lệch (bảng / S2L): " + "; ".join(f"{t} {a} / {b}" for t, a, b in lech) if lech else ""))
-# Chi chap nhan lech o ngay S2L tra ngay am 0 (ghi trong "nguon"); lech khac nghia la bang sai.
-sys.exit(any(goc[0] != 0 for _, _, goc in lech))
+# Chi chap nhan lech o ngay S2L tra ngay am 0 va 59 ngay nam 1900 sua tay (ghi trong "nguon"); lech khac la bang sai.
+sys.exit(any(goc[0] != 0 and not SUA_TU <= t <= SUA_DEN for t, _, goc in lech))

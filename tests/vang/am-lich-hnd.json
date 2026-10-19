@@ -1,4 +1,4 @@
-{"nguon": "ansaotuvi 0.1.28, Lich_HND (thuat toan Ho Ngoc Duc), mui gio +7. Moi phan tu: [ngay duong mung 1, nam am, thang am, nhuan 0/1]; du nam am 1900-2100, phan tu cuoi la Tet 2101 (chi de biet do dai thang truoc). S2L tra ngay am 0 o 2054-05-07, 2062-04-09 (ma HND goc chon nham lan trang moi): bang tinh la ngay cuoi thang truoc. Sinh lai: bash scripts/doi-chieu/chay.sh",
+{"nguon": "ansaotuvi 0.1.28, Lich_HND (thuat toan Ho Ngoc Duc), mui gio +7. Moi phan tu: [ngay duong mung 1, nam am, thang am, nhuan 0/1]; du nam am 1900-2100, phan tu cuoi la Tet 2101 (chi de biet do dai thang truoc). S2L tra ngay am 0 o 2054-05-07, 2062-04-09 (ma HND goc chon nham lan trang moi): bang tinh la ngay cuoi thang truoc. Nam 1900 sua tay (SUA trong may sinh): ansaotuvi 0.1.28 S2L ra nhuan thang 7, dung la nhuan thang 8 \u2014 thang bat dau 24/09/1900 khong co trung khi (goc Mat Troi dau thang va dau thang sau cung cung 6, getSunLongitude cua @tuquet/lunar mui +7); @tuquet/lunar va lunar-typescript cung ra nhuan 8. Sinh lai: bash scripts/doi-chieu/chay.sh",
 "thang": [
 ["1900-01-31",1900,1,0],
 ["1900-03-01",1900,2,0],
@@ -7,8 +7,8 @@
 ["1900-05-28",1900,5,0],
 ["1900-06-27",1900,6,0],
 ["1900-07-26",1900,7,0],
-["1900-08-25",1900,7,1],
-["1900-09-24",1900,8,0],
+["1900-08-25",1900,8,0],
+["1900-09-24",1900,8,1],
 ["1900-10-23",1900,9,0],
 ["1900-11-22",1900,10,0],
 ["1900-12-22",1900,11,0],
