@@ -20,6 +20,9 @@ export function el<K extends keyof HTMLElementTagNameMap>(
   return e;
 }
 
+/** Ten thu trong tuan theo `thu()` cua loi (0 = Chu Nhat). Mot cho duy nhat de cac man ghi giong nhau. */
+export const THU: readonly string[] = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
+
 /** Khoi gap/mo: the `<details>` san cua trinh duyet — khong can JS, may doc man hinh doc duoc. */
 export function khoi(tieuDe: string, moSan: boolean, ...con: Con[]): HTMLElement {
   return el('details', { class: 'khoi', ...(moSan ? { open: '' } : {}) }, el('summary', {}, tieuDe), ...con);

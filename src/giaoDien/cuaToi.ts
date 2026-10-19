@@ -9,7 +9,7 @@ import { xemNgay } from '../loi/homNay.ts';
 import { docGioGo, docNgayGo, khungGio, noiSinhChac, timNoiSinh } from '../loi/nhap.ts';
 import { NUOC_NGOAI } from '../loi/tinh.ts';
 import { docFile, type Kho } from '../luuTru.ts';
-import { el, homNay7, isoNgay, moTaKhac, tinh } from './chung.ts';
+import { el, homNay7, isoNgay, moTaKhac, THU, tinh } from './chung.ts';
 import { dongTheoTuoi } from './homNay.ts';
 import { CAC_KHOI } from './khoi/index.ts';
 
@@ -63,7 +63,6 @@ function theHoSo(hs: HoSo, ...nut: HTMLElement[]): HTMLElement {
   return el('div', {}, the, ...khoiMon);
 }
 
-const THU = ['Chủ nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
 const NGAY_DAU = soNgay({ nam: 1900, thang: 2, ngay: 1 });
 const NGAY_CUOI = soNgay({ nam: 2100, thang: 12, ngay: 31 });
 const hai = (n: number): string => String(n).padStart(2, '0');

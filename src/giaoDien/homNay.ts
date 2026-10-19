@@ -5,9 +5,8 @@
 import { dinhDangAm, dinhDangNgay, type NgayDuong } from '../loi/amLich.ts';
 import { tuoiMu, type HoSo } from '../loi/hoSo.ts';
 import { chiTietNgay, gioTotTheoTuoi, theoTuoi, xemNgay, type ChiTietNgay, type GioHoangDao, type NgayXem } from '../loi/homNay.ts';
-import { el, homNay7, khoi, tinh } from './chung.ts';
+import { el, homNay7, khoi, THU, tinh } from './chung.ts';
 
-const THU = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
 const NHAN = { xung: 'Xung', hop: 'Hợp', binh: 'Bình thường' } as const;
 const SOAN_LAI = 'Lời do Claude soạn lại theo quan niệm dân gian.';
 const LOI_KY: Readonly<Record<string, string>> = {
