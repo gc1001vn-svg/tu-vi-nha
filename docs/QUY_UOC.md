@@ -16,7 +16,7 @@ Tra 14/10/2026. Cột "Đã kiểm": **máy** = đọc mã hoặc chạy thử t
 | Cung phi Bát trạch | Lập Xuân, đúng thời khắc | Tết | 3 trang phong thủy tính theo tiết khí; phái Tết thì chưa thấy trang nào ghi rõ | W3, W4, W5 | web · **câu hỏi 3** |
 | Kim Lâu, Hoang Ốc, Tam Tai | Tết: Kim Lâu, Hoang Ốc theo tuổi mụ (mục 3); Tam Tai theo chi năm sinh và chi năm xem | Lập Xuân: chưa thấy nguồn | các trang đều tính theo tuổi mụ, năm âm | W20, NGUON_MO | web |
 | Sao hạn Cửu Diệu + 8 hạn | Tết (tuổi mụ) | — | "tuổi cúng lễ, viết sớ vẫn theo năm Tết" [W3] | W3, W21 | web |
-| Con giáp hiển thị, tuổi xung/hợp | Tết | — (màn bát tự, phong thủy ghi thêm con giáp theo Lập Xuân khi hai cái khác nhau) | cách hiểu phổ thông ở VN (Bính Ngọ bắt đầu 17/02/2026) | W3, W19, M4 | máy+web |
+| Con giáp hiển thị, tuổi xung/hợp, mệnh nạp âm năm sinh | Tết | — (màn bát tự, phong thủy ghi thêm con giáp theo Lập Xuân khi hai cái khác nhau) | cách hiểu phổ thông ở VN (Bính Ngọ bắt đầu 17/02/2026) | W3, W19, M4 | máy+web |
 | Xem ngày | can chi ngày theo ngày dương; năm in trên lịch theo Tết; thần sát năm (Thái Tuế, Tam Sát…) theo Lập Xuân, **chưa chắc** | — | `getYearPositionTaiSui` mặc định Lập Xuân; chưa có nguồn thứ hai | M4 | máy |
 | Chiêm tinh | không dùng năm âm; mọi mốc theo giờ UTC | — | — | — | — |
 | Thần số học: năm cá nhân | 01/01 | sinh nhật | phần đông đổi số ngày 01/01 | W15 | web |
@@ -100,6 +100,8 @@ Giờ sinh (đã đổi về +7) cách một ranh không quá 15 phút thì tín
 | Tử vi | Không lập được một lá duy nhất (Mệnh, Thân, cục và phần lớn sao an theo giờ), nên hiện 12 phương án theo 12 giờ cho người dùng chọn |
 | Chiêm tinh | Tính lúc 12:00: Mặt Trời và các hành tinh dùng được; Mặt Trăng đổi cung trong ngày thì hiện 2 phương án; bỏ cung Mọc và các nhà |
 | Kinh Dịch, bói Kiều, tarot, xin xăm, tướng mặt, chỉ tay | Không cần giờ sinh |
+
+Cách làm trong mã (đợt 1, `src/loi/hoSo.ts`): không rõ giờ thì thử 00:00 và 22:59 của ngày ghi (giờ +7), ra khác nhau thì hiện cả hai — bắt được ngày Lập Xuân, ngày giao tiết. Không thử 23:00 trở đi: theo phái A (mục 4) mọi ngày đều sang ngày hôm sau, ngày sinh nào cũng thành 2 phương án; nên người sinh đêm 30 Tết sau 23:00 mà không rõ giờ thì app vẫn lấy năm cũ (**chưa chắc**, chưa thấy nguồn bàn).
 
 Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungChu`); `iztro` bắt buộc có `timeIndex`; `lunar-typescript` tính khởi vận theo quy ước 3 ngày tới tiết = 1 năm, 6 giờ = 1 tháng.
 ## 10. Chữ (đã chốt; áp cho chữ hiện trong app và bảng dữ liệu)
