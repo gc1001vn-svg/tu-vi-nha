@@ -7,6 +7,9 @@ import { NUOC_NGOAI } from '../loi/tinh.ts';
 
 type Con = Node | string | null | false;
 
+/** Khuon chung moi khoi thong tin mot nguoi (bat tu, nam nay, tu vi…): ho so, ket qua tinh san, ngay xem. */
+export type VeKhoi = (hs: HoSo, tr: TinhRa, ngayXem: NgayDuong) => HTMLElement;
+
 /** Tao the. Chu nguoi dung luon vao bang text node (khong innerHTML). */
 export function el<K extends keyof HTMLElementTagNameMap>(
   ten: K, thuoc: Readonly<Record<string, string>> = {}, ...con: Con[]
@@ -15,6 +18,11 @@ export function el<K extends keyof HTMLElementTagNameMap>(
   for (const [k, v] of Object.entries(thuoc)) e.setAttribute(k, v);
   for (const c of con) if (c !== null && c !== false) e.append(c);
   return e;
+}
+
+/** Khoi gap/mo: the `<details>` san cua trinh duyet — khong can JS, may doc man hinh doc duoc. */
+export function khoi(tieuDe: string, moSan: boolean, ...con: Con[]): HTMLElement {
+  return el('details', { class: 'khoi', ...(moSan ? { open: '' } : {}) }, el('summary', {}, tieuDe), ...con);
 }
 
 /** "Hom nay" luon theo gio Viet Nam (+7), du may dang dat mui khac. */

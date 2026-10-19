@@ -10,6 +10,7 @@ import { NUOC_NGOAI, TINH } from '../loi/tinh.ts';
 import { docFile, type Kho } from '../luuTru.ts';
 import { el, homNay7, isoNgay, moTaKhac, tinh } from './chung.ts';
 import { dongTheoTuoi } from './homNay.ts';
+import { CAC_KHOI } from './khoi/index.ts';
 
 export interface CuaToi {
   readonly kho: Kho;
@@ -28,12 +29,14 @@ let daTra: HoSo | null = null;
 
 const loiCua = (e: unknown): string => (e instanceof Error ? e.message : String(e));
 
+/** The ket qua + cac khoi mon (bat tu, nam nay…). Khoi nao loi thi chi khoi do bao loi, cac khoi khac van hien. */
 function theHoSo(hs: HoSo, ...nut: HTMLElement[]): HTMLElement {
   const noi = hs.noiSinh === NUOC_NGOAI ? `nước ngoài (${hs.muiGio ?? '?'})` : hs.noiSinh;
   const [nam, thang, ngay] = hs.ngaySinh.split('-').map(Number);
   const dau = el('div', { class: 'ten' }, `${hs.ten} (${hs.gioiTinh === 'nam' ? 'nam' : 'nữ'})`);
   const duong = el('p', {}, `Dương lịch ${dinhDangNgay({ nam: nam ?? 0, thang: thang ?? 0, ngay: ngay ?? 0 })} ${hs.gioSinh ?? '(không rõ giờ)'} · ${noi}`);
   const the = el('section', { class: 'the' }, dau, duong);
+  const khoiMon: HTMLElement[] = [];
   try {
     const r = tinh(hs);
     const k = r.chinh;
@@ -45,11 +48,18 @@ function theHoSo(hs: HoSo, ...nut: HTMLElement[]): HTMLElement {
       ...r.canhBao.map((c) => el('p', { class: 'canh-bao' }, c)),
       ...r.khac.map((p) => el('p', { class: 'canh-bao' }, `${p.lyDo}: khác ở ${moTaKhac(p.khac, p.ketQua)}`)),
     );
+    for (const ve of CAC_KHOI) {
+      try {
+        khoiMon.push(ve(hs, r, homNay7()));
+      } catch (e) {
+        khoiMon.push(el('p', { class: 'loi' }, `Một phần không tính được: ${loiCua(e)}`));
+      }
+    }
   } catch (e) {
     the.append(el('p', { class: 'loi' }, `Không tính được: ${loiCua(e)}`));
   }
   if (nut.length > 0) the.append(el('div', { class: 'nut-hang' }, ...nut));
-  return the;
+  return el('div', {}, the, ...khoiMon);
 }
 
 /** `xong` nhan ho so da kiem va da tinh thu; tra loi (tieng Viet) neu khong xong. */
