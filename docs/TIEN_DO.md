@@ -4,7 +4,8 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 15/10/2026 — đợt 0 xong phần máy, gộp `main` 15/10.
+Cập nhật: 19/10/2026 — đợt 0 xong phần máy, gộp `main` 15/10; trang web chạy từ 19/10:
+https://gc1001vn-svg.github.io/tu-vi-nha/ (Deploy kiểm: trang chính, manifest, icon đều HTTP 200).
 
 ## 1. Đang ở đâu
 
@@ -22,8 +23,6 @@ Hồ sơ nhiều người + sao lưu file · âm lịch VN (`@tuquet/lunar`) · 
 
 ## 3. Cần anh
 
-- Bật GitHub Pages một lần: mở https://github.com/gc1001vn-svg/tu-vi-nha/settings/pages → mục "Source" chọn
-  "GitHub Actions". Chưa bật thì việc tự đưa app lên web báo đỏ.
 - Chụp app lịch âm anh tin, 7 ngày (cả dòng ngày âm, trực, ngày tốt/xấu): 21/01/1985 · 26/07/1987 · 29/01/1968 ·
   01/02/1965 · 25/08/1938 · 10/02/2026 · 10/03/2026. Để biết: ngày âm trước 1968 theo +7 hay +8; 12 trực theo tiết hay tháng âm.
 
