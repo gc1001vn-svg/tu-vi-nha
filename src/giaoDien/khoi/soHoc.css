@@ -1,0 +1,20 @@
+/* Khoi than so hoc, cung hoang dao, nhip sinh hoc (`soHoc.ts`). Moi chu >= 15px; mau lay bien o `src/style.css`. */
+.so-hoc .sh-lon { display: flex; align-items: baseline; gap: 10px; margin: 2px 0 4px; }
+.so-hoc .sh-so { font-size: 2.6rem; font-weight: 700; line-height: 1.1; color: var(--vang); }
+.so-hoc .sh-ten { font-size: 1.6rem; font-weight: 700; color: var(--vang); }
+.so-hoc .sh-loi, .so-hoc .sh-chu-thich { font-size: 0.9rem; color: var(--mo); }
+.so-hoc .dong .sh-loi { flex-basis: 100%; }
+
+.so-hoc .sh-luoi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-width: 240px; margin: 12px 0 6px; }
+.so-hoc .sh-luoi > span {
+  min-height: 44px; display: flex; align-items: center; justify-content: center; text-align: center;
+  border: 1px solid var(--vien); border-radius: 8px; font-weight: 600; overflow-wrap: anywhere;
+}
+
+.so-hoc .sh-nhip { padding: 8px 0; border-top: 1px solid var(--vien); }
+.so-hoc .sh-nhip-dau { display: flex; justify-content: space-between; gap: 8px; }
+.so-hoc .sh-thanh { position: relative; height: 12px; margin: 6px 0; border: 1px solid var(--vien); border-radius: 6px; background: var(--nen); }
+.so-hoc .sh-thanh::after { content: ''; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--mo); }
+.so-hoc .sh-thanh > i { position: absolute; top: 0; bottom: 0; border-radius: 6px; background: var(--xanh); }
+.so-hoc .sh-thanh > i.sh-am { background: var(--do); }
+.so-hoc .sh-nguy { color: var(--do); }

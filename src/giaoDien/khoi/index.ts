@@ -5,5 +5,6 @@
  */
 import type { VeKhoi } from '../chung.ts';
 import { veKhoiBatTu } from './batTu.ts';
+import { veKhoiHoangDao, veKhoiNhipSinhHoc, veKhoiThanSo } from './soHoc.ts';
 
-export const CAC_KHOI: readonly VeKhoi[] = [veKhoiBatTu];
+export const CAC_KHOI: readonly VeKhoi[] = [veKhoiBatTu, veKhoiThanSo, veKhoiHoangDao, veKhoiNhipSinhHoc];
