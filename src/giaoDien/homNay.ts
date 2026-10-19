@@ -1,9 +1,10 @@
 /**
- * The "Hom nay": thong tin chung cua ngay + "Ca nha hom nay" (moi nguoi mot dong — anh chot 19/10).
+ * The "Hom nay": thong tin chung cua ngay + "Voi toi hom nay" theo ho so cua toi (anh chot 19/10: chi luu ho so cua anh,
+ * tra cuu nguoi khac thi khong luu).
  */
-import { dinhDangAm, dinhDangNgay } from '../loi/amLich.ts';
+import { dinhDangAm, dinhDangNgay, type NgayDuong } from '../loi/amLich.ts';
 import { tuoiMu, type HoSo } from '../loi/hoSo.ts';
-import { theoTuoi, xemNgay } from '../loi/homNay.ts';
+import { theoTuoi, xemNgay, type NgayXem } from '../loi/homNay.ts';
 import { el, homNay7, tinh } from './chung.ts';
 
 const THU = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
@@ -13,7 +14,23 @@ const dong = (nhan: string, giaTri: string, ghiChu?: string): HTMLElement =>
   el('div', { class: 'dong' }, el('span', { class: 'nhan' }, nhan), el('span', {}, giaTri),
     ghiChu === undefined ? null : el('small', { class: 'ghi-chu' }, ghiChu));
 
-export function veHomNay(ds: readonly HoSo[], moThem: () => void): HTMLElement {
+/** Mot nguoi hom nay: hop/xung tuoi, loi, mau so hop menh. Dung o "Hom nay" (ho so cua toi) va "Tra cuu". */
+export function dongTheoTuoi(hs: HoSo, n: NgayXem, d: NgayDuong): HTMLElement {
+  try {
+    const k = tinh(hs).chinh;
+    const t = theoTuoi(n, k.chiNam, k.hanhMenh);
+    return el('div', { class: `nguoi ${t.quanHe}` },
+      el('div', { class: 'ten' }, `${hs.ten} · ${String(tuoiMu(k.am.nam, d))} tuổi (${k.conGiap})`,
+        el('span', { class: 'nhan-quan-he' }, `${NHAN[t.quanHe]}${t.loai === '' ? '' : ` · ${t.loai}`}`)),
+      el('p', {}, t.loi),
+      el('p', { class: 'mau' }, `Màu hợp: ${t.mauHop.join(', ')} · Số hợp: ${t.soHop.join(', ')}`),
+      el('p', { class: 'ghi-chu' }, 'Màu, số theo mệnh (nạp âm năm sinh). Lời do Claude soạn lại theo quan niệm dân gian.'));
+  } catch (e) {
+    return el('p', { class: 'loi' }, `${hs.ten}: không tính được (${e instanceof Error ? e.message : String(e)})`);
+  }
+}
+
+export function veHomNay(toi: HoSo | undefined, moToi: () => void): HTMLElement {
   const d = homNay7();
   const n = xemNgay(d);
   const chung = el('section', { class: 'the' },
@@ -27,27 +44,13 @@ export function veHomNay(ds: readonly HoSo[], moThem: () => void): HTMLElement {
     dong('Thần tài', n.thanTai), dong('Hỷ thần', n.hyThan),
     dong('Nạp âm', `${n.napAmNgay} (${n.hanhNgay})`),
   );
-
-  const caNha = el('section', { class: 'the' }, el('h2', {}, 'Cả nhà hôm nay'));
-  if (ds.length === 0) {
-    const nut = el('button', { type: 'button', class: 'chinh' }, 'Thêm người nhà');
-    nut.addEventListener('click', moThem);
-    caNha.append(el('p', {}, 'Chưa có hồ sơ nào.'), nut);
+  const voiToi = el('section', { class: 'the' }, el('h2', {}, 'Với tôi hôm nay'));
+  if (toi === undefined) {
+    const nut = el('button', { type: 'button', class: 'chinh' }, 'Nhập hồ sơ của tôi');
+    nut.addEventListener('click', moToi);
+    voiToi.append(el('p', {}, 'Chưa có hồ sơ của tôi. Nhập một lần, app tự tính mỗi ngày.'), nut);
+  } else {
+    voiToi.append(dongTheoTuoi(toi, n, d));
   }
-  for (const hs of ds) {
-    try {
-      const k = tinh(hs).chinh;
-      const t = theoTuoi(n, k.chiNam, k.hanhMenh);
-      caNha.append(el('div', { class: `nguoi ${t.quanHe}` },
-        el('div', { class: 'ten' }, `${hs.ten} · ${String(tuoiMu(k.am.nam, d))} tuổi (${k.conGiap})`,
-          el('span', { class: 'nhan-quan-he' }, `${NHAN[t.quanHe]}${t.loai === '' ? '' : ` · ${t.loai}`}`)),
-        el('p', {}, t.loi),
-        el('p', { class: 'mau' }, `Màu hợp: ${t.mauHop.join(', ')} · Số hợp: ${t.soHop.join(', ')}`),
-      ));
-    } catch (e) {
-      caNha.append(el('p', { class: 'loi' }, `${hs.ten}: không tính được (${e instanceof Error ? e.message : String(e)})`));
-    }
-  }
-  if (ds.length > 0) caNha.append(el('p', { class: 'ghi-chu' }, 'Màu, số theo mệnh (nạp âm năm sinh). Lời do Claude soạn lại theo quan niệm dân gian.'));
-  return el('div', {}, chung, caNha);
+  return el('div', {}, chung, voiToi);
 }

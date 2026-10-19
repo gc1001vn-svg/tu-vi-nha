@@ -1,10 +1,10 @@
 /**
- * Cua vao cua trang: hai the "Hom nay" · "Ca nha", dai nhac sao luu / cai app, chan trang so phien ban.
+ * Cua vao cua trang: ba the "Hom nay" · "Tra cuu" · "Cua toi", dai nhac sao luu / cai app, chan trang so phien ban.
  */
 import { registerSW } from 'virtual:pwa-register';
 import { PHIEN_BAN } from './PhienBan';
 import { el, homNay7, isoNgay } from './giaoDien/chung.ts';
-import { moForm, veCaNha } from './giaoDien/caNha.ts';
+import { veCuaToi, veTraCuu } from './giaoDien/cuaToi.ts';
 import { veHomNay } from './giaoDien/homNay.ts';
 import { docKho, ghiKho, xuatFile, type Kho } from './luuTru.ts';
 import type { HoSo } from './loi/hoSo.ts';
@@ -31,7 +31,7 @@ const dau = docKho();
 let kho: Kho = dau.kho;
 const chanGhi = dau.chanGhi;
 let thongBao: string | null = dau.loi;
-let the: 'homNay' | 'caNha' = 'homNay';
+let the: 'homNay' | 'traCuu' | 'cuaToi' = 'homNay';
 
 const NGAY_MS = 86_400_000;
 const laAppManHinhChinh = (): boolean =>
@@ -85,26 +85,27 @@ function ve(): void {
     n.addEventListener('click', () => { the = ma; ve(); });
     return n;
   };
-  const moThem = (): void => { moForm('moi'); the = 'caNha'; ve(); };
   const noiDung = the === 'homNay'
-    ? veHomNay(kho.hoSo, moThem)
-    : veCaNha({
-      kho,
-      doiHoSo: (ds: readonly HoSo[]) => doiKho({ ...kho, hoSo: ds }),
-      xuat,
-      bao: (chu) => { thongBao = chu; },
-      ve,
-    });
+    ? veHomNay(kho.hoSo[0], () => { the = 'cuaToi'; ve(); })
+    : the === 'traCuu'
+      ? veTraCuu(() => { ve(); scrollTo(0, 0); })
+      : veCuaToi({
+        kho,
+        doiHoSo: (ds: readonly HoSo[]) => doiKho({ ...kho, hoSo: ds }),
+        xuat,
+        bao: (chu) => { thongBao = chu; },
+        ve,
+      });
   app.replaceChildren(
     el('h1', {}, 'Tử Vi Nhà'),
-    el('nav', { class: 'cac-the', role: 'tablist' }, nutThe('homNay', 'Hôm nay'), nutThe('caNha', 'Cả nhà')),
+    el('nav', { class: 'cac-the', role: 'tablist' }, nutThe('homNay', 'Hôm nay'), nutThe('traCuu', 'Tra cứu'), nutThe('cuaToi', 'Của tôi')),
     ...daiNhac(),
     noiDung,
     el('p', { class: 'phien-ban' }, `Bản ${PHIEN_BAN}`),
   );
 }
 
-// Mo lai app sang ngay moi thi "Hom nay" phai doi theo. Chi ve lai the nay: ve lai the "Ca nha" la mat chu dang go do trong form.
+// Mo lai app sang ngay moi thi "Hom nay" phai doi theo. Chi ve lai the nay: ve lai the co form la mat chu dang go do.
 document.addEventListener('visibilitychange', () => {
   if (document.visibilityState === 'visible' && the === 'homNay') ve();
 });
