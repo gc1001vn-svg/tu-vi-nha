@@ -96,8 +96,18 @@ input:disabled { opacity: 0.5; }
 .nut-hang { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .form .cot, .form label.cot { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
 .form input[type='text'], .form input[type='date'], .form input[type='time'], .form select { width: 100%; }
-.ba-o { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 8px; }
-.ba-o input { width: 100%; }
+/* Form go nhanh: o go + dong "= …" ngay duoi + hang nut goi y (cao 44px); Nam/Nu la nut bat tat. */
+.form .nhan-o { display: flex; flex-direction: column; gap: 6px; }
+.xem-truoc { margin: 0; color: var(--mo); font-size: 0.95rem; }
+.xem-truoc.loi { color: var(--do); }
+.xem-truoc:empty, .goi-y:empty { display: none; }
+.goi-y { display: flex; flex-wrap: wrap; gap: 8px; }
+.goi-y button { text-align: left; }
+.nut-doi { display: flex; gap: 8px; }
+.nut-doi button { flex: 1; }
+.nut-doi button[aria-pressed='true'] { background: var(--vang); color: var(--nen); border-color: var(--vang); font-weight: 600; }
+.hang-chon { display: flex; flex-wrap: wrap; gap: 0 20px; }
+.hang-chon label { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
 [hidden] { display: none !important; }
 
 .khoi { background: var(--nen-the); border: 1px solid var(--vien); border-radius: 14px; padding: 0 14px; margin-bottom: 12px; }
