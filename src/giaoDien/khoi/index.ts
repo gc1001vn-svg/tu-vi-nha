@@ -4,5 +4,6 @@
  * Ke hoach: `docs/ke-hoach/2026-10-19-tang-toc.md`.
  */
 import type { VeKhoi } from '../chung.ts';
+import { veKhoiTuVi } from './tuVi.ts';
 
-export const CAC_KHOI: readonly VeKhoi[] = [];
+export const CAC_KHOI: readonly VeKhoi[] = [veKhoiTuVi];
