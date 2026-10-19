@@ -39,6 +39,16 @@ describe('tu vi: la so', () => {
     expect(LA.flatMap((p) => soPy(p, 'altuvi'))).toEqual([]);
   });
 
+  test('menh chu, than chu: mac dinh Toan Thu (theo cung Menh), tuy chon theo tuoi (Quan Xuan Thinh); Ty Linh Tinh, Ngo Hoa Tinh', () => {
+    // ca A Altuvi (gia): nam 24/2 at Suu gio Suu → Menh o Dan
+    const a = { ngay: 24, thang: 2, nam: 1985, chiGio: 1, gioiTinh: 'nam', namXem: 2026 } as const;
+    expect(lapLaSo(a)).toMatchObject({ menhChu: 'Lộc Tồn', thanChu: 'Thiên Tướng' });
+    expect(lapLaSo({ ...a, menhChuTheo: 'tuoi' })).toMatchObject({ menhChu: 'Cự Môn', thanChu: 'Thiên Tướng' });
+    expect(lapLaSo({ ...a, nam: 1984 }).thanChu).toBe('Linh Tinh'); // Giap Ty
+    expect(lapLaSo({ ...a, nam: 1990 }).thanChu).toBe('Hỏa Tinh'); // Canh Ngo
+    expect(lapLaSo({ ...a, nam: 1995, menhChuTheo: 'tuoi' }).menhChu).toBe('Cự Môn'); // At Hoi: vi du trong sach Quan Xuan Thinh
+  });
+
   test('ngay gio sai thi nem loi', () => {
     const v = { ngay: 31, thang: 1, nam: 2000, chiGio: 0, gioiTinh: 'nam', namXem: 2026 } as const;
     expect(() => lapLaSo(v)).toThrow();
