@@ -23,7 +23,8 @@ Hồ sơ nhiều người + sao lưu file · âm lịch VN (`@tuquet/lunar`) · 
 
 ## 3. Cần anh
 
-- Chụp app lịch âm anh tin, 7 ngày (cả dòng ngày âm, trực, ngày tốt/xấu): 21/01/1985 · 26/07/1987 · 29/01/1968 ·
+- Ảnh lịch âm: **đã nhận 21/01/1985** (khớp bảng vàng; can chi tháng theo tháng âm — `QUY_UOC.md` mục 2). Còn thiếu: dòng "Trực" của 21/01/1985
+  (Nguy = theo tiết, Phá = theo tháng âm) và 6 ngày còn lại. Chụp app lịch âm anh tin, 7 ngày (cả dòng ngày âm, trực, ngày tốt/xấu): 21/01/1985 · 26/07/1987 · 29/01/1968 ·
   01/02/1965 · 25/08/1938 · 10/02/2026 · 10/03/2026. Để biết: ngày âm trước 1968 theo +7 hay +8; 12 trực theo tiết hay tháng âm.
 
 ## 4. Nợ, chỗ chưa chắc

@@ -27,6 +27,7 @@ Tra 14/10/2026. Cột "Đã kiểm": **máy** = đọc mã hoặc chạy thử t
 | Bát tự: trụ tháng, tuổi khởi vận | 12 tiết (Lập Xuân, Kinh Trập, Thanh Minh…), đúng thời khắc +7 | theo cả ngày tiết (`sxtwl`) | mọi nguồn cùng một ý | M4, M5, W17 | máy+web |
 | Cửu tinh tháng | tháng tiết, đúng thời khắc | theo ngày tiết (`getMonthNineStar` mặc định) | Huyền Không theo tiết | M4, W2 (chỉ thấy ghi bàn tháng có giờ bắt đầu) | máy |
 | Xem ngày: 12 trực, hoàng/hắc đạo ngày, thần sát theo tháng | tháng tiết (ngày giao tiết thuộc tháng mới) | tháng âm | `getZhiXing`, `getDayTianShen` tính theo tiết; Thông Thư lấy chi tháng theo tiết, sang tiết thì tính lại | M4, W22 | máy+web; lịch in ở VN **chưa chắc** (chờ ảnh lịch anh chụp) |
+| Can chi tháng in trên lịch (màn "Hôm nay") | **tháng âm**: tháng Giêng năm Ất Sửu = Mậu Dần (tính từ can năm âm + số tháng; tháng nhuận dùng can chi tháng trước) | — | Ảnh anh chụp 19/10: 21/01/1985 (trước Lập Xuân) lịch Việt ghi tháng Mậu Dần; `getMonthInGanZhi` ra Đinh Sửu (theo tiết) → không dùng hàm thư viện cho dòng này | ảnh | máy |
 | Xem ngày: ngày kiêng ghi theo ngày âm (Tam Nương 3, 7, 13, 18, 22, 27; Nguyệt Kỵ 5, 14, 23) | tháng âm | — | quy tắc vốn ghi theo ngày âm | W18 | web |
 
 Ngày thử để chốt dòng 12 trực (máy, `lunar-typescript`). Ngày 10/02/2026 (23/12 âm): theo tiết là trực Trừ, ngày hắc đạo; theo tháng âm là trực Mãn, ngày hoàng đạo. Ngày 10/03/2026 (22/1 âm): theo tiết là trực Định; theo tháng âm là trực Chấp.
