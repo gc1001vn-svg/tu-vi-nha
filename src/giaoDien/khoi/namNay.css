@@ -1,0 +1,7 @@
+/* Khoi nam nay, phong thuy: ten muc to mau theo tot/xau, nghia xuong mot dong rieng; chu >= 15px (0.9rem = 15.3px). */
+.dong-muc b { font-weight: 600; }
+.dong-muc .nhan { min-width: 6.6em; }
+.dong-muc.tot b { color: var(--xanh); }
+.dong-muc.xau b { color: var(--do); }
+.dong-muc-nghia, .dong-muc-chu { color: var(--mo); font-size: 0.9rem; }
+.dong-muc-nghia { flex-basis: 100%; }
