@@ -127,6 +127,14 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Năm cá nhân = ngày + tháng sinh + năm xem, rút về 1–9 (đổi 01/01, mục 1); tháng cá nhân = năm cá nhân + tháng. Số ngày sinh: rút gọn ngày, giữ 11, 22. Lưới 3×3 bỏ số 0; mũi tên chưa làm (các trang đặt tên vênh) [W31].
 - Cung hoàng đạo theo bảng ngày cố định của `lunar-typescript`. Vênh 1 ngày ở 21/6, 23/10, 22/11 (thư viện: Song Tử, Thiên Bình, Thiên Yết; nhiều bảng: Cự Giải, Thiên Yết, Nhân Mã) → ngày cách giao cung ±1 thì ghi thêm cung bên cạnh [W32].
 - Nhịp sinh học: sin(2πt/T), T = 23, 28, 33 ngày, t = số ngày từ ngày sinh; ghi rõ không có cơ sở khoa học [W33].
+## 14. Năm nay, hướng Bát trạch, tuổi hợp (`src/loi/namNay.ts`, `batTrach.ts`, `tuoiHop.ts`, đo 19/10)
+- Năm xem = năm âm (Tết) của ngày xem; tuổi mụ theo mục 3.
+- **Sao Cửu Diệu**: tuổi mụ chia 9, nam nữ khác vòng. **8 hạn**: (số chục + số đơn vị của tuổi mụ) chia 8 — không chia 8 thẳng (89 và 90 cùng Huỳnh Tuyền); nam dư 1 Huỳnh Tuyền … dư 0 Diêm Vương; nữ dư 1 Tán Tận, 2 Thiên Tinh, 3 Ngũ Mộ, 4 Tam Kheo, 5 Huỳnh Tuyền, 6 Diêm Vương, 7 Địa Võng, 0 Thiên La. Khớp bảng báo năm 2026: 36 năm sinh × 2 giới, sao + hạn 144/144 ô; năm 2025: 8/8 [W34].
+- **Kim Lâu**: tuổi mụ chia 9 dư 1, 3, 6, 8 (Thân, Thê, Tử, Súc); cách "cộng chữ số" ra trùng hệt nên không làm tuỳ chọn; biến thể cửu cung (khởi Cấn) chưa làm. **Hoang Ốc**: (chục + đơn vị) chia 6, 10 tuổi ở Nhất Cát, mỗi chục quay về cung của chục (`hoangOc = theoChuc`); tuỳ chọn `demTiep` (đếm liền từ 10 tuổi); bỏ hai biến thể trái quy tắc "20 tuổi Nhì Nghi" (tuổi mụ chia 6; bảng cách 9 năm) [W35].
+- Dưới 10 tuổi mụ: hạn, Kim Lâu, Hoang Ốc ghi "Chưa xét" (các bảng bắt đầu từ 10 tuổi) — **chưa chắc**.
+- **Tam Tai** theo nhóm tam hợp của chi năm sinh. **Thái Tuế**: trùng (Trị), xung, hình (tam hình + tự hình), hại, phá — ghi đủ các quan hệ cùng lúc (2026 Ngọ: Trị + Hình) [W35].
+- **Bát trạch**: Đông/Tây tứ mệnh, 8 hướng theo phép biến hào Du Niên (64/64 ô khớp nguồn); cung phi theo Lập Xuân (mục 1), sinh giữa Lập Xuân và Tết thì ghi thêm "nếu tính theo Tết thì là …". **Tuổi hợp/kỵ**: tam hợp, lục hợp, tứ hành xung, lục xung, lục hại — cùng công thức `theoTuoi` (144 cặp chi) [W36].
+- Đã kiểm: web (trích đoạn tìm kiếm, chưa mở trang gốc); URL từng dòng bảng báo trong comment `tests/NamNay.test.ts`.
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -138,6 +146,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `gioMatTroi` | bật · tắt | tắt | tử vi, bát tự |
 | `namCaNhan` | `ngay0101` · `sinhNhat` | `ngay0101` | thần số học |
 | `soChuDao` | `motLuot` · `rutGonRieng` | `motLuot` | thần số học |
+| `hoangOc` | `theoChuc` · `demTiep` | `theoChuc` | Hoang Ốc |
 | `phaiTuVi` | `altuvi` · `ansaotuvi` | `altuvi` (luật 3) | tử vi: Thiên Giải, Phá Toái, Hỏa/Linh Tinh, năm Canh (Khôi, Việt, Hóa Khoa, Hóa Kỵ, Lưu Hà), Mệnh chủ/Thân chủ |
 | `menhMauSo` | `napAm` · `cungPhi` | `napAm` | màu, số hợp mệnh (màn "Hôm nay") |
 
@@ -175,6 +184,9 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W31 https://thuvienphapluat.vn/cong-dong-dan-luat/huong-dan-cach-tinh-nam-ca-nhan-theo-than-so-hoc-210558.aspx · https://fptshop.com.vn/tin-tuc/for-gamers/2026-la-nam-ca-nhan-so-may-195644 · https://mytour.vn/vi/blog/bai-viet/kham-pha-bi-an-cua-ngay-sinh-qua-than-so-hoc-so-hoc-theo-pythagoras.html · https://www.vietnamworks.com/hrinsider/bieu-do-ngay-sinh-than-so-hoc-la-gi.html · https://jobsgo.vn/blog/bieu-do-ngay-sinh-than-so-hoc/
 - W32 https://shopee.vn/blog/cung-hoang-dao/ · https://hoanghamobile.com/tin-tuc/22-11-la-cung-gi/ · https://www.lovetoknow.com/life/astrology/horoscope-sign-dates
 - W33 https://blogs.mathworks.com/cleve/?p=105 · https://www.intmath.com/trigonometric-graphs/biorhythm-graphs.php · https://encyclopedia.pub/entry/37613
+- W34 https://luatminhkhue.vn/bang-tinh-sao-han-va-cuu-dieu-nam-binh-ngo-2026.aspx · https://hoatieu.vn/tai-lieu/bang-tinh-sao-han-204566 · https://phongthuyviet.com.vn/2016/01/22/cach-tinh-han-huynh-tuyen/ · https://tuvisonlong.com/han-hang-nam-la-gi/ · https://lichngaytot.com/tu-vi/sao-han-tuoi-ty-nam-2026-304-232429.html · https://tuoiam.com/sao-han/ · https://mogi.vn/news/bang-sao-han-2025-270399/
+- W35 https://fptshop.com.vn/tin-tuc/for-gamers/2026-tuoi-nao-pham-kim-lau-200222 · https://www.dienmayxanh.com/kinh-nghiem-hay/hoang-oc-la-gi-cach-tinh-tuoi-hoang-oc-1586912 · https://nhadepktv.vn/tu-van-phong-thuy/han-hoang-oc-la-gi.html · https://market.vinhomes.vn/blog/han-hoang-oc · https://luatminhkhue.vn/tam-tai-la-gi.aspx · https://vietnamnet.vn/han-tam-tai-nam-2026-co-nhung-tuoi-nao-cach-hoa-giai-han-tam-tai-2485550.html · https://soha.vn/nam-2026-nhung-tuoi-nao-pham-thai-tue-198251217110657351.htm · https://kenh14.vn/nam-2026-nhung-tuoi-nao-pham-thai-tue-215251217084647382.chn
+- W36 https://wiki.batdongsan.com.vn/wiki/xem-huong-tot-va-xau-cho-tung-cung-menh-58093 · https://vatphamphongthuy.com/xem-huong-tot-xau-theo-menh-cung.html · https://www.blogphongthuy.com/cac-huong-tot-xau-voi-8-menh-cung.html · https://giaoducthudo.giaoducthoidai.vn/vi-dau-co-tam-hop-tu-hanh-xung-luc-hop-luc-hai-giua-cac-tuoi-voi-nhau-112321.html
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.
