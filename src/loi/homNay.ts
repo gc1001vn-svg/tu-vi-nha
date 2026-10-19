@@ -1,11 +1,12 @@
 /**
- * Man "Hom nay": thong tin mot ngay (can chi, tiet, truc, hoang dao, gio hoang dao, than tai) va theo tuoi tung nguoi.
- * Quy uoc: `docs/QUY_UOC.md` muc 2 (can chi thang theo thang am, truc/hoang dao theo thang tiet), muc 11 (theo tuoi, mau, so).
- * Thuoc: `tests/HomNay.test.ts` (5 anh lich anh chup, quet so thu vien 1900–2100).
+ * Man "Hom nay": thong tin mot ngay (can chi, tiet, truc, hoang dao, gio hoang dao, than tai), chi tiet ngay (nen/kieng,
+ * than sat, 28 tu, Banh To, xung, sat, ngay ky am) va theo tuoi tung nguoi.
+ * Quy uoc: `docs/QUY_UOC.md` muc 2 (can chi thang theo thang am, truc/hoang dao/than sat theo thang tiet), muc 11 (theo tuoi, mau, so).
+ * Thuoc: `tests/HomNay.test.ts` (5 anh lich anh chup, quet so thu vien 1900–2100), `tests/HomNayChiTiet.test.ts`.
  */
-import { LunarUtil, Solar } from 'lunar-typescript';
+import { LunarUtil, Solar, type Lunar } from 'lunar-typescript';
 import { CHI, canChiNam, canChiNgay, canChiThang, duongSangAm, soNgay, thu, tuSoNgay, type NgayAm, type NgayDuong } from './amLich.ts';
-import { hv } from './hanViet/index.ts';
+import { BANG, hv, type Bang, type Nhom } from './hanViet/index.ts';
 
 export interface GioHoangDao { readonly chi: string; readonly khoang: string }
 export interface NgayXem {
@@ -22,14 +23,20 @@ export type ThangXemNgay = 'tiet' | 'am';
 
 const hai = (n: number): string => String(n).padStart(2, '0');
 
+// Thu vien tinh tiet theo gio Bac Kinh (+8). Ca ngay D (gio VN) thuoc thang cua tiet roi truoc 23:59:59 VN = 00:59:59 Bac Kinh ngay D+1.
+function cuoiNgayVN(d: NgayDuong): Lunar {
+  const mai = tuSoNgay(soNgay(d) + 1);
+  return Solar.fromYmdHms(mai.nam, mai.thang, mai.ngay, 0, 59, 59).getLunar();
+}
+const chiThangXem = (cuoiNgay: Lunar, am: NgayAm, t: ThangXemNgay): number =>
+  t === 'am' ? (am.thang + 1) % 12 : cuoiNgay.getMonthZhiIndexExact();
+
 export function xemNgay(d: NgayDuong, thangXemNgay: ThangXemNgay = 'tiet'): NgayXem {
   const am = duongSangAm(d);
   const lunar = Solar.fromYmd(d.nam, d.thang, d.ngay).getLunar();
-  // Thu vien tinh tiet theo gio Bac Kinh (+8). Ca ngay D (gio VN) thuoc thang cua tiet roi truoc 23:59:59 VN = 00:59:59 Bac Kinh ngay D+1.
-  const mai = tuSoNgay(soNgay(d) + 1);
-  const cuoiNgay = Solar.fromYmdHms(mai.nam, mai.thang, mai.ngay, 0, 59, 59).getLunar();
+  const cuoiNgay = cuoiNgayVN(d);
   const chiNgay = (soNgay(d) + 1) % 12;
-  const chiThang = thangXemNgay === 'am' ? (am.thang + 1) % 12 : cuoiNgay.getMonthZhiIndexExact();
+  const chiThang = chiThangXem(cuoiNgay, am, thangXemNgay);
   const thienThan = LunarUtil.TIAN_SHEN[(chiNgay + (LunarUtil.ZHI_TIAN_SHEN_OFFSET[CHI.charAt(chiThang)] ?? 0)) % 12 + 1] ?? '';
   const napAm = lunar.getDayNaYin();
   return {
@@ -46,6 +53,62 @@ export function xemNgay(d: NgayDuong, thangXemNgay: ThangXemNgay = 'tiet'): Ngay
     napAmNgay: hv('napAm', napAm),
     hanhNgay: hv('nguHanh', napAm.slice(-1)),
     chiNgay,
+  };
+}
+
+/** Gio hoang dao tru gio luc xung chi nam sinh (`QUY_UOC` muc 11). */
+export function gioTotTheoTuoi(n: NgayXem, chiNamSinh: number): GioHoangDao[] {
+  const xung = hv('chi', CHI.charAt((chiNamSinh + 6) % 12));
+  return n.gioHoangDao.filter((g) => g.chi !== xung);
+}
+
+export interface ChiTietNgay {
+  /** Viec nen lam (宜), nen kieng (忌) — loi de hieu (`nghia` cua bang). */
+  readonly nen: readonly string[]; readonly kieng: readonly string[];
+  /** Cat than (吉神), hung sat (凶煞). */
+  readonly saoTot: readonly string[]; readonly saoXau: readonly string[];
+  /** "Tâm Nguyệt Hồ", "Xấu", "Cáo". */
+  readonly tu28: { readonly ten: string; readonly catHung: string; readonly conVat: string };
+  /** Banh To bach ky: [can ngay, chi ngay]. */
+  readonly banhTo: readonly string[];
+  /** Tuoi chinh xung ("Canh Thân (Khỉ)"): chi luc xung chi ngay, can bi can ngay khac (`getDayChongDesc`). */
+  readonly tuoiXung: string;
+  readonly huongSat: string;
+  /** "Tam Nương", "Nguyệt Kỵ" theo ngay am (`QUY_UOC` muc 2, 5). */
+  readonly ngayKy: readonly string[];
+}
+
+/** `nghia` neu bang co (viec nen/kieng, cau Banh To, con vat), khong thi am Han-Viet. */
+const deHieu = (nhom: Nhom, chu: string): string => (BANG[nhom] as Bang)[chu]?.nghia ?? hv(nhom, chu);
+const NGAY_KY: readonly (readonly [string, readonly number[]])[] = [['Tam Nương', [3, 7, 13, 18, 22, 27]], ['Nguyệt Kỵ', [5, 14, 23]]];
+
+/**
+ * Tach khoi `xemNgay` vi chi tiet khong can gio (`getTimes` chiem ~0,9 ms/ngay cua `xemNgay`): the Tra cuu khong phai
+ * tinh thua, thuoc quet duoc day. Thang cua nen/kieng, than sat: nhu truc (thu vien lay thang tiet theo ngay giao tiet
+ * gio Bac Kinh — `getMonthInGanZhi`, `getMonthZhiIndex`), o day sua theo gio VN. 28 tu, Banh To, xung, sat chi theo ngay.
+ */
+export function chiTietNgay(d: NgayDuong, thangXemNgay: ThangXemNgay = 'tiet'): ChiTietNgay {
+  const am = duongSangAm(d);
+  const l = Solar.fromYmd(d.nam, d.thang, d.ngay).getLunar();
+  const ganChi = l.getDayInGanZhi();
+  const chiThang = chiThangXem(cuoiNgayVN(d), am, thangXemNgay);
+  // Nen/kieng chi doi theo chi thang (quet 60 can chi ngay x 60 can chi thang 19/10: can thang khong doi ket qua),
+  // nen dua mot can chi bat ky co chi do (JIA_ZI[0..11] co chi 0..11).
+  const thang = LunarUtil.JIA_ZI[chiThang] ?? '';
+  const ds = (nhom: Nhom, chu: readonly string[]): string[] => chu.map((c) => deHieu(nhom, c));
+  return {
+    nen: ds('nenKieng', LunarUtil.getDayYi(thang, ganChi)),
+    kieng: ds('nenKieng', LunarUtil.getDayJi(thang, ganChi)),
+    saoTot: ds('thanSat', LunarUtil.getDayJiShen(chiThang, ganChi)),
+    saoXau: ds('thanSat', LunarUtil.getDayXiongSha(chiThang, ganChi)),
+    tu28: {
+      ten: `${hv('tu28', l.getXiu())} ${hv('thatChinh', l.getZheng())} ${hv('dongVat28', l.getAnimal())}`,
+      catHung: deHieu('catHung', l.getXiuLuck()), conVat: deHieu('dongVat28', l.getAnimal()),
+    },
+    banhTo: [deHieu('banhTo', l.getPengZuGan()), deHieu('banhTo', l.getPengZuZhi())],
+    tuoiXung: `${hv('can', l.getDayChongGan())} ${hv('chi', l.getDayChong())} (${deHieu('conGiap', l.getDayChongShengXiao())})`,
+    huongSat: hv('phuong', l.getDaySha()),
+    ngayKy: NGAY_KY.filter(([, ngay]) => ngay.includes(am.ngay)).map(([ten]) => ten),
   };
 }
 
