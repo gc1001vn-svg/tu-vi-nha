@@ -15,6 +15,16 @@
   color: var(--chu);
 }
 
+/* App man hinh chinh dung thanh trang thai trong suot: phu mot dai nen de chu cuon len khong chui duoi gio, pin. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: env(safe-area-inset-top);
+  background: var(--nen);
+  z-index: 10;
+}
+
 body {
   margin: 0;
   padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
@@ -69,7 +79,7 @@ input:disabled { opacity: 0.5; }
 
 .nguoi { border-top: 1px solid var(--vien); padding: 8px 0; }
 .ten { font-weight: 600; }
-.nhan-quan-he { margin-left: 8px; padding: 2px 8px; border-radius: 8px; font-size: 0.85rem; background: var(--vien); }
+.nhan-quan-he { display: inline-block; white-space: nowrap; margin-left: 8px; padding: 2px 8px; border-radius: 8px; font-size: 0.85rem; background: var(--vien); }
 .nguoi.hop .nhan-quan-he { background: var(--xanh); color: var(--nen); }
 .nguoi.xung .nhan-quan-he { background: var(--do); color: var(--nen); }
 .mau { color: var(--mo); font-size: 0.95rem; }
@@ -86,9 +96,26 @@ input:disabled { opacity: 0.5; }
 .nut-hang { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
 .form .cot, .form label.cot { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
 .form input[type='text'], .form input[type='date'], .form input[type='time'], .form select { width: 100%; }
-.ba-o { display: grid; grid-template-columns: 1fr 1fr 1.4fr; gap: 8px; }
-.ba-o input { width: 100%; }
+/* Form go nhanh: o go + dong "= …" ngay duoi + hang nut goi y (cao 44px); Nam/Nu la nut bat tat. */
+.form .nhan-o { display: flex; flex-direction: column; gap: 6px; }
+.xem-truoc { margin: 0; color: var(--mo); font-size: 0.95rem; }
+.xem-truoc.loi { color: var(--do); }
+.xem-truoc:empty, .goi-y:empty { display: none; }
+.goi-y { display: flex; flex-wrap: wrap; gap: 8px; }
+.goi-y button { text-align: left; }
+.nut-doi { display: flex; gap: 8px; }
+.nut-doi button { flex: 1; }
+.nut-doi button[aria-pressed='true'] { background: var(--vang); color: var(--nen); border-color: var(--vang); font-weight: 600; }
+.hang-chon { display: flex; flex-wrap: wrap; gap: 0 20px; }
+.hang-chon label { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; }
 [hidden] { display: none !important; }
+
+.khoi { background: var(--nen-the); border: 1px solid var(--vien); border-radius: 14px; padding: 0 14px; margin-bottom: 12px; }
+.khoi[open] { padding-bottom: 14px; }
+.khoi > summary { min-height: 44px; display: flex; align-items: center; gap: 8px; font-weight: 600; color: var(--vang); cursor: pointer; list-style: none; }
+.khoi > summary::-webkit-details-marker { display: none; }
+.khoi > summary::after { content: '▾'; margin-left: auto; transition: transform 0.2s; }
+.khoi:not([open]) > summary::after { transform: rotate(-90deg); }
 
 .phien-ban {
   opacity: 0.6;
