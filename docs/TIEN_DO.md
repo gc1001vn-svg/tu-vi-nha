@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 19/10/2026 — đợt 0 xong phần máy, gộp `main` 15/10; trang web chạy từ 19/10:
+Cập nhật: 19/10/2026 (5 ảnh lịch) — đợt 0 xong phần máy, gộp `main` 15/10; trang web chạy từ 19/10:
 https://gc1001vn-svg.github.io/tu-vi-nha/ (Deploy kiểm: trang chính, manifest, icon đều HTTP 200).
 
 ## 1. Đang ở đâu
@@ -23,14 +23,12 @@ Hồ sơ nhiều người + sao lưu file · âm lịch VN (`@tuquet/lunar`) · 
 
 ## 3. Cần anh
 
-- Ảnh lịch âm: **đã nhận 21/01/1985** (khớp bảng vàng; can chi tháng theo tháng âm — `QUY_UOC.md` mục 2). Còn thiếu: dòng "Trực" của 21/01/1985
-  (Nguy = theo tiết, Phá = theo tháng âm) và 6 ngày còn lại. Chụp app lịch âm anh tin, 7 ngày (cả dòng ngày âm, trực, ngày tốt/xấu): 21/01/1985 · 26/07/1987 · 29/01/1968 ·
-  01/02/1965 · 25/08/1938 · 10/02/2026 · 10/03/2026. Để biết: ngày âm trước 1968 theo +7 hay +8; 12 trực theo tiết hay tháng âm.
+- Ảnh lịch: **đã nhận 5 ngày** (khớp bảng vàng 25/25; lịch âm theo +7 cả trước 1968). Còn thiếu cho 21/01/1985, 10/02/2026,
+  10/03/2026: dòng "Trực" và "Ngày … Hoàng Đạo/Hắc Đạo" (trang đổi ngày không có — mở trang chi tiết ngày); thêm tên trang (thanh địa chỉ).
 
 ## 4. Nợ, chỗ chưa chắc
 
 - `@tuquet/lunar` và `ansaotuvi.S2L` trả ngày âm 0 cho 07/05/2054, 09/04/2062 → đợt 1 chặn riêng (bảng vàng: 30/3, 30/2).
-- Ngày âm trước 1968 có thể theo +8 (`@dqcai/vn-lunar` trùng HND +8 trước 1968) — tạm theo +7, chờ ảnh.
 - `lunar-typescript` 1.8.6 lộ mã `sn.sanSang`, `sn.guiKu`, `sn.siLi`, `sn.daTui`; thư viện sửa thì thước "không thừa" báo → đổi khoá.
 - Bảng Hán–Việt cần người rành lịch đọc lại nghĩa: Bành Tổ (壬不泱水, 庚不经络…), lộc (互禄/进禄 hiểu theo năm sinh), vài vật hậu,
   động vật 28 tú (貉, 獬, 獐 theo nghĩa chữ, khác lịch Việt), 要安 Yếu Yên, 王日 Vương Nhật.
