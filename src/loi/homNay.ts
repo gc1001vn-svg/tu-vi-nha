@@ -31,7 +31,8 @@ function cuoiNgayVN(d: NgayDuong): Lunar {
 const chiThangXem = (cuoiNgay: Lunar, am: NgayAm, t: ThangXemNgay): number =>
   t === 'am' ? (am.thang + 1) % 12 : cuoiNgay.getMonthZhiIndexExact();
 
-export function xemNgay(d: NgayDuong, thangXemNgay: ThangXemNgay = 'tiet'): NgayXem {
+// Mac dinh thang am nhu lich Viet (anh chot 19/10, QUY_UOC muc 2); 'tiet' theo Thong Thu, de so voi thu vien.
+export function xemNgay(d: NgayDuong, thangXemNgay: ThangXemNgay = 'am'): NgayXem {
   const am = duongSangAm(d);
   const lunar = Solar.fromYmd(d.nam, d.thang, d.ngay).getLunar();
   const cuoiNgay = cuoiNgayVN(d);
@@ -87,7 +88,7 @@ const NGAY_KY: readonly (readonly [string, readonly number[]])[] = [['Tam Nươn
  * tinh thua, thuoc quet duoc day. Thang cua nen/kieng, than sat: nhu truc (thu vien lay thang tiet theo ngay giao tiet
  * gio Bac Kinh — `getMonthInGanZhi`, `getMonthZhiIndex`), o day sua theo gio VN. 28 tu, Banh To, xung, sat chi theo ngay.
  */
-export function chiTietNgay(d: NgayDuong, thangXemNgay: ThangXemNgay = 'tiet'): ChiTietNgay {
+export function chiTietNgay(d: NgayDuong, thangXemNgay: ThangXemNgay = 'am'): ChiTietNgay {
   const am = duongSangAm(d);
   const l = Solar.fromYmd(d.nam, d.thang, d.ngay).getLunar();
   const ganChi = l.getDayInGanZhi();

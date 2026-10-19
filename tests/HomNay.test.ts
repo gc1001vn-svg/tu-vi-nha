@@ -37,9 +37,9 @@ describe('xemNgay', () => {
   });
 
   test('tuy chon thang am cho truc, hoang dao (ngay thu o QUY_UOC muc 2)', () => {
-    expect(xemNgay(ngay('2026-02-10'))).toMatchObject({ truc: 'Trừ', hoangDao: false });
+    expect(xemNgay(ngay('2026-02-10'), 'tiet')).toMatchObject({ truc: 'Trừ', hoangDao: false });
     expect(xemNgay(ngay('2026-02-10'), 'am')).toMatchObject({ truc: 'Mãn', hoangDao: true });
-    expect(xemNgay(ngay('2026-03-10')).truc).toBe('Định');
+    expect(xemNgay(ngay('2026-03-10'), 'tiet').truc).toBe('Định');
     expect(xemNgay(ngay('2026-03-10'), 'am').truc).toBe('Chấp');
   });
 
@@ -68,7 +68,7 @@ describe('xemNgay', () => {
     for (const jd of chon) {
       if (jd < dau || jd > cuoi) continue;
       const d = tuSoNgay(jd);
-      const x = xemNgay(d);
+      const x = xemNgay(d, 'tiet');
       const l = Solar.fromYmd(d.nam, d.thang, d.ngay).getLunar();
       const khop = x.truc === hv('truc', l.getZhiXing()) && x.thienThan === hv('thienThan', l.getDayTianShen());
       if (ngoaiLe.has(ymd(d))) {
@@ -87,7 +87,7 @@ describe('xemNgay', () => {
     const mai = tuSoNgay(soNgay(d) + 1);
     const lMai = Solar.fromYmd(mai.nam, mai.thang, mai.ngay).getLunar();
     const chiNgay = (soNgay(d) + 1) % 12;
-    expect(xemNgay(d).truc).toBe(hv('truc', LunarUtil.ZHI_XING[(chiNgay - lMai.getMonthZhiIndex() + 12) % 12 + 1] ?? ''));
+    expect(xemNgay(d, 'tiet').truc).toBe(hv('truc', LunarUtil.ZHI_XING[(chiNgay - lMai.getMonthZhiIndex() + 12) % 12 + 1] ?? ''));
   });
 });
 
