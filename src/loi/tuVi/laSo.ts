@@ -53,6 +53,8 @@ export interface DauVaoLaSo {
   /** Nam am dang xem (theo Tet): tuoi mu, dai van, tieu han. */
   readonly namXem: number;
   readonly phaiTuVi?: PhaiTuVi;
+  /** Menh chu (chi ap cho phai 'altuvi'): 'cungMenh' theo chi cung Menh (Toan Thu, mac dinh) · 'tuoi' theo chi nam (Quan Xuan Thinh 1950). */
+  readonly menhChuTheo?: 'cungMenh' | 'tuoi';
 }
 
 export interface Sao {
@@ -381,8 +383,9 @@ export function lapLaSo(v: DauVaoLaSo): LaSo {
     than: than - 1,
     cuc: tenCuc,
     soCuc,
-    // ansaotuvi tra bang chi bang so CAN nam (`ThienBan.py`) — nham; Altuvi chua do, theo sach: Menh chu theo chi cung Menh, Than chu theo chi nam.
-    menhChu: MENH_CHU[al ? menh : canNam] ?? '',
+    // Toan Thu: Menh chu theo chi cung Menh, Than chu theo chi nam ("火鈴" ty ngo: sach Viet tach Ty Linh, Ngo Hoa) — QUY_UOC muc 15.
+    // ansaotuvi tra bang chi bang so CAN nam (`ThienBan.py`) — nham, giu o phai 'ansaotuvi' de so 100% voi Python.
+    menhChu: MENH_CHU[al ? (v.menhChuTheo === 'tuoi' ? chiNam : menh) : canNam] ?? '',
     thanChu: THAN_CHU[al ? chiNam : canNam] ?? '',
     amDuong: `${amDuong === 1 ? 'Dương' : 'Âm'} ${gt === 1 ? 'Nam' : 'Nữ'}`,
     chiGio: v.chiGio,

@@ -27,14 +27,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` từ nay kiểu
 
 ## 3. Cần anh
 
-- Ảnh ô giữa một lá số altuvi.com (chỗ Mệnh chủ, Thân chủ nếu có) — app đang theo sách, `ansaotuvi` tính khác.
 - Thử iPhone như mục 2, chụp chỗ lỗi.
 - Tuỳ anh: xoá nhánh `claude/determined-galileo-xz2mc5` trên GitHub khi xong việc — lịch sử nhánh còn một commit lộ ngày sinh
   thật (19/10; `main` sạch vì gộp dồn; máy ảo không ghi đè lịch sử được).
 
 ## 4. Nợ, chỗ chưa chắc
 
-- Mệnh chủ/Thân chủ chưa đối chiếu Altuvi; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
+- Mệnh chủ/Thân chủ: theo *Toàn Thư* (tra 19/10, `QUY_UOC` mục 15), chưa so được Altuvi (phải trả tiền); tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng, sao ngày theo hoàng lịch Trung Hoa (lịch Việt có hệ sao khác).
 - Thần tài, hỷ thần, hướng sát chưa có nguồn Việt; cung hoàng đạo theo bảng ngày cố định.
 - Tuỳ chọn trong `QUY_UOC` chưa có màn chỉnh. Mới thử Chromium, chưa thử Safari/WebKit.

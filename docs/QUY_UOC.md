@@ -135,6 +135,14 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Tam Tai** theo nhóm tam hợp của chi năm sinh. **Thái Tuế**: trùng (Trị), xung, hình (tam hình + tự hình), hại, phá — ghi đủ các quan hệ cùng lúc (2026 Ngọ: Trị + Hình) [W35].
 - **Bát trạch**: Đông/Tây tứ mệnh, 8 hướng theo phép biến hào Du Niên (64/64 ô khớp nguồn); cung phi theo Lập Xuân (mục 1), sinh giữa Lập Xuân và Tết thì ghi thêm "nếu tính theo Tết thì là …". **Tuổi hợp/kỵ**: tam hợp, lục hợp, tứ hành xung, lục xung, lục hại — cùng công thức `theoTuoi` (144 cặp chi) [W36].
 - Đã kiểm: web (trích đoạn tìm kiếm, chưa mở trang gốc); URL từng dòng bảng báo trong comment `tests/NamNay.test.ts`.
+## 15. Mệnh chủ, Thân chủ (tử vi, tra 19/10 — phần này trên Altuvi phải trả tiền, anh nhờ tự tra)
+| Cách | Mệnh chủ | Thân chủ | Nguồn |
+|---|---|---|---|
+| **Toàn Thư (mặc định `menhChuTheo = cungMenh`)** | theo **địa chi cung Mệnh**: Tý Tham Lang · Sửu, Hợi Cự Môn · Dần, Tuất Lộc Tồn · Mão, Dậu Văn Khúc · Thìn, Thân Liêm Trinh · Tỵ, Mùi Vũ Khúc · Ngọ Phá Quân | theo **chi năm sinh**: Tý, Ngọ "火鈴" · Sửu, Mùi Thiên Tướng · Dần, Thân Thiên Lương · Mão, Dậu Thiên Đồng · Thìn, Tuất Văn Xương · Tỵ, Hợi Thiên Cơ | *Tử Vi Đẩu Số Toàn Thư* quyển 2 (安命主, 安身主); trang Trung Hoa thống nhất; trang Việt: tuvilyso, tracuutuvi, khoahoc.tuvichanco, tuvisaigon [W37, W38] |
+| Quản Xuân Thịnh (`menhChuTheo = tuoi`) | theo **chi năm sinh** (cùng bảng 12 chi) — sách lấy ví dụ "người tuổi Hợi, mệnh chủ Cự Môn, Thân chủ Thiên Cơ" | như trên | *Số Tử vi kinh nghiệm* (1950); vài bản ca quyết Trung Hoa (ncc.com.tw) cũng gán Mệnh chủ theo năm [W39] |
+
+- "火鈴" của tuổi Tý, Ngọ: sách Việt và đa số trang Việt tách **Tý Linh Tinh, Ngọ Hỏa Tinh** (app theo); trang Trung Hoa nay ghi Hỏa Tinh cả hai; một trang Việt ghi ngược (Ngọ Linh Tinh). Chưa làm tuỳ chọn.
+- `ansaotuvi` dùng bảng theo tuổi nhưng tra bằng số **can** năm (`ThienBan.py`) — sai cả hai cách; chỉ giữ ở phái `ansaotuvi` để so với bản Python. Altuvi theo cách nào: **chưa biết** (phải trả tiền mới xem).
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -147,6 +155,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `namCaNhan` | `ngay0101` · `sinhNhat` | `ngay0101` | thần số học |
 | `soChuDao` | `motLuot` · `rutGonRieng` | `motLuot` | thần số học |
 | `hoangOc` | `theoChuc` · `demTiep` | `theoChuc` | Hoang Ốc |
+| `menhChuTheo` | `cungMenh` · `tuoi` | `cungMenh` (Toàn Thư) | tử vi: Mệnh chủ |
 | `phaiTuVi` | `altuvi` · `ansaotuvi` | `altuvi` (luật 3) | tử vi: Thiên Giải, Phá Toái, Hỏa/Linh Tinh, năm Canh (Khôi, Việt, Hóa Khoa, Hóa Kỵ, Lưu Hà), Mệnh chủ/Thân chủ |
 | `menhMauSo` | `napAm` · `cungPhi` | `napAm` | màu, số hợp mệnh (màn "Hôm nay") |
 
@@ -187,6 +196,9 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W34 https://luatminhkhue.vn/bang-tinh-sao-han-va-cuu-dieu-nam-binh-ngo-2026.aspx · https://hoatieu.vn/tai-lieu/bang-tinh-sao-han-204566 · https://phongthuyviet.com.vn/2016/01/22/cach-tinh-han-huynh-tuyen/ · https://tuvisonlong.com/han-hang-nam-la-gi/ · https://lichngaytot.com/tu-vi/sao-han-tuoi-ty-nam-2026-304-232429.html · https://tuoiam.com/sao-han/ · https://mogi.vn/news/bang-sao-han-2025-270399/
 - W35 https://fptshop.com.vn/tin-tuc/for-gamers/2026-tuoi-nao-pham-kim-lau-200222 · https://www.dienmayxanh.com/kinh-nghiem-hay/hoang-oc-la-gi-cach-tinh-tuoi-hoang-oc-1586912 · https://nhadepktv.vn/tu-van-phong-thuy/han-hoang-oc-la-gi.html · https://market.vinhomes.vn/blog/han-hoang-oc · https://luatminhkhue.vn/tam-tai-la-gi.aspx · https://vietnamnet.vn/han-tam-tai-nam-2026-co-nhung-tuoi-nao-cach-hoa-giai-han-tam-tai-2485550.html · https://soha.vn/nam-2026-nhung-tuoi-nao-pham-thai-tue-198251217110657351.htm · https://kenh14.vn/nam-2026-nhung-tuoi-nao-pham-thai-tue-215251217084647382.chn
 - W36 https://wiki.batdongsan.com.vn/wiki/xem-huong-tot-va-xau-cho-tung-cung-menh-58093 · https://vatphamphongthuy.com/xem-huong-tot-xau-theo-menh-cung.html · https://www.blogphongthuy.com/cac-huong-tot-xau-voi-8-menh-cung.html · https://giaoducthudo.giaoducthoidai.vn/vi-dau-co-tam-hop-tu-hanh-xung-luc-hop-luc-hai-giua-cac-tuoi-voi-nhau-112321.html
+- W37 *Tử Vi Đẩu Số Toàn Thư* quyển 2, bản Wikisource https://zh.wikisource.org/zh-hant/紫微斗數全書/卷二 (máy ảo chặn, đọc qua trích đoạn) · https://www.ptt.cc/man/Life/D4B8/DB31/M.1299766290.A.FE6.html · https://blog.sina.com.cn/s/blog_1370e69aa0102wext.html · https://blog.csdn.net/weixin_30843605/article/details/98658904 · https://ly.yishihui.net/bz/6002.htm
+- W38 https://tuvilyso.org/forum/topic/12145-menh-chu-than-chu/ · https://tracuutuvi.com/chu-menh-tham-lang-chu-than-linh-tinh.html · https://khoahoc.tuvichanco.net/menh-chu-than-chu.html · https://tuvisaigon.vn/cach-menh-chu-trong-tu-vi-dau.html
+- W39 http://www.phongthuychanthu.com/2018/01/quan-xuan-thinh-so-tu-vi-kinh-nghiem.html · https://lyso.vn/tong-hop/than-chu-menh-chu-t19600/ · http://sach.nlv.gov.vn/sach/cgi-bin/sach?a=d&d=tdKyoE1950.1.6 (bản sách 1950, Thư viện Quốc gia) · https://www.ncc.com.tw/fate/paleo/gv/gv_15.htm
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.
