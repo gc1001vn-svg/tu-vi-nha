@@ -1,0 +1,23 @@
+/* Khoi bat tu: bang 4 tru vua kho 390px (cot nhan hep, chu dai tu xuong dong), dai van luoi 4 x 2. */
+.bat-tu { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 14px; text-align: center; margin-bottom: 8px; }
+.bat-tu th, .bat-tu td { border-top: 1px solid var(--vien); padding: 5px 2px; vertical-align: top; }
+.bat-tu thead th { color: var(--vang); border-top: 0; }
+.bat-tu thead td { width: 4.3em; border-top: 0; }
+.bat-tu tbody th { color: var(--mo); font-weight: 400; text-align: left; }
+.bat-tu .lon td { font-size: 1.3rem; font-weight: 600; }
+.bat-tu .tang + .tang { margin-top: 4px; }
+.bat-tu small { display: block; color: var(--mo); font-size: 14px; }
+
+.nhan-muc { color: var(--vang); font-weight: 600; margin-top: 12px; }
+.ngu-hanh { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; font-size: 14px; }
+.ngu-hanh .thanh { height: 6px; margin-top: 3px; border-radius: 3px; background: var(--vang); }
+
+.dai-van { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; font-size: 14px; text-align: center; margin: 6px 0; }
+.dai-van .van { border: 1px solid var(--vien); border-radius: 10px; padding: 6px 2px; color: var(--mo); }
+.dai-van .cc { color: var(--chu); font-weight: 600; }
+.dai-van .dang { border: 2px solid var(--vang); color: var(--chu); font-weight: 700; }
+.dai-van .dang .cc { color: var(--vang); }
+
+.giai { margin-top: 10px; font-size: 0.9rem; }
+.giai > summary { color: var(--vang); cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+.giai ul { margin: 4px 0; padding-left: 20px; }
