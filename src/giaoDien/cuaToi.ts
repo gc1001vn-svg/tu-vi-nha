@@ -1,13 +1,17 @@
 /**
- * The "Ca nha": danh sach ho so, form them/sua (nhap ngay duong hoac am), xuat/nhap file sao luu.
+ * Hai the dung chung form nhap ngay gio sinh (duong hoac am) va the ket qua:
+ *   - "Cua toi": MOT ho so duy nhat cua anh, luu trong may + xuat/nhap file sao luu. App dua vao no de tu tinh moi ngay.
+ *   - "Tra cuu": nhap bat ky ai, ra ket qua ngay, KHONG luu (anh chot 19/10; luu them nguoi khac de dot 9).
  */
 import { amSangDuong, dinhDangAm, dinhDangNgay, type NgayAm } from '../loi/amLich.ts';
 import { kiemHoSo, tuoiMu, type HoSo } from '../loi/hoSo.ts';
+import { xemNgay } from '../loi/homNay.ts';
 import { NUOC_NGOAI, TINH } from '../loi/tinh.ts';
 import { docFile, type Kho } from '../luuTru.ts';
 import { el, homNay7, isoNgay, moTaKhac, tinh } from './chung.ts';
+import { dongTheoTuoi } from './homNay.ts';
 
-export interface CaNha {
+export interface CuaToi {
   readonly kho: Kho;
   /** Ghi danh sach moi; tra loi neu khong ghi duoc. */
   doiHoSo(ds: readonly HoSo[]): string | null;
@@ -17,26 +21,14 @@ export interface CaNha {
   ve(): void;
 }
 
-/** `null` = dang xem danh sach; 'moi' = form trong; HoSo = dang sua. */
-let dangSua: HoSo | 'moi' | null = null;
+let dangSuaToi = false;
 let choNhap: HoSo[] | null = null;
-
-export function moForm(hs: HoSo | 'moi'): void {
-  dangSua = hs;
-}
+/** Nguoi vua tra cuu — chi song trong phien mo app, khong ghi vao may. */
+let daTra: HoSo | null = null;
 
 const loiCua = (e: unknown): string => (e instanceof Error ? e.message : String(e));
 
-function theHoSo(hs: HoSo, ctx: CaNha): HTMLElement {
-  const sua = el('button', { type: 'button' }, 'Sửa');
-  sua.addEventListener('click', () => { dangSua = hs; ctx.ve(); });
-  const xoa = el('button', { type: 'button', class: 'nguy' }, 'Xoá');
-  xoa.addEventListener('click', () => {
-    if (!confirm(`Xoá hồ sơ "${hs.ten}"? Không lấy lại được nếu chưa sao lưu.`)) return;
-    const loi = ctx.doiHoSo(ctx.kho.hoSo.filter((h) => h.id !== hs.id));
-    if (loi !== null) ctx.bao(loi);
-    ctx.ve();
-  });
+function theHoSo(hs: HoSo, ...nut: HTMLElement[]): HTMLElement {
   const noi = hs.noiSinh === NUOC_NGOAI ? `nước ngoài (${hs.muiGio ?? '?'})` : hs.noiSinh;
   const [nam, thang, ngay] = hs.ngaySinh.split('-').map(Number);
   const dau = el('div', { class: 'ten' }, `${hs.ten} (${hs.gioiTinh === 'nam' ? 'nam' : 'nữ'})`);
@@ -56,12 +48,14 @@ function theHoSo(hs: HoSo, ctx: CaNha): HTMLElement {
   } catch (e) {
     the.append(el('p', { class: 'loi' }, `Không tính được: ${loiCua(e)}`));
   }
-  the.append(el('div', { class: 'nut-hang' }, sua, xoa));
+  if (nut.length > 0) the.append(el('div', { class: 'nut-hang' }, ...nut));
   return the;
 }
 
-function form(ctx: CaNha, cu: HoSo | null): HTMLElement {
-  const ten = el('input', { type: 'text', maxlength: '60', autocomplete: 'off', value: cu?.ten ?? '' });
+/** `xong` nhan ho so da kiem va da tinh thu; tra loi (tieng Viet) neu khong xong. */
+function form(tieuDe: string, nutXong: string, tenMacDinh: string, cu: HoSo | null,
+  xong: (hs: HoSo) => string | null, huy: (() => void) | null): HTMLElement {
+  const ten = el('input', { type: 'text', maxlength: '60', autocomplete: 'off', placeholder: tenMacDinh, value: cu?.ten ?? '' });
   const gioiTinh = el('select', {}, el('option', { value: 'nam' }, 'Nam'), el('option', { value: 'nu' }, 'Nữ'));
   gioiTinh.value = cu?.gioiTinh ?? 'nam';
 
@@ -83,7 +77,7 @@ function form(ctx: CaNha, cu: HoSo | null): HTMLElement {
       const a = docAm();
       const d = amSangDuong(a);
       let chu = `= dương lịch ${dinhDangNgay(d)}`;
-      // Truoc 1976 nhieu lich in theo gio +8 (QUY_UOC muc 7): nguoi nha nho ngay am theo lich do co the lech.
+      // Truoc 1976 nhieu lich in theo gio +8 (QUY_UOC muc 7): ngay am nho theo lich do co the lech.
       if (a.nam < 1976) {
         try {
           const d8 = amSangDuong(a, 8);
@@ -119,19 +113,18 @@ function form(ctx: CaNha, cu: HoSo | null): HTMLElement {
   noiSinh.addEventListener('change', () => { khoiMui.hidden = noiSinh.value !== NUOC_NGOAI; });
 
   const loi = el('p', { class: 'loi', role: 'alert' });
-  const luu = el('button', { type: 'submit', class: 'chinh' }, 'Lưu');
-  const huy = el('button', { type: 'button' }, 'Huỷ');
-  huy.addEventListener('click', () => { dangSua = null; ctx.ve(); });
+  const nutHuy = huy === null ? null : el('button', { type: 'button' }, 'Huỷ');
+  nutHuy?.addEventListener('click', () => { huy?.(); });
 
   const f = el('form', { class: 'the form' },
-    el('h2', {}, cu === null ? 'Thêm người nhà' : `Sửa: ${cu.ten}`),
-    el('label', { class: 'cot' }, 'Tên gọi', ten),
+    el('h2', {}, tieuDe),
+    el('label', { class: 'cot' }, 'Tên gọi (không bắt buộc)', ten),
     el('label', { class: 'cot' }, 'Giới tính', gioiTinh),
     el('div', { class: 'cot' }, el('span', {}, 'Ngày sinh'), el('label', {}, kieuAm, ' Nhập ngày âm'), ngayDuong, khoiAm),
     el('div', { class: 'cot' }, el('label', { class: 'cot' }, 'Giờ sinh (giờ đồng hồ lúc đó)', gio),
       el('label', {}, khongRo, ' Không rõ giờ')),
     el('label', { class: 'cot' }, 'Nơi sinh (tên tỉnh lúc sinh)', noiSinh),
-    khoiMui, loi, el('div', { class: 'nut-hang' }, luu, huy),
+    khoiMui, loi, el('div', { class: 'nut-hang' }, el('button', { type: 'submit', class: 'chinh' }, nutXong), nutHuy),
   );
   f.addEventListener('submit', (ev) => {
     ev.preventDefault();
@@ -139,17 +132,13 @@ function form(ctx: CaNha, cu: HoSo | null): HTMLElement {
       if (!khongRo.checked && gio.value === '') throw new Error('Chưa nhập giờ sinh (hoặc chọn "Không rõ giờ")');
       const ngaySinh = kieuAm.checked ? isoNgay(amSangDuong(docAm())) : ngayDuong.value;
       const hs = kiemHoSo({
-        id: cu?.id ?? crypto.randomUUID(), ten: ten.value, gioiTinh: gioiTinh.value, ngaySinh,
-        gioSinh: khongRo.checked ? null : gio.value.slice(0, 5), noiSinh: noiSinh.value,
+        id: cu?.id ?? crypto.randomUUID(), ten: ten.value.trim() === '' ? tenMacDinh : ten.value, gioiTinh: gioiTinh.value,
+        ngaySinh, gioSinh: khongRo.checked ? null : gio.value.slice(0, 5), noiSinh: noiSinh.value,
         ...(noiSinh.value === NUOC_NGOAI ? { muiGio: muiGio.value } : {}),
       });
-      tinh(hs); // tinh thu truoc khi luu: mui gio la, ngay ngoai bang… bao ngay o day
-      const ds = ctx.kho.hoSo;
-      const moi = ds.some((h) => h.id === hs.id) ? ds.map((h) => (h.id === hs.id ? hs : h)) : [...ds, hs];
-      const loiGhi = ctx.doiHoSo(moi);
-      if (loiGhi !== null) throw new Error(loiGhi);
-      dangSua = null;
-      ctx.ve();
+      tinh(hs); // tinh thu truoc: mui gio la, ngay ngoai bang… bao ngay o day
+      const loiXong = xong(hs);
+      if (loiXong !== null) throw new Error(loiXong);
     } catch (e) {
       loi.textContent = loiCua(e);
     }
@@ -157,7 +146,7 @@ function form(ctx: CaNha, cu: HoSo | null): HTMLElement {
   return f;
 }
 
-function khoiSaoLuu(ctx: CaNha): HTMLElement {
+function khoiSaoLuu(ctx: CuaToi): HTMLElement {
   const xuat = el('button', { type: 'button' }, 'Xuất file sao lưu');
   xuat.addEventListener('click', () => { ctx.xuat(); });
   const chon = el('input', { type: 'file', accept: '.json,application/json', hidden: '' });
@@ -173,35 +162,52 @@ function khoiSaoLuu(ctx: CaNha): HTMLElement {
     el('div', { class: 'nut-hang' }, xuat, nhap), chon);
   if (choNhap !== null) {
     const ds = choNhap;
-    const gop = el('button', { type: 'button', class: 'chinh' }, 'Gộp thêm');
-    const thay = el('button', { type: 'button', class: 'nguy' }, 'Thay hết');
+    const thay = el('button', { type: 'button', class: 'chinh' }, 'Dùng hồ sơ trong file');
     const huy = el('button', { type: 'button' }, 'Huỷ');
-    const xong = (moi: readonly HoSo[] | null): void => {
-      choNhap = null;
-      if (moi !== null) {
-        const loi = ctx.doiHoSo(moi);
-        ctx.bao(loi ?? `Đã nhập ${String(ds.length)} hồ sơ.`);
-      }
-      ctx.ve();
-    };
-    gop.addEventListener('click', () => {
-      const trongFile = new Set(ds.map((h) => h.id));
-      xong([...ctx.kho.hoSo.filter((h) => !trongFile.has(h.id)), ...ds]); // trung ma: lay ban trong file
-    });
     thay.addEventListener('click', () => {
-      if (confirm(`Thay toàn bộ ${String(ctx.kho.hoSo.length)} hồ sơ đang có bằng ${String(ds.length)} hồ sơ trong file?`)) xong(ds);
+      if (ctx.kho.hoSo.length > 0 && !confirm('Thay hồ sơ đang có bằng hồ sơ trong file?')) return;
+      choNhap = null;
+      ctx.bao(ctx.doiHoSo(ds) ?? 'Đã nhập file sao lưu.');
+      ctx.ve();
     });
-    huy.addEventListener('click', () => { xong(null); });
-    khoi.append(el('p', { class: 'canh-bao' }, `File có ${String(ds.length)} hồ sơ: ${ds.map((h) => h.ten).join(', ')}.`),
-      el('div', { class: 'nut-hang' }, gop, thay, huy));
+    huy.addEventListener('click', () => { choNhap = null; ctx.ve(); });
+    khoi.append(el('p', { class: 'canh-bao' }, `File có hồ sơ: ${ds.map((h) => h.ten).join(', ')}.`),
+      el('div', { class: 'nut-hang' }, thay, huy));
   }
   return khoi;
 }
 
-export function veCaNha(ctx: CaNha): HTMLElement {
-  if (dangSua !== null) return form(ctx, dangSua === 'moi' ? null : dangSua);
-  const them = el('button', { type: 'button', class: 'chinh' }, 'Thêm người nhà');
-  them.addEventListener('click', () => { dangSua = 'moi'; ctx.ve(); });
-  return el('div', {}, ...ctx.kho.hoSo.map((h) => theHoSo(h, ctx)),
-    ctx.kho.hoSo.length === 0 ? el('p', {}, 'Chưa có hồ sơ nào.') : null, them, khoiSaoLuu(ctx));
+export function veCuaToi(ctx: CuaToi): HTMLElement {
+  // Ho so cua toi = phan tu dau. Phan tu sau (ban truoc cho them nhieu nguoi, hay file cu) giu nguyen, chua hien — dot 9.
+  const [toi, ...conLai] = ctx.kho.hoSo;
+  if (toi === undefined || dangSuaToi) {
+    const luu = (hs: HoSo): string | null => {
+      const loi = ctx.doiHoSo([hs, ...conLai]);
+      if (loi === null) { dangSuaToi = false; ctx.ve(); }
+      return loi;
+    };
+    const huy = toi === undefined ? null : (): void => { dangSuaToi = false; ctx.ve(); };
+    return el('div', {}, form('Hồ sơ của tôi', 'Lưu', 'Tôi', toi ?? null, luu, huy), khoiSaoLuu(ctx));
+  }
+  const sua = el('button', { type: 'button' }, 'Sửa');
+  sua.addEventListener('click', () => { dangSuaToi = true; ctx.ve(); });
+  const xoa = el('button', { type: 'button', class: 'nguy' }, 'Xoá');
+  xoa.addEventListener('click', () => {
+    if (!confirm('Xoá hồ sơ của tôi? Không lấy lại được nếu chưa sao lưu.')) return;
+    const loi = ctx.doiHoSo(conLai);
+    if (loi !== null) ctx.bao(loi);
+    ctx.ve();
+  });
+  return el('div', {}, theHoSo(toi, sua, xoa), khoiSaoLuu(ctx));
+}
+
+export function veTraCuu(ve: () => void): HTMLElement {
+  const tra = (hs: HoSo): null => { daTra = hs; ve(); return null; };
+  const ketQua: HTMLElement[] = [];
+  if (daTra !== null) {
+    const d = homNay7();
+    ketQua.push(theHoSo(daTra), el('section', { class: 'the' }, el('h2', {}, 'Hôm nay với người này'), dongTheoTuoi(daTra, xemNgay(d), d)));
+  }
+  return el('div', {}, ...ketQua, form('Tra cứu cho bất kỳ ai', 'Xem', 'Người tra cứu', daTra, tra, null),
+    el('p', { class: 'ghi-chu' }, 'Tra cứu không lưu vào máy: đóng app là mất.'));
 }

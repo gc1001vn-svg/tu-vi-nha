@@ -1,12 +1,13 @@
 # Kế hoạch tổng — tu-vi-nha (bản 2, 14/10/2026)
 
-- Hỏi: ai dùng → Đáp: anh trước; người nhà làm sau cùng (anh chốt 19/10 — đợt 9)
+- Hỏi: ai dùng → Đáp: anh. App **tra cứu được cho bất kỳ ai** (nhập ngày giờ sinh, không lưu); chỉ lưu **hồ sơ của anh**
+  để app tự tính cho anh theo giờ/ngày/tháng/năm (may rủi, nên làm gì, phong thủy, bày trận…). Lưu thêm người nhà: đợt 9 (anh chốt 19/10)
 - Hỏi: cài thế nào → Đáp: web cài lên màn hình chính iPhone (PWA); repo `tu-vi-nha`, công khai
 - Hỏi: lời giải → Đáp: văn soạn sẵn trước, AI sau
 - Hỏi: môn nào → Đáp: có hết; kế hoạch một lần cho tất cả, làm kỹ
 
 Việc: app xem mọi môn từ một hồ sơ (tên, giới tính, ngày giờ + nơi sinh, ảnh, hướng nhà), theo giờ/ngày/tháng/năm/cả đời.
-Xong là khi: trên iPhone, hồ sơ của anh (người nhà: đợt 9); mọi môn ở bảng dưới ra kết quả khớp bộ ca kiểm; dữ liệu chỉ nằm trong máy.
+Xong là khi: trên iPhone, tra được cho bất kỳ ai và tự tính cho hồ sơ của anh; mọi môn ở bảng dưới ra kết quả khớp bộ ca kiểm; dữ liệu chỉ nằm trong máy.
 
 Cách đo: `npm run do` (kiểm lỗi, kiểu, test, đóng gói) + bộ ca kiểm vàng từng môn, sinh từ thư viện đối chiếu độc lập
 (`docs/NGUON_MO.md` — đã chạy thử 3.000 lá số, 73.383 ngày âm) + ảnh chụp khổ iPhone. Anh thử máy thật 3 lần: sau đợt 1, 4, cuối.
@@ -23,7 +24,7 @@ Khung: Vite + TypeScript + PWA + vitest như `quoc-chien` (không React — lá 
 | 6 | Chiêm tinh (lá số + theo ngày) · thần số học · tarot bản 1909 · nhịp sinh học |
 | 7 | Ảnh + AI trả phí: tướng mặt (đo trong máy), chỉ tay, hỏi đáp, lời tổng hợp mọi môn · khoá API nhập trên từng máy, không bao giờ vào repo, đặt hạn mức chi · ảnh lấy bằng nút chọn/chụp ảnh, không mở camera trực tiếp |
 | 8 | Kỳ Môn Độn Giáp (chép `kinqimen`), Huyền Không nhà, xin xăm, cân xương — chỉ khi đủ nguồn |
-| 9 | **Người nhà (sau cùng):** hồ sơ từng người dùng ở mọi môn · hợp tuổi vợ chồng, làm ăn, sinh con · đặt tên con theo ngũ hành · xem cả nhà một lượt |
+| 9 | **Người nhà (sau cùng):** lưu thêm hồ sơ người khác · hợp tuổi vợ chồng, làm ăn, sinh con · đặt tên con theo ngũ hành · xem cả nhà một lượt |
 
 Tử vi (đợt 2) — đã quyết bằng số đo 14/10, 5 lá số Altuvi: `ansaotuvi` khớp 329/345 sao, `iztro` 235/285 → chép `ansaotuvi`
 (~2.100 dòng Python, MIT) sang TypeScript; chỗ lệch (Thiên Giải, Phá Toái, Hỏa/Linh, năm Canh) theo Altuvi — `docs/NGUON_MO.md`.

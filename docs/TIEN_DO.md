@@ -9,18 +9,19 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/
 
 ## 1. Đang ở đâu
 
-- Đợt 0: khung, đồ nghề, bảng Hán–Việt, `QUY_UOC`. Đợt 1: hai thẻ "Hôm nay" · "Cả nhà".
+- Đợt 0: khung, đồ nghề, bảng Hán–Việt, `QUY_UOC`. Đợt 1: ba thẻ "Hôm nay" · "Tra cứu" (bất kỳ ai, không lưu) ·
+  "Của tôi" (một hồ sơ, lưu trong máy + file sao lưu).
 - Lõi `src/loi/`: `amLich` (`@tuquet/lunar`, chặn "ngày 0") · `muiGio` (VN viết cứng) · `tinh` (63 tỉnh cũ) · `hoSo`
   (ngày âm phái A, can chi, nạp âm, cung phi Lập Xuân, tuổi mụ, phương án sát ranh) · `homNay` (tiết/trực theo +7).
-- Giao diện `src/giaoDien/`, lưu `src/luuTru.ts` (localStorage, xuất/nhập file, nhắc 30 ngày, nhắc cài app).
+- Giao diện `src/giaoDien/` (`cuaToi.ts` có cả Tra cứu), lưu `src/luuTru.ts` (localStorage, xuất/nhập file, nhắc 30 ngày, nhắc cài app).
 - Bảng vàng 1900 đã sửa: nhuận tháng 8 (bản cũ của `ansaotuvi` ghi 7, sai).
 
 ## 2. Việc kế
 
-- **Anh thử iPhone thật (lần 1 của kế hoạch tổng)** — cài app màn hình chính, nhập hồ sơ của anh, xuất file (Chia sẻ →
-  Lưu vào Tệp), xoá, nhập lại. Chưa có xác nhận thì chưa mở đợt 2.
-- **Anh chốt 19/10: làm cho một mình anh trước, người nhà dời xuống đợt 9 (sau cùng).** App vẫn giữ nhiều hồ sơ (không
-  sửa mã), các đợt sau chỉ cần chạy đúng với một hồ sơ.
+- **Anh thử iPhone thật (lần 1 của kế hoạch tổng)** — cài app màn hình chính, thử thẻ "Tra cứu", nhập hồ sơ ở "Của tôi",
+  xuất file (Chia sẻ → Lưu vào Tệp), xoá, nhập lại. Chưa có xác nhận thì chưa mở đợt 2.
+- **Anh chốt 19/10:** tra được cho mọi người; chỉ lưu hồ sơ của anh, app tự tính cho anh theo giờ/ngày/tháng/năm. Mỗi
+  đợt sau thêm phần của môn đó vào "Hôm nay"/"Của tôi" và "Tra cứu". Lưu thêm người nhà: đợt 9 (sau cùng).
 - Đợt 2: tử vi (chép `ansaotuvi` sang TS, chỗ lệch theo Altuvi — `NGUON_MO`).
 
 ## 3. Cần anh
