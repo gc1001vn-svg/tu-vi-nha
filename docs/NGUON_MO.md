@@ -71,7 +71,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 |---|---|---|---|
 | `ansaotuvi` (Python) | 0.1.28 · MIT | **Tử vi theo sách Việt** (mã ghi theo sách "Số tử vi dưới góc nhìn khoa học"), lịch âm HND chọn múi giờ → sinh lá số mẫu. ~2.100 dòng → **chép sang TypeScript làm lõi tử vi** (chốt 14/10) | máy: cài, chạy 3.000 lá số |
 | `tuvi-mcp-server` (Python) | 0.5.0 · Apache-2.0 (0.3.1 là MIT) | Tử vi VN dựa `ansaotuvi` + 51 cách cục, 12 trực, 28 tú | máy: PyPI |
-| `sxtwl` (Python/C++) | 2.0.7 · BSD | Lịch Trung Quốc, tiết khí → đối chiếu bát tự | máy: PyPI |
+| `sxtwl` (Python/C++) | 2.0.7 · BSD | Lịch Trung Quốc, tiết khí → đối chiếu bát tự | máy: PyPI. **Đo 19/10** (`scripts/doi-chieu/so-bat-tu.*`, 2.700 ca): bốn trụ ca thường 2.339/2.339; 361 ca ngày giao tiết khớp khi lấy theo thời khắc tiết của `sxtwl` (197 ca khác cách "theo cả ngày"); ngày + giờ phái A 2.700/2.700; thời khắc 2.411 tiết lệch `lunar-typescript` tối đa 54,4 giây; `sxtwl` tự vênh ngày 07/12/1917 |
 | `lunar_python` | 1.4.8 · MIT | Cùng tác giả `lunar-javascript` — **không độc lập**, chỉ để thử nhanh | máy: PyPI |
 | `kinqimen` (Python) | 0.0.6.6 · MIT | Kỳ Môn Độn Giáp → chép thuật toán sang TypeScript | máy: PyPI |
 | `iztro-py` | 0.5.0 | Bản Python của `iztro` — không độc lập | máy: PyPI |

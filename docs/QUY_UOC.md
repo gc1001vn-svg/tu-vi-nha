@@ -115,6 +115,16 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Số hợp mệnh** (Lạc Thư): Thủy 0, 1 · Thổ 2, 5, 8 · Mộc 3, 4 · Kim 6, 7 · Hỏa 9; số hợp = số bản mệnh + số hành sinh mệnh (mytour: Kim hợp 6, 7 và 2, 5, 8; fptshop: Mộc hợp 0, 1, 3, 4) [W28]. Vênh: có trang gán số theo Hà Đồ (Kim 4, 9…) — không theo. Đã kiểm: web.
 - **Mệnh** dùng cho màu, số: nạp âm năm sinh, năm theo Tết (gumac, fptshop gọi "mệnh Kim/Mộc" theo nạp âm) [W27, W28]. Tuỳ chọn khác: hành của cung phi (mytour, báo Lâm Đồng dùng Nhất Bạch, Nhị Hắc…) [W25, W26].
 - **Tháng tiết của ngày** theo giờ +7: `lunar-typescript` lấy ngày giao tiết theo giờ Bắc Kinh, nên khi tiết rơi 23:00–23:59 giờ VN thì thư viện chậm một ngày. Máy (19/10): 1900–2100 có 102 ngày như vậy; ngoài 102 ngày đó trực, thần trực nhật của app khớp thư viện (so 9.579 ngày, `tests/HomNay.test.ts`).
+## 12. Bát tự (`src/loi/batTu.ts`, đo 19/10)
+- Trụ năm, tháng: `lunar-typescript` với giờ +7 cộng 1 giờ (`get…Exact`); trụ ngày theo phái A (mục 4); chi giờ theo đồng hồ +7, can giờ theo ngày đó.
+- Đại vận: `getYun(giới tính, 2)` dựng từ giờ +8, đếm phút tới tiết (4.320 phút = 1 năm, 360 phút = 1 tháng, 12 phút = 1 ngày — đúng "3 ngày = 1 năm, 6 giờ = 1 tháng" ở mục 9); sect 1 làm tròn theo canh giờ Bắc Kinh nên không dùng. Tuổi vận ghi là tuổi mụ của năm bắt đầu vận (năm dương bắt đầu − năm âm sinh + 1), **chưa chắc** (chưa có nguồn Việt; thư viện tính theo năm dương sinh, người sinh trước Tết lệch 1 tuổi).
+- Ngũ hành đếm 8 chữ (hành can + hành chính của chi), không cộng tàng can (trọng số tàng can mỗi phái một khác).
+- Không rõ giờ: trụ và khởi vận tính lúc 12:00 (thẻ chính `hoSo.ts` lấy 00:00 — ngày Lập Xuân rơi trước 12:00 thì khối bát tự và cung phi có thể khác, cả hai đều hiện phương án kia). Đã kiểm: máy (`sxtwl` 2.700 ca, `NGUON_MO`).
+## 13. Thần số học, cung hoàng đạo, nhịp sinh học (`src/loi/soHoc.ts`, chỉ dùng ngày dương)
+- Số chủ đạo: cộng mọi chữ số dd/mm/yyyy, còn >11 thì cộng tiếp; giữ 10, 11, 22/4, 33/6; không có số 1 [W29]. Vênh: fptshop, hellobacsi chỉ kê 2–11 và 22/4 (tổng 33 về 6); mytour, thuviennhadat giữ 33 → app ghi "33/6". Tuỳ chọn `rutGonRieng`: rút gọn ngày, tháng, năm riêng rồi cộng (trang nước ngoài) [W30].
+- Năm cá nhân = ngày + tháng sinh + năm xem, rút về 1–9 (đổi 01/01, mục 1); tháng cá nhân = năm cá nhân + tháng. Số ngày sinh: rút gọn ngày, giữ 11, 22. Lưới 3×3 bỏ số 0; mũi tên chưa làm (các trang đặt tên vênh) [W31].
+- Cung hoàng đạo theo bảng ngày cố định của `lunar-typescript`. Vênh 1 ngày ở 21/6, 23/10, 22/11 (thư viện: Song Tử, Thiên Bình, Thiên Yết; nhiều bảng: Cự Giải, Thiên Yết, Nhân Mã) → ngày cách giao cung ±1 thì ghi thêm cung bên cạnh [W32].
+- Nhịp sinh học: sin(2πt/T), T = 23, 28, 33 ngày, t = số ngày từ ngày sinh; ghi rõ không có cơ sở khoa học [W33].
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -125,6 +135,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `thangNhuanTuVi` | `thangTruoc` · `chia15` · `thangSau` | `thangTruoc` | tử vi |
 | `gioMatTroi` | bật · tắt | tắt | tử vi, bát tự |
 | `namCaNhan` | `ngay0101` · `sinhNhat` | `ngay0101` | thần số học |
+| `soChuDao` | `motLuot` · `rutGonRieng` | `motLuot` | thần số học |
 | `menhMauSo` | `napAm` · `cungPhi` | `napAm` | màu, số hợp mệnh (màn "Hôm nay") |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
@@ -156,6 +167,11 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W25 https://mytour.vn/vi/blog/doi-song/mau-sac-may-man-hom-nay-7-9-2025-theo-menh-giup-ban-thu-hut-tai-loc-va-tinh-duyen-mytour.html · https://mytour.vn/vi/blog/doi-song/kham-pha-mau-sac-may-man-hom-nay-15-9-2025-theo-phong-thuy-menh-chuan-trong-do-do-la-mau-sac-phu-hop-nhat-mytour.html: màu theo ngày, mệnh theo cửu tinh, hành ngày theo nạp âm. W26 https://baolamdong.vn/mau-sac-may-man-ngay-6112025-cho-tung-menh-theo-phong-thuy-400488.html: cùng cách gọi mệnh, màu khác mytour.
 - W27 https://gumac.vn/tin-tuc/menh-tho-hop-mau-gi · https://gumac.vn/tin-tuc/menh-moc-hop-mau-gi · https://fptshop.com.vn/tin-tuc/danh-gia/menh-kim-hop-mau-gi-169092: màu từng hành, màu tương sinh (Lộ Bàng Thổ hợp màu Hỏa, Đại Lâm Mộc hợp màu Thủy).
 - W28 https://fptshop.com.vn/tin-tuc/for-gamers/menh-moc-hop-so-nao-193888 · https://mytour.vn/vi/blog/bai-viet/menh-kim-hop-so-nao-mang-lai-phu-quy-tien-bac-doi-dao-cho-gia-chu.html: số theo hành (Lạc Thư).
+- W29 https://fptshop.com.vn/tin-tuc/thu-thuat/cach-tinh-so-chu-dao-157703 · https://hellobacsi.com/community/suc-khoe-tinh-than/cach-tinh-so-chu-dao-trong-than-so-hoc-238929/ · https://mytour.vn/vi/blog/bai-viet/so-master-33-bac-thay-voi-tam-nhin-rong-mo.html · https://thuviennhadat.vn/phap-luat/master-number-la-gi-y-nghia-tung-master-number-trong-than-so-hoc-630185.html
+- W30 https://people.howstuffworks.com/life-path-number.htm · https://101planners.com/numerology/life-path-number-calculator/ · https://numerology.pardesco.com/life-path/how-to-calculate/
+- W31 https://thuvienphapluat.vn/cong-dong-dan-luat/huong-dan-cach-tinh-nam-ca-nhan-theo-than-so-hoc-210558.aspx · https://fptshop.com.vn/tin-tuc/for-gamers/2026-la-nam-ca-nhan-so-may-195644 · https://mytour.vn/vi/blog/bai-viet/kham-pha-bi-an-cua-ngay-sinh-qua-than-so-hoc-so-hoc-theo-pythagoras.html · https://www.vietnamworks.com/hrinsider/bieu-do-ngay-sinh-than-so-hoc-la-gi.html · https://jobsgo.vn/blog/bieu-do-ngay-sinh-than-so-hoc/
+- W32 https://shopee.vn/blog/cung-hoang-dao/ · https://hoanghamobile.com/tin-tuc/22-11-la-cung-gi/ · https://www.lovetoknow.com/life/astrology/horoscope-sign-dates
+- W33 https://blogs.mathworks.com/cleve/?p=105 · https://www.intmath.com/trigonometric-graphs/biorhythm-graphs.php · https://encyclopedia.pub/entry/37613
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.
