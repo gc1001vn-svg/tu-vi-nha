@@ -74,7 +74,9 @@ export const NGUON_SAO_HAN = 'Về nguồn: bảng sao theo tuổi có từ hai 
   + '1311), chùa Nhật Bản vẫn dùng: vòng sao của nam trùng đủ 9 tuổi. Vòng riêng của nữ và ngày cúng hằng tháng của 9 sao có trong '
   + 'bộ Ngọc Hạp Ký thuộc Đạo tạng đời Minh: bảng nam nữ từ 11 đến 99 tuổi trùng cả hai vòng của app, trừ vài chữ chép nhầm. Kinh '
   + '1308 ghi La Hầu, Thổ Tú nặng với nam, Kế Đô, Vân Hớn nặng với nữ; hai kinh xếp Thổ Tú, Vân Hớn là sao xấu, Thủy Diệu là sao '
-  + 'tốt — khác cách chia ba tốt, ba xấu, ba trung tính của dân gian ta mà app theo. Thích Nhật Từ (Học viện Phật giáo Việt Nam) '
+  + 'tốt — khác cách chia ba tốt, ba xấu, ba trung tính của dân gian ta mà app theo. Bộ 8 hạn chưa thấy nguồn ngoài Việt Nam: vài '
+  + 'tên như Thiên La, Địa Võng, Toán Tận, Ngũ Mộ có trong sách văn sớ Đạo giáo; cách đếm theo chục (nam 10 tuổi ở Huỳnh Tuyền) '
+  + 'giống một vòng 8 cung trong sách chọn ngày Triều Tiên thế kỷ 15, nhưng các cung khác tên. Thích Nhật Từ (Học viện Phật giáo Việt Nam) '
   + 'và Thứ trưởng Bộ Văn hóa, Thể thao và Du lịch nói giáo lý nhà Phật không có sao tốt, sao xấu; năm 2019 Bộ đề nghị không để '
   + 'việc dâng sao giải hạn biến tướng thành dịch vụ trục lợi.';
 
