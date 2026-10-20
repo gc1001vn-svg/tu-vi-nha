@@ -179,6 +179,27 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **21 đoạn**: "Mở đầu" (câu 1–38) + 20 hồi theo mục lục bản Nguyễn Can Mộng 1936; ranh hồi tìm bằng so khớp OCR (lệch 0–2 câu),
   đặt ở câu lục; tên đoạn, tóm tắt Claude soạn lại.
 
+## 18. Kinh Dịch (`src/loi/kinhDich.ts`, tra 20/10)
+- **Chữ**: nguyên văn 64 quẻ, 386 hào theo Kanripo KR1a0001, chỉ lấy chữ (bỏ dấu câu người biên tập); 63 chỗ dị văn với bản
+  Wikisource giữ theo Kanripo (bản thứ ba theo Kanripo 34 chỗ, Wikisource 10). Nhãn cửu/lục của 384 hào khớp vạch quẻ. Tên Việt =
+  tượng quái trên + quái dưới + tên ngắn, 8 quẻ thuần gọi "Thuần …" (vênh: "Càn vi Thiên", "Bát Thuần Càn"); quẻ 20 viết Quán
+  (có nơi Quan). Lời giải Claude soạn lại theo nghĩa nguyên văn, không chép bản dịch.
+- **Gieo đồng xu**: mỗi hào 3 đồng, mỗi mặt 2 hoặc 3 → tổng 6 lão âm (động) · 7 thiếu dương · 8 thiếu âm · 9 lão dương (động);
+  lần đầu là hào 1 (dưới cùng). Máy gieo nên không cần chọn mặt sấp/ngửa tính 3 (nguồn Việt vênh).
+- **Đoạn cần đọc** (Chu Hy, 易學啟蒙·考變占): 0 hào động → lời quẻ chủ · 1 → lời hào đó · 2 → hai hào, hào trên chính ·
+  3 → lời quẻ chủ và quẻ biến, có hào 1 động thì quẻ chủ chính, không thì quẻ biến chính (前十卦主貞，後十卦主悔) · 4 → hai hào
+  tĩnh của quẻ biến, hào dưới chính · 5 → hào tĩnh của quẻ biến · 6 → Càn đọc Dụng Cửu, Khôn đọc Dụng Lục, quẻ khác đọc lời quẻ biến.
+  Hai trường hợp 2 và 4 sách tự ghi là suy ra.
+- **Mai Hoa theo giờ** (梅花易數 quyển 1): chi năm âm (Tý 1 … Hợi 12) + tháng âm + ngày âm, chia 8 → quái trên (dư 0 là 8;
+  Càn 1, Đoài 2, Ly 3, Chấn 4, Tốn 5, Khảm 6, Cấn 7, Khôn 8); thêm chi giờ (Tý 1 … Hợi 12), chia 8 → quái dưới, chia 6 → hào động
+  (dư 0 là 6). Sách không nói, app chọn: năm đổi ở Tết (`namMaiHoa`, cùng lịch với tháng, ngày âm; `meihua-ts-lib` đổi ở Lập
+  Xuân) · tháng nhuận lấy số tháng · từ 23 giờ sang ngày sau như mục 4. Quẻ hỗ: hào 2-3-4 làm quái dưới, 3-4-5 làm quái trên;
+  quẻ chủ Càn, Khôn lấy hỗ của quẻ biến (乾坤無互，互其變卦 → `hoCanKhon`). Thể/Dụng: quái có hào động là Dụng; luận theo
+  體用總訣 (quyển 2).
+- **Đo**: 14 ví dụ trong sách khớp 14/14; 300 giờ ngẫu nhiên 1950–2050 so `meihua-ts-lib` (`scripts/doi-chieu/so-mai-hoa.mjs`):
+  291 khớp, 4 lệch vì quẻ Càn/Khôn lấy hỗ theo sách, 5 lệch vì thư viện đổi năm ở Lập Xuân, 0 lệch chưa giải thích.
+- **Không làm**: Lục hào nạp giáp (lục thân, thế ứng), nhập kết quả gieo tay, Mai Hoa lấy quẻ theo chữ, vật, tiếng.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -196,6 +217,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `phaiTuVi` | `altuvi` · `ansaotuvi` | `altuvi` (luật 3) | tử vi: Thiên Giải, Phá Toái, Hỏa/Linh Tinh, năm Canh (Khôi, Việt, Hóa Khoa, Hóa Kỵ, Lưu Hà), Mệnh chủ/Thân chủ |
 | `menhMauSo` | `napAm` · `cungPhi` | `napAm` | màu, số hợp mệnh (màn "Hôm nay") |
 | `cauKieu` | `motCap` · `haiCap` | `motCap` (một cặp lục bát) | bói Kiều (mục 17) |
+| `namMaiHoa` | `tet` · `lapXuan` | `tet` | Kinh Dịch: Mai Hoa (mục 18) |
+| `hoCanKhon` | `theoSach` · `giuNguyen` | `theoSach` (乾坤無互) | Kinh Dịch: quẻ hỗ của Càn, Khôn |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
 ## Nguồn

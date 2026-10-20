@@ -4,6 +4,9 @@
  */
 import { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH, tinhBatTu } from '../src/loi/batTu.ts';
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
+import { HOI } from '../src/loi/kieu.ts';
+import { LUAN } from '../src/loi/kinhDich.ts';
+import { GIAI, GIAI_DUNG_CUU, GIAI_DUNG_LUC } from '../src/loi/kinhDichGiai.ts';
 import { NGUON_SAO_HAN, namNay } from '../src/loi/namNay.ts';
 import { lapLaSo } from '../src/loi/tuVi/laSo.ts';
 import { tinhLuuHan } from '../src/loi/tuVi/luuHan.ts';
@@ -40,6 +43,11 @@ function moiDoan(): [string, string][] {
       for (const m of [n.sao, n.han]) if (m.giai !== undefined) ra.push([`namNay ${m.ten}`, m.giai]);
     }
   }
+  // dot 4: Kinh Dich (64 que x 7 doan + Dung Cuu/Luc + luan The Dung), tom tat 21 doan Kieu
+  GIAI.forEach((g, i) => { ra.push([`kinhDich ${String(i + 1)}`, g.que], ...g.hao.map((h, k): [string, string] => [`kinhDich ${String(i + 1)}.${String(k + 1)}`, h])); });
+  ra.push(['kinhDich dungCuu', GIAI_DUNG_CUU], ['kinhDich dungLuc', GIAI_DUNG_LUC]);
+  for (const l of Object.values(LUAN)) ra.push([`maiHoa ${l.ten}`, l.loi]);
+  for (const h of HOI) ra.push([`kieu ${h.ten}`, h.tomTat]);
   return ra;
 }
 
