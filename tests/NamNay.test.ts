@@ -124,6 +124,12 @@ describe('sao han Cuu Dieu + 8 han', () => {
     expect(lech).toEqual([]);
   });
 
+  test('vong sao nam trung bang Cuu Dieu theo tuoi mu (数え年) cua chua Nhat, tuoi 1–9', () => {
+    // 羅睺 土曜 水曜 金曜 日曜 火曜 計都 月曜 木曜 — nckoyasan.org (1–3), engakuji.jp (1, 4, 9), higoyo.me, saijigoyomi (5–8).
+    expect(Array.from({ length: 9 }, (_, i) => tuoi(i + 1, 'nam').sao.ten)).toEqual(
+      ['La Hầu', 'Thổ Tú', 'Thủy Diệu', 'Thái Bạch', 'Thái Dương', 'Vân Hớn', 'Kế Đô', 'Thái Âm', 'Mộc Đức']);
+  });
+
   test('nam xem doi o Tet; sinh truoc Tet tinh nam am truoc', () => {
     // Tet Binh Ngo 17/02/2026.
     expect(nn(1990, 'nam', { nam: 2026, thang: 2, ngay: 16 })).toMatchObject({ namAm: 2025, canChi: 'Ất Tỵ', tuoiMu: 36 });

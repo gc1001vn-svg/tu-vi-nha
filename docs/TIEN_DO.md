@@ -4,8 +4,8 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 20/10/2026 — đợt "lưu hạn + lời giải" (`docs/ke-hoach/2026-10-20-luu-han-loi-giai.md`, anh duyệt A) gộp `main` 20/10;
-anh thử iPhone lần 2 ổn, chê vài chỗ diễn giải khó hiểu → viết lại theo sách gốc Tân Biên, gộp lần hai cùng ngày.
+Cập nhật: 20/10/2026 — đợt "lưu hạn + lời giải" (`docs/ke-hoach/2026-10-20-luu-han-loi-giai.md`, anh duyệt A) gộp `main` ba lần
+trong ngày: lưu hạn + lời giải · viết lại lời giải theo sách Tân Biên · tra nguồn Phật, Đạo, chùa.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -16,9 +16,10 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   hướng Bát trạch, tuổi hợp, thần số học, hoàng đạo, nhịp sinh học.
 - 20/10: tử vi hạn năm, tháng, ngày + 9 sao lưu tự tính theo hôm nay (`src/loi/tuVi/luuHan.ts`; khớp `tuvi-mcp-server`, `iztro`
   200/200 mỗi bên) · lời giải dài: tử vi (`nghia.ts`), 9 sao hạn + 8 hạn (tháng kỵ, ngày cúng khi ≥2 nguồn), bát tự.
-- 20/10 lần hai: đọc sách gốc *Tử Vi Đẩu Số Tân Biên* (Thái Thứ Lang 1956, OCR archive.org) — hạn tháng app dùng đúng "cách thứ
-  nhất" sách nói hay dùng, 9 sao lưu khớp sách; lời giải viết lại theo sách, lời thường; mỗi hạn có kết luận tốt/xấu theo luật
-  sách ("quá nửa sao"); bát tự giải thích từ khó. `QUY_UOC` mục 16: bảng so 6 cách hạn tháng. Ảnh 390×844: không lỗi.
+- 20/10 lần hai: sách gốc *Tử Vi Đẩu Số Tân Biên* (1956, OCR archive.org) — hạn tháng đúng "cách thứ nhất" sách nói hay dùng,
+  9 sao lưu khớp; lời giải viết lại lời thường, mỗi hạn kết luận tốt/xấu theo luật sách. `QUY_UOC` mục 16: so 6 cách hạn tháng.
+- 20/10 lần ba: nguồn Trung Hoa, Nhật, Hàn, Phật, Đạo — vòng sao nam khớp bảng Cửu Diệu chùa Nhật 9/9; Thái Tuế 2026, Tam Tai khớp
+  đa số (`QUY_UOC` mục 14, W43–W44); thêm câu "Về nguồn" dưới giải sao hạn (giáo lý Phật không có sao tốt, xấu).
 
 ## 2. Việc kế
 
@@ -31,7 +32,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 - Xem lời giải mới trên iPhone, chụp chỗ còn khó hiểu.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
-  còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu` (đều đã
+  còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
 
 ## 4. Nợ, chỗ chưa chắc
@@ -40,7 +41,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Mệnh chủ/Thân chủ theo *Toàn Thư* (`QUY_UOC` mục 15), chưa so Altuvi; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
 - Lời giải tử vi theo Tân Biên (Claude viết lại), sao hạn theo trang dân gian, bát tự theo nghĩa phổ biến — chưa ai rành đọc lại;
   bát tự chỉ đếm thô, chưa xét vượng suy. Tốt/xấu từng phụ tinh theo bảng `ansaotuvi`, có sao lệch với sách (vd Mộ).
-- Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng, sao ngày theo hoàng lịch Trung Hoa (lịch Việt có hệ sao khác).
+- Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Vòng sao nữ chưa có nguồn ngoài VN. Nên/kiêng, sao ngày theo hoàng lịch Trung Hoa (lịch Việt có hệ sao khác).
 - Thần tài, hỷ thần, hướng sát chưa có nguồn Việt; cung hoàng đạo theo bảng ngày cố định. Tuỳ chọn `QUY_UOC` chưa có màn chỉnh.
 - Mới thử Chromium, chưa thử Safari/WebKit. `lunar-typescript` 1.8.6 lộ mã `sn.*` (bảng Hán–Việt đỡ); bảng cần người rành lịch
   đọc lại vài mục (Bành Tổ, lộc, 28 tú).
