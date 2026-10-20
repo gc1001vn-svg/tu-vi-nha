@@ -2,14 +2,16 @@
  * Nam nay voi mot nguoi: sao Cuu Dieu, 8 han, Kim Lau, Hoang Oc, Tam Tai, Thai Tue.
  * Nam xem = nam am (theo Tet) cua ngay xem; tuoi mu theo QUY_UOC muc 3; Tam Tai, Thai Tue theo chi nam sinh.
  * Nguon tung quy tac ghi tren bang; thuoc: `tests/NamNay.test.ts` (bang in san nam 2026, vai ca 2025).
- * Loi nghia do Claude soan lai theo quan niem dan gian (luat 6), mot dong moi muc.
+ * Loi nghia do Claude soan lai theo quan niem dan gian (luat 6): mot dong moi muc; sao, han them mot doan `giai`.
+ * Thang ky, ngay cung trong `giai` chi ghi khi >=2 trang dan gian khop (tra 20/10: hoatieu, bachhoaxanh, dienmayxanh,
+ * docungtamlinh, didongviet, thuvienphapluat, vietlac, muaban); trang ghi khac nhau thi bo.
  */
 import { CHI, canChiNam, duongSangAm, type NgayDuong } from './amLich.ts';
 import { hv } from './hanViet/index.ts';
 import { tuoiMu, type HoSo, type KetQuaHoSo } from './hoSo.ts';
 
 export type MucDo = 'tot' | 'binh' | 'xau';
-export interface Muc { readonly ten: string; readonly mucDo: MucDo; readonly nghia: string }
+export interface Muc { readonly ten: string; readonly mucDo: MucDo; readonly nghia: string; readonly giai?: string }
 export interface NamNay {
   readonly namAm: number;
   readonly canChi: string;
@@ -24,20 +26,42 @@ export interface NamNay {
 /** Cach dem Hoang Oc khi qua chuc (QUY_UOC bang tuy chon `hoangOc`), mac dinh `theoChuc`. */
 export interface TuyChonNamNay { readonly hoangOc?: 'theoChuc' | 'demTiep' }
 
-type Bang = Readonly<Record<string, readonly [MucDo, string]>>;
+type Bang = Readonly<Record<string, readonly [MucDo, string, string?]>>;
 
 // Cuu Dieu: tuoi mu chia 9, nam nu hai vong khac nhau (luatminhkhue, thuvienphapluat, hoatieu).
 // Tot/trung/xau: ngaydep, nongnghiepmoitruong (3 sao tot, 3 xau, 3 trung tinh).
 const SAO: Bang = {
-  'Thái Dương': ['tot', 'Sao tốt: công việc hanh thông, dễ gặp người giúp.'],
-  'Thái Âm': ['tot', 'Sao tốt: tiền bạc khá, gia đạo yên vui.'],
-  'Mộc Đức': ['tot', 'Sao tốt: hòa thuận, dễ có tin vui.'],
-  'Thổ Tú': ['binh', 'Sao trung tính: dễ gặp tiểu nhân, thị phi; đi xa nên cẩn thận.'],
-  'Thủy Diệu': ['binh', 'Sao trung tính: có lộc nhưng dễ thị phi; dân gian dặn tránh sông nước.'],
-  'Vân Hớn': ['binh', 'Sao trung tính: dễ nóng nảy, cãi vã, kiện tụng nhỏ.'],
-  'La Hầu': ['xau', 'Sao xấu, kỵ nam: dễ thị phi, kiện tụng, buồn phiền.'],
-  'Kế Đô': ['xau', 'Sao xấu, kỵ nữ: dễ buồn phiền, hao tài, lục đục trong nhà.'],
-  'Thái Bạch': ['xau', 'Sao xấu: dễ hao tài; nên giữ tiền, tránh đầu tư lớn.'],
+  'Thái Dương': ['tot', 'Sao tốt: công việc hanh thông, dễ gặp người giúp.',
+    'Sao tốt, ứng với Mặt Trời: năm có sao này chiếu thường hanh thông về công việc, danh tiếng, dễ gặp người giúp; hợp mở rộng '
+    + 'việc làm ăn, nhận trách nhiệm mới. Các trang dân gian ghi tháng Sáu và tháng Mười âm là hai tháng tốt nhất. '
+    + 'Dân gian thường cúng giải hạn sao này ngày 27 âm lịch hằng tháng.'],
+  'Thái Âm': ['tot', 'Sao tốt: tiền bạc khá, gia đạo yên vui.',
+    'Sao tốt, ứng với Mặt Trăng: năm có sao này chiếu thường khá về tiền bạc, nhà cửa, gia đạo êm ấm; hợp tích lũy, sửa sang nhà. '
+    + 'Dân gian ghi tháng Chín âm là tháng tốt; đa số trang ghi kỵ tháng Mười Một (vài trang ghi tháng Mười). '
+    + 'Thường cúng giải hạn ngày 26 âm lịch hằng tháng.'],
+  'Mộc Đức': ['tot', 'Sao tốt: hòa thuận, dễ có tin vui.',
+    'Sao tốt, ứng với sao Mộc: năm có sao này chiếu thường hòa thuận, dễ có tin vui như cưới hỏi, thêm người, công việc êm. '
+    + 'Nên giữ cái hòa, tránh nóng nảy làm hỏng việc tốt. Ngày cúng sao này các trang ghi khác nhau nên app không ghi.'],
+  'Thổ Tú': ['binh', 'Sao trung tính: dễ gặp tiểu nhân, thị phi; đi xa nên cẩn thận.',
+    'Sao trung tính, ứng với sao Thổ: dễ gặp tiểu nhân, thị phi, chuyện trong nhà lục đục; đi xa, làm ăn với người lạ nên '
+    + 'kỹ giấy tờ. Không phải sao dữ, giữ lời ăn tiếng nói là qua. Thường cúng giải hạn ngày 19 âm lịch hằng tháng.'],
+  'Thủy Diệu': ['binh', 'Sao trung tính: có lộc nhưng dễ thị phi; dân gian dặn tránh sông nước.',
+    'Sao trung tính, ứng với sao Thủy: có lộc, nhất là việc buôn bán, đi lại, nhưng dễ thị phi vì lời nói. Dân gian dặn tránh '
+    + 'sông nước, nhất là tháng Tư và tháng Tám âm. Thường cúng giải hạn ngày 21 âm lịch hằng tháng.'],
+  'Vân Hớn': ['binh', 'Sao trung tính: dễ nóng nảy, cãi vã, kiện tụng nhỏ.',
+    'Sao trung tính hơi xấu, ứng với sao Hỏa: dễ nóng nảy, cãi vã, kiện tụng nhỏ, ốm vặt; làm ăn ở mức vừa. Đa số trang ghi '
+    + 'tháng Hai và tháng Tám âm là xấu nhất. Nên nhịn một câu, tránh tranh chấp; ngày cúng các trang ghi khác nhau.'],
+  'La Hầu': ['xau', 'Sao xấu, kỵ nam: dễ thị phi, kiện tụng, buồn phiền.',
+    'Sao xấu, ứng với điểm La Hầu trong lịch pháp cổ: chủ khẩu thiệt, thị phi, kiện tụng, buồn phiền, nặng với nam hơn nữ. '
+    + 'Các trang dân gian ghi kỵ nhất tháng Giêng và tháng Bảy âm. Nên giữ lời nói, đọc kỹ giấy tờ trước khi ký. '
+    + 'Thường cúng giải hạn ngày 8 âm lịch hằng tháng.'],
+  'Kế Đô': ['xau', 'Sao xấu, kỵ nữ: dễ buồn phiền, hao tài, lục đục trong nhà.',
+    'Sao xấu, cặp với La Hầu: chủ buồn phiền, hao tài, chuyện trong nhà lục đục, nặng với nữ hơn nam. Dân gian ghi kỵ tháng Ba '
+    + 'và tháng Chín âm. Nên chi tiêu dè dặt, giữ hòa khí trong nhà. Thường cúng giải hạn ngày 18 âm lịch hằng tháng.'],
+  'Thái Bạch': ['xau', 'Sao xấu: dễ hao tài; nên giữ tiền, tránh đầu tư lớn.',
+    'Sao xấu, ứng với sao Kim: chủ hao tài, tiểu nhân, ốm vặt — câu cửa miệng là "Thái Bạch quét sạch cửa nhà". Kỵ nhất tháng '
+    + 'Năm âm; nhiều trang kể thêm tháng Hai, tháng Tám. Nên giữ tiền, tránh cho vay, đầu tư lớn. Thường cúng giải hạn ngày 15 '
+    + 'âm lịch hằng tháng.'],
 };
 // Phan tu thu i = tuoi mu chia 9 du i.
 const SAO_NAM = ['Mộc Đức', 'La Hầu', 'Thổ Tú', 'Thủy Diệu', 'Thái Bạch', 'Thái Dương', 'Vân Hớn', 'Kế Đô', 'Thái Âm'];
@@ -46,14 +70,24 @@ const SAO_NU = ['Thủy Diệu', 'Kế Đô', 'Vân Hớn', 'Mộc Đức', 'Th�
 // 8 han: dem tren ban tay, 10 tuoi nam o Huynh Tuyen, nu o Tan Tan (nu di nguoc); moi chuc sang mot cung, tuoi le dem tiep
 // -> vi tri = so chuc + so don vi (phongthuyviet, dichhocungdung, bang tuoi tuvisonlong, hoatieu; khop 35 nam sinh 2026).
 const HAN: Bang = {
-  'Huỳnh Tuyền': ['xau', 'Dễ đau ốm, hao tài; dân gian dặn tránh sông nước.'],
-  'Tam Kheo': ['xau', 'Dễ đau nhức tay chân, va quệt khi đi lại.'],
-  'Ngũ Mộ': ['xau', 'Dễ hao tài, mất đồ; chi tiêu nên dè dặt.'],
-  'Thiên Tinh': ['xau', 'Dễ vướng thị phi, kiện tụng; ăn uống nên cẩn thận.'],
-  'Tán Tận': ['xau', 'Còn gọi Toán Tận: dễ hao tiền, bệnh lâu khỏi; đi xe nên cẩn thận.'],
-  'Thiên La': ['xau', 'Dễ gặp chuyện rối rắm, phiền muộn khó gỡ.'],
-  'Địa Võng': ['xau', 'Dễ vướng thị phi, chuyện giấy tờ pháp lý; nói năng nên giữ lời.'],
-  'Diêm Vương': ['xau', 'Dễ có chuyện buồn, người nhà đau ốm; đi lại nên cẩn thận.'],
+  'Huỳnh Tuyền': ['xau', 'Dễ đau ốm, hao tài; dân gian dặn tránh sông nước.',
+    'Hạn xấu, nghĩa đen là "suối vàng": dễ đau ốm nặng, hao tài, việc lớn khó thành. Nên giữ sức khỏe, đi khám định kỳ, '
+    + 'tránh sông nước và những việc liều.'],
+  'Tam Kheo': ['xau', 'Dễ đau nhức tay chân, va quệt khi đi lại.',
+    'Hạn xấu nhẹ: dễ đau nhức tay chân, va quệt khi đi lại. Nên cẩn thận khi lái xe, leo trèo, mang vác nặng.'],
+  'Ngũ Mộ': ['xau', 'Dễ hao tài, mất đồ; chi tiêu nên dè dặt.',
+    'Hạn xấu về tiền: dễ hao tài, mất đồ, tiền ra nhiều hơn vào. Nên chi tiêu dè dặt, cất giữ giấy tờ, tài sản cẩn thận.'],
+  'Thiên Tinh': ['xau', 'Dễ vướng thị phi, kiện tụng; ăn uống nên cẩn thận.',
+    'Hạn xấu về thị phi: dễ vướng kiện tụng, tranh chấp, bị nói xấu; dân gian dặn cẩn thận ăn uống. Nên giữ lời, '
+    + 'tránh đứng ra bảo lãnh cho người khác.'],
+  'Tán Tận': ['xau', 'Còn gọi Toán Tận: dễ hao tiền, bệnh lâu khỏi; đi xe nên cẩn thận.',
+    'Còn gọi Toán Tận: dễ hao tiền, bệnh lâu khỏi, việc dở dang. Nên giữ sức khỏe, đi xe cẩn thận, chưa vội làm ăn lớn.'],
+  'Thiên La': ['xau', 'Dễ gặp chuyện rối rắm, phiền muộn khó gỡ.',
+    'Hạn "lưới trời": dễ gặp chuyện rối rắm, phiền muộn, đầu óc căng thẳng, khó gỡ. Nên làm từng việc một, nghỉ ngơi đủ.'],
+  'Địa Võng': ['xau', 'Dễ vướng thị phi, chuyện giấy tờ pháp lý; nói năng nên giữ lời.',
+    'Hạn "lưới đất": dễ vướng thị phi, giấy tờ pháp lý, tai tiếng. Nên giữ lời, làm đúng thủ tục, tránh việc mờ ám.'],
+  'Diêm Vương': ['xau', 'Dễ có chuyện buồn, người nhà đau ốm; đi lại nên cẩn thận.',
+    'Hạn xấu về chuyện buồn: dễ có tin buồn, người nhà đau ốm, xa nhà gặp chuyện. Nên thăm hỏi người thân, đi lại cẩn thận.'],
 };
 // Phan tu thu i = (so chuc + so don vi) chia 8 du i.
 const HAN_NAM = ['Diêm Vương', 'Huỳnh Tuyền', 'Tam Kheo', 'Ngũ Mộ', 'Thiên Tinh', 'Tán Tận', 'Thiên La', 'Địa Võng'];
@@ -106,7 +140,7 @@ const tenChi = (c: number): string => hv('chi', CHI.charAt(c % 12));
 function tra(bang: Bang, ten: string | undefined): Muc {
   const m = ten === undefined ? undefined : bang[ten];
   if (ten === undefined || m === undefined) throw new Error(`Bảng năm nay thiếu "${String(ten)}"`);
-  return { ten, mucDo: m[0], nghia: m[1] };
+  return { ten, mucDo: m[0], nghia: m[1], ...(m[2] === undefined ? {} : { giai: m[2] }) };
 }
 
 const CHUA_XET: Muc = { ten: 'Chưa xét', mucDo: 'binh', nghia: 'Các bảng bắt đầu đếm từ 10 tuổi mụ.' };

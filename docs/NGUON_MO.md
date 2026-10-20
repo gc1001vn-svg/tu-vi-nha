@@ -7,7 +7,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 
 | Tên | Bản · giấy phép | Có gì | Đợt | Đã kiểm |
 |---|---|---|---|---|
-| `iztro` | 2.6.2 · MIT | Tử vi đẩu số: lá số 12 cung, đại vận, lưu niên/nguyệt/nhật/thời; **có tiếng Việt `vi-VN`**; lập từ ngày dương (`bySolar`) hoặc ngày âm (`byLunar`); có cơ chế plugin | 2 | máy: bản, giấy phép, 19 file `vi-VN`, hàm `byLunar`. **Không chọn làm lõi** — xem "Đối chiếu altuvi.com" |
+| `iztro` | 2.6.2 · MIT | Tử vi đẩu số: lá số 12 cung, đại vận, lưu niên/nguyệt/nhật/thời; **có tiếng Việt `vi-VN`**; lập từ ngày dương (`bySolar`) hoặc ngày âm (`byLunar`); có cơ chế plugin | 2 | máy: bản, giấy phép, 19 file `vi-VN`, hàm `byLunar`. **Không chọn làm lõi** — xem "Đối chiếu altuvi.com". 20/10: `horoscope` làm bảng vàng phái lưu nguyệt khởi Lưu Thái Tuế (`tests/vang/luu-han-iztro.json`, 200/200) |
 | `react-iztro` | 1.5.0 · MIT | Vẽ lá số `iztro` (cần React) — **không dùng** vì bỏ `iztro` làm lõi | — | máy |
 | `lunar-javascript` | 1.7.7 · MIT | Can chi, tiết khí, bát tự, thập thần, ngũ hành, 12 trực, 28 tú, hoàng đạo, nên/kiêng, hướng thần tài/hỷ thần. **Chữ ra tiếng Trung** (chỉ có `chs`, `en`) → cần bảng Hán–Việt | 1, 3 | máy |
 | `lunar-typescript` | 1.8.6 · MIT | **Chọn dùng (14/10)** — bản TypeScript của `lunar-javascript`, cùng tác giả, có sẵn khai kiểu. Chữ ra tiếng Trung → bảng Hán–Việt `src/loi/hanViet/` | 1, 3 | máy: 73.414 ngày 1900–2100 ra y hệt `lunar-javascript` 1.7.7 (42 hàm mỗi ngày; cửu tinh, bát tự, 13 giờ mỗi 7 ngày), **trừ** `getDayXiongSha` 300 ngày lộ mã i18n `sn.sanSang`, `sn.guiKu`, `sn.siLi`, `sn.daTui` thay cho 三丧 鬼哭 四离 大退 — lỗi thư viện, bảng Hán–Việt đỡ (`scripts/doi-chieu/so-lunar-ts.mjs`) |
@@ -71,7 +71,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 | Tên | Bản · giấy phép | Dùng để | Đã kiểm |
 |---|---|---|---|
 | `ansaotuvi` (Python) | 0.1.28 · MIT | **Tử vi theo sách Việt** (mã ghi theo sách "Số tử vi dưới góc nhìn khoa học"), lịch âm HND chọn múi giờ → sinh lá số mẫu. ~2.100 dòng → **chép sang TypeScript làm lõi tử vi** (chốt 14/10) | máy: cài, chạy 3.000 lá số |
-| `tuvi-mcp-server` (Python) | 0.5.0 · Apache-2.0 (0.3.1 là MIT) | Tử vi VN dựa `ansaotuvi` + 51 cách cục, 12 trực, 28 tú | máy: PyPI |
+| `tuvi-mcp-server` (Python) | 0.5.0 · Apache-2.0 (0.3.1 là MIT) | Tử vi VN dựa `ansaotuvi` + 51 cách cục, 12 trực, 28 tú; **vận hạn** (`_transit.py`: tiểu, nguyệt, nhật hạn, 7 sao lưu) → bảng vàng `tests/vang/luu-han-mcp.json` | máy: PyPI. **Đo 20/10:** lõi lưu hạn TS khớp 200/200 ca (cài `--no-deps` + `pillow`, xem `chay.sh`) |
 | `sxtwl` (Python/C++) | 2.0.7 · BSD | Lịch Trung Quốc, tiết khí → đối chiếu bát tự | máy: PyPI. **Đo 19/10** (`scripts/doi-chieu/so-bat-tu.*`, 2.700 ca): bốn trụ ca thường 2.339/2.339; 361 ca ngày giao tiết khớp khi lấy theo thời khắc tiết của `sxtwl` (197 ca khác cách "theo cả ngày"); ngày + giờ phái A 2.700/2.700; thời khắc 2.411 tiết lệch `lunar-typescript` tối đa 54,4 giây; `sxtwl` tự vênh ngày 07/12/1917 |
 | `lunar_python` | 1.4.8 · MIT | Cùng tác giả `lunar-javascript` — **không độc lập**, chỉ để thử nhanh | máy: PyPI |
 | `kinqimen` (Python) | 0.0.6.6 · MIT | Kỳ Môn Độn Giáp → chép thuật toán sang TypeScript | máy: PyPI |
@@ -101,6 +101,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 | Tam Tai, Thái Tuế | Tam Tai theo nhóm tam hợp chi năm sinh; Thái Tuế: trùng, xung, hình (tam hình + tự hình), hại, phá | Một thầy Hồng Kông cho Dậu phá Ngọ — không theo | luatminhkhue, batdongsan wiki, vietnamnet, soha, kenh14, tvbs (19/10) |
 | Hướng Bát trạch, tuổi hợp | 8 hướng theo biến hào Du Niên (64/64 ô); tam hợp, lục hợp, tứ hành xung, lục hại | Bảng Bát trạch adongadc sai, không theo | batdongsan wiki, vatphamphongthuy, blogphongthuy, dienmayxanh, giaoducthudo (19/10) |
 | Thước Lỗ Ban | 3 thước: 52,2 cm (thông thuỷ) · 42,9 cm (dương trạch) · 38,8 cm (âm phần) | Tên cung, công dụng từng thước vênh giữa các trang | [nukeviet](https://nukeviet.vn/en/store/modules/thuocloban/), [quantrimang](https://quantrimang.com/cuoc-song/thuoc-lo-ban-175844), [baohatinh](https://baohatinh.vn/cong-cu/lo-ban) |
+| Lưu niên, nguyệt, nhật (tử vi) | 9 sao lưu theo can chi năm xem; nguyệt hạn khởi tiểu hạn (Thái Thứ Lang) hoặc Lưu Thái Tuế (Đẩu Quân); nhật hạn từ cung tháng | Nguyệt hạn có nhiều cách → tuỳ chọn `nguyetHanTu`; tháng nhuận khi xem | `QUY_UOC` mục 16, W40 (20/10) |
 | Cung phi Bát trạch | Sinh trước Tết → năm âm trước | Sinh giữa Tết và Lập Xuân: hai trường phái khác nhau | [muaban](https://muaban.net/blog/phong-thuy-bat-trach-518866/), [baodautu](https://baodautu.vn/batdongsan/vi-sao-phong-thuy-bat-trach-pho-bien-d102133.html) |
 | La bàn iPhone | `DeviceOrientationEvent.requestPermission()` gọi ngay trong lúc bấm; đọc `webkitCompassHeading` | Có báo lỗi bị từ chối dù đã cho phép; chưa thấy nguồn riêng cho app ở màn hình chính | [MDN](https://developer.mozilla.org/docs/Web/API/DeviceOrientationEvent), [WebKit 269706](https://bugs.webkit.org/show_bug.cgi?id=269706), [Defold](https://forum.defold.com/t/how-to-force-safari-browser-to-allow-deviceorientation-permission-solved/75641) |
 

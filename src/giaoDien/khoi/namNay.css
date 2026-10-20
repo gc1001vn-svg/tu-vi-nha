@@ -5,3 +5,5 @@
 .dong-muc.xau b { color: var(--do); }
 .dong-muc-nghia, .dong-muc-chu { color: var(--mo); font-size: 0.9rem; }
 .dong-muc-nghia { flex-basis: 100%; }
+.giai-nam { margin-top: 6px; font-size: 0.9rem; }
+.giai-nam > summary { color: var(--vang); cursor: pointer; min-height: 44px; display: flex; align-items: center; }
