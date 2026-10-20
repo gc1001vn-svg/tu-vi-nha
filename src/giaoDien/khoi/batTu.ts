@@ -9,11 +9,11 @@ import './batTu.css';
 
 const COT = ['Năm', 'Tháng', 'Ngày', 'Giờ'];
 
-/** "can Quý là Thiên Tài — … Chi Hợi (theo chính khí) là Kiếp Tài — …" */
+/** "can Quý là Thiên Tài — … Chi Hợi (can chính ẩn trong chi là Nhâm) là Kiếp Tài — …" */
 const giaiVan = (v: VanNam): string => {
   const [can = '', chi = ''] = v.canChi.split(' ');
   const [t1, t2] = v.thapThan;
-  return `can ${can} là ${t1} — ${NGHIA_VAN[t1] ?? ''} Chi ${chi} (theo chính khí) là ${t2} — ${NGHIA_VAN[t2] ?? ''}`;
+  return `can ${can} là ${t1} — ${NGHIA_VAN[t1] ?? ''} Chi ${chi} (can chính ẩn trong chi là ${v.tang}) là ${t2} — ${NGHIA_VAN[t2] ?? ''}`;
 };
 
 export const veKhoiBatTu: VeKhoi = (hs, tr, ngayXem) => {
@@ -46,13 +46,16 @@ export const veKhoiBatTu: VeKhoi = (hs, tr, ngayXem) => {
   const tong = b.nhomHanh.reduce((t, x) => t + x.so, 0);
   const giup = b.nhomHanh.filter((x) => x.nhom === 'Tỷ Kiếp' || x.nhom === 'Ấn').reduce((t, x) => t + x.so, 0);
   const nhomHanh = [
-    el('p', {}, `Theo quan hệ với nhật chủ: ${b.nhomHanh.map((x) => `${x.nhom} (${x.hanh}) ${String(x.so)}`).join(' · ')}.`),
+    el('p', {}, 'Xếp theo quan hệ với nhật chủ (chính mình):'),
+    el('ul', { class: 'nhom-hanh' }, ...b.nhomHanh.map((x) => el('li', {}, el('b', {}, x.nhom),
+      ` — ${NHOM_HANH[x.nhom]?.la ?? ''}: hành ${x.hanh}, ${String(x.so)} chữ`))),
     ...b.nhomHanh.filter((x) => x.so >= 3).map((x) =>
       el('p', {}, el('b', {}, `${x.nhom} nhiều`), ` (${String(x.so)} chữ ${x.hanh}): ${NHOM_HANH[x.nhom]?.nhieu ?? ''}`)),
     ...b.nhomHanh.filter((x) => x.so === 0).map((x) =>
       el('p', {}, el('b', {}, `Thiếu ${x.nhom}`), ` (không có chữ ${x.hanh}): ${NHOM_HANH[x.nhom]?.thieu ?? ''}`)),
-    el('p', { class: 'ghi-chu' }, `Phía đỡ nhật chủ (Tỷ Kiếp, Ấn) ${String(giup)}/${String(tong)} chữ, phía làm tốn sức `
-      + `${String(tong - giup)}/${String(tong)}. Đếm thô, chưa xét mùa sinh và tàng can; các thầy xét vượng suy kỹ hơn nhiều.`),
+    el('p', { class: 'ghi-chu' }, `Hành đỡ cho mình (Tỷ Kiếp, Ấn): ${String(giup)}/${String(tong)} chữ; hành làm mình tốn sức `
+      + `(Thực Thương, Tài, Quan Sát): ${String(tong - giup)}/${String(tong)} chữ. Đây chỉ là đếm thô, chưa tính mùa sinh và can ẩn `
+      + 'trong chi, nên chưa nói được mình mạnh hay yếu.'),
   ];
   const vanNay = b.daiVan.find((v) => v.dangChay);
   const dau = b.daiVan[0];
@@ -63,7 +66,7 @@ export const veKhoiBatTu: VeKhoi = (hs, tr, ngayXem) => {
     .filter((t) => t in NGHIA_THAP_THAN);
   const giai = el('details', { class: 'giai' }, el('summary', {}, 'Giải nghĩa thập thần, trường sinh, đại vận'),
     el('p', {}, 'Nhật chủ là can của ngày sinh, tượng trưng cho chính mình; mọi can chi khác xét theo quan hệ sinh – khắc với nhật chủ.'),
-    el('p', {}, 'Thập thần là tên của quan hệ đó, ghi cho từng can và tàng can (can ẩn trong chi):'),
+    el('p', {}, 'Thập thần là tên của quan hệ đó, ghi cho từng can và tàng can (can ẩn trong chi). "Mình" dưới đây là nhật chủ:'),
     el('ul', {}, ...thapThan.map((t) => el('li', {}, `${t}: ${NGHIA_THAP_THAN[t] ?? ''}`))),
     el('p', {}, 'Trường sinh: sức của nhật chủ ở từng chi, mạnh ở Lâm Quan, Đế Vượng, yếu ở Bệnh, Tử, Mộ, Tuyệt.'),
     el('p', {}, 'Đại vận: mỗi vận 10 năm, can chi đi tiếp từ trụ tháng; năm sinh can dương thì nam đi thuận, nữ đi nghịch, can âm thì ngược lại.'),

@@ -3,6 +3,7 @@
  * Quy tac `docs/QUY_UOC.md` muc 16 (tra 20/10): sao luu an nhu sao goc nhung theo can chi nam xem; nguyet han theo
  * Thai Thu Lang — cung tieu han lam thang Gieng, dem nghich toi thang sinh, roi thuan toi gio sinh duoc thang Gieng nam xem,
  * moi thang thuan mot cung (phai kia khoi tu Luu Thai Tue: Dau Quan, `iztro`); nhat han: cung thang lam mung 1, dem thuan.
+ * Nguon goc: *Tu Vi Dau So Tan Bien* (Thai Thu Lang 1956) muc 10.4–10.5 va phan III muc 4 (9 sao luu); *Toan Thu* an Dau Quan.
  * Thuoc: `tests/LuuHan.test.ts` (bang vang tu `tuvi-mcp-server` 0.5.0 va `iztro` 2.6.2 — `scripts/doi-chieu/luu-han-*`).
  */
 import { canChiNam, duongSangAm, type NgayDuong } from '../amLich.ts';
@@ -50,4 +51,19 @@ export function tinhLuuHan(ls: LaSo, thangSinh: number, ngayXem: NgayDuong, tu: 
     namAm: am.nam, canChi: canChiNam(am.nam), thangAm: am.thang, nhuan: am.nhuan, ngayAm: am.ngay,
     thaiTue, tieuHan, thang, ngay: (thang + am.ngay - 1) % 12, thangPhaiKia, ngayPhaiKia: (thangPhaiKia + am.ngay - 1) % 12, sao,
   };
+}
+
+export interface DanhGia { readonly tot: number; readonly xau: number; readonly tong: number; readonly ket: 'tốt' | 'xấu' | 'lẫn lộn' }
+
+/**
+ * Tan Bien phan III muc 1.2: trong cac sao hoi ve cung han (chinh cung, hai cung tam hop, cung doi dien), qua nua tot la han
+ * tot, qua nua xau la han xau. Tot/xau theo bang sao (`loai`); chinh tinh tinh theo do sang (Binh khong tot khong xau).
+ */
+export function danhGiaHan(ls: LaSo, lh: LuuHan, chi: number): DanhGia {
+  const hoi = [0, 4, 6, 8].map((d) => (chi + d) % 12);
+  const sao = [...hoi.flatMap((c) => ls.cung[c]?.sao ?? []), ...lh.sao.filter((s) => hoi.includes(s.chi))];
+  const tot = sao.filter((s) => (s.loai === 1 ? s.doSang === 'M' || s.doSang === 'V' || s.doSang === 'Đ' : s.loai < 10)).length;
+  const xau = sao.filter((s) => (s.loai === 1 ? s.doSang === 'H' : s.loai > 10)).length;
+  const tong = sao.length;
+  return { tot, xau, tong, ket: tot * 2 > tong ? 'tốt' : xau * 2 > tong ? 'xấu' : 'lẫn lộn' };
 }
