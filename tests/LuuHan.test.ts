@@ -6,7 +6,7 @@
 import { amSangDuong, duongSangAm, soNgay, tuSoNgay } from '../src/loi/amLich.ts';
 import type { GioiTinh } from '../src/loi/hoSo.ts';
 import { lapLaSo } from '../src/loi/tuVi/laSo.ts';
-import { tinhLuuHan, type LuuHan } from '../src/loi/tuVi/luuHan.ts';
+import { danhGiaHan, tinhLuuHan, type LuuHan } from '../src/loi/tuVi/luuHan.ts';
 import mcp from './vang/luu-han-mcp.json';
 import iz from './vang/luu-han-iztro.json';
 
@@ -65,5 +65,35 @@ describe('luu han', () => {
     const thuong = amSangDuong({ ...a, nhuan: false });
     const [x, y] = [tinhLuuHan(ls, 2, nhuan), tinhLuuHan(ls, 2, thuong)];
     expect([x.nhuan, x.thangAm, x.thang, x.ngay]).toEqual([true, y.thangAm, y.thang, y.ngay]);
+  });
+
+  test('danh gia han (Tan Bien III.1.2): dem sao 4 cung tam phuong tu chinh + sao luu; qua nua tot/xau', () => {
+    const ls = laSo([24, 2, 1985, 1, 'nam'], 2026);
+    const l = tinhLuuHan(ls, 2, { nam: 2026, thang: 10, ngay: 20 });
+    for (let chi = 0; chi < 12; chi++) {
+      const d = danhGiaHan(ls, l, chi);
+      const hoi = [chi, (chi + 4) % 12, (chi + 6) % 12, (chi + 8) % 12];
+      const dem = hoi.reduce((t, c) => t + (ls.cung[c]?.sao.length ?? 0), 0) + l.sao.filter((s) => hoi.includes(s.chi)).length;
+      expect(d.tong).toBe(dem);
+      expect(d.tot + d.xau).toBeLessThanOrEqual(d.tong);
+      expect(d.ket).toBe(d.tot * 2 > d.tong ? 'tốt' : d.xau * 2 > d.tong ? 'xấu' : 'lẫn lộn');
+    }
+    // Ca A, cung Ty (Phu The): chinh tinh Thien Dong Vuong, Thai Am Vuong deu tinh la tot.
+    const ty = danhGiaHan(ls, l, 0);
+    const chinhTot = ls.cung[0]?.sao.filter((s) => s.loai === 1 && s.doSang === 'V').length;
+    expect(chinhTot).toBe(2);
+    expect(ty.tot).toBeGreaterThanOrEqual(2);
+  });
+
+  test('vi du trong sach Tan Bien (phan III muc 4): nam At Mui, nam Ty', () => {
+    const ls = laSo([24, 2, 1985, 1, 'nam'], 2015);
+    const o = (xem: { nam: number; thang: number; ngay: number }) =>
+      Object.fromEntries(tinhLuuHan(ls, 2, xem).sao.map((s) => [s.ten.replace('Lưu ', ''), s.chi]));
+    // At Mui 2015: Thai Tue Mui, Tang Mon Dau, Bach Ho Mao, Khoc Hoi, Hu Suu, Loc Ton Mao, Kinh Duong Thin, Da La Dan.
+    expect(o({ nam: 2015, thang: 6, ngay: 1 })).toMatchObject({
+      'Thái Tuế': 7, 'Tang Môn': 9, 'Bạch Hổ': 3, 'Thiên Khốc': 11, 'Thiên Hư': 1, 'Lộc Tồn': 3, 'Kình Dương': 4, 'Đà La': 2,
+    });
+    // Nam Ty: Luu Thien Ma o Dan.
+    expect(o({ nam: 2020, thang: 6, ngay: 1 })['Thiên Mã']).toBe(2);
   });
 });

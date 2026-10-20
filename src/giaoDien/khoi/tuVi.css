@@ -57,3 +57,7 @@
 .tv-giai ul { margin: 4px 0; padding-left: 20px; }
 .tv-giai li + li { margin-top: 4px; }
 .tv-chi-tiet .tv-giai { font-size: 0.9rem; }
+.tv-ket { border-left: 3px solid var(--vien); padding-left: 8px; }
+.tv-ket.tv-tot { border-color: var(--xanh); }
+.tv-ket.tv-xau { border-color: var(--do); }
+.tv-ket.tv-vua { border-color: var(--vang); }

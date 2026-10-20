@@ -22,7 +22,7 @@ export interface Tru {
   readonly truongSinh: string;
 }
 /** Mot can chi gap tren duong doi (dai van, nam dang xem): thap than cua can va cua chinh khi (tang can dau) cua chi. */
-export interface VanNam { readonly canChi: string; readonly thapThan: readonly [string, string] }
+export interface VanNam { readonly canChi: string; readonly thapThan: readonly [string, string]; /** Can chinh an trong chi. */ readonly tang: string }
 export interface DaiVan extends VanNam { readonly tuoi: number; readonly batDau: NgayDuong; readonly dangChay: boolean }
 export interface BatTu {
   /** Nam, thang, ngay, gio; gio = null khi khong ro gio. */
@@ -72,26 +72,24 @@ const NGHIA_CAN: Readonly<Record<string, string>> = {
 
 /** Loi Claude soan lai theo quan niem dan gian, moi thap than mot doan (khoa la ten tieng Viet). */
 export const NGHIA_THAP_THAN: Readonly<Record<string, string>> = {
-  'Tỷ Kiên': 'cùng hành, cùng âm dương với nhật chủ: anh em, bạn bè, tính tự lập. Vừa phải thì có bạn đồng hành, chí tự lực; '
+  'Tỷ Kiên': 'cùng hành, cùng tính âm/dương với mình: anh em, bạn bè, tính tự lập. Vừa phải thì có bạn đồng hành, chí tự lực; '
     + 'nhiều quá thì cứng đầu, dễ tranh phần.',
-  'Kiếp Tài': 'cùng hành, khác âm dương: bạn mà cũng là người tranh phần, dám liều, dễ hao tiền. Nhiều thì hay hùn hạp, bốc đồng; '
-    + 'có Quan Sát kìm lại thì thành dũng cảm, quyết đoán.',
-  'Thực Thần': 'nhật chủ sinh ra, cùng âm dương: tài khéo, ăn ở thong thả, phúc lộc. Chủ khả năng hưởng thụ, sáng tạo nhẹ nhàng; '
-    + 'nhiều quá thì dễ lười, ham vui.',
-  'Thương Quan': 'nhật chủ sinh ra, khác âm dương: sáng tạo, giỏi nói, không chịu gò bó. Tài hoa nhưng hay chê, dễ va chạm cấp '
-    + 'trên; có Ấn kìm lại thì thành tài năng có chừng mực.',
-  'Thiên Tài': 'nhật chủ khắc, cùng âm dương: tiền bất ngờ, buôn bán, hào phóng. Giỏi nắm cơ hội, rộng rãi với bạn bè; nhiều quá '
-    + 'thì tiêu nhiều, khó giữ.',
-  'Chính Tài': 'nhật chủ khắc, khác âm dương: tiền làm ra đều đặn, cần kiệm. Chủ tính thực tế, giữ nếp nhà; với nam còn ứng với vợ '
+  'Kiếp Tài': 'cùng hành, khác tính âm/dương với mình: bạn mà cũng là người tranh phần, dám liều, dễ hao tiền. Nhiều thì hay hùn hạp, '
+    + 'bốc đồng; có Quan Sát kìm lại thì thành dũng cảm, quyết đoán.',
+  'Thực Thần': 'do mình sinh ra, cùng tính âm/dương: tài khéo, ăn ở thong thả, có lộc ăn; sáng tạo nhẹ nhàng. Nhiều quá thì dễ lười, ham vui.',
+  'Thương Quan': 'do mình sinh ra, khác tính âm/dương: sáng tạo, giỏi nói, không chịu gò bó; tài hoa nhưng hay chê, dễ va chạm cấp trên. '
+    + 'Có Ấn kìm lại thì thành tài năng có chừng mực.',
+  'Thiên Tài': 'bị mình khắc, cùng tính âm/dương: tiền bất ngờ, buôn bán, hào phóng; giỏi nắm cơ hội. Nhiều quá thì tiêu nhiều, khó giữ.',
+  'Chính Tài': 'bị mình khắc, khác tính âm/dương: tiền làm ra đều đặn, cần kiệm, thực tế, giữ nếp nhà; với nam còn ứng với vợ '
     + 'theo cách xem truyền thống.',
-  'Thất Sát': 'khắc nhật chủ, cùng âm dương: áp lực, uy quyền, dám đương đầu. Có chế ngự thì thành người có uy, làm việc lớn; không '
-    + 'chế thì dễ căng thẳng, va chạm.',
-  'Chính Quan': 'khắc nhật chủ, khác âm dương: kỷ luật, danh dự, chức phận. Chủ sự đứng đắn, được tín nhiệm; với nữ còn ứng với '
-    + 'chồng theo cách xem truyền thống.',
-  'Thiên Ấn': 'sinh nhật chủ, cùng âm dương: học điều lạ, trực giác, nghề riêng. Giỏi tự học, có óc khác người; nhiều quá thì dễ '
+  'Thất Sát': 'khắc mình, cùng tính âm/dương: áp lực, uy quyền, dám đương đầu. Có sao kìm lại thì thành người có uy, làm việc lớn; '
+    + 'không thì dễ căng thẳng, va chạm.',
+  'Chính Quan': 'khắc mình, khác tính âm/dương: kỷ luật, danh dự, chức phận; đứng đắn, được tín nhiệm. Với nữ còn ứng với chồng '
+    + 'theo cách xem truyền thống.',
+  'Thiên Ấn': 'sinh ra mình, cùng tính âm/dương: học điều lạ, trực giác, nghề riêng; giỏi tự học, có óc khác người. Nhiều quá thì dễ '
     + 'cô độc, nghĩ nhiều làm ít.',
-  'Chính Ấn': 'sinh nhật chủ, khác âm dương: mẹ, thầy, học vấn, được che chở. Chủ lòng nhân hậu, học hành, giấy tờ thuận; nhiều '
-    + 'quá thì dễ ỷ lại.',
+  'Chính Ấn': 'sinh ra mình, khác tính âm/dương: mẹ, thầy, học vấn, được che chở; nhân hậu, học hành và giấy tờ thuận. Nhiều quá thì '
+    + 'dễ ỷ lại.',
 };
 
 /** Thap than cua can (hoac chinh khi cua chi) dai van, nam dang xem: nghia trong khoang thoi gian do. */
@@ -108,17 +106,18 @@ export const NGHIA_VAN: Readonly<Record<string, string>> = {
   'Chính Ấn': 'được che chở, học hành, giấy tờ thuận; được người trên giúp.',
 };
 
-/** Nam nhom hanh theo quan he voi nhat chu, thu tu trong `BatTu.nhomHanh`: nghia khi nhieu va khi thieu. */
-export const NHOM_HANH: Readonly<Record<string, { readonly nhieu: string; readonly thieu: string }>> = {
-  'Tỷ Kiếp': { nhieu: 'tự tin, cứng đầu, đông bạn nhưng dễ tranh phần, hao tiền vì bạn.',
+/** Nam nhom hanh theo quan he voi nhat chu, thu tu trong `BatTu.nhomHanh`: la gi, nghia khi nhieu va khi thieu. */
+export const NHOM_HANH: Readonly<Record<string, { readonly la: string; readonly nhieu: string; readonly thieu: string }>> = {
+  'Tỷ Kiếp': { la: 'cùng hành với mình (anh em, bạn bè, người ngang hàng)', nhieu: 'tự tin, cứng đầu, đông bạn nhưng dễ tranh phần, hao tiền vì bạn.',
     thieu: 'dễ thiếu tự tin, ít người cùng chí hướng; nên tìm cộng sự đáng tin.' },
-  'Thực Thương': { nhieu: 'giỏi thể hiện, sáng tạo, ăn nói; dễ nói quá lời, không chịu gò bó.',
+  'Thực Thương': { la: 'hành do mình sinh ra (tài năng, lời nói, sự sáng tạo)', nhieu: 'giỏi thể hiện, sáng tạo, ăn nói; dễ nói quá lời, không chịu gò bó.',
     thieu: 'ít bộc lộ, khó nói ra ý mình; nên tập trình bày, viết ra.' },
-  'Tài': { nhieu: 'nhạy với tiền, thực tế, nhưng dễ mệt vì lo kiếm; sức nhật chủ yếu mà Tài nhiều thì tiền khó giữ.',
+  'Tài': { la: 'hành bị mình khắc (tiền bạc, của cải)', nhieu: 'nhạy với tiền, thực tế, nhưng dễ mệt vì lo kiếm; nếu bản thân yếu mà '
+    + 'Tài nhiều thì tiền khó giữ.',
     thieu: 'ít để tâm tiền bạc, tiêu tùy hứng; nên lập kế hoạch chi tiêu.' },
-  'Quan Sát': { nhieu: 'chịu nhiều áp lực, kỷ luật, trách nhiệm nặng; dễ căng thẳng.',
+  'Quan Sát': { la: 'hành khắc mình (công việc, kỷ luật, áp lực, chức phận)', nhieu: 'chịu nhiều áp lực, kỷ luật, trách nhiệm nặng; dễ căng thẳng.',
     thieu: 'tự do, ít ràng buộc, nhưng dễ thiếu kỷ luật, khó giữ nề nếp.' },
-  'Ấn': { nhieu: 'được che chở, học nhiều, nhưng dễ ỷ lại, chậm hành động.',
+  'Ấn': { la: 'hành sinh ra mình (cha mẹ, thầy, học hành, sự che chở)', nhieu: 'được che chở, học nhiều, nhưng dễ ỷ lại, chậm hành động.',
     thieu: 'phải tự lập sớm, ít được nâng đỡ; nên chủ động tìm thầy, học thêm.' },
 };
 
@@ -193,7 +192,8 @@ const hai = (n: number): string => String(n).padStart(2, '0');
 /** Can chi `g` `z` (chu Han) nhin tu nhat chu `nhat`: ten va thap than cua can, cua chinh khi trong chi. */
 function vanNam(nhat: string, g: string, z: string): VanNam {
   const tt = (c: string): string => hv('thapThan', LunarUtil.SHI_SHEN[nhat + c] ?? '');
-  return { canChi: `${hv('can', g)} ${hv('chi', z)}`, thapThan: [tt(g), tt(LunarUtil.ZHI_HIDE_GAN[z]?.[0] ?? '')] };
+  const tang = LunarUtil.ZHI_HIDE_GAN[z]?.[0] ?? '';
+  return { canChi: `${hv('can', g)} ${hv('chi', z)}`, thapThan: [tt(g), tt(tang)], tang: hv('can', tang) };
 }
 
 export function tinhBatTu(hs: HoSo, kq: KetQuaHoSo, ngayXem: NgayDuong): BatTu {

@@ -7,7 +7,9 @@ import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 import { namNay } from '../src/loi/namNay.ts';
 import { lapLaSo } from '../src/loi/tuVi/laSo.ts';
 import { tinhLuuHan } from '../src/loi/tuVi/luuHan.ts';
-import { BINH, CHINH_TINH, HAN, NGHIA_CUNG, PHU_TINH, SAO_LUU, THAN_CU, TRIET, TUAN, VO_CHINH_DIEU } from '../src/loi/tuVi/nghia.ts';
+import {
+  BINH, CHINH_TINH, CHU_DE, HAN, NGHIA_CUNG, PHU_TINH, SAO_LUU, SAO_LUU_TRUNG, THAN_CHUNG, THAN_CU, TRIET, TUAN, VO_CHINH_DIEU,
+} from '../src/loi/tuVi/nghia.ts';
 
 const hs = (o: Partial<HoSo> = {}): HoSo => ({
   id: 'a', ten: 'Thử', gioiTinh: 'nam', ngaySinh: '1985-03-15', gioSinh: '02:00', noiSinh: 'Hà Nội', ...o,
@@ -24,7 +26,7 @@ function moiDoan(): [string, string][] {
       else if (typeof v === 'object' && v !== null) them(`${ten}.${k}`, v as Record<string, unknown>);
     }
   };
-  them('tuVi', { NGHIA_CUNG, CHINH_TINH, PHU_TINH, SAO_LUU, THAN_CU, HAN, BINH, TUAN, TRIET, VO_CHINH_DIEU });
+  them('tuVi', { NGHIA_CUNG, CHU_DE, CHINH_TINH, PHU_TINH, SAO_LUU, SAO_LUU_TRUNG, THAN_CU, THAN_CHUNG, HAN, BINH, TUAN, TRIET, VO_CHINH_DIEU });
   them('batTu', { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH });
   for (let i = 0; i < 10; i++) {
     const h = hs({ ngaySinh: ngay(i) });
@@ -47,7 +49,8 @@ describe('loi giai', () => {
     expect(ten.length).toBe(108); // 109 sao, hai sao cung ten Quan Phù
     expect(ten.filter((t) => !(t in CHINH_TINH) && !(t in PHU_TINH))).toEqual([]);
     expect(Object.keys(CHINH_TINH)).toHaveLength(14);
-    expect(ls.cung.map((c) => c.ten).filter((t) => !(t in NGHIA_CUNG))).toEqual([]);
+    expect(ls.cung.map((c) => c.ten).filter((t) => !(t in NGHIA_CUNG) || !(t in CHU_DE))).toEqual([]);
+    expect(Object.keys(SAO_LUU_TRUNG).filter((t) => !(t in SAO_LUU))).toEqual([]);
     expect(tinhLuuHan(ls, 2, { nam: 2026, thang: 10, ngay: 20 }).sao.map((s) => s.ten).sort()).toEqual(Object.keys(SAO_LUU).sort());
     const than = new Set(Array.from({ length: 12 }, (_, g) => { const l = la(g); return l.cung[l.than]?.ten ?? ''; }));
     expect([...than].sort()).toEqual(Object.keys(THAN_CU).sort());

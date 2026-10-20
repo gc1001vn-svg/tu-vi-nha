@@ -52,14 +52,14 @@ const SAO: Bang = {
     'Sao trung tính hơi xấu, ứng với sao Hỏa: dễ nóng nảy, cãi vã, kiện tụng nhỏ, ốm vặt; làm ăn ở mức vừa. Đa số trang ghi '
     + 'tháng Hai và tháng Tám âm là xấu nhất. Nên nhịn một câu, tránh tranh chấp; ngày cúng các trang ghi khác nhau.'],
   'La Hầu': ['xau', 'Sao xấu, kỵ nam: dễ thị phi, kiện tụng, buồn phiền.',
-    'Sao xấu, ứng với điểm La Hầu trong lịch pháp cổ: chủ khẩu thiệt, thị phi, kiện tụng, buồn phiền, nặng với nam hơn nữ. '
+    'Sao xấu: hay mang chuyện lời qua tiếng lại, thị phi, kiện tụng, buồn phiền; nam gặp nặng hơn nữ. '
     + 'Các trang dân gian ghi kỵ nhất tháng Giêng và tháng Bảy âm. Nên giữ lời nói, đọc kỹ giấy tờ trước khi ký. '
     + 'Thường cúng giải hạn ngày 8 âm lịch hằng tháng.'],
   'Kế Đô': ['xau', 'Sao xấu, kỵ nữ: dễ buồn phiền, hao tài, lục đục trong nhà.',
-    'Sao xấu, cặp với La Hầu: chủ buồn phiền, hao tài, chuyện trong nhà lục đục, nặng với nữ hơn nam. Dân gian ghi kỵ tháng Ba '
+    'Sao xấu, cặp với La Hầu: hay mang chuyện buồn phiền, hao tiền, trong nhà lục đục; nữ gặp nặng hơn nam. Dân gian ghi kỵ tháng Ba '
     + 'và tháng Chín âm. Nên chi tiêu dè dặt, giữ hòa khí trong nhà. Thường cúng giải hạn ngày 18 âm lịch hằng tháng.'],
   'Thái Bạch': ['xau', 'Sao xấu: dễ hao tài; nên giữ tiền, tránh đầu tư lớn.',
-    'Sao xấu, ứng với sao Kim: chủ hao tài, tiểu nhân, ốm vặt — câu cửa miệng là "Thái Bạch quét sạch cửa nhà". Kỵ nhất tháng '
+    'Sao xấu, ứng với sao Kim: hay làm hao tiền, gặp kẻ xấu, ốm vặt — câu cửa miệng là "Thái Bạch quét sạch cửa nhà". Kỵ nhất tháng '
     + 'Năm âm; nhiều trang kể thêm tháng Hai, tháng Tám. Nên giữ tiền, tránh cho vay, đầu tư lớn. Thường cúng giải hạn ngày 15 '
     + 'âm lịch hằng tháng.'],
 };

@@ -39,3 +39,12 @@ Lùi bằng: gộp `main` một commit (`git merge --squash`), hỏng thì `git 
 KHÔNG làm: lưu thời (giờ) · tứ hóa lưu niên · lưu đại hạn · chấm điểm tốt/xấu cả năm · chọn ngày xem khác hôm nay · màn chỉnh tuỳ chọn ·
   AI (đợt 7) · người nhà (đợt 9).
 Cần anh: duyệt phương án. Nếu trang Altuvi anh xem có mục hạn tháng, chụp một ảnh (ngày sinh giả cũng được) để chốt phái.
+
+Sau khi anh thử iPhone (20/10):
+- Hỏi: bước A thế nào → Đáp: mọi thứ ổn, nhưng vài chỗ diễn giải khó hiểu — tra lại bước diễn giải (anh)
+- Hỏi: hạn tháng chốt theo đâu → Đáp: Altuvi phải trả tiền; tìm nhiều nguồn tin cậy, so sánh (anh). Đã đọc sách gốc *Tử Vi Đẩu Số
+  Tân Biên* (Thái Thứ Lang 1956, bản OCR archive.org): mục 10.4 ghi 3 cách, "thường người ta hay dùng cách thứ nhất" = cách app
+  đang dùng; *Toàn Thư* 安斗君訣 = cách Lưu Thái Tuế (app hiện thêm dòng). Sao lưu: sách phần III mục 4 đúng 9 sao như app.
+- Việc thêm: viết lại lời giải theo nghĩa trong Tân Biên, lời thường; mỗi hạn có kết luận theo luật sách (III.1.2: quá nửa sao
+  hội về cung hạn tốt là hạn tốt, quá nửa xấu là hạn xấu); bát tự giải thích từ khó (nhật chủ, nhóm hành, can ẩn).
+- Hỏi: xoá nhánh GitHub → Đáp: để dồn, xoá một lần sau cùng (anh).
