@@ -6,7 +6,8 @@
  * Thang ky, ngay cung trong `giai` chi ghi khi >=2 trang dan gian khop (tra 20/10: hoatieu, bachhoaxanh, dienmayxanh,
  * docungtamlinh, didongviet, thuvienphapluat, vietlac, muaban); trang ghi khac nhau thi bo.
  * Doi chieu (tra 20/10, QUY_UOC muc 14): vong sao nam trung 9/9 bang hanh nien Cuu Dieu cua hai kinh Mat tong doi Duong
- * (Dai Chinh tang so 1308, 1311 — ban XML CBETA) va bang chua Nhat; kinh khong co vong rieng cho nu.
+ * (Dai Chinh tang so 1308, 1311 — ban XML CBETA) va bang chua Nhat; vong nu va ngay cung hang thang: bo Ngoc Hap Ky, Dao tang
+ * doi Minh (DZ1481, ban Kanripo) — bang 11–99 tuoi khop nam 86/89, nu 83/89, 9 o lech la chep lan chu (QUY_UOC muc 14).
  */
 import { CHI, canChiNam, duongSangAm, type NgayDuong } from './amLich.ts';
 import { hv } from './hanViet/index.ts';
@@ -43,7 +44,8 @@ const SAO: Bang = {
     + 'Thường cúng giải hạn ngày 26 âm lịch hằng tháng.'],
   'Mộc Đức': ['tot', 'Sao tốt: hòa thuận, dễ có tin vui.',
     'Sao tốt, ứng với sao Mộc: năm có sao này chiếu thường hòa thuận, dễ có tin vui như cưới hỏi, thêm người, công việc êm. '
-    + 'Nên giữ cái hòa, tránh nóng nảy làm hỏng việc tốt. Ngày cúng sao này các trang ghi khác nhau nên app không ghi.'],
+    + 'Nên giữ cái hòa, tránh nóng nảy làm hỏng việc tốt. Sách Ngọc Hạp Ký (Đạo tạng đời Minh) ghi ngày cúng 25 âm lịch hằng '
+    + 'tháng; các trang Việt ghi khác nhau.'],
   'Thổ Tú': ['binh', 'Sao trung tính: dễ gặp tiểu nhân, thị phi; đi xa nên cẩn thận.',
     'Sao trung tính, ứng với sao Thổ: dễ gặp tiểu nhân, thị phi, chuyện trong nhà lục đục; đi xa, làm ăn với người lạ nên '
     + 'kỹ giấy tờ. Không phải sao dữ, giữ lời ăn tiếng nói là qua. Thường cúng giải hạn ngày 19 âm lịch hằng tháng.'],
@@ -53,7 +55,8 @@ const SAO: Bang = {
     + 'sao phúc lộc, xếp vào nhóm tốt; app theo cách chia ba sao tốt, ba sao xấu, ba sao trung tính.'],
   'Vân Hớn': ['binh', 'Sao trung tính: dễ nóng nảy, cãi vã, kiện tụng nhỏ.',
     'Sao trung tính hơi xấu, ứng với sao Hỏa: dễ nóng nảy, cãi vã, kiện tụng nhỏ, ốm vặt; làm ăn ở mức vừa. Đa số trang ghi '
-    + 'tháng Hai và tháng Tám âm là xấu nhất. Nên nhịn một câu, tránh tranh chấp; ngày cúng các trang ghi khác nhau.'],
+    + 'tháng Hai và tháng Tám âm là xấu nhất. Nên nhịn một câu, tránh tranh chấp. Sách Ngọc Hạp Ký (Đạo tạng đời Minh) ghi '
+    + 'ngày cúng 29 âm lịch hằng tháng; các trang Việt ghi khác nhau.'],
   'La Hầu': ['xau', 'Sao xấu, kỵ nam: dễ thị phi, kiện tụng, buồn phiền.',
     'Sao xấu: hay mang chuyện lời qua tiếng lại, thị phi, kiện tụng, buồn phiền; nam gặp nặng hơn nữ. '
     + 'Các trang dân gian ghi kỵ nhất tháng Giêng và tháng Bảy âm. Nên giữ lời nói, đọc kỹ giấy tờ trước khi ký. '
@@ -66,14 +69,14 @@ const SAO: Bang = {
     + 'Năm âm; nhiều trang kể thêm tháng Hai, tháng Tám. Nên giữ tiền, tránh cho vay, đầu tư lớn. Thường cúng giải hạn ngày 15 '
     + 'âm lịch hằng tháng.'],
 };
-/** Hien duoi doan giai sao han (tra 20/10: kinh 1308, 1311, chua Nhat, Giao duc 2019, baovanhoa, sggp — QUY_UOC W43, W45). */
-export const NGUON_SAO_HAN = 'Về nguồn: bảng sao theo tuổi có từ hai kinh Mật tông đời Đường trong Đại Chính tạng (số 1308 '
-  + 'và 1311): vòng sao của nam trong app trùng đủ 9 tuổi với kinh, các chùa Nhật Bản vẫn dùng bảng này trong lễ cúng sao đầu '
-  + 'năm. Kinh chỉ có một vòng chung, không có vòng riêng cho nữ (vòng nữ chưa thấy nguồn ngoài Việt Nam); kinh 1308 ghi La Hầu, '
-  + 'Thổ Tú nặng với nam, Kế Đô, Vân Hớn nặng với nữ. Hai kinh xếp Thổ Tú, Vân Hớn là sao xấu, Thủy Diệu là sao tốt — khác cách '
-  + 'chia ba tốt, ba xấu, ba trung tính của dân gian ta mà app theo. Thích Nhật Từ (Học viện Phật giáo Việt Nam) và Thứ trưởng Bộ '
-  + 'Văn hóa, Thể thao và Du lịch nói giáo lý nhà Phật không có sao tốt, sao xấu; năm 2019 Bộ đề nghị không để việc dâng sao '
-  + 'giải hạn biến tướng thành dịch vụ trục lợi.';
+/** Hien duoi doan giai sao han (tra 20/10: kinh 1308, 1311, Ngoc Hap Ky, chua Nhat, Giao duc 2019, baovanhoa — QUY_UOC W43, W45). */
+export const NGUON_SAO_HAN = 'Về nguồn: bảng sao theo tuổi có từ hai kinh Mật tông đời Đường trong Đại Chính tạng (số 1308, '
+  + '1311), chùa Nhật Bản vẫn dùng: vòng sao của nam trùng đủ 9 tuổi. Vòng riêng của nữ và ngày cúng hằng tháng của 9 sao có trong '
+  + 'bộ Ngọc Hạp Ký thuộc Đạo tạng đời Minh: bảng nam nữ từ 11 đến 99 tuổi trùng cả hai vòng của app, trừ vài chữ chép nhầm. Kinh '
+  + '1308 ghi La Hầu, Thổ Tú nặng với nam, Kế Đô, Vân Hớn nặng với nữ; hai kinh xếp Thổ Tú, Vân Hớn là sao xấu, Thủy Diệu là sao '
+  + 'tốt — khác cách chia ba tốt, ba xấu, ba trung tính của dân gian ta mà app theo. Thích Nhật Từ (Học viện Phật giáo Việt Nam) '
+  + 'và Thứ trưởng Bộ Văn hóa, Thể thao và Du lịch nói giáo lý nhà Phật không có sao tốt, sao xấu; năm 2019 Bộ đề nghị không để '
+  + 'việc dâng sao giải hạn biến tướng thành dịch vụ trục lợi.';
 
 // Phan tu thu i = tuoi mu chia 9 du i.
 const SAO_NAM = ['Mộc Đức', 'La Hầu', 'Thổ Tú', 'Thủy Diệu', 'Thái Bạch', 'Thái Dương', 'Vân Hớn', 'Kế Đô', 'Thái Âm'];

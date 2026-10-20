@@ -132,6 +132,14 @@ describe('sao han Cuu Dieu + 8 han', () => {
       ['La Hầu', 'Thổ Tú', 'Thủy Diệu', 'Thái Bạch', 'Thái Dương', 'Vân Hớn', 'Kế Đô', 'Thái Âm', 'Mộc Đức']);
   });
 
+  test('ca hai vong trung bang "nam nu tri nien tinh" cua Ngoc Hap Ky (Dao tang DZ1481), tuoi 11–19', () => {
+    // 看男女值年星辰命之屬: 十一歲男子土星女人火星 … 十九歲男子羅睺星女人計都星 — raw.githubusercontent.com/kanripo/KR5h0051.
+    // Ca bang 11–99: nam 86/89, nu 83/89; 9 o lech la chep lan 太陽/太隂, 水/木 (trai chu ky 9 cua chinh bang).
+    const ra = (g: GioiTinh) => Array.from({ length: 9 }, (_, i) => tuoi(11 + i, g).sao.ten);
+    expect(ra('nam')).toEqual(['Thổ Tú', 'Thủy Diệu', 'Thái Bạch', 'Thái Dương', 'Vân Hớn', 'Kế Đô', 'Thái Âm', 'Mộc Đức', 'La Hầu']);
+    expect(ra('nu')).toEqual(['Vân Hớn', 'Mộc Đức', 'Thái Âm', 'Thổ Tú', 'La Hầu', 'Thái Dương', 'Thái Bạch', 'Thủy Diệu', 'Kế Đô']);
+  });
+
   test('nam xem doi o Tet; sinh truoc Tet tinh nam am truoc', () => {
     // Tet Binh Ngo 17/02/2026.
     expect(nn(1990, 'nam', { nam: 2026, thang: 2, ngay: 16 })).toMatchObject({ namAm: 2025, canChi: 'Ất Tỵ', tuoiMu: 36 });
