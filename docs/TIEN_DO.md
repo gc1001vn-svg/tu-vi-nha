@@ -6,6 +6,7 @@
 
 Cập nhật: 20/10/2026 — đợt "lưu hạn + lời giải" (`docs/ke-hoach/2026-10-20-luu-han-loi-giai.md`, anh duyệt A) gộp `main` năm lần
 trong ngày: lưu hạn + lời giải · lời giải theo sách Tân Biên · nguồn Phật, Đạo, chùa · kinh gốc · Ngọc Hạp Ký.
+**Anh thử trên iPhone 20/10 (bản 16:43): mọi thứ ổn → đợt này đóng.**
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -23,14 +24,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- Anh thử iPhone lần 2: gõ phím, lá số + hạn năm/tháng/ngày, lời giải, sao lưu xuất → xoá → nhập (lần 1 chưa thử bước này).
-- Anh xem lại phần lời giải mới; chỗ nào còn khó hiểu thì chụp, em sửa tiếp.
+- Mở đợt mới: em trình kế hoạch, anh duyệt rồi mới làm (chưa chọn đợt).
 - Kế hoạch tổng còn: đợt 4 (Kinh Dịch, bói Kiều, xem ngày theo việc), 5 (la bàn, Lỗ Ban, phi tinh), 6 (chiêm tinh, tarot),
   7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- Xem lời giải mới trên iPhone, chụp chỗ còn khó hiểu.
+- Chọn đợt kế để em lập kế hoạch.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
@@ -43,5 +43,5 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   bát tự chỉ đếm thô, chưa xét vượng suy. Tốt/xấu từng phụ tinh theo bảng `ansaotuvi`, có sao lệch với sách (vd Mộ).
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng, sao ngày theo hoàng lịch Trung Hoa (lịch Việt có hệ sao khác).
 - Thần tài, hỷ thần, hướng sát chưa có nguồn Việt; cung hoàng đạo theo bảng ngày cố định. Tuỳ chọn `QUY_UOC` chưa có màn chỉnh.
-- Mới thử Chromium, chưa thử Safari/WebKit. `lunar-typescript` 1.8.6 lộ mã `sn.*` (bảng Hán–Việt đỡ); bảng cần người rành lịch
+- Máy ảo chỉ thử Chromium; anh thử iPhone thật 20/10 ổn. `lunar-typescript` 1.8.6 lộ mã `sn.*` (bảng Hán–Việt đỡ); bảng cần người rành lịch
   đọc lại vài mục (Bành Tổ, lộc, 28 tú).
