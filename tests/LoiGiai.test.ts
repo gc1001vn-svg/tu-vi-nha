@@ -4,7 +4,7 @@
  */
 import { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH, tinhBatTu } from '../src/loi/batTu.ts';
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
-import { namNay } from '../src/loi/namNay.ts';
+import { NGUON_SAO_HAN, namNay } from '../src/loi/namNay.ts';
 import { lapLaSo } from '../src/loi/tuVi/laSo.ts';
 import { tinhLuuHan } from '../src/loi/tuVi/luuHan.ts';
 import {
@@ -28,6 +28,7 @@ function moiDoan(): [string, string][] {
   };
   them('tuVi', { NGHIA_CUNG, CHU_DE, CHINH_TINH, PHU_TINH, SAO_LUU, SAO_LUU_TRUNG, THAN_CU, THAN_CHUNG, HAN, BINH, TUAN, TRIET, VO_CHINH_DIEU });
   them('batTu', { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH });
+  them('namNay', { NGUON_SAO_HAN });
   for (let i = 0; i < 10; i++) {
     const h = hs({ ngaySinh: ngay(i) });
     ra.push([`nhatChu ${ngay(i)}`, tinhBatTu(h, tinhHoSo(h).chinh, { nam: 2026, thang: 10, ngay: 20 }).nghiaNhatChu]);

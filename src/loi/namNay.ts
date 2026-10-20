@@ -5,6 +5,8 @@
  * Loi nghia do Claude soan lai theo quan niem dan gian (luat 6): mot dong moi muc; sao, han them mot doan `giai`.
  * Thang ky, ngay cung trong `giai` chi ghi khi >=2 trang dan gian khop (tra 20/10: hoatieu, bachhoaxanh, dienmayxanh,
  * docungtamlinh, didongviet, thuvienphapluat, vietlac, muaban); trang ghi khac nhau thi bo.
+ * Doi chieu ngoai VN (tra 20/10, QUY_UOC muc 14): vong sao nam trung bang Cuu Dieu theo tuoi mu cua chua Nhat 9/9; chua Nhat
+ * khong chia nam nu, vong nu chua thay nguon ngoai VN; kinh Mat tong ban Cuu Dieu nhung khong co bang tuoi.
  */
 import { CHI, canChiNam, duongSangAm, type NgayDuong } from './amLich.ts';
 import { hv } from './hanViet/index.ts';
@@ -47,7 +49,8 @@ const SAO: Bang = {
     + 'kỹ giấy tờ. Không phải sao dữ, giữ lời ăn tiếng nói là qua. Thường cúng giải hạn ngày 19 âm lịch hằng tháng.'],
   'Thủy Diệu': ['binh', 'Sao trung tính: có lộc nhưng dễ thị phi; dân gian dặn tránh sông nước.',
     'Sao trung tính, ứng với sao Thủy: có lộc, nhất là việc buôn bán, đi lại, nhưng dễ thị phi vì lời nói. Dân gian dặn tránh '
-    + 'sông nước, nhất là tháng Tư và tháng Tám âm. Thường cúng giải hạn ngày 21 âm lịch hằng tháng.'],
+    + 'sông nước, nhất là tháng Tư và tháng Tám âm. Thường cúng giải hạn ngày 21 âm lịch hằng tháng. Nhiều trang gọi đây là '
+    + 'sao phúc lộc, xếp vào nhóm tốt; app theo cách chia ba sao tốt, ba sao xấu, ba sao trung tính.'],
   'Vân Hớn': ['binh', 'Sao trung tính: dễ nóng nảy, cãi vã, kiện tụng nhỏ.',
     'Sao trung tính hơi xấu, ứng với sao Hỏa: dễ nóng nảy, cãi vã, kiện tụng nhỏ, ốm vặt; làm ăn ở mức vừa. Đa số trang ghi '
     + 'tháng Hai và tháng Tám âm là xấu nhất. Nên nhịn một câu, tránh tranh chấp; ngày cúng các trang ghi khác nhau.'],
@@ -63,6 +66,13 @@ const SAO: Bang = {
     + 'Năm âm; nhiều trang kể thêm tháng Hai, tháng Tám. Nên giữ tiền, tránh cho vay, đầu tư lớn. Thường cúng giải hạn ngày 15 '
     + 'âm lịch hằng tháng.'],
 };
+/** Hien duoi doan giai sao han (tra 20/10: chua Nhat, Giao duc 2019, baovanhoa, sggp — QUY_UOC W43). */
+export const NGUON_SAO_HAN = 'Về nguồn: bảng sao theo tuổi và lệ cúng sao giải hạn là tục dân gian. Thứ tự sao của nam trùng '
+  + 'bảng Cửu Diệu theo tuổi mụ ở các chùa Nhật Bản (lễ cúng sao đầu năm); chùa Nhật không chia nam nữ, bảng sao của nữ chưa '
+  + 'thấy nguồn ngoài Việt Nam. Thích Nhật Từ (Học viện Phật giáo Việt Nam) và Thứ trưởng Bộ Văn hóa, Thể thao và Du lịch đều '
+  + 'nói giáo lý nhà Phật không có sao tốt, sao xấu; năm 2019 Bộ đề nghị không để việc dâng sao giải hạn biến tướng thành dịch '
+  + 'vụ trục lợi.';
+
 // Phan tu thu i = tuoi mu chia 9 du i.
 const SAO_NAM = ['Mộc Đức', 'La Hầu', 'Thổ Tú', 'Thủy Diệu', 'Thái Bạch', 'Thái Dương', 'Vân Hớn', 'Kế Đô', 'Thái Âm'];
 const SAO_NU = ['Thủy Diệu', 'Kế Đô', 'Vân Hớn', 'Mộc Đức', 'Thái Âm', 'Thổ Tú', 'La Hầu', 'Thái Dương', 'Thái Bạch'];
