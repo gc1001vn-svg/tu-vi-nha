@@ -11,7 +11,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 1. Đang ở đâu
 
-- Ba thẻ: "Hôm nay" · "Tra cứu" (bất kỳ ai, không lưu) · "Của tôi" (một hồ sơ, lưu trong máy + file sao lưu).
+- Bốn thẻ: "Hôm nay" · "Tra cứu" (bất kỳ ai, không lưu) · "Của tôi" (một hồ sơ, lưu trong máy + file sao lưu) · "Gieo quẻ".
   Chỉ lưu hồ sơ của anh; người nhà để đợt 9 (anh chốt 19/10).
 - Khối mỗi người (`src/giaoDien/khoi/`): tử vi (Altuvi 345/345), năm nay (bảng báo 2026 144/144), bát tự + đại vận (`sxtwl`),
   hướng Bát trạch, tuổi hợp, thần số học, hoàng đạo, nhịp sinh học.
@@ -24,13 +24,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- Đợt 4 (Kinh Dịch, bói Kiều, chọn ngày theo việc): kế hoạch `docs/ke-hoach/2026-10-20-dot-4.md`, chờ anh duyệt.
+- Đợt 4 (`docs/ke-hoach/2026-10-20-dot-4.md`, anh duyệt A): xong phần 1 bói Kiều (`QUY_UOC` mục 17); kế: chọn ngày, Kinh Dịch.
 - Kế hoạch tổng còn: đợt 5 (la bàn, Lỗ Ban, phi tinh), 6 (chiêm tinh, tarot),
   7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- Duyệt kế hoạch đợt 4 (kèm chụp 4 ngày lịch ghi trong đó).
+- Chụp 4 ngày lịch ghi trong kế hoạch đợt 4 (trước phần chọn ngày).
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.

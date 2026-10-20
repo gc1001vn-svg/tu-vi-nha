@@ -165,6 +165,20 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Kết luận hạn tốt/xấu:** Tân Biên phần III mục 1.2 — trong các sao hội về cung hạn (chính cung, hai cung tam hợp, cung đối diện) quá nửa tốt là hạn tốt, quá nửa xấu là hạn xấu (`danhGiaHan`). Tốt/xấu theo bảng sao `ansaotuvi`; sao chính theo độ sáng, Bình không tính.
 - Chưa so Altuvi (phần hạn trên Altuvi phải trả tiền). Không làm: lưu thời, tứ hóa lưu niên, lưu đại hạn (Tân Biên III.1.1 có nhắc).
 - Đã kiểm: máy (`tests/LuuHan.test.ts`, bảng vàng `tests/vang/luu-han-*.json` sinh bằng `scripts/doi-chieu/luu-han-*`) + web (trích đoạn).
+## 17. Bói Kiều (`src/loi/kieu.ts`, tra và soát 20/10)
+- **Chữ**: gốc là bản phổ thông chép Wikisource (`congmnguyen/kieu-gpt`; ấn bản gốc chưa rõ, khớp ảnh bản Bùi Kỷ – Trần Trọng Kim
+  1927 ở 23/26 câu thử). 480 câu khác một bản độc lập (`tiepvupsu/ebookMLCB`) đem bỏ phiếu **từng chữ** với bản in OCR archive.org:
+  243 câu lấy chữ theo bản B (OCR giống B), 214 câu giữ bản gốc, 23 câu không so được thì giữ bản gốc; 16 câu sửa tay (đổi chỗ chữ,
+  dấu câu bị đổi thành dấu thanh như "aỉ", "nàọ"). Bảng từng câu: `scripts/doi-chieu/kieu-soat.tsv`. Theo phiếu nên chữ cũ, chữ mới
+  lẫn nhau (dầu/dù, đương/đang, Lâm Tri → Lâm Truy).
+- **Cách bói**: khấn → mở ngẫu nhiên → đọc câu → tự suy theo việc mình hỏi (Phan Kế Bính gọi là "bói chơi"; Phạm Đan Quế 1991).
+  Máy chọn đều một trong 1.627 cặp lục bát (`crypto` ở giao diện), hiện thêm một cặp trước, một cặp sau để đọc ra ý.
+  Vênh: khấn ai (Từ Hải, Giác Duyên, Thúy Kiều: Phạm Đan Quế, loigiaihay · Thúy Kiều, Kim Trọng: Phan Kế Bính) → mặc định
+  câu thứ nhất; đọc mấy câu (Phan Kế Bính "mấy câu", Phạm Đan Quế 2 câu) → tuỳ chọn `cauKieu`; trang trái/phải, đếm dòng
+  thì máy không cần. Không làm: lời giải sẵn từng câu (sách bói Kiều còn bản quyền), bói "3 lần" (không thấy nguồn).
+- **21 đoạn**: "Mở đầu" (câu 1–38) + 20 hồi theo mục lục bản Nguyễn Can Mộng 1936; ranh hồi tìm bằng so khớp OCR (lệch 0–2 câu),
+  đặt ở câu lục; tên đoạn, tóm tắt Claude soạn lại.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -181,6 +195,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `nguyetHanTu` | `tieuHan` · `thaiTue` | `tieuHan` (Thái Thứ Lang, trang Việt) | tử vi: lưu nguyệt, lưu nhật (mục 16) |
 | `phaiTuVi` | `altuvi` · `ansaotuvi` | `altuvi` (luật 3) | tử vi: Thiên Giải, Phá Toái, Hỏa/Linh Tinh, năm Canh (Khôi, Việt, Hóa Khoa, Hóa Kỵ, Lưu Hà), Mệnh chủ/Thân chủ |
 | `menhMauSo` | `napAm` · `cungPhi` | `napAm` | màu, số hợp mệnh (màn "Hôm nay") |
+| `cauKieu` | `motCap` · `haiCap` | `motCap` (một cặp lục bát) | bói Kiều (mục 17) |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
 ## Nguồn
