@@ -6,7 +6,7 @@
  */
 import { Solar } from 'lunar-typescript';
 import vang from './vang/bat-tu-sxtwl.json';
-import { NGHIA_THAP_THAN, tinhBatTu, type BatTu } from '../src/loi/batTu.ts';
+import { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH, tinhBatTu, type BatTu } from '../src/loi/batTu.ts';
 import { hv } from '../src/loi/hanViet/index.ts';
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 
@@ -128,5 +128,26 @@ describe('bat tu: dai van', () => {
     // Sinh truoc Tet (10/01/1985 thuoc nam am Giap Ty): tuoi mu tinh tu nam am 1984.
     const tet = bt('1985-01-10', '12:00');
     expect(tet.daiVan.map((v) => v.tuoi - (v.batDau.nam - 1984 + 1))).toEqual([0, 0, 0, 0, 0, 0, 0, 0]);
+  });
+});
+
+describe('bat tu: van, nam nay, nhom hanh theo nhat chu', () => {
+  test('nhat chu Quy Thuy: Ty Kiep Thuy, Thuc Thuong Moc, Tai Hoa, Quan Sat Tho, An Kim; cong bang so chu', () => {
+    const b = bt('1985-03-15', '02:00');
+    expect(b.nhatChu).toBe('Quý Thủy');
+    expect(b.nhomHanh.map((x) => `${x.nhom} ${x.hanh} ${String(x.so)}`))
+      .toEqual(['Tỷ Kiếp Thủy 2', 'Thực Thương Mộc 2', 'Tài Hỏa 0', 'Quan Sát Thổ 4', 'Ấn Kim 0']);
+    expect(b.nhomHanh.reduce((t, x) => t + x.so, 0)).toBe(b.nguHanh.reduce((t, x) => t + x.so, 0));
+    expect(Object.keys(NHOM_HANH).sort()).toEqual(b.nhomHanh.map((x) => x.nhom).sort());
+  });
+
+  test('van dang chay va nam nay theo thap than; nam doi o Lap Xuan (04/02/2026 03:02 gio VN)', () => {
+    const b = bt('1985-03-15', '02:00');
+    expect(b.daiVan.find((v) => v.dangChay)).toMatchObject({ canChi: 'Ất Hợi', thapThan: ['Thực Thần', 'Kiếp Tài'] });
+    expect(b.namNay).toEqual({ canChi: 'Bính Ngọ', thapThan: ['Chính Tài', 'Thiên Tài'] });
+    expect(bt('1985-03-15', '02:00', {}, { nam: 2026, thang: 2, ngay: 3 }).namNay).toEqual({ canChi: 'Ất Tỵ', thapThan: ['Thực Thần', 'Chính Tài'] });
+    expect(bt('1985-03-15', '02:00', {}, { nam: 2026, thang: 2, ngay: 4 }).namNay.canChi).toBe('Bính Ngọ');
+    const moi = [b.namNay, ...b.daiVan].flatMap((v) => v.thapThan);
+    expect(moi.filter((t) => !(t in NGHIA_VAN))).toEqual([]);
   });
 });

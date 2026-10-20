@@ -53,7 +53,7 @@ Tý muộn (晚子时/夜子时) là 23:00–23:59; Tý sớm (早子时) là 00
 | Môn | Mặc định | Tuỳ chọn khác | Nguồn | Đã kiểm |
 |---|---|---|---|---|
 | Tử vi: tháng sinh | cả tháng nhuận tính như tháng trước, giữ số tháng (ca C: 25/2 nhuận tính là tháng 2) | chia ở ngày 15: từ 15 trở về trước tính tháng đó, sau 15 tính tháng sau (`iztro` `fixLeap` mặc định; W17); hoặc cả tháng tính tháng sau (W17) | A, M2, M3, W17 | máy+web |
-| Tử vi: lưu nguyệt trong năm có tháng nhuận | như dòng trên, **chưa chắc** (Altuvi chưa đo) | như trên | — | — |
+| Tử vi: lưu nguyệt trong năm có tháng nhuận | như dòng trên (cả tháng nhuận là tháng trước), **chưa chắc** (Altuvi chưa đo) | chia ở ngày 15 (`iztro`, hocvienlyso) — mục 16 | M3, W40 | máy+web |
 | Bát tự, cửu tinh, 12 trực, hoàng đạo | không ảnh hưởng (tính theo tiết) | — | M4, W17 | máy+web |
 | Ngày kiêng theo ngày âm | vẫn áp trong tháng nhuận, theo số ngày (em suy ra, **chưa chắc**) | — | W18 | web |
 
@@ -132,6 +132,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Sao Cửu Diệu**: tuổi mụ chia 9, nam nữ khác vòng. **8 hạn**: (số chục + số đơn vị của tuổi mụ) chia 8 — không chia 8 thẳng (89 và 90 cùng Huỳnh Tuyền); nam dư 1 Huỳnh Tuyền … dư 0 Diêm Vương; nữ dư 1 Tán Tận, 2 Thiên Tinh, 3 Ngũ Mộ, 4 Tam Kheo, 5 Huỳnh Tuyền, 6 Diêm Vương, 7 Địa Võng, 0 Thiên La. Khớp bảng báo năm 2026: 36 năm sinh × 2 giới, sao + hạn 144/144 ô; năm 2025: 8/8 [W34].
 - **Kim Lâu**: tuổi mụ chia 9 dư 1, 3, 6, 8 (Thân, Thê, Tử, Súc); cách "cộng chữ số" ra trùng hệt nên không làm tuỳ chọn; biến thể cửu cung (khởi Cấn) chưa làm. **Hoang Ốc**: (chục + đơn vị) chia 6, 10 tuổi ở Nhất Cát, mỗi chục quay về cung của chục (`hoangOc = theoChuc`); tuỳ chọn `demTiep` (đếm liền từ 10 tuổi); bỏ hai biến thể trái quy tắc "20 tuổi Nhì Nghi" (tuổi mụ chia 6; bảng cách 9 năm) [W35].
 - Dưới 10 tuổi mụ: hạn, Kim Lâu, Hoang Ốc ghi "Chưa xét" (các bảng bắt đầu từ 10 tuổi) — **chưa chắc**.
+- Đoạn giải dài sao, hạn (20/10): tháng kỵ, ngày cúng hằng tháng chỉ ghi khi ≥2 trang khớp (La Hầu tháng Giêng, Bảy, ngày 8 · Kế Đô tháng Ba, Chín, ngày 18 · Thái Bạch tháng Năm, ngày 15 · Thái Dương tháng Sáu, Mười tốt, ngày 27 · Thái Âm tháng Chín tốt, ngày 26 · Thổ Tú ngày 19 · Thủy Diệu tháng Tư, Tám, ngày 21). Vênh thì ghi "đa số trang" (Thái Âm kỵ tháng Mười Một hay Mười, Vân Hớn tháng Hai, Tám hay Tư, Tám) hoặc bỏ (ngày cúng Mộc Đức, Vân Hớn) [W41].
 - **Tam Tai** theo nhóm tam hợp của chi năm sinh. **Thái Tuế**: trùng (Trị), xung, hình (tam hình + tự hình), hại, phá — ghi đủ các quan hệ cùng lúc (2026 Ngọ: Trị + Hình) [W35].
 - **Bát trạch**: Đông/Tây tứ mệnh, 8 hướng theo phép biến hào Du Niên (64/64 ô khớp nguồn); cung phi theo Lập Xuân (mục 1), sinh giữa Lập Xuân và Tết thì ghi thêm "nếu tính theo Tết thì là …". **Tuổi hợp/kỵ**: tam hợp, lục hợp, tứ hành xung, lục xung, lục hại — cùng công thức `theoTuoi` (144 cặp chi) [W36].
 - Đã kiểm: web (trích đoạn tìm kiếm, chưa mở trang gốc); URL từng dòng bảng báo trong comment `tests/NamNay.test.ts`.
@@ -143,6 +144,13 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 
 - "火鈴" của tuổi Tý, Ngọ: sách Việt và đa số trang Việt tách **Tý Linh Tinh, Ngọ Hỏa Tinh** (app theo); trang Trung Hoa nay ghi Hỏa Tinh cả hai; một trang Việt ghi ngược (Ngọ Linh Tinh). Chưa làm tuỳ chọn.
 - `ansaotuvi` dùng bảng theo tuổi nhưng tra bằng số **can** năm (`ThienBan.py`) — sai cả hai cách; chỉ giữ ở phái `ansaotuvi` để so với bản Python. Altuvi theo cách nào: **chưa biết** (phải trả tiền mới xem).
+## 16. Lưu niên, lưu nguyệt, lưu nhật (tử vi, `src/loi/tuVi/luuHan.ts`, tra 20/10)
+- Năm xem theo Tết (mục 1); tiểu hạn như lá số. Ngày xem là ngày dương hôm nay theo giờ +7 (đổi lúc 00:00), đổi ra ngày âm.
+- **9 sao lưu** an như sao gốc nhưng theo can chi năm xem: Lưu Thái Tuế (chi năm xem), Lưu Tang Môn (Thái Tuế thuận 2 cung), Lưu Bạch Hổ (đối Tang Môn), Lưu Lộc Tồn (theo can), Lưu Kình Dương, Lưu Đà La (hai bên Lộc Tồn), Lưu Thiên Mã (theo chi), Lưu Thiên Khốc, Lưu Thiên Hư (từ Ngọ, nghịch/thuận theo chi). Máy: `tuvi-mcp-server` 0.5.0 (7 sao, không có Tang Môn, Bạch Hổ) và `iztro` 2.6.2 (流禄 流羊 流陀 流马, 丧门 白虎 vòng 岁前) khớp 200/200 ca mỗi bên. Web: tuvisonlong, phongthuythanhhoa, lyso.vn (Tang Môn, Bạch Hổ) [W40].
+- **Lưu nguyệt (nguyệt hạn), mặc định `nguyetHanTu = tieuHan`** (Thái Thứ Lang): cung tiểu hạn làm tháng Giêng, đếm nghịch tới tháng sinh, rồi thuận tới giờ sinh = tháng Giêng năm xem, mỗi tháng thuận một cung (`tuvi-mcp-server`; horos, viettopreview, phongthuythanhhoa, lyso.vn). Tuỳ chọn `thaiTue`: khởi từ cung Lưu Thái Tuế (Đẩu Quân; lyso.vn ghi là cách của Tử Vân; `iztro`). Trang Việt nói còn "6, 7 cách" (có cách khởi từ Dần) — không làm. Chưa có màn chỉnh tuỳ chọn nên app **hiện thêm một dòng cung theo cách kia** khi hai cách khác cung.
+- **Lưu nhật (nhật hạn)**: cung tháng là mùng 1, đếm thuận tới ngày âm đang xem (cả hai thư viện; hocvienlyso, kabala). Tháng nhuận: mục 5.
+- Chưa so Altuvi (mẫu anh gửi không có hạn) — **chưa chắc** phái nào là của Altuvi. Không làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
+- Đã kiểm: máy (`tests/LuuHan.test.ts`, bảng vàng `tests/vang/luu-han-*.json` sinh bằng `scripts/doi-chieu/luu-han-*`) + web (trích đoạn).
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -156,6 +164,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `soChuDao` | `motLuot` · `rutGonRieng` | `motLuot` | thần số học |
 | `hoangOc` | `theoChuc` · `demTiep` | `theoChuc` | Hoang Ốc |
 | `menhChuTheo` | `cungMenh` · `tuoi` | `cungMenh` (Toàn Thư) | tử vi: Mệnh chủ |
+| `nguyetHanTu` | `tieuHan` · `thaiTue` | `tieuHan` (Thái Thứ Lang, trang Việt) | tử vi: lưu nguyệt, lưu nhật (mục 16) |
 | `phaiTuVi` | `altuvi` · `ansaotuvi` | `altuvi` (luật 3) | tử vi: Thiên Giải, Phá Toái, Hỏa/Linh Tinh, năm Canh (Khôi, Việt, Hóa Khoa, Hóa Kỵ, Lưu Hà), Mệnh chủ/Thân chủ |
 | `menhMauSo` | `napAm` · `cungPhi` | `napAm` | màu, số hợp mệnh (màn "Hôm nay") |
 
@@ -199,6 +208,8 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W37 *Tử Vi Đẩu Số Toàn Thư* quyển 2, bản Wikisource https://zh.wikisource.org/zh-hant/紫微斗數全書/卷二 (máy ảo chặn, đọc qua trích đoạn) · https://www.ptt.cc/man/Life/D4B8/DB31/M.1299766290.A.FE6.html · https://blog.sina.com.cn/s/blog_1370e69aa0102wext.html · https://blog.csdn.net/weixin_30843605/article/details/98658904 · https://ly.yishihui.net/bz/6002.htm
 - W38 https://tuvilyso.org/forum/topic/12145-menh-chu-than-chu/ · https://tracuutuvi.com/chu-menh-tham-lang-chu-than-linh-tinh.html · https://khoahoc.tuvichanco.net/menh-chu-than-chu.html · https://tuvisaigon.vn/cach-menh-chu-trong-tu-vi-dau.html
 - W39 http://www.phongthuychanthu.com/2018/01/quan-xuan-thinh-so-tu-vi-kinh-nghiem.html · https://lyso.vn/tong-hop/than-chu-menh-chu-t19600/ · http://sach.nlv.gov.vn/sach/cgi-bin/sach?a=d&d=tdKyoE1950.1.6 (bản sách 1950, Thư viện Quốc gia) · https://www.ncc.com.tw/fate/paleo/gv/gv_15.htm
+- W40 (lưu hạn, trích đoạn 20/10) https://lyso.vn/xem-tu-vi/ban-ve-cac-cach-xem-dai-van-tieu-van-luu-dai-van-nguyet-van-nhat-van-cua-tu-vi-t83863/ (Thái Thứ Lang khởi tiểu vận, Tử Vân khởi Lưu Thái Tuế) · https://lyso.vn/xem-tu-vi/cach-tinh-nguyet-han-t67995/page10.html ("6, 7 cách") · https://viettopreview.vn/cach-xem-han-thang-trong-tu-vi.html · https://horos.vn/blog/post/nguyet-van-cach-xac-dinh-han-thang-nguyet-han-trong-tu-vi · http://phongthuythanhhoa.vn/vi/cach-tinh-han-thang-han-nguyet-van-trong-tu-vi-chinh-xac/ · https://hocvienlyso.org/luan-doan-nhat-han-tren-la-so-tu-vi.html (nhật hạn; tháng nhuận chia ở ngày 15) · https://hoc.kabala.vn/cach-luan-doan-dai-han-va-tieu-han/ · https://tuvisonlong.com/y-nghia-cac-sao-luu-nien-khi-giai-doan-tieu-han-nam/ · http://phongthuythanhhoa.vn/vi/tinh-chat-cua-cac-sao-luu-dong-trong-tu-vi/ · https://lyso.vn/xem-tu-vi/cach-an-cac-sao-luu-trong-tu-vi-ly-so-t121409/ · máy: `tuvi-mcp-server` 0.5.0 `_transit.py`, `iztro` 2.6.2 `FunctionalAstrolabe.js`.
+- W41 (sao hạn, trích đoạn 20/10) https://hoatieu.vn/tai-lieu/cung-sao-la-hau-204576 · https://www.bachhoaxanh.com/kinh-nghiem-hay/cach-cung-sao-nam-2022-de-giai-han-sao-ke-do-thai-bach-va-la-hau-1403145 · https://www.dienmayxanh.com/kinh-nghiem-hay/cung-sao-giai-han-1588853 · https://docungtamlinh.com.vn/cung-sao-giai-han-ram-thang-gieng/ · https://phongthuyphuockhang.com/cung-sao-giai-han/ · https://didongviet.vn/dchannel/sao-thuy-dieu/ · https://vietlac.net/chi-tiet-9-sao-chieu-menh-tuoi-trong-nam · https://huyenbi.net/Sao-Van-Hon-la-gi-tot-hay-xau-Van-khan-va-cach-cung-giai-han-sao-Van-Hon-3138.html · https://muaban.net/blog/sao-thai-duong-tot-hay-xau-223674/ · https://tiki.vn/blog/sao-thai-bach/ · https://mogi.vn/news/sao-moc-duc-149708/
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.

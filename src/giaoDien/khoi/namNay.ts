@@ -1,6 +1,6 @@
 /**
  * Khoi "Nam <can chi> <nam> — tuoi mu N" (`src/loi/namNay.ts`): sao, han, Kim Lau, Hoang Oc, Tam Tai, Thai Tue.
- * `dongMuc` (muc xau to do, tot to xanh — `namNay.css`) dung chung cho khoi phong thuy.
+ * `dongMuc` (muc xau to do, tot to xanh — `namNay.css`) dung chung cho khoi phong thuy. Sao, han co them doan giai (gap san).
  */
 import { namNay, type Muc } from '../../loi/namNay.ts';
 import { el, khoi, type VeKhoi } from '../chung.ts';
@@ -19,6 +19,9 @@ export const veKhoiNamNay: VeKhoi = (hs, tr, ngayXem) => {
   return khoi(`Năm ${n.canChi} ${String(n.namAm)} — tuổi mụ ${String(n.tuoiMu)}`, true,
     dongMuc('Sao', n.sao), dongMuc('Hạn', n.han), dongMuc('Kim Lâu', n.kimLau), dongMuc('Hoang Ốc', n.hoangOc),
     dongMuc('Tam Tai', n.tamTai), dongMuc('Thái Tuế', n.thaiTue),
+    el('details', { class: 'giai-nam' }, el('summary', {}, `Giải nghĩa sao ${n.sao.ten}, hạn ${n.han.ten}`),
+      ...[n.sao, n.han].filter((m) => m.giai !== undefined).map((m) => el('p', {}, el('b', {}, m.ten), ` — ${m.giai ?? ''}`)),
+      n.han.giai === undefined ? el('p', {}, `Hạn: ${n.han.nghia}`) : null),
     tr.khac.some((p) => p.ketQua.am.nam !== k.am.nam)
       && el('p', { class: 'canh-bao' }, 'Giờ sinh sát Tết: nếu tính sang năm âm khác thì các mục trên đổi theo.'),
     el('p', { class: 'dong-muc-chu' }, `Theo tuổi mụ, năm âm tính từ Tết. ${LOI_SOAN}`));
