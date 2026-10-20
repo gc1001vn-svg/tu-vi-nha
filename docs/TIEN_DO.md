@@ -24,13 +24,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- Mở đợt mới: em trình kế hoạch, anh duyệt rồi mới làm (chưa chọn đợt).
-- Kế hoạch tổng còn: đợt 4 (Kinh Dịch, bói Kiều, xem ngày theo việc), 5 (la bàn, Lỗ Ban, phi tinh), 6 (chiêm tinh, tarot),
+- Đợt 4 (Kinh Dịch, bói Kiều, chọn ngày theo việc): kế hoạch `docs/ke-hoach/2026-10-20-dot-4.md`, chờ anh duyệt.
+- Kế hoạch tổng còn: đợt 5 (la bàn, Lỗ Ban, phi tinh), 6 (chiêm tinh, tarot),
   7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- Chọn đợt kế để em lập kế hoạch.
+- Duyệt kế hoạch đợt 4 (kèm chụp 4 ngày lịch ghi trong đó).
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.

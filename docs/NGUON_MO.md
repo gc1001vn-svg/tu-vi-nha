@@ -85,9 +85,10 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 
 | Nguồn | Tình trạng | Đợt | Đã kiểm |
 |---|---|---|---|
-| Kinh Dịch nguyên văn chữ Hán | Hết bản quyền (cổ thư) | 4 | — chưa lấy được bản số: Wikisource bị máy ảo chặn |
+| Kinh Dịch nguyên văn chữ Hán | Cổ thư, hết bản quyền; Kanripo không ghi giấy phép → chỉ lấy chữ, bỏ dấu câu người biên tập | 4 | máy 20/10: `kanripo/KR1a0001` tệp `KR1a0001_001`–`_069.txt` trên raw.githubusercontent.com (64 quẻ, 386 hào) · bản Wikisource chụp lại `robolong/zhengming` `data-sources/wikisource/周易/` (CC BY-SA, chỉ để soát): 63 chỗ dị văn · bản thứ ba `Guopop/chinese-philosophy` `经/易类/周易.json` theo Kanripo 34 chỗ, Wikisource 10 · luật Chu Hy (考變占): `kanripo/KR1a0062` tệp `_002` |
+| 梅花易數 (Mai Hoa) | Cổ thư | 4 | máy 20/10: `ShousenZHANG/chinese-fortune` `knowledge/books/meihua/c001`–`c003.json` (MIT, chụp Wikisource); 14 ví dụ trong sách tính lại khớp 14/14 · đối chiếu `meihua-ts-lib` 0.1.0 (npm, GPL → chỉ chạy ngoài repo; đổi năm theo Lập Xuân) |
 | Kinh Dịch bản dịch Ngô Tất Tố, Phan Bội Châu | Người dịch mất 1954, 1940 → hết hạn bảo hộ theo luật VN (50 năm sau khi mất); **bản in 2007 có thể kèm chú thích mới** | 4 | web: [thư viện ĐH Hải Phòng](https://lib.hpu.edu.vn/jspui/handle/123456789/22) chỉ có bản hạn chế |
-| Truyện Kiều (bói Kiều) | Hết bản quyền | 4 | — Wikisource bị chặn; cần bản số |
+| Truyện Kiều (bói Kiều) | Hết bản quyền (Nguyễn Du); chỉ lấy câu thơ, không lấy chú thích các bản in | 4 | máy 20/10: bản A `congmnguyen/kieu-gpt` `input.txt` (chép Wikisource; 3.254 câu, đủ luật 6/8) · bản B `tiepvupsu/ebookMLCB` `Chapters/01_Overview/11_featureengineering/TruyenKieu.txt` (độc lập, lệch A 480 câu, có lỗi mã chữ) · bản in OCR archive.org `truyen-kieu-nguyen-du-nom-quoc-ngu` · ảnh Bùi Kỷ – Trần Trọng Kim 1927 archive.org `truyen-thuy-kieu-bui-ky-tran-trong-kim-1927` · 20 hồi: Nguyễn Can Mộng 1936 (archive.org `TruyenKieuNguyenCanMong1936`) · cách bói: Phan Kế Bính (`VietNamPhongTucPKB1915`), Phạm Đan Quế 1991 (`boi-kieu-binh-kieu-vinh-kieu-pham-dan-que`) |
 | Bài tarot 1909 (Pamela Colman Smith) | Hết bản quyền ở Mỹ; Anh/EU từ 01/01/2022. **Bản tô màu 1971 và tên "Rider-Waite" thì không** | 6 | web: [Wikipedia](https://en.wikipedia.org/wiki/Rider%E2%80%93Waite_Tarot), [WOPC](https://wopc.co.uk/tarot/rider-waite) |
 | Lời giải tử vi, bát tự, phong thủy | Sách hiện đại còn bản quyền → **Claude soạn lời mới** theo quan niệm truyền thống, ghi rõ là soạn lại | 2–6 | — |
 | *Tử Vi Đẩu Số Tân Biên* (Vân Đằng Thái Thứ Lang, Sài Gòn 1956) | Bản OCR trên archive.org (6 phần, `_djvu.txt`); năm mất tác giả **chưa rõ** → coi như còn bản quyền: chỉ lấy quy tắc và nghĩa sao, Claude viết lại, không chép văn | 2 | máy: tải qua proxy 20/10, đọc mục 10.4–10.6, phần II mục 2–3, phần III mục 1, 2, 4 (`QUY_UOC` W42) |
@@ -109,11 +110,16 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 
 ## Chưa tìm được — cần anh quyết hoặc tra thêm
 
-- **Lục Diệu (giờ xuất hành Lý Thuần Phong):** chưa có nguồn ghi công thức rõ.
+- **Lục Diệu (giờ xuất hành Lý Thuần Phong):** 20/10 tìm được (ngày âm + tháng âm + khắc − 2) chia 6, khắc 1 = giờ Tý/Ngọ
+  (nhiều trang Việt, chỉ đọc qua tóm tắt tìm kiếm; mã `buicaoliem/licham`, `vinhicut/2027` ra cùng kết quả). Thứ tự Việt đổi
+  ô 2–3 so với 小六壬. Chưa so ảnh trang anh tin.
 - **Cân xương đoán số:** chưa có bảng đủ năm/tháng/ngày/giờ; một nguồn Đài Loan nói không có sử liệu chứng minh là của Viên Thiên Cương ([gvm](https://www.gvm.com.tw/article/105604)).
 - **Xin xăm Quan Âm 100 quẻ:** chưa tìm nguồn.
 - **Huyền Không phi tinh:** không thấy thư viện mở, chỉ có trang tính thương mại → tự viết, đối chiếu ảnh chụp trang tính.
-- **Ngày xuất hành theo Khổng Minh** (Đường Phong, Thiên Đạo…): trang anh tin có, chưa tìm nguồn công thức; 5 mẫu ở `mau-lich.json`.
+- **Ngày xuất hành theo Khổng Minh** (Đường Phong, Thiên Đạo…): 20/10 tìm được bảng 3 nhóm tháng âm (1-4-7-10 chia 6;
+  2-5-8-11 và 3-6-9-12 chia 8) ở `braverynew/xemngay` (chép muaban.net), phongthuyvuong, lich365 (tóm tắt) — khớp 5/5
+  `mau-lich.json`, nhưng 5 mẫu đều là mùng 1: cần ảnh ngày khác mùng 1. Sát Chủ, Thọ Tử, Dương Công Kỵ: `hungnhat.js`
+  (repo `tungocvan/adminlt-laravel-12`) + `buicaoliem/licham` — cả hai không ghi giấy phép, chỉ đọc quy tắc.
 - **Giờ Tý (23–24 giờ) thuộc ngày nào, giờ mặt trời thực theo kinh độ:** chưa có nguồn bàn rõ → để thành tuỳ chọn.
 - **Giá AI:** chỉ có trang thứ ba. Gemini 3.5 Flash ~1,50 USD/9 USD mỗi triệu token vào/ra ([pricepertoken](https://pricepertoken.com/pricing-page/model/google-gemini-3.5-flash)); giá Claude các trang vênh nhau. Tra lại khi tới đợt 7.
 - **Trang gốc thuật toán âm lịch Hồ Ngọc Đức:** máy ảo không vào được → chưa rõ điều kiện dùng mã của ông. Thuật toán (công thức thiên văn) không có bản quyền; dùng thư viện MIT ở trên.
