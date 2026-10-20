@@ -124,8 +124,10 @@ describe('sao han Cuu Dieu + 8 han', () => {
     expect(lech).toEqual([]);
   });
 
-  test('vong sao nam trung bang Cuu Dieu theo tuoi mu (数え年) cua chua Nhat, tuoi 1–9', () => {
-    // 羅睺 土曜 水曜 金曜 日曜 火曜 計都 月曜 木曜 — nckoyasan.org (1–3), engakuji.jp (1, 4, 9), higoyo.me, saijigoyomi (5–8).
+  test('vong sao nam trung bang hanh nien Cuu Dieu cua kinh 1311, 1308 va chua Nhat (数え年), tuoi 1–9', () => {
+    // 梵天火羅九曜 (T1311): "羅睺…年一、十、十九…", "土宿…年二、十一…", 北辰(水) 3, 太白 4, 大陽 5, 熒惑(火) 6, 計都 7, 大陰 8,
+    // 歲星(木) 9; 七曜攘災決 (T1308) 九執至行年法 cung thu tu — XML CBETA github.com/cbeta-org/xml-p5 T/T21. Chua Nhat:
+    // nckoyasan.org (1–3), engakuji.jp (1, 4, 9), higoyo.me, saijigoyomi (5–8).
     expect(Array.from({ length: 9 }, (_, i) => tuoi(i + 1, 'nam').sao.ten)).toEqual(
       ['La Hầu', 'Thổ Tú', 'Thủy Diệu', 'Thái Bạch', 'Thái Dương', 'Vân Hớn', 'Kế Đô', 'Thái Âm', 'Mộc Đức']);
   });

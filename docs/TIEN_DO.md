@@ -4,8 +4,8 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 20/10/2026 — đợt "lưu hạn + lời giải" (`docs/ke-hoach/2026-10-20-luu-han-loi-giai.md`, anh duyệt A) gộp `main` ba lần
-trong ngày: lưu hạn + lời giải · viết lại lời giải theo sách Tân Biên · tra nguồn Phật, Đạo, chùa.
+Cập nhật: 20/10/2026 — đợt "lưu hạn + lời giải" (`docs/ke-hoach/2026-10-20-luu-han-loi-giai.md`, anh duyệt A) gộp `main` bốn lần
+trong ngày: lưu hạn + lời giải · lời giải theo sách Tân Biên · nguồn Phật, Đạo, chùa · nguyên văn kinh.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -18,8 +18,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   200/200 mỗi bên) · lời giải dài: tử vi (`nghia.ts`), 9 sao hạn + 8 hạn (tháng kỵ, ngày cúng khi ≥2 nguồn), bát tự.
 - 20/10 lần hai: sách gốc *Tử Vi Đẩu Số Tân Biên* (1956, OCR archive.org) — hạn tháng đúng "cách thứ nhất" sách nói hay dùng,
   9 sao lưu khớp; lời giải viết lại lời thường, mỗi hạn kết luận tốt/xấu theo luật sách. `QUY_UOC` mục 16: so 6 cách hạn tháng.
-- 20/10 lần ba: nguồn Trung Hoa, Nhật, Hàn, Phật, Đạo — vòng sao nam khớp bảng Cửu Diệu chùa Nhật 9/9; Thái Tuế 2026, Tam Tai khớp
-  đa số (`QUY_UOC` mục 14, W43–W44); thêm câu "Về nguồn" dưới giải sao hạn (giáo lý Phật không có sao tốt, xấu).
+- 20/10 lần ba, bốn: vòng sao nam trùng bảng tuổi trong kinh đời Đường (Đại Chính tạng 1308, 1311) và chùa Nhật
+  9/9; Thái Tuế, Tam Tai khớp *Tam Mệnh Thông Hội*, bách khoa Hàn (`QUY_UOC` mục 14, W43–W45); câu "Về nguồn" dưới giải sao hạn.
 
 ## 2. Việc kế
 
@@ -32,7 +32,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 - Xem lời giải mới trên iPhone, chụp chỗ còn khó hiểu.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
-  còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao` (đều đã
+  còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
 
 ## 4. Nợ, chỗ chưa chắc
