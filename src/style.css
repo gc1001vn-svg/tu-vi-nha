@@ -118,6 +118,12 @@ input:disabled { opacity: 0.5; }
 .khoi > summary::after { content: '▾'; margin-left: auto; transition: transform 0.2s; }
 .khoi:not([open]) > summary::after { transform: rotate(-90deg); }
 
+/* Hinh que Kinh Dich: hao duong mot vach lien, hao am hai vach; hao dong to do. */
+.hinh-que { display: flex; flex-direction: column; gap: 6px; width: 96px; margin: 8px 0; }
+.vach { display: flex; gap: 16px; height: 10px; }
+.vach i { flex: 1; background: var(--vang); border-radius: 2px; }
+.vach.hao-dong i { background: var(--do); }
+
 .phien-ban {
   opacity: 0.6;
   font-size: 0.8rem;
