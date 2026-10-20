@@ -91,7 +91,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 | Bài tarot 1909 (Pamela Colman Smith) | Hết bản quyền ở Mỹ; Anh/EU từ 01/01/2022. **Bản tô màu 1971 và tên "Rider-Waite" thì không** | 6 | web: [Wikipedia](https://en.wikipedia.org/wiki/Rider%E2%80%93Waite_Tarot), [WOPC](https://wopc.co.uk/tarot/rider-waite) |
 | Lời giải tử vi, bát tự, phong thủy | Sách hiện đại còn bản quyền → **Claude soạn lời mới** theo quan niệm truyền thống, ghi rõ là soạn lại | 2–6 | — |
 | *Tử Vi Đẩu Số Tân Biên* (Vân Đằng Thái Thứ Lang, Sài Gòn 1956) | Bản OCR trên archive.org (6 phần, `_djvu.txt`); năm mất tác giả **chưa rõ** → coi như còn bản quyền: chỉ lấy quy tắc và nghĩa sao, Claude viết lại, không chép văn | 2 | máy: tải qua proxy 20/10, đọc mục 10.4–10.6, phần II mục 2–3, phần III mục 1, 2, 4 (`QUY_UOC` W42) |
-| Kinh Mật tông về Cửu Diệu (宿曜經 T1299, T1308, T1311), 玉匣記 (Đạo tạng DZ1480); bản khắc *Toàn Thư*, *Uyên Hải Tử Bình* trên archive.org | Cổ thư, hết bản quyền | 2 | 20/10: CBETA, ctext, Wikisource bị máy ảo chặn; bản archive.org (`20260506_20260506_1217`, `20260506_20260506_1149`) chữ khắc dọc, OCR hỏng → **chưa đọc được nguyên văn**, chỉ dùng trích đoạn (`QUY_UOC` mục 14) |
+| Kinh Mật tông về Cửu Diệu (宿曜經 T1299, T1308, T1311), 玉匣記 (Đạo tạng DZ1480); bản khắc *Toàn Thư*, *Uyên Hải Tử Bình* trên archive.org | Cổ thư, hết bản quyền | 2 | máy: 20/10 (anh mở mạng) tải bản XML CBETA (github.com/cbeta-org/xml-p5) T1299, T1308, T1311 — đọc được, T1308 và T1311 có bảng 行年 trùng vòng sao nam (`QUY_UOC` mục 14, W45); tripitaka.cbeta.org đổi cấu trúc (404), ctext tự chặn (403); 玉匣記 chưa đọc; bản archive.org (`20260506_20260506_1217`, `20260506_20260506_1149`) chữ khắc dọc, OCR hỏng |
 
 ## Quy tắc tính — nguồn web, phải có ≥2 nguồn khớp trước khi viết
 
