@@ -6,6 +6,7 @@
 import { batTrach } from '../loi/batTrach.ts';
 import { tenCungPhi, type GioiTinh, type HoSo } from '../loi/hoSo.ts';
 import { xemLaBan } from '../loi/laBan.ts';
+import { xemLoBan, type DoanCung } from '../loi/loBan.ts';
 import { el, khoi, tinh } from './chung.ts';
 import { dongMuc, LOI_SOAN } from './khoi/namNay.ts';
 
@@ -163,6 +164,37 @@ function veLaBan(ctx: PhongThuy): HTMLElement {
       + `24 sơn mỗi sơn 15°. ${LOI_SOAN}`));
 }
 
+const cmTuMm = (mm: number): string => (mm / 10).toFixed(1).replace('.', ',');
+const khoang = (d: DoanCung): string => `${cmTuMm(d.tuMm)}–${cmTuMm(d.denMm)} cm`;
+
+function veThuocLoBan(): HTMLElement {
+  const o = el('input', { type: 'text', inputmode: 'decimal', maxlength: '8', autocomplete: 'off', placeholder: 'vd 81 hoặc 81,5' });
+  const ketQua = el('div', { 'aria-live': 'polite' });
+  o.addEventListener('input', () => {
+    const t = o.value.trim();
+    if (t === '') { ketQua.replaceChildren(); return; }
+    const so = /^\d{1,5}([.,]\d{1,2})?$/.test(t) ? Number(t.replace(',', '.')) : Number.NaN;
+    let ds;
+    try { ds = xemLoBan(so); } catch (e) {
+      ketQua.replaceChildren(el('p', { class: 'loi' }, e instanceof Error ? e.message : String(e)));
+      return;
+    }
+    ketQua.replaceChildren(...ds.map((x) => dongMuc(`${x.thuoc.ten} ${String(x.thuoc.dai).replace('.', ',')}`, {
+      ten: x.doan.cung.ten, mucDo: x.doan.cung.tot ? 'tot' : 'xau',
+      nghia: `${x.doan.cung.nghia} Cung này ${khoang(x.doan)}.`
+        + (x.doan.cung.tot ? '' : ` Gần nhất cung tốt: ${[x.totDuoi, x.totTren].filter((d) => d !== undefined)
+          .map((d) => `${khoang(d)} (${d.cung.ten})`).join(' hoặc ')}.`),
+    })));
+  });
+  return khoi('Thước Lỗ Ban', false,
+    el('label', { class: 'cot' }, 'Số đo (cm)', o),
+    ketQua,
+    el('p', { class: 'ghi-chu' }, 'Thước 52,2 cm (thông thủy): khoảng lọt lòng — cửa đi, cửa sổ, ô thoáng, đo trong khung, không tính khung. '
+      + 'Thước 42,9 cm (dương trạch): khối đặc — bếp, bệ, bậc, giường, tủ. Thước 38,8 cm (âm phần): đồ thờ, mộ. Các trang ghi công dụng '
+      + 'từng thước hơi khác nhau; số dùng cho việc gì thì xem thước đó. Chỉ xét cung lớn: tên cung nhỏ các trang ghi vênh nhau. '
+      + `Cung này "a–b cm" là mọi số đo tròn mm nằm trong cung. ${LOI_SOAN}`));
+}
+
 export function vePhongThuy(ctx: PhongThuy): HTMLElement {
-  return el('div', {}, veLaBan(ctx));
+  return el('div', {}, veLaBan(ctx), veThuocLoBan());
 }
