@@ -142,3 +142,11 @@ input:disabled { opacity: 0.5; }
 .la-ban .kim { position: absolute; left: 50%; top: 14px; transform: translateX(-50%);
   border: 8px solid transparent; border-top: 0; border-bottom: 96px solid var(--vang); }
 .la-ban .so-do { position: absolute; left: 0; right: 0; top: 122px; text-align: center; font-size: 1.8rem; font-weight: 700; }
+
+/* Luoi phi tinh 3x3 (the "Phong thuy"): Nam o tren; so sao xanh = tot, do = xau. */
+.luoi-phi-tinh { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin: 8px 0; }
+.luoi-phi-tinh > div { display: flex; flex-direction: column; align-items: center; border: 1px solid var(--vien); border-radius: 8px; padding: 6px 2px; font-size: 0.85rem; }
+.luoi-phi-tinh .huong { color: var(--mo); }
+.luoi-phi-tinh .so { font-size: 1.4rem; font-weight: 700; line-height: 1.2; }
+.luoi-phi-tinh .tot .so { color: var(--xanh); }
+.luoi-phi-tinh .xau .so { color: var(--do); }

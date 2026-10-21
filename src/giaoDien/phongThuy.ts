@@ -5,9 +5,10 @@
  */
 import { batTrach } from '../loi/batTrach.ts';
 import { tenCungPhi, type GioiTinh, type HoSo } from '../loi/hoSo.ts';
-import { xemLaBan } from '../loi/laBan.ts';
+import { xemLaBan, type Phuong } from '../loi/laBan.ts';
 import { xemLoBan, type DoanCung } from '../loi/loBan.ts';
-import { el, khoi, tinh } from './chung.ts';
+import { phiTinh, type Ban, type HuongKy, type O } from '../loi/phiTinh.ts';
+import { el, homNay7, khoi, tinh } from './chung.ts';
 import { dongMuc, LOI_SOAN } from './khoi/namNay.ts';
 
 export interface PhongThuy {
@@ -51,6 +52,12 @@ function veLaBan(ctx: PhongThuy): HTMLElement {
     return n;
   });
   const ketQua = el('div', { 'aria-live': 'polite' });
+  const pt = phiTinh(homNay7());
+  const ky = (p: Phuong, phia: string): HTMLElement | null => {
+    const ten = pt.ky.filter((k) => (k.son === undefined ? k.huong === p.huong : k.son.includes(p.son))).map((k) => k.ten);
+    return ten.length === 0 ? null : el('p', { class: 'canh-bao' },
+      `Năm ${pt.canChiNam}: ${phia} (${p.huong}, sơn ${p.son}) có ${ten.join(', ')} — tránh động thổ, sửa lớn phía này.`);
+  };
 
   const veKetQua = (saiSo: number | null, nghieng: boolean): void => {
     if (doHienTai === null) { ketQua.replaceChildren(); return; }
@@ -68,6 +75,7 @@ function veLaBan(ctx: PhongThuy): HTMLElement {
         + `Tọa ${soDo(x.toa.do)}: sơn ${x.toa.son}, ${x.toa.huong}. Gọi là tọa ${x.toa.son} hướng ${x.huong.son}.`),
       ke === null ? null : el('p', { class: 'canh-bao' }, `Cách ranh sơn ${ke.ke.son} ${ke.cach.toFixed(1).replace('.', ',')}°`
         + (ke.ke.huong === x.huong.huong ? '' : ` (sang hướng ${ke.ke.huong})`) + ': điện thoại sai vài độ là đổi sơn — đo lại vài chỗ.'),
+      ky(x.huong, 'phía trước'), ky(x.toa, 'phía sau lưng'),
       nghieng ? el('p', { class: 'canh-bao' }, 'Máy đang nghiêng: đặt nằm phẳng trên lòng bàn tay, đầu máy chỉ thẳng ra ngoài.') : null,
       chuaChac ? el('p', { class: 'canh-bao' }, `La bàn máy đang sai ${saiSo < 0 ? 'chưa rõ bao nhiêu' : `±${String(Math.round(saiSo))}°`}: `
         + 'chưa kết luận. Cầm máy vẽ hình số 8 vài lần, ra xa sắt thép rồi đo lại.') : null,
@@ -195,6 +203,32 @@ function veThuocLoBan(): HTMLElement {
       + `Cung này "a–b cm" là mọi số đo tròn mm nằm trong cung. ${LOI_SOAN}`));
 }
 
+// Nam o tren nhu bang phi tinh trong sach (Wikibooks, masterseanchan); o nao cung ghi huong.
+const LUOI: readonly O[] = ['Đông Nam', 'Nam', 'Tây Nam', 'Đông', 'Giữa', 'Tây', 'Đông Bắc', 'Bắc', 'Tây Bắc'];
+
+const veLuoi = (b: Ban, ten: string): HTMLElement => el('div', { class: 'luoi-phi-tinh', role: 'img', 'aria-label': `${ten}: `
+  + LUOI.map((h) => `${h} ${b.o[h].ten}`).join(', ') },
+...LUOI.map((h) => el('div', { class: b.o[h].tot ? 'tot' : 'xau' },
+  el('span', { class: 'huong' }, h), el('span', { class: 'so' }, String(b.o[h].so)), el('span', {}, b.o[h].ten))));
+
+const dongKy = (k: HuongKy): HTMLElement => dongMuc(k.ten,
+  { ten: k.huong + (k.son === undefined ? '' : ` (sơn ${k.son.join(', ')})`), mucDo: 'xau', nghia: k.nghia });
+
+function vePhiTinh(): HTMLElement {
+  const p = phiTinh(homNay7());
+  const d = p.tiet.ngay;
+  return khoi(`Phi tinh năm ${p.canChiNam}, tháng này`, false,
+    el('p', {}, el('b', {}, `Năm ${p.canChiNam}`), ` (đổi năm ở Lập Xuân, khoảng 4/2): ${p.nam.o['Giữa'].ten} vào giữa.`),
+    veLuoi(p.nam, `Phi tinh năm ${p.canChiNam}`),
+    ...LUOI.map((h) => dongMuc(h, { ten: `${p.nam.o[h].ten} (${p.nam.o[h].tenHuyenKhong})`, mucDo: p.nam.o[h].tot ? 'tot' : 'xau', nghia: p.nam.o[h].nghia })),
+    el('p', {}, el('b', {}, 'Hướng kỵ năm nay')), ...p.ky.map(dongKy),
+    el('p', {}, el('b', {}, 'Tháng này'), ` (từ tiết ${p.tiet.ten} ${String(d.ngay)}/${String(d.thang)}): ${p.thang.o['Giữa'].ten} vào giữa.`),
+    veLuoi(p.thang, 'Phi tinh tháng này'),
+    el('p', { class: 'ghi-chu' }, 'Lưới đặt Nam ở trên, Bắc ở dưới như bảng phi tinh trong sách. Đứng giữa nhà: phía nào ứng ô đó. '
+      + 'Sao tháng cùng nghĩa sao năm, tác động nhẹ hơn. Tốt/xấu từng sao theo Huyền Không (thư viện lunar); Thái Tuế, Tuế Phá, '
+      + `Tam Sát theo chi năm. La bàn ở trên tự báo khi hướng đo trùng hướng kỵ. ${LOI_SOAN}`));
+}
+
 export function vePhongThuy(ctx: PhongThuy): HTMLElement {
-  return el('div', {}, veLaBan(ctx), veThuocLoBan());
+  return el('div', {}, veLaBan(ctx), veThuocLoBan(), vePhiTinh());
 }

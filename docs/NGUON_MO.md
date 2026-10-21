@@ -114,7 +114,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 
 - **Cân xương đoán số:** chưa có bảng đủ năm/tháng/ngày/giờ; một nguồn Đài Loan nói không có sử liệu chứng minh là của Viên Thiên Cương ([gvm](https://www.gvm.com.tw/article/105604)).
 - **Xin xăm Quan Âm 100 quẻ:** chưa tìm nguồn.
-- **Huyền Không phi tinh:** không thấy thư viện mở, chỉ có trang tính thương mại → tự viết, đối chiếu ảnh chụp trang tính.
+- **Huyền Không phi tinh:** phi tinh năm/tháng đã làm (đợt 5, `QUY_UOC` mục 22: sao giữa từ `lunar-typescript` + Lạc Thư). Huyền Không theo nhà (sao sơn, sao hướng — đợt 8): không thấy thư viện mở, chỉ có trang tính thương mại → tự viết, đối chiếu ảnh chụp trang tính.
 - **Giờ Tý (23–24 giờ) thuộc ngày nào, giờ mặt trời thực theo kinh độ:** chưa có nguồn bàn rõ → để thành tuỳ chọn.
 - **Giá AI:** chỉ có trang thứ ba. Gemini 3.5 Flash ~1,50 USD/9 USD mỗi triệu token vào/ra ([pricepertoken](https://pricepertoken.com/pricing-page/model/google-gemini-3.5-flash)); giá Claude các trang vênh nhau. Tra lại khi tới đợt 7.
 - **Trang gốc thuật toán âm lịch Hồ Ngọc Đức:** máy ảo không vào được → chưa rõ điều kiện dùng mã của ông. Thuật toán (công thức thiên văn) không có bản quyền; dùng thư viện MIT ở trên.
