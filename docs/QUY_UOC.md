@@ -200,6 +200,53 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   291 khớp, 4 lệch vì quẻ Càn/Khôn lấy hỗ theo sách, 5 lệch vì thư viện đổi năm ở Lập Xuân, 0 lệch chưa giải thích.
 - **Không làm**: Lục hào nạp giáp (lục thân, thế ứng), nhập kết quả gieo tay, Mai Hoa lấy quẻ theo chữ, vật, tiếng.
 
+## 19. Chọn ngày theo việc (`src/loi/chonNgay.ts`, tra 21/10)
+- **Nguồn**: 3 agent tra 21/10; trang Việt không mở thẳng được (lỗi DNS), đọc qua **tóm tắt tìm kiếm** → các ca trong
+  `tests/ChonNgay.test.ts` là ca của trang lịch theo ngày (xemlicham, lichngaytot, lichvannien) chép qua tóm tắt, chưa ai mở trang
+  gốc; mã GitHub (`hungnhat.js`, `buicaoliem/licham`, `vinhicut/2027`, `braverynew/xemngay` — không giấy phép, chỉ đọc quy tắc)
+  đọc thẳng. Riêng Khổng Minh có 9 ảnh anh chụp. Mọi bảng theo **tháng âm**; tháng nhuận dùng bảng của tháng cùng số (xemlicham,
+  lichngaytot, lichvannien tháng 6 nhuận 2025) [W46].
+- **Việc → mục nên/kiêng** của hoàng lịch: cưới hỏi 嫁娶, 納采 · động thổ 動土 · khai trương 開市 · xuất hành 出行 · mua xe 交易,
+  納財 (chưa chắc: không nguồn nào có mục riêng).
+- **Luật chấm** (Claude đặt, ghi lý do từng ngày): **Tránh** nếu Tam Nương, Nguyệt Kỵ, Dương Công Kỵ, Sát Chủ Dương, Thọ Tử,
+  hoặc chi ngày lục xung chi năm sinh. Không Tránh thì **Tốt** khi Hoàng Đạo + lịch ghi nên việc đó + không có lý do xấu (Hắc
+  Đạo, lịch ghi kiêng, lịch không ghi nên, Sát Chủ Âm, ngày Khổng Minh xấu khi xuất hành); còn lại **Được**. Lục hợp, tam hợp
+  tuổi chỉ ghi thêm. Năm phạm Kim Lâu (cưới hỏi, động thổ), Hoang Ốc (động thổ), Tam Tai (cưới hỏi, động thổ, khai trương)
+  báo ở đầu tháng, không đổi mức từng ngày (mục 14). Đếm 2026, không xét tuổi: Tránh 11–15 ngày/tháng, Tốt 0–6.
+- **Lịch ghi kiêng** chỉ hạ xuống Được (tuỳ chọn `kiengLich`): so `cnlunar` 0.2.5 (MIT, tự tính theo thần sát) 2.008 ngày
+  2024–2029 (`scripts/doi-chieu/so-cnlunar.mjs`), 7 mục, tháng âm cả hai bên: **nên trùng 73,5 %, kiêng trùng 60,9 %**
+  (kappa nên 0,15–0,49, kiêng 0,03–0,16 — kiêng gần như ngẫu nhiên); 1.097 lượt một bên ghi nên, bên kia ghi kiêng. cnlunar
+  không có mục 動土 (so với 修造). Tháng tiết hay tháng âm đổi < 2 điểm %.
+- **Dương Công Kỵ** (13 ngày): 13/1, 11/2, 9/3, 7/4, 5/5, 3/6, **1/7 và 29/7**, 27/8, 25/9, 23/10, 21/11, 19/12 — sách Hoa
+  (Baidu, 玉匣記), xemlicham, `hungnhat.js`, `vinhicut`; 13 ngày dương 2026 trùng danh sách báo Hoa. Vênh: tháng 7 lấy 8 và 29
+  (lichngaytot theo ngày, ~5 bài Việt) · tháng 2 lấy 12 (3 bài) · tháng 12 xemlicham ghi 22 (3 điểm), lichngaytot 21 (1 điểm) →
+  không theo, chưa làm tuỳ chọn.
+- **Sát Chủ**: xemlicham tách hai nhãn. **Sát Chủ Âm** (chi ngày theo tháng 1–12: Tỵ, Tý, Mùi, Mão, Thân, Tuất, **Sửu, Hợi**,
+  Ngọ, Dậu, Dần, Thìn — lịch theo ngày xemlicham, lichngaytot, lichvannien, 4 mã; ≥10 bài viết đảo tháng 7 Hợi, 8 Sửu, không
+  trang theo ngày nào khớp): xemlicham, xemngay ghi kiêng mai táng, thờ cúng; lichvannien ghi "xấu mọi việc" → app chỉ hạ Được.
+  **Sát Chủ Dương** (Tý, Sửu, Sửu, Tuất, Thìn, Thìn, Sửu, Thìn, Sửu, Thìn, Mùi, Thìn — ≥6 bài, xemlicham theo ngày): kiêng xây
+  dựng, cưới hỏi, buôn bán, mua xe, đi xa → Tránh. Bảng 殺主 của sách Hoa là bảng khác, không ghép được.
+- **Thọ Tử** theo **chi ngày** (Tuất, Thìn, Hợi, Tỵ, Tý, Ngọ, Sửu, Mùi, Dần, Thân, Mão, Dậu): xemlicham, lichvannien (31/8/2026
+  Đinh Sửu có Thọ Tử), 6 mã, 受死日 sách Hoa, Nhật (Nhật theo tháng tiết). Bản can chi (Bính Tuất, Nhâm Thìn…) chỉ 3–4 bài Việt → không theo.
+- **Ngày Khổng Minh**: tháng 1-4-7-10 vòng 6 (Đường Phong, Kim Thổ, Kim Dương, Thuần Dương, Đạo Tặc, Hảo Thương) · 2-5-8-11
+  vòng 8 (Thiên Đạo, Thiên Môn, Thiên Đường, Thiên Tài, Thiên Tặc, Thiên Dương, Thiên Hầu, Thiên Thương) · 3-6-9-12 vòng 8
+  (**Chu Tước**, Bạch Hổ Đầu, Bạch Hổ Kiếp, Bạch Hổ Túc, Huyền Vũ, Thanh Long Đầu, Thanh Long Kiếp, Thanh Long Túc); mùng 1 là tên
+  đầu vòng. Ảnh anh 9/9; phongthuyvuong, lich365, `braverynew/xemngay`, mẫu xemlicham, lichngaytot. Vênh: ngày 30 tháng 2-5-8-11
+  là Thiên Thương (xemlicham, lichvannien, xemngay, lich365) hay Thiên Dương theo vòng (phongthuyvuong) → Thiên Thương; ngày 30
+  tháng 3-6-9-12 Thanh Long Đầu theo vòng (xemngay, lichvannien) hay Thanh Long Túc (xemlicham, 1 điểm) → theo vòng. Mã
+  `WxVision-Upgrade` lệch một ô, không dùng. Tốt/xấu theo mọi trang Việt (không có mức "bình").
+- **Giờ Lý Thuần Phong** (tuỳ chọn `lyThuanPhong`): khắc 1 = giờ Tý và Ngọ … khắc 6 = Tỵ và Hợi. Mặc định **`sach`**:
+  (ngày âm + tháng âm + khắc − 2) chia 6, dư 1 Đại An, 2 Tốc Hỷ, 3 Lưu Niên, 4 Xích Khẩu, 5 Tiểu Cát, 0 Tuyệt Lộ (xemvm,
+  phongthuyvuong, lich365, xemvanmenh; vietnamnet, hoatieu, lichngaytot, lichvannien theo ngày khớp 16/16 ca). **`xemlicham`**
+  (trang anh tin): thứ tự Trung Hoa (Đại An, Lưu Niên, Tốc Hỷ…), giờ Tý = ô (ngày + tháng − 1) chia 6 — suy từ 7 mẫu qua tóm tắt,
+  **chưa có ảnh**; cùng ngày hai trường phái khác nhau (14/10/2026 giờ Tý: lichvannien Đại An, xemlicham Lưu Niên). Đại An,
+  Tốc Hỷ, Tiểu Cát tốt; ba tên còn lại xấu.
+- **Hướng**: hỷ thần theo can ngày như hoàng lịch (sách Đặng Xuân Xuyến, mẫu 10 can trên 4 trang). **Tài thần** (tuỳ chọn
+  `taiThan`, sửa cả thẻ "Hôm nay"): sách Đặng Xuân Xuyến, lich365, lichngaytot, lichvannien, quantrimang — Giáp Ất Đông Nam,
+  Bính Đinh Chính Đông, Mậu Chính Bắc, Kỷ Chính Nam, Canh Tân Tây Nam, Nhâm Chính Tây, Quý Tây Bắc; hoàng lịch Trung Hoa
+  (`getDayPositionCaiDesc`, app dùng tới 21/10) khác 8/10 can; xemlicham khác sách ở Mậu (Chính Nam), Quý (Chính Tây), mỗi can 2 mẫu.
+- **Không làm**: Sát Chủ giờ (hai nguồn vênh), Không Phòng, Ly Sàng (≤1 nguồn), hệ sao Ngọc Hạp đầy đủ, việc ngoài 5 việc.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -219,6 +266,10 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `cauKieu` | `motCap` · `haiCap` | `motCap` (một cặp lục bát) | bói Kiều (mục 17) |
 | `namMaiHoa` | `tet` · `lapXuan` | `tet` | Kinh Dịch: Mai Hoa (mục 18) |
 | `hoCanKhon` | `theoSach` · `giuNguyen` | `theoSach` (乾坤無互) | Kinh Dịch: quẻ hỗ của Càn, Khôn |
+| `kiengLich` | `xau` · `tranh` | `xau` (kiêng của hai hoàng lịch trùng 61 %) | chọn ngày: lịch ghi kiêng việc (mục 19) |
+| `lyThuanPhong` | `sach` · `xemlicham` | `sach` (chờ ảnh xemlicham) | chọn ngày: giờ xuất hành (mục 19) |
+| `taiThan` | `sachViet` · `xemlicham` · `hoangLich` | `sachViet` (chưa có trong mã) | hướng tài thần (mục 19) |
+| `duongCongThang7` | `mung1` · `mung8` | `mung1` (chưa có trong mã) | chọn ngày: Dương Công Kỵ tháng 7 (mục 19) |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
 ## Nguồn
@@ -266,6 +317,7 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W43 (nguồn Phật, Đạo, chùa — trích đoạn 20/10) chùa Nhật: https://nckoyasan.org/wp-content/uploads/2025/01/hoshimatsuri-chart-2025.pdf · https://nckoyasan.org/wp-content/uploads/2025/01/2025-Hoshi-Matsuri-Form.pdf · https://www.engakuji.jp/information/%E5%B9%B3%E6%88%9024%E5%B9%B4%E3%81%AE%E6%98%9F%E4%BE%9B%E3%83%BB%E4%B9%9D%E6%9B%9C%E6%98%9F%E6%97%A9%E8%A6%8B%E8%A1%A8/ · https://higoyo.me/nichiyousei/ · https://saijigoyomi.com/tonensei/ · https://byodoji.online/en/ritual/hoshiku/2025 · kinh: https://ntireader.org/taisho/t1299.html · https://ntireader.org/taisho/t1311.html · https://crta.info/wiki/許真君玉匣記_-_DZ1480 · VN: https://giaoduc.net.vn/van-hoa/lam-dieu-ac-se-gap-qua-bao-giao-ly-nha-phat-khong-cung-sao-giai-han-post195620.gd · https://baovanhoa.vn/van-hoa/thu-truong-trinh-thi-thuy-giao-ly-nha-phat-khong-co-sao-tot-sao-xau-72980.html · https://www.sggp.org.vn/bo-vh-tt-dl-de-nghi-chan-chinh-bien-tuong-trong-cung-dang-sao-giai-han-post509181.html · https://baovanhoa.vn/van-hoa/bo-vhttdl-chi-dao-chan-chinh-bien-tuong-trong-cung-dang-sao-giai-han-66283.html · Thủy Diệu: https://hoatieu.vn/tai-lieu/sao-thuy-dieu-tot-hay-xau-206412 · https://didongviet.vn/dchannel/sao-thuy-dieu/ · https://thuvienphapluat.vn/cong-dong-dan-luat/bang-sao-han-nam-2025-at-ty-cho-cac-tuoi-216641.html
 - W44 (Thái Tuế, Tam Tai — trích đoạn 20/10) đền, nhà nước Đài Loan: https://www.ht.org.tw/faq256.htm · https://www.ht.org.tw/religion393.htm · https://religion.moi.gov.tw/Knowledge/Content?ci=2&cid=44 · báo, thầy số: https://www.nownews.com/news/6764775 · https://health.tvbs.com.tw/life/359390 · https://health.tvbs.com.tw/life/360350 · https://udn.com/news/story/7268/9261870 · https://udn.com/news/story/7272/9318633 · https://news.tvbs.com.tw/english/3117327 · https://www.taiwanplus.com/news/lunar-new-year/lunar-new-year-traditions/260213043/year-of-the-horse-turning-around-an-unlucky-zodiac-fortune · Hàn: https://encykorea.aks.ac.kr/Article/E0026787 · https://www.beopbo.com/news/articleView.html?idxno=74322 · http://www.ibulgyo.com/news/articleView.html?idxno=85880 · https://www.jogyesa.kr/board/news/board_view.php?search_forward=2004&page=31&num=6553
 - W45 (nguyên văn, đọc 20/10 sau khi anh mở mạng) kinh, bản XML CBETA: https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/T21/T21n1311.xml · https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/T21/T21n1308.xml · https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/T21/T21n1299.xml · *Tam Mệnh Thông Hội* quyển 2: https://zh.wikisource.org/wiki/三命通會/卷二 · encykorea 삼재: https://encykorea.aks.ac.kr/Article/E0026787 · *Ngọc Hạp Ký* bản Kanripo (Đạo tạng): https://raw.githubusercontent.com/kanripo/KR5h0051/master/KR5h0051_000.txt (法師選擇記, bảng nam nữ, ngày cúng) · https://raw.githubusercontent.com/kanripo/KR5h0049/master/KR5h0049_001.txt (mục lục "男女值年星命之屬") · https://zh.wikisource.org/wiki/玉匣記 · Hàn 직성: https://encykorea.aks.ac.kr/Article/E0054507 · https://raw.githubusercontent.com/kanripo/KR5c0148/master/KR5c0148_001.txt (DZ0752) · 8 hạn: https://raw.githubusercontent.com/kanripo/KR5b0320/master/KR5b0320_002.txt (赤松子章曆) · https://zh.wikisource.org/wiki/選擇要略/下 (入宮催屍)
+- W46 (chọn ngày, tra 21/10 qua tóm tắt tìm kiếm) lịch theo ngày: https://www.xemlicham.com/am-lich/nam/2026/thang/9/ngay/22 · https://www.xemlicham.com/am-lich/nam/2026/thang/10/ngay/9 · https://www.xemlicham.com/am-lich/nam/2026/thang/8/ngay/13 · https://lichngaytot.com/xem-ngay-tot-xau-22-09-2026 · https://lichngaytot.com/xem-ngay-tot-xau-13-10-2026 · https://lichngaytot.com/xem-ngay-tot-xau-20-08-2026 · https://lichvannien.net/lich-am/nam/2026/thang/8/ngay/31 · https://lichvannien.net/lich-am/nam/2026/thang/10/ngay/14 · Khổng Minh, Lý Thuần Phong: https://phongthuyvuong.net/chon-ngay-tot/cach-tinh-ngay-xuat-hanh-theo-khong-minh-gio-xuat-hanh-theo-ly-thuan-phong-434.html · https://lich365.net/lich-khong-minh.html · https://lich365.net/cach-tinh-gio-xuat-hanh.html · https://xemvm.com/kien-thuc-phong-thuy/xem-ngay/chon-gio-xuat-hanh-theo-ly-thuan-phong-459.html · https://vietnamnet.vn/gio-xuat-hanh-huong-xuat-hanh-ngay-mung-1-tet-nguyen-dan-at-ty-2025-2365254.html · hướng: https://t-van.net/dang-xuan-xuyen-cach-tinh-phuong-vi-xuat-hanh-hy-than-tai-than-hac-than/ · Dương Công: https://baike.baidu.com/item/%E6%9D%A8%E5%85%AC%E5%BF%8C%E6%97%A5/3630656 · https://zh.wikisource.org/wiki/%E7%8E%89%E5%8C%A3%E8%A8%98 · https://www.sohu.com/a/967580128_121994924 · Thọ Tử: https://www.ttjiri.com/baishiji/17715.html · https://koyomil.com/jushinichi/ · Sát Chủ Dương: https://www.blogphongthuy.com/cach-tinh-ngay-sat-chu-duong-nhu-the-nao.html · mã: https://raw.githubusercontent.com/tungocvan/adminlt-laravel-12/main/public/js/lichvannien/hungnhat.js · https://raw.githubusercontent.com/buicaoliem/licham/HEAD/sao-report.md · https://raw.githubusercontent.com/vinhicut/2027/HEAD/tuvivietnam-react-main/frontend/src/features/lunar-calendar/engine/saoCatHung.js · https://raw.githubusercontent.com/braverynew/xemngay/master/index.html · máy: `cnlunar` 0.2.5 (PyPI, MIT).
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.

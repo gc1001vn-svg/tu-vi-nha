@@ -31,7 +31,7 @@ describe('xemNgay', () => {
     expect(xemNgay(ngay('2026-10-19'))).toMatchObject({
       thu: 1, am: { nam: 2026, thang: 9, ngay: 10, nhuan: false }, canChiNam: 'Bính Ngọ', canChiThang: 'Mậu Tuất',
       canChiNgay: 'Bính Dần', tiet: 'Hàn Lộ', truc: 'Định', thienThan: 'Tư Mệnh', hoangDao: true,
-      thanTai: 'Tây Nam', napAmNgay: 'Lư Trung Hỏa', hanhNgay: 'Hỏa', chiNgay: 2,
+      thanTai: 'Chính Đông', napAmNgay: 'Lư Trung Hỏa', hanhNgay: 'Hỏa', chiNgay: 2,
     });
     expect(xemNgay(ngay('2026-10-19')).gioHoangDao[0]).toEqual({ chi: 'Tý', khoang: '23–01' });
   });

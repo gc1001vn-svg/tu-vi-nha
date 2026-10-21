@@ -17,6 +17,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 | `circular-natal-horoscope-js` | 1.1.0 · Unlicense | Lá số chiêm tinh Tây: hành tinh, cung nhà (nhiều hệ), góc chiếu. Cũ (2022), dựa `moment` | 6 | máy |
 | `astronomy-engine` | 2.1.19 · MIT | Vị trí Mặt Trời, Mặt Trăng, hành tinh (dự phòng/đối chiếu) | 6 | máy |
 | `@mediapipe/tasks-vision` | 1.1.0 · Apache-2.0 | Điểm mốc khuôn mặt, bàn tay — chạy ngay trong máy | 7 | máy; chạy trên iPhone thật: **chưa** |
+| `cnlunar` | 0.2.5 · MIT | Hoàng lịch Python tự tính nên/kiêng theo thần sát (bảng khác `lunar-*`) — **chỉ để đo**: chạy ở thư mục tạm (`chay.sh`) | 4 | máy: 21/10 so nên/kiêng 7 việc 2.008 ngày — nên trùng 73,5 %, kiêng 60,9 % (`QUY_UOC` mục 19) |
 | `sweph` (Swiss Ephemeris) | AGPL/LGPL | Chính xác nhất cho chiêm tinh | — | máy; **không dùng**: nặng, `astronomy-engine` đủ |
 
 ## Số đo 14/10/2026 (chạy trong máy ảo, kịch bản ở `scripts/doi-chieu/`)
@@ -110,16 +111,12 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 
 ## Chưa tìm được — cần anh quyết hoặc tra thêm
 
-- **Lục Diệu (giờ xuất hành Lý Thuần Phong):** 20/10 tìm được (ngày âm + tháng âm + khắc − 2) chia 6, khắc 1 = giờ Tý/Ngọ
-  (nhiều trang Việt, chỉ đọc qua tóm tắt tìm kiếm; mã `buicaoliem/licham`, `vinhicut/2027` ra cùng kết quả). Thứ tự Việt đổi
-  ô 2–3 so với 小六壬. Trang anh tin (xemlicham) không có giờ xuất hành → chưa so được.
+- **Giờ xuất hành Lý Thuần Phong:** 21/10 tìm được hai trường phái — sách + lichngaytot, lichvannien (app theo) và xemlicham (thứ tự
+  Trung Hoa, chỉ biết qua tóm tắt tìm kiếm) → tuỳ chọn `lyThuanPhong`, chờ ảnh xemlicham để chốt (`QUY_UOC` mục 19).
 - **Cân xương đoán số:** chưa có bảng đủ năm/tháng/ngày/giờ; một nguồn Đài Loan nói không có sử liệu chứng minh là của Viên Thiên Cương ([gvm](https://www.gvm.com.tw/article/105604)).
 - **Xin xăm Quan Âm 100 quẻ:** chưa tìm nguồn.
 - **Huyền Không phi tinh:** không thấy thư viện mở, chỉ có trang tính thương mại → tự viết, đối chiếu ảnh chụp trang tính.
-- **Ngày xuất hành theo Khổng Minh** (Đường Phong, Thiên Đạo…): 20/10 tìm được bảng 3 nhóm tháng âm (1-4-7-10 chia 6;
-  2-5-8-11 và 3-6-9-12 chia 8) ở `braverynew/xemngay` (chép muaban.net), phongthuyvuong, lich365 (tóm tắt) — khớp **9/9**
-  ảnh trang anh tin (`mau-lich.json`: 5 ngày mùng 1 + 4 ngày khác, đủ ba nhóm tháng; 21/10). Sát Chủ, Thọ Tử, Dương Công Kỵ: `hungnhat.js`
-  (repo `tungocvan/adminlt-laravel-12`) + `buicaoliem/licham` — cả hai không ghi giấy phép, chỉ đọc quy tắc.
+- **Tài thần theo xemlicham:** khác sách Việt ở can Mậu, Quý (2 mẫu mỗi can, qua tóm tắt) → chờ ảnh (`QUY_UOC` mục 19).
 - **Giờ Tý (23–24 giờ) thuộc ngày nào, giờ mặt trời thực theo kinh độ:** chưa có nguồn bàn rõ → để thành tuỳ chọn.
 - **Giá AI:** chỉ có trang thứ ba. Gemini 3.5 Flash ~1,50 USD/9 USD mỗi triệu token vào/ra ([pricepertoken](https://pricepertoken.com/pricing-page/model/google-gemini-3.5-flash)); giá Claude các trang vênh nhau. Tra lại khi tới đợt 7.
 - **Trang gốc thuật toán âm lịch Hồ Ngọc Đức:** máy ảo không vào được → chưa rõ điều kiện dùng mã của ông. Thuật toán (công thức thiên văn) không có bản quyền; dùng thư viện MIT ở trên.

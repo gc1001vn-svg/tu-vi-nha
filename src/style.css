@@ -95,6 +95,7 @@ input:disabled { opacity: 0.5; }
 }
 
 .nut-hang { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.nut-hang > .am { align-self: center; }
 .form .cot, .form label.cot { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
 .form input[type='text'], .form input[type='date'], .form input[type='time'], .form select { width: 100%; }
 /* Form go nhanh: o go + dong "= …" ngay duoi + hang nut goi y (cao 44px); Nam/Nu la nut bat tat. */

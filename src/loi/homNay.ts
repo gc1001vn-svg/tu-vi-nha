@@ -22,6 +22,9 @@ export interface NgayXem {
 export type ThangXemNgay = 'tiet' | 'am';
 
 const hai = (n: number): string => String(n).padStart(2, '0');
+// Tai than theo can ngay (Giap = 0): sach Dang Xuan Xuyen, lichngaytot, lichvannien, quantrimang (tra 21/10, QUY_UOC muc 19).
+// Hoang lich Trung Hoa (`getDayPositionCaiDesc`) khac 8/10 can; xemlicham khac them Mau (Chinh Nam), Quy (Chinh Tay).
+const TAI_THAN = ['Đông Nam', 'Đông Nam', 'Chính Đông', 'Chính Đông', 'Chính Bắc', 'Chính Nam', 'Tây Nam', 'Tây Nam', 'Chính Tây', 'Tây Bắc'];
 
 // Thu vien tinh tiet theo gio Bac Kinh (+8). Ca ngay D (gio VN) thuoc thang cua tiet roi truoc 23:59:59 VN = 00:59:59 Bac Kinh ngay D+1.
 function cuoiNgayVN(d: NgayDuong): Lunar {
@@ -49,7 +52,7 @@ export function xemNgay(d: NgayDuong, thangXemNgay: ThangXemNgay = 'am'): NgayXe
     hoangDao: LunarUtil.TIAN_SHEN_TYPE[thienThan] === '黄道',
     gioHoangDao: lunar.getTimes().slice(0, 12).flatMap((t, i) => t.getTianShenType() === '黄道'
       ? [{ chi: hv('chi', t.getZhi()), khoang: `${hai((i * 2 + 23) % 24)}–${hai(i * 2 + 1)}` }] : []),
-    thanTai: hv('huong', lunar.getDayPositionCaiDesc()),
+    thanTai: TAI_THAN[(soNgay(d) + 9) % 10] ?? '',
     hyThan: hv('huong', lunar.getDayPositionXiDesc()),
     napAmNgay: hv('napAm', napAm),
     hanhNgay: hv('nguHanh', napAm.slice(-1)),
