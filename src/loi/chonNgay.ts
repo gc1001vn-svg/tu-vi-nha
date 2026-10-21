@@ -34,7 +34,7 @@ export interface NgayChon {
   readonly xuatHanh?: XuatHanh;
 }
 
-// Duong Cong Ky: [thang am, ngay am], 13 ngay/nam; thang 7 lay mung 1 va 29 (xemlicham, sach Hoa; lichngaytot lay 8 va 29).
+// Duong Cong Ky: [thang am, ngay am], 13 ngay/nam; thang 7 lay mung 1 va 29 (Ngoc Hap Ky, sach Hoa, ~11 nguon; ~7 bai Viet lay 8 va 29).
 const DUONG_CONG: readonly (readonly [number, number])[] = [
   [1, 13], [2, 11], [3, 9], [4, 7], [5, 5], [6, 3], [7, 1], [7, 29], [8, 27], [9, 25], [10, 23], [11, 21], [12, 19],
 ];
@@ -77,11 +77,9 @@ const KHONG_MINH: readonly (readonly Ten[])[] = [
   ],
 ];
 
-// Ly Thuan Phong (khac 1 = gio Ty va Ngo … khac 6 = Ty (蛇) va Hoi). `sach`: (ngay + thang + khac − 3) chia 6 tren thu tu Viet
-// (sach, lichngaytot, lichvannien — 17/17 vi du); `xemlicham`: (ngay + thang + khac − 2) chia 6 tren thu tu Trung Hoa (12/12 mau
-// xemlicham qua tom tat may, chua co anh). QUY_UOC muc 19.
-const LTP_VIET = ['Đại An', 'Tốc Hỷ', 'Lưu Niên', 'Xích Khẩu', 'Tiểu Cát', 'Tuyệt Lộ'];
-const LTP_TRUNG_HOA = ['Đại An', 'Lưu Niên', 'Tốc Hỷ', 'Xích Khẩu', 'Tiểu Cát', 'Tuyệt Lộ'];
+// Ly Thuan Phong (khac 1 = gio Ty va Ngo … khac 6 = Ty (蛇) va Hoi): (ngay + thang + khac − 3) chia 6 tren thu tu Viet — 5 bai day
+// cach tinh, bao, lichngaytot, lichvannien (16/16 ca). Mot trang (xemlicham) tinh khac, khong theo (QUY_UOC muc 19).
+const LTP = ['Đại An', 'Tốc Hỷ', 'Lưu Niên', 'Xích Khẩu', 'Tiểu Cát', 'Tuyệt Lộ'];
 const LTP_TOT = new Set(['Đại An', 'Tốc Hỷ', 'Tiểu Cát']);
 
 const hai = (n: number): string => String(n).padStart(2, '0');
@@ -96,10 +94,9 @@ export function khongMinh(am: NgayAm): XuatHanh['khongMinh'] {
 }
 
 /** 12 gio xuat hanh Ly Thuan Phong cua mot ngay am (gio Ty dau ngay). */
-export function gioLyThuanPhong(am: NgayAm, phai: TuyChonChonNgay['lyThuanPhong'] = 'sach'): GioXuatHanh[] {
+export function gioLyThuanPhong(am: NgayAm): GioXuatHanh[] {
   return Array.from({ length: 12 }, (_, i) => {
-    const khac = (i % 6) + 1;
-    const ten = (phai === 'xemlicham' ? LTP_TRUNG_HOA[(am.ngay + am.thang + khac - 2) % 6] : LTP_VIET[(am.ngay + am.thang + khac - 3) % 6]) ?? '';
+    const ten = LTP[(am.ngay + am.thang + (i % 6) + 1 - 3) % 6] ?? '';
     return { chi: hv('chi', CHI.charAt(i)), khoang: `${hai((i * 2 + 23) % 24)}–${hai(i * 2 + 1)}`, ten, tot: LTP_TOT.has(ten) };
   });
 }
@@ -122,7 +119,7 @@ const LOI_KY: Readonly<Record<string, string>> = { 'Tam Nương': 'kiêng khởi
  * Lich ghi kieng viec: mac dinh `xau` (chi chan muc Tot) vi muc kieng cua thu vien trung cnlunar chi 58–65% (kappa 0,02–0,16,
  * `scripts/doi-chieu/so-cnlunar.mjs`); `tranh` = xep Tranh nhu ngay ky (QUY_UOC muc 19).
  */
-export interface TuyChonChonNgay { readonly kiengLich?: 'xau' | 'tranh'; readonly lyThuanPhong?: 'sach' | 'xemlicham' }
+export interface TuyChonChonNgay { readonly kiengLich?: 'xau' | 'tranh' }
 
 /** Cham mot ngay cho mot viec. `chiNamSinh` (0 = Ty) bo trong thi khong xet tuoi. */
 export function chamNgay(d: NgayDuong, viec: Viec, chiNamSinh?: number, tc: TuyChonChonNgay = {}): NgayChon {
@@ -151,7 +148,7 @@ export function chamNgay(d: NgayDuong, viec: Viec, chiNamSinh?: number, tc: TuyC
   if (viec === 'xuatHanh') {
     const km = khongMinh(n.am);
     ly.push({ loai: km.tot ? 'tot' : 'xau', chu: `Ngày ${km.ten} (Khổng Minh)` });
-    xuatHanh = { khongMinh: km, gio: gioLyThuanPhong(n.am, tc.lyThuanPhong), hyThan: n.hyThan, taiThan: n.thanTai };
+    xuatHanh = { khongMinh: km, gio: gioLyThuanPhong(n.am), hyThan: n.hyThan, taiThan: n.thanTai };
   }
   const danhGia: DanhGia = ly.some((l) => l.loai === 'tranh') ? 'tranh'
     : ly.some((l) => l.loai === 'xau') ? 'duoc' : 'tot';

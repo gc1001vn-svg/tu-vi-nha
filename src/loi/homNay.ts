@@ -23,7 +23,7 @@ export type ThangXemNgay = 'tiet' | 'am';
 
 const hai = (n: number): string => String(n).padStart(2, '0');
 // Tai than theo can ngay (Giap = 0): sach Dang Xuan Xuyen, lichngaytot, lichvannien, quantrimang (tra 21/10, QUY_UOC muc 19).
-// Hoang lich Trung Hoa (`getDayPositionCaiDesc`) khac 8/10 can; xemlicham khac them Mau (Chinh Nam), Quy (Chinh Tay).
+// Hoang lich Trung Hoa (`getDayPositionCaiDesc`) khac 8/10 can; mot trang (xemlicham) khac them Mau, Quy — khong theo.
 const TAI_THAN = ['Đông Nam', 'Đông Nam', 'Chính Đông', 'Chính Đông', 'Chính Bắc', 'Chính Nam', 'Tây Nam', 'Tây Nam', 'Chính Tây', 'Tây Bắc'];
 
 // Thu vien tinh tiet theo gio Bac Kinh (+8). Ca ngay D (gio VN) thuoc thang cua tiet roi truoc 23:59:59 VN = 00:59:59 Bac Kinh ngay D+1.

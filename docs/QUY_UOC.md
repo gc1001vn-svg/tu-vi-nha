@@ -235,16 +235,15 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   là Thiên Thương (xemlicham, lichvannien, xemngay, lich365) hay Thiên Dương theo vòng (phongthuyvuong) → Thiên Thương; ngày 30
   tháng 3-6-9-12 Thanh Long Đầu theo vòng (xemngay, lichvannien) hay Thanh Long Túc (xemlicham, 1 điểm) → theo vòng. Mã
   `WxVision-Upgrade` lệch một ô, không dùng. Tốt/xấu theo mọi trang Việt (không có mức "bình").
-- **Giờ Lý Thuần Phong** (tuỳ chọn `lyThuanPhong`): khắc 1 = giờ Tý và Ngọ … khắc 6 = Tỵ và Hợi. Mặc định **`sach`**:
-  (ngày âm + tháng âm + khắc − 2) chia 6, dư 1 Đại An, 2 Tốc Hỷ, 3 Lưu Niên, 4 Xích Khẩu, 5 Tiểu Cát, 0 Tuyệt Lộ (xemvm,
-  phongthuyvuong, lich365, xemvanmenh; vietnamnet, hoatieu, lichngaytot, lichvannien theo ngày khớp 16/16 ca). **`xemlicham`**
-  (trang anh tin): thứ tự Trung Hoa (Đại An, Lưu Niên, Tốc Hỷ…), giờ Tý = ô (ngày + tháng − 1) chia 6 — suy từ 7 mẫu qua tóm tắt,
-  **chưa có ảnh**; cùng ngày hai trường phái khác nhau (14/10/2026 giờ Tý: lichvannien Đại An, xemlicham Lưu Niên). Đại An,
-  Tốc Hỷ, Tiểu Cát tốt; ba tên còn lại xấu.
-- **Hướng**: hỷ thần theo can ngày như hoàng lịch (sách Đặng Xuân Xuyến, mẫu 10 can trên 4 trang). **Tài thần** (tuỳ chọn
-  `taiThan`, sửa cả thẻ "Hôm nay"): sách Đặng Xuân Xuyến, lich365, lichngaytot, lichvannien, quantrimang — Giáp Ất Đông Nam,
+- **Giờ Lý Thuần Phong**: khắc 1 = giờ Tý và Ngọ … khắc 6 = Tỵ và Hợi; (ngày âm + tháng âm + khắc − 2) chia 6, dư 1 Đại An,
+  2 Tốc Hỷ, 3 Lưu Niên, 4 Xích Khẩu, 5 Tiểu Cát, 0 Tuyệt Lộ — 5 bài dạy cách tính (xemvm, phongthuyvuong, lich365, xemvanmenh,
+  osshcmup), báo vietnamnet, hoatieu, lịch theo ngày lichngaytot, lichvannien (khớp 16/16 ca). Một trang (xemlicham) tính theo thứ
+  tự Trung Hoa lệch một ô (14/10/2026 giờ Tý: lichvannien Đại An, xemlicham Lưu Niên) → 1 nguồn, không theo (anh quyết 21/10,
+  mục "Anh đã quyết" số 7). Đại An, Tốc Hỷ, Tiểu Cát tốt; ba tên còn lại xấu.
+- **Hướng**: hỷ thần theo can ngày như hoàng lịch (sách Đặng Xuân Xuyến, mẫu 10 can trên 4 trang). **Tài thần** (sửa cả thẻ
+  "Hôm nay"; tuỳ chọn `taiThan`): sách Đặng Xuân Xuyến, lich365, lichngaytot, lichvannien, quantrimang — Giáp Ất Đông Nam,
   Bính Đinh Chính Đông, Mậu Chính Bắc, Kỷ Chính Nam, Canh Tân Tây Nam, Nhâm Chính Tây, Quý Tây Bắc; hoàng lịch Trung Hoa
-  (`getDayPositionCaiDesc`, app dùng tới 21/10) khác 8/10 can; xemlicham khác sách ở Mậu (Chính Nam), Quý (Chính Tây), mỗi can 2 mẫu.
+  (`getDayPositionCaiDesc`, app dùng tới 21/10) khác 8/10 can; một trang (xemlicham) khác sách ở Mậu, Quý → 1 nguồn, không theo.
 - **Không làm**: Sát Chủ giờ (hai nguồn vênh), Không Phòng, Ly Sàng (≤1 nguồn), hệ sao Ngọc Hạp đầy đủ, việc ngoài 5 việc.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
@@ -267,8 +266,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `namMaiHoa` | `tet` · `lapXuan` | `tet` | Kinh Dịch: Mai Hoa (mục 18) |
 | `hoCanKhon` | `theoSach` · `giuNguyen` | `theoSach` (乾坤無互) | Kinh Dịch: quẻ hỗ của Càn, Khôn |
 | `kiengLich` | `xau` · `tranh` | `xau` (kiêng của hai hoàng lịch trùng 61 %) | chọn ngày: lịch ghi kiêng việc (mục 19) |
-| `lyThuanPhong` | `sach` · `xemlicham` | `sach` (chờ ảnh xemlicham) | chọn ngày: giờ xuất hành (mục 19) |
-| `taiThan` | `sachViet` · `xemlicham` · `hoangLich` | `sachViet` (chưa có trong mã) | hướng tài thần (mục 19) |
+| `taiThan` | `sachViet` · `hoangLich` | `sachViet` (chưa có trong mã) | hướng tài thần (mục 19) |
 | `duongCongThang7` | `mung1` · `mung8` | `mung1` (chưa có trong mã) | chọn ngày: Dương Công Kỵ tháng 7 (mục 19) |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
@@ -323,6 +321,7 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.
 2. Giờ đồng hồ thời dùng +8/+9 (miền Nam 1960–6/1975 và các giai đoạn ở bảng mục 7): app **tự lùi về +7** rồi mới tính; vẫn có tuỳ chọn giữ giờ nhập như Altuvi.
 3. Cung phi của người sinh giữa Tết và Lập Xuân: theo **Lập Xuân**.
-4. Ngày âm trước 1968: theo **+7** như trang anh tin (ảnh 19/10: 1938, 1965 khớp +7, lịch TQ lệch tháng) — `docs/NGUON_MO.md`. Người nhà nhớ ngày âm theo lịch thời đó (+8) có thể lệch ở ngày hai lịch vênh → app ưu tiên nhập ngày dương; chỉ có ngày âm thì cảnh báo ở các ngày vênh.
+4. Ngày âm trước 1968: theo **+7** như trang lịch anh tìm trên mạng (xemlicham — anh nói rõ 21/10 không phải trang anh tin; ảnh 19/10: 1938, 1965 khớp +7, lịch TQ lệch tháng) — `docs/NGUON_MO.md`. Người nhà nhớ ngày âm theo lịch thời đó (+8) có thể lệch ở ngày hai lịch vênh → app ưu tiên nhập ngày dương; chỉ có ngày âm thì cảnh báo ở các ngày vênh.
 5. (19/10) Trực, ngày hoàng/hắc đạo, nên/kiêng, sao theo tháng: theo **tháng âm** như lịch Việt trên mạng (baohatinh, chogia, baolamdong, xemlicham khớp 4/4 ngày thử) — không cần ảnh lịch nữa.
 6. (20/10) Tốt/xấu 9 sao Cửu Diệu: **giữ như dân gian** (3 tốt: Thái Dương, Thái Âm, Mộc Đức · 3 xấu: La Hầu, Kế Đô, Thái Bạch · 3 trung tính: Thổ Tú, Thủy Diệu, Vân Hớn), không theo kinh gốc (Thổ Tú, Vân Hớn xấu; Thủy Diệu tốt — mục 14), không làm tuỳ chọn.
+7. (21/10) Không có trang lịch "anh tin": xemlicham chỉ là trang anh tìm trên mạng. Chỗ các nguồn vênh: **theo bên được nhiều nguồn uy tín công nhận nhất**; bên chỉ có một trang thì không theo, không làm tuỳ chọn.

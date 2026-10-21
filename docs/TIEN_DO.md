@@ -21,14 +21,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- Đợt 4 xong phần máy (`docs/ke-hoach/2026-10-20-dot-4.md`); chờ anh thử khối chọn ngày trên iPhone + 1 ảnh (mục 3).
+- Đợt 4 xong phần máy (`docs/ke-hoach/2026-10-20-dot-4.md`); chờ anh thử khối chọn ngày trên iPhone (mục 3).
 - Kế hoạch tổng còn: đợt 5 (la bàn, Lỗ Ban, phi tinh), 6 (chiêm tinh, tarot),
   7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- **Chụp 2 ảnh xemlicham** (https://www.xemlicham.com/am-lich/nam/2026/thang/10/ngay/14 và …/ngay/16): giờ xuất hành giờ Tý,
-  dòng "đón Tài Thần". App theo sách: 14/10 Đại An, 16/10 Tây Bắc; ảnh ghi Lưu Niên, Chính Tây thì đổi theo xemlicham (mục 19).
+- Thử khối "Chọn ngày theo việc" trên iPhone (cuối thẻ "Hôm nay"). Nguồn vênh: theo bên được nhiều nguồn công nhận (anh chốt 21/10).
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
