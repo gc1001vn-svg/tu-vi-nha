@@ -1,5 +1,6 @@
 /**
- * Doc chu go vao form: ngay "15031985" / "15/03/1985", gio "1430" / "7h30", noi sinh "hcm" / "ha noi".
+ * Doc chu go vao form: ngay "15031985" / "15/03/1985", gio "1430" / "7h30", noi sinh "hcm" / "ha noi",
+ * so do "81", "81 cm", "0,81 m" (dan tu app Do cua iPhone).
  * Chi DOC: giao dien khong sua chu dang go (bo go Telex/VNI, con tro iPhone se hong), chi hien dong "= …" ben duoi.
  * Thuoc: `tests/Nhap.test.ts`.
  */
@@ -47,6 +48,24 @@ export function docGioGo(s: string): { gio: number; phut: number } | null | Loi 
   if (gio > 23) return { loi: `Không có ${String(gio)} giờ: giờ từ 0 tới 23` };
   if (phut > 59) return { loi: `Không có ${String(phut)} phút: phút từ 0 tới 59` };
   return { gio, phut };
+}
+
+/**
+ * So do (cm) go tay hay dan tu app Do: so tran la cm; co don vi thi uu tien cm, roi mm, roi m (chu dan co the kem nhan, so inch).
+ * Dau phay hay cham deu la dau thap phan.
+ */
+export function docSoDoGo(s: string): { cm: number } | null | Loi {
+  const t = s.replace(/\u00a0/g, ' ').trim().toLowerCase();
+  if (t === '') return null;
+  const so = (x: string): number => Number(x.replace(',', '.'));
+  const tran = /^\d+(?:[.,]\d+)?$/.test(t) ? so(t) : undefined;
+  if (tran !== undefined) return { cm: tran };
+  for (const [dv, he] of [['cm', 1], ['mm', 0.1], ['m', 100]] as const) {
+    const m = new RegExp(`(\\d+(?:[.,]\\d+)?)\\s*${dv}(?![a-z])`).exec(t);
+    if (m?.[1] !== undefined) return { cm: Math.round(so(m[1]) * he * 100) / 100 };
+  }
+  if (/["″']|\bin\b|\bft\b/.test(t)) return { loi: 'Số đo theo inch: vào Cài đặt → Đo, chọn hệ mét rồi đo lại' };
+  return { loi: 'Chưa đọc được số đo: gõ vd 81, 81,5 hoặc 81 cm' };
 }
 
 const hai = (n: number): string => String(n).padStart(2, '0');

@@ -7,6 +7,7 @@ import { batTrach } from '../loi/batTrach.ts';
 import { tenCungPhi, type GioiTinh, type HoSo } from '../loi/hoSo.ts';
 import { xemLaBan, type Phuong } from '../loi/laBan.ts';
 import { xemLoBan, type DoanCung } from '../loi/loBan.ts';
+import { docSoDoGo } from '../loi/nhap.ts';
 import { phiTinh, type Ban, type HuongKy, type O } from '../loi/phiTinh.ts';
 import { el, homNay7, khoi, tinh } from './chung.ts';
 import { dongMuc, LOI_SOAN } from './khoi/namNay.ts';
@@ -175,29 +176,49 @@ function veLaBan(ctx: PhongThuy): HTMLElement {
 const cmTuMm = (mm: number): string => (mm / 10).toFixed(1).replace('.', ',');
 const khoang = (d: DoanCung): string => `${cmTuMm(d.tuMm)}–${cmTuMm(d.denMm)} cm`;
 
+/** App Do cua iPhone sai khoang 1–2 cm (QUY_UOC muc 21): so dan vao cach ranh cung duoi muc nay thi nhac do lai bang thuoc day. */
+const SAT_RANH_APP_DO_MM = 20;
+
 function veThuocLoBan(): HTMLElement {
-  const o = el('input', { type: 'text', inputmode: 'decimal', maxlength: '8', autocomplete: 'off', placeholder: 'vd 81 hoặc 81,5' });
+  const o = el('input', { type: 'text', inputmode: 'decimal', maxlength: '40', autocomplete: 'off', placeholder: 'vd 81, 81,5 hoặc 81 cm' });
+  const nutDan = el('button', { type: 'button' }, 'Dán từ app Đo');
   const ketQua = el('div', { 'aria-live': 'polite' });
-  o.addEventListener('input', () => {
-    const t = o.value.trim();
-    if (t === '') { ketQua.replaceChildren(); return; }
-    const so = /^\d{1,5}([.,]\d{1,2})?$/.test(t) ? Number(t.replace(',', '.')) : Number.NaN;
+  const bao = (chu: string): void => { ketQua.replaceChildren(el('p', { class: 'loi' }, chu)); };
+  let tuAppDo = false;
+  const ve = (): void => {
+    const r = docSoDoGo(o.value);
+    if (r === null) { ketQua.replaceChildren(); return; }
+    if ('loi' in r) { bao(r.loi); return; }
     let ds;
-    try { ds = xemLoBan(so); } catch (e) {
-      ketQua.replaceChildren(el('p', { class: 'loi' }, e instanceof Error ? e.message : String(e)));
-      return;
-    }
-    ketQua.replaceChildren(...ds.map((x) => dongMuc(`${x.thuoc.ten} ${String(x.thuoc.dai).replace('.', ',')}`, {
-      ten: x.doan.cung.ten, mucDo: x.doan.cung.tot ? 'tot' : 'xau',
-      nghia: `${x.doan.cung.nghia} Cung này ${khoang(x.doan)}.`
-        + (x.doan.cung.tot ? '' : ` Gần nhất cung tốt: ${[x.totDuoi, x.totTren].filter((d) => d !== undefined)
-          .map((d) => `${khoang(d)} (${d.cung.ten})`).join(' hoặc ')}.`),
-    })));
+    try { ds = xemLoBan(r.cm); } catch (e) { bao(e instanceof Error ? e.message : String(e)); return; }
+    const mm = r.cm * 10;
+    ketQua.replaceChildren(
+      el('p', {}, `= ${String(r.cm).replace('.', ',')} cm`),
+      ...ds.map((x) => {
+        const cach = Math.min(mm - x.doan.tuMm, x.doan.denMm + 1 - mm);
+        return dongMuc(`${x.thuoc.ten} ${String(x.thuoc.dai).replace('.', ',')}`, {
+          ten: x.doan.cung.ten, mucDo: x.doan.cung.tot ? 'tot' : 'xau',
+          nghia: `${x.doan.cung.nghia} Cung này ${khoang(x.doan)}.`
+            + (x.doan.cung.tot ? '' : ` Gần nhất cung tốt: ${[x.totDuoi, x.totTren].filter((d) => d !== undefined)
+              .map((d) => `${khoang(d)} (${d.cung.ten})`).join(' hoặc ')}.`)
+            + (tuAppDo && cach < SAT_RANH_APP_DO_MM ? ` Chỉ cách ranh cung ${cmTuMm(Math.max(cach, 0))} cm — app Đo có thể sai chừng đó, đo lại bằng thước dây.` : ''),
+        });
+      }));
+  };
+  o.addEventListener('input', () => { tuAppDo = false; ve(); });
+  // Safari hoi "Dan" ngay tren nut; bi chan thi chi cach dan tay.
+  nutDan.addEventListener('click', () => {
+    if (navigator.clipboard?.readText === undefined) { bao('Máy không cho đọc chữ đã chép: giữ ngón tay vào ô số đo rồi chọn Dán.'); return; }
+    navigator.clipboard.readText().then((chu) => { o.value = chu.trim(); tuAppDo = true; ve(); },
+      () => { bao('Máy không cho đọc chữ đã chép: giữ ngón tay vào ô số đo rồi chọn Dán.'); });
   });
   return khoi('Thước Lỗ Ban', false,
     el('label', { class: 'cot' }, 'Số đo (cm)', o),
+    el('div', { class: 'nut-hang' }, nutDan),
     ketQua,
-    el('p', { class: 'ghi-chu' }, 'Thước 52,2 cm (thông thủy): khoảng lọt lòng — cửa đi, cửa sổ, ô thoáng, đo trong khung, không tính khung. '
+    el('p', { class: 'ghi-chu' }, 'Đo bằng app Đo của iPhone: đo xong chạm vào con số → Chép, quay lại đây bấm "Dán từ app Đo". App Đo sai '
+      + 'khoảng 1–2 cm, có khi 3–5 %, trong khi cung nhỏ nhất chỉ 3,9 cm: số nào gần ranh cung thì đo lại bằng thước dây. '
+      + 'Thước 52,2 cm (thông thủy): khoảng lọt lòng — cửa đi, cửa sổ, ô thoáng, đo trong khung, không tính khung. '
       + 'Thước 42,9 cm (dương trạch): khối đặc — bếp, bệ, bậc, giường, tủ. Thước 38,8 cm (âm phần): đồ thờ, mộ. Các trang ghi công dụng '
       + 'từng thước hơi khác nhau; số dùng cho việc gì thì xem thước đó. Chỉ xét cung lớn: tên cung nhỏ các trang ghi vênh nhau. '
       + `Cung này "a–b cm" là mọi số đo tròn mm nằm trong cung. ${LOI_SOAN}`));

@@ -1,7 +1,7 @@
 /**
  * Doc chu go vao form (`src/loi/nhap.ts`): ngay, gio, noi sinh. Ngay trong file nay deu la ngay GIA (luat 1 CLAUDE.md).
  */
-import { docGioGo, docNgayGo, khungGio, noiSinhChac, timNoiSinh } from '../src/loi/nhap.ts';
+import { docGioGo, docNgayGo, docSoDoGo, khungGio, noiSinhChac, timNoiSinh } from '../src/loi/nhap.ts';
 import { NUOC_NGOAI, TINH } from '../src/loi/tinh.ts';
 
 const NAM_NAY = 2026;
@@ -86,6 +86,23 @@ describe('docGioGo: cac kieu go gio', () => {
     [14, 30, 'Mùi (13–15)'], [23, 0, 'Tý (23–01)'], [0, 59, 'Tý (23–01)'], [1, 0, 'Sửu (01–03)'], [22, 59, 'Hợi (21–23)'],
   ])('khung gio %i:%i → %s', (gio, phut, ten) => {
     expect(khungGio(gio, phut)).toBe(ten);
+  });
+});
+
+describe('docSoDoGo: so do go tay hay dan tu app Do', () => {
+  test('so tran la cm; co don vi thi doi ra cm; dau phay hay cham', () => {
+    const cm = (s: string): unknown => docSoDoGo(s);
+    for (const [s, v] of [['81', 81], ['81,5', 81.5], ['81.5', 81.5], ['81 cm', 81], ['81cm', 81], [' 81,3 cm ', 81.3], ['0,81 m', 81],
+      ['2,13 m', 213], ['810 mm', 81], ['81\u00a0cm', 81], ['Chiều rộng 81 cm', 81], ['32″ 81 cm', 81], ['2 m', 200]] as const) {
+      expect(cm(s), s).toEqual({ cm: v });
+    }
+  });
+
+  test('trong la null; inch, chu la thi bao loi', () => {
+    expect(docSoDoGo('  ')).toBeNull();
+    expect(docSoDoGo('32″')).toEqual({ loi: expect.stringContaining('inch') as unknown });
+    expect(docSoDoGo('2 ft 8 in')).toEqual({ loi: expect.stringContaining('inch') as unknown });
+    expect(docSoDoGo('abc')).toEqual({ loi: expect.stringContaining('Chưa đọc được') as unknown });
   });
 });
 

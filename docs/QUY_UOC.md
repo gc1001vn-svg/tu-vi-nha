@@ -281,6 +281,10 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Không làm cung nhỏ**: 42,9 có tên cung nhỏ cho 6/8 cung (財德 寶庫 六合 迎福…), còn Kiếp, Hại thì cùng bộ chữ 口舌 病臨 死絕 災至
   trang ghi ở thước 42,9, trang ghi ở thước 38,8; 38,8 và 52,2 không trang nào kê cung nhỏ → chưa ô nào đủ 2 nguồn.
 - **Công dụng thước** các trang ghi hơi khác (bàn thờ đo 38,8 hay 42,9) → app ghi công dụng, để người dùng xem đúng thước.
+- **App Đo của iPhone** (anh hỏi 21/10): web không mở được app Đo (Apple không công bố đường dẫn — diễn đàn lập trình Apple), Safari
+  iPhone chưa có WebXR để đo bằng camera (bảng tương thích 5–6/2026) → nối qua chép–dán: app Đo có nút Chép (support.apple.com
+  102468); ô số đo nhận "81 cm", "0,81 m", "810 mm" (`docSoDoGo`, `tests/Nhap.test.ts`), nút "Dán từ app Đo". App Đo sai ~1–2 cm,
+  3–5 % (SlashGear, TechRadar — Apple không công bố) → số dán cách ranh cung dưới 2 cm thì nhắc đo lại bằng thước dây.
 - Đã kiểm: `tests/LoBan.test.ts` — ranh cung tới 0,1 mm (tính bằng µm nguyên); 5 khoảng cửa trang Việt công bố (voh: rộng 80,8–82,6,
   cao 210,6–214,8, rộng 105,5–109; batdongsan cửa phòng ngủ 80,5–81,8 × 210,8–214,2) nằm trọn một cung tốt thước 52,2; 10 số bàn
   thờ (41, 48, 61, 67, 69, 81, 107, 127, 153, 175 — thuviennhadat, scrapbox) đều cung tốt thước 38,8. Web qua trích đoạn tìm kiếm.
