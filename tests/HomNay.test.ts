@@ -1,5 +1,5 @@
 /**
- * Man "Hom nay" (`src/loi/homNay.ts`): khop 5 anh lich anh chup (`scripts/doi-chieu/mau-lich.json`), khop thu vien
+ * Man "Hom nay" (`src/loi/homNay.ts`): khop 9 anh lich anh chup (`scripts/doi-chieu/mau-lich.json`), khop thu vien
  * `lunar-typescript` o truc/than truc nhat moi ngay tru ngay tiet roi 23:00–24:00 gio VN (thu vien tinh +8), theo tuoi.
  */
 import { Lunar, LunarUtil, Solar } from 'lunar-typescript';
@@ -15,7 +15,7 @@ const ngay = (s: string): NgayDuong => {
 const ymd = (d: NgayDuong): string => `${String(d.nam)}-${String(d.thang).padStart(2, '0')}-${String(d.ngay).padStart(2, '0')}`;
 
 describe('xemNgay', () => {
-  test('5 anh lich anh chup: am, can chi ngay, can chi thang, tiet, gio hoang dao (25 o)', () => {
+  test('9 anh lich anh chup: am, can chi ngay, can chi thang, tiet, gio hoang dao (45 o)', () => {
     const lech = mau.ca.flatMap((c) => {
       const x = xemNgay(ngay(c.duong));
       const may = {

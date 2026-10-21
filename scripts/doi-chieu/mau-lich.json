@@ -1,10 +1,14 @@
 {
- "nguon": "Trang 'Đổi ngày dương sang âm' chủ dự án tin, ảnh anh chụp 19/10/2026; 21/10 tìm lại theo câu giới thiệu trên ảnh: xemlicham.com/app/doi-ngay-duong-sang-am. Giờ hoàng đạo theo thứ tự trên trang.",
+ "nguon": "Trang 'Đổi ngày dương sang âm' chủ dự án tin, 5 ảnh anh chụp 19/10/2026, 4 ảnh 21/10 (ngày khác mùng 1); 21/10 tìm lại theo câu giới thiệu trên ảnh: xemlicham.com/app/doi-ngay-duong-sang-am. Giờ hoàng đạo theo thứ tự trên trang.",
  "ca": [
   { "duong": "1985-01-21", "am": "1/1/1985", "ngay": "Canh Thân", "thang": "Mậu Dần", "tiet": "Đại Hàn", "gioHoangDao": "Tý Sửu Thìn Tỵ Mùi Tuất", "xuatHanh": "Đường Phong" },
   { "duong": "1987-07-26", "am": "1/7/1987", "ngay": "Bính Tý", "thang": "Mậu Thân", "tiet": "Đại Thử", "gioHoangDao": "Tý Sửu Mão Ngọ Thân Dậu", "xuatHanh": "Đường Phong" },
   { "duong": "1968-01-29", "am": "1/1/1968", "ngay": "Mậu Tuất", "thang": "Giáp Dần", "tiet": "Đại Hàn", "gioHoangDao": "Dần Thìn Tỵ Thân Dậu Hợi", "xuatHanh": "Đường Phong" },
   { "duong": "1965-02-01", "am": "1/1/1965", "ngay": "Bính Tuất", "thang": "Mậu Dần", "tiet": "Đại Hàn", "gioHoangDao": "Dần Thìn Tỵ Thân Dậu Hợi", "xuatHanh": "Đường Phong" },
-  { "duong": "1938-08-25", "am": "1/8/1938", "ngay": "Kỷ Sửu", "thang": "Tân Dậu", "tiet": "Xử Thử", "gioHoangDao": "Dần Mão Tỵ Thân Tuất Hợi", "xuatHanh": "Thiên Đạo" }
+  { "duong": "1938-08-25", "am": "1/8/1938", "ngay": "Kỷ Sửu", "thang": "Tân Dậu", "tiet": "Xử Thử", "gioHoangDao": "Dần Mão Tỵ Thân Tuất Hợi", "xuatHanh": "Thiên Đạo" },
+  { "duong": "2026-10-25", "am": "16/9/2026", "ngay": "Nhâm Thân", "thang": "Mậu Tuất", "tiet": "Sương Giáng", "gioHoangDao": "Tý Sửu Thìn Tỵ Mùi Tuất", "xuatHanh": "Thanh Long Túc" },
+  { "duong": "2026-11-14", "am": "6/10/2026", "ngay": "Nhâm Thìn", "thang": "Kỷ Hợi", "tiet": "Lập Đông", "gioHoangDao": "Dần Thìn Tỵ Thân Dậu Hợi", "xuatHanh": "Hảo Thương" },
+  { "duong": "2026-11-19", "am": "11/10/2026", "ngay": "Đinh Dậu", "thang": "Kỷ Hợi", "tiet": "Lập Đông", "gioHoangDao": "Tý Dần Mão Ngọ Mùi Dậu", "xuatHanh": "Đạo Tặc" },
+  { "duong": "2026-12-19", "am": "11/11/2026", "ngay": "Đinh Mão", "thang": "Canh Tý", "tiet": "Đại Tuyết", "gioHoangDao": "Tý Dần Mão Ngọ Mùi Dậu", "xuatHanh": "Thiên Đường" }
  ]
 }

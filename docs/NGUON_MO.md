@@ -30,7 +30,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 - `ansaotuvi.S2L` (HND) và `@tuquet/lunar` trả **ngày âm 0** cho 07/05/2054 và 09/04/2062 (lỗi ở ranh tháng); bảng vàng `tests/vang/am-lich-hnd.json` ghi 30/3/2054, 30/2/2062 (khớp `lunar-javascript`) → lõi chặn: "ngày 0" = ngày cuối tháng trước. Đo 15/10; 19/10 tính trăng mới (`newMoon` của `@tuquet`) lúc 00:03 ngày 08/05/2054 và 00:18 ngày 10/04/2062 giờ +7 → hai ngày đó đúng là ngày 30. Trăng mới sát 0 giờ vài phút: sai số công thức có thể lật ngày — **chưa chắc**, theo HND.
 - `@dqcai/vn-lunar` trước 1968 trùng HND **+8** (24.594 ngày, khác 211), 1968–2030 trùng +7: giống lịch Việt trước 1968 tính theo +8 (suy từ số, chưa có tài liệu) → chờ ảnh anh chụp (`docs/TIEN_DO.md`).
 - Mốc đã biết khớp: Tết 1985 VN 21/01 (TQ 20/02) · Tết 2007 VN 17/02 (TQ 18/02) · Tết 2026 cả hai 17/02.
-- **Nguồn thứ ba (19/10):** trang đổi ngày dương sang âm anh tin, 5 ảnh (1938, 1965, 1968, 1985, 1987) khớp bảng vàng HND +7 **25/25 ô** (ngày âm, can chi ngày, can chi tháng, tiết, giờ hoàng đạo) — `scripts/doi-chieu/mau-lich.json`, `so-anh-lich.mjs`. Trang tính +7 cả trước 1968; can chi tháng theo **tháng âm** (thư viện theo tiết, lệch cả 5).
+- **Nguồn thứ ba (19/10):** trang đổi ngày dương sang âm anh tin, 5 ảnh (1938, 1965, 1968, 1985, 1987) khớp bảng vàng HND +7 **25/25 ô**; 21/10 thêm 4 ảnh năm 2026 (ngày khác mùng 1) → **45/45 ô** (ngày âm, can chi ngày, can chi tháng, tiết, giờ hoàng đạo) — `scripts/doi-chieu/mau-lich.json`, `so-anh-lich.mjs`. Trang tính +7 cả trước 1968; can chi tháng theo **tháng âm** (thư viện theo tiết, lệch cả 5).
 
 **Tử vi, 3.000 lá số ngẫu nhiên (1930–2030, bỏ giờ Tý), `iztro` so với `ansaotuvi` (sách Việt):**
 - `iztro` lập từ ngày dương (lịch TQ): mệnh lệch 55 ca, ≥1 chính tinh lệch **119 ca (4 %)**.
@@ -112,13 +112,13 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 
 - **Lục Diệu (giờ xuất hành Lý Thuần Phong):** 20/10 tìm được (ngày âm + tháng âm + khắc − 2) chia 6, khắc 1 = giờ Tý/Ngọ
   (nhiều trang Việt, chỉ đọc qua tóm tắt tìm kiếm; mã `buicaoliem/licham`, `vinhicut/2027` ra cùng kết quả). Thứ tự Việt đổi
-  ô 2–3 so với 小六壬. Chưa so ảnh trang anh tin.
+  ô 2–3 so với 小六壬. Trang anh tin (xemlicham) không có giờ xuất hành → chưa so được.
 - **Cân xương đoán số:** chưa có bảng đủ năm/tháng/ngày/giờ; một nguồn Đài Loan nói không có sử liệu chứng minh là của Viên Thiên Cương ([gvm](https://www.gvm.com.tw/article/105604)).
 - **Xin xăm Quan Âm 100 quẻ:** chưa tìm nguồn.
 - **Huyền Không phi tinh:** không thấy thư viện mở, chỉ có trang tính thương mại → tự viết, đối chiếu ảnh chụp trang tính.
 - **Ngày xuất hành theo Khổng Minh** (Đường Phong, Thiên Đạo…): 20/10 tìm được bảng 3 nhóm tháng âm (1-4-7-10 chia 6;
-  2-5-8-11 và 3-6-9-12 chia 8) ở `braverynew/xemngay` (chép muaban.net), phongthuyvuong, lich365 (tóm tắt) — khớp 5/5
-  `mau-lich.json`, nhưng 5 mẫu đều là mùng 1: cần ảnh ngày khác mùng 1. Sát Chủ, Thọ Tử, Dương Công Kỵ: `hungnhat.js`
+  2-5-8-11 và 3-6-9-12 chia 8) ở `braverynew/xemngay` (chép muaban.net), phongthuyvuong, lich365 (tóm tắt) — khớp **9/9**
+  ảnh trang anh tin (`mau-lich.json`: 5 ngày mùng 1 + 4 ngày khác, đủ ba nhóm tháng; 21/10). Sát Chủ, Thọ Tử, Dương Công Kỵ: `hungnhat.js`
   (repo `tungocvan/adminlt-laravel-12`) + `buicaoliem/licham` — cả hai không ghi giấy phép, chỉ đọc quy tắc.
 - **Giờ Tý (23–24 giờ) thuộc ngày nào, giờ mặt trời thực theo kinh độ:** chưa có nguồn bàn rõ → để thành tuỳ chọn.
 - **Giá AI:** chỉ có trang thứ ba. Gemini 3.5 Flash ~1,50 USD/9 USD mỗi triệu token vào/ra ([pricepertoken](https://pricepertoken.com/pricing-page/model/google-gemini-3.5-flash)); giá Claude các trang vênh nhau. Tra lại khi tới đợt 7.

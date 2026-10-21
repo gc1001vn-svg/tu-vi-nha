@@ -1,6 +1,6 @@
 // So anh lich chu du an chup (mau-lich.json) voi bang vang am lich (HND +7) va lunar-typescript.
 // Chay: node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/so-anh-lich.mjs
-// Do 19/10/2026: 25/25 o khop. Can chi THANG tren lich Viet tinh theo thang am (cong thuc duoi), khong theo tiet.
+// Do 19/10/2026: 25/25 o khop; 21/10 them 4 anh (2026, ngay khac mung 1): 45/45. Can chi THANG tren lich Viet tinh theo thang am (cong thuc duoi), khong theo tiet.
 import { readFileSync } from 'node:fs';
 import { Solar } from 'lunar-typescript';
 import { CO_BAN } from '../../src/loi/hanViet/coBan.ts';

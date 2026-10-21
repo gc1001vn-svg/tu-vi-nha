@@ -5,7 +5,7 @@
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
 Cập nhật: 21/10/2026 — đợt 4 gộp `main` bói Kiều, Kinh Dịch; anh bấm thử 3 nút thẻ "Gieo quẻ" 21/10, không báo lỗi.
-Còn chọn ngày theo việc (chờ 4 ảnh lịch). Đợt "lưu hạn + lời giải" anh thử iPhone 20/10 ổn, đã đóng.
+Còn chọn ngày theo việc: đã có 4 ảnh lịch 21/10 (Khổng Minh khớp 9/9). Đợt "lưu hạn + lời giải" anh thử iPhone 20/10 ổn, đã đóng.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -22,13 +22,12 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- Đợt 4 (`docs/ke-hoach/2026-10-20-dot-4.md`, anh duyệt A): xong bói Kiều, Kinh Dịch (`QUY_UOC` mục 17, 18); còn chọn ngày.
+- Đợt 4 (`docs/ke-hoach/2026-10-20-dot-4.md`, anh duyệt A): xong bói Kiều, Kinh Dịch (`QUY_UOC` mục 17, 18); còn chọn ngày (phiên mới, effort high).
 - Kế hoạch tổng còn: đợt 5 (la bàn, Lỗ Ban, phi tinh), 6 (chiêm tinh, tarot),
   7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- Chụp 4 ngày (ghi trong kế hoạch đợt 4) ở https://www.xemlicham.com/app/doi-ngay-duong-sang-am — trang ảnh 19/10.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
