@@ -144,5 +144,11 @@
     "claude-code-setup@synced": false,
     "data@synced": false,
     "pdf-viewer@synced": false
+  },
+  "permissions": {
+    "allow": [
+      "Bash(node /home/user/ghi-nho/cong-cu/cai_dat.mjs:*)",
+      "Bash(cat /home/user/ghi-nho/:*)"
+    ]
   }
 }
