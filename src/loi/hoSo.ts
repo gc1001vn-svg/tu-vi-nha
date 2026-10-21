@@ -25,6 +25,8 @@ export interface HoSo {
   readonly noiSinh: string;
   /** Mui gio IANA (vd "Europe/Paris") khi sinh o nuoc ngoai — giao dien doi ra phut lech bang `Intl`. */
   readonly muiGio?: string;
+  /** Huong nha do bang la ban (dot 5), do nguyen 0–359 theo bac tu; khong co = chua do. */
+  readonly huongNha?: number;
 }
 
 export interface KetQuaHoSo {
@@ -88,6 +90,9 @@ function cungPhi(nam: number, gioiTinh: GioiTinh): number {
   }
   return so === 5 ? (gioiTinh === 'nam' ? 2 : 8) : so;
 }
+
+/** Ten cung phi tu nam (da tinh theo Lap Xuan) — la ban o the "Phong thuy" cho sua nam sinh, khong can ca ho so. */
+export const tenCungPhi = (nam: number, gioiTinh: GioiTinh): string => hv('batQuai', QUAI.charAt(cungPhi(nam, gioiTinh)));
 
 function ketQua(phutTuyetDoi7: number, coGio: boolean, gioiTinh: GioiTinh, tc: TuyChon): KetQuaHoSo {
   const ngay7 = Math.floor(phutTuyetDoi7 / 1440);
@@ -212,7 +217,14 @@ export function kiemHoSo(x: unknown): HoSo {
   if (gioSinh !== null) docGio(gioSinh);
   const noiSinh = laChuoi(o['noiSinh'], 'nơi sinh', 60);
   if (noiSinh !== NUOC_NGOAI && mienCua(noiSinh) === undefined) throw new Error(`Không có nơi sinh "${noiSinh}"`);
-  const hs: HoSo = { id: laChuoi(o['id'], 'mã', 64), ten: laChuoi(o['ten'], 'tên', 60), gioiTinh, ngaySinh, gioSinh, noiSinh };
+  const huong = o['huongNha'];
+  if (huong !== undefined && !(Number.isInteger(huong) && (huong as number) >= 0 && (huong as number) < 360)) {
+    throw new Error('Sai "hướng nhà" (cần số độ nguyên 0–359)');
+  }
+  const hs: HoSo = {
+    id: laChuoi(o['id'], 'mã', 64), ten: laChuoi(o['ten'], 'tên', 60), gioiTinh, ngaySinh, gioSinh, noiSinh,
+    ...(huong === undefined ? {} : { huongNha: huong as number }),
+  };
   if (noiSinh !== NUOC_NGOAI) return hs;
   const muiGio = laChuoi(o['muiGio'], 'múi giờ', 64);
   if (!/^[A-Za-z_]+(\/[A-Za-z0-9_+-]+)*$/.test(muiGio)) throw new Error(`Sai múi giờ "${muiGio}"`);

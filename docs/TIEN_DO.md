@@ -4,35 +4,38 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 21/10/2026 — **đợt 4 đóng** (anh thử iPhone 21/10 ổn cả ba); **đợt 5 anh duyệt kế hoạch 21/10**, chưa làm mã.
+Cập nhật: 21/10/2026 — **đợt 5: la bàn đã gộp `main`, chờ anh thử iPhone**; Lỗ Ban, phi tinh chưa làm.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
 
-- Bốn thẻ: "Hôm nay" · "Tra cứu" (bất kỳ ai, không lưu) · "Của tôi" (một hồ sơ, lưu trong máy + file sao lưu) · "Gieo quẻ".
+- Năm thẻ: "Hôm nay" · "Tra cứu" (bất kỳ ai, không lưu) · "Của tôi" (một hồ sơ, lưu trong máy + file sao lưu) · "Gieo quẻ" ·
+  "Phong thủy".
   Chỉ lưu hồ sơ của anh; người nhà để đợt 9 (anh chốt 19/10).
 - Khối mỗi người (`src/giaoDien/khoi/`): tử vi (Altuvi 345/345), năm nay (bảng báo 2026 144/144), bát tự + đại vận (`sxtwl`),
   hướng Bát trạch, tuổi hợp, thần số học, hoàng đạo, nhịp sinh học.
 - Tử vi hạn năm, tháng, ngày + 9 sao lưu theo hôm nay (`luuHan.ts`, `QUY_UOC` mục 16) · lời giải dài tử vi, sao hạn, bát tự.
-- Thẻ "Gieo quẻ" (đợt 4): Kinh Dịch gieo xu hoặc Mai Hoa, lời 64 quẻ, 386 hào; bói Kiều 3.254 câu (`QUY_UOC` mục 17, 18).
-- Khối "Chọn ngày theo việc" cuối thẻ "Hôm nay" (đợt 4, `src/loi/chonNgay.ts`, `QUY_UOC` mục 19): 5 việc × tháng → Tốt/Được/Tránh
-  kèm lý do; Dương Công, Sát Chủ Âm/Dương, Thọ Tử, Khổng Minh, giờ Lý Thuần Phong; tài thần đổi theo sách Việt (cả thẻ "Hôm nay").
+- Đợt 4: thẻ "Gieo quẻ" (Kinh Dịch, bói Kiều) · khối "Chọn ngày theo việc" cuối thẻ "Hôm nay" (`QUY_UOC` mục 17–19).
+- Thẻ "Phong thủy" (đợt 5, `QUY_UOC` mục 20): la bàn (cảm biến hoặc gõ số độ) → 24 sơn, hướng, tọa, tốt/xấu theo cung phi;
+  lưu hướng nhà vào hồ sơ.
 
 ## 2. Việc kế
 
-- Đợt 5 (`docs/ke-hoach/2026-10-21-dot-5.md`, anh duyệt 21/10): A — thẻ thứ năm "Phong thủy", lưu hướng nhà vào hồ sơ,
-  lưới phi tinh theo đa số trang Việt. **Việc kế: la bàn trước** (gộp `main` cho anh thử iPhone), rồi Lỗ Ban, phi tinh.
-- Kế hoạch tổng còn sau đợt 5: 6 (chiêm tinh, tarot),
-  7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
+- Đợt 5 (`docs/ke-hoach/2026-10-21-dot-5.md`): **kế: Lỗ Ban, rồi phi tinh** + hướng kỵ năm (la bàn báo khi trùng).
+  La bàn hỏng trên iPhone → lùi phương án B (chỉ gõ số độ).
+- Sau đợt 5: 6 (chiêm tinh, tarot), 7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
+- **Thử la bàn trên iPhone**: mở app từ màn hình chính → thẻ "Phong thủy" → "Bật la bàn" → "Cho phép"; xoay máy, so số độ với
+  app La bàn có sẵn của iPhone (lệch ≤5° là đạt). Báo: có hiện bảng hỏi quyền không, kim có quay không.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich`, `claude/blissful-sagan-ur507y` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
 
 ## 4. Nợ, chỗ chưa chắc
 
+- La bàn chưa thử máy thật; `webkitCompassHeading` bắc từ hay bắc thật chưa thấy tài liệu Apple (VN lệch <2°, không chỉnh).
 - Hạn tháng chưa so Altuvi (phải trả tiền); tháng nhuận khi xem tính như tháng trước (sách Trung Hoa, hocvienlyso chia ở ngày 15).
 - Mệnh chủ/Thân chủ theo *Toàn Thư* (`QUY_UOC` mục 15), chưa so Altuvi; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
 - Lời giải tử vi theo Tân Biên (Claude viết lại), sao hạn theo trang dân gian, bát tự theo nghĩa phổ biến, 450 đoạn Kinh Dịch

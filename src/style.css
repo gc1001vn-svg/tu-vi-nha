@@ -61,8 +61,8 @@ input[type='checkbox'] { min-height: 0; width: 22px; height: 22px; vertical-alig
 input:disabled { opacity: 0.5; }
 
 .cac-the { display: flex; gap: 6px; margin-bottom: 12px; }
-/* Bon the tren khung 390 px: bot dem hai ben cho chu "Gieo quẻ" nam mot dong. */
-.cac-the button { flex: 1; padding: 8px 2px; }
+/* Nam the tren khung 390 px: chu 0,85rem moi the mot dong (do 21/10: tong 351/358 px; 0,9rem tran 362 px). */
+.cac-the button { flex: 1; padding: 8px 2px; font-size: 0.85rem; white-space: nowrap; }
 .cac-the button[aria-selected='true'] { background: var(--vang); color: var(--nen); font-weight: 600; }
 
 .the {
@@ -129,3 +129,16 @@ input:disabled { opacity: 0.5; }
   opacity: 0.6;
   font-size: 0.8rem;
 }
+
+/* La ban (the "Phong thuy"): mat xoay nguoc so do de chu B chi bac tu; kim co dinh chi dau may. Khong `transition`:
+   qua 359° → 0° no quay nguoc ca vong. */
+.la-ban { position: relative; width: 220px; height: 220px; margin: 8px auto; }
+.la-ban .mat { position: absolute; inset: 0; border: 2px solid var(--vien); border-radius: 50%; }
+.la-ban .mat span { position: absolute; font-weight: 600; color: var(--mo); }
+.la-ban .chu-0 { top: 6px; left: 50%; transform: translateX(-50%); color: var(--do); }
+.la-ban .chu-1 { right: 10px; top: 50%; transform: translateY(-50%); }
+.la-ban .chu-2 { bottom: 6px; left: 50%; transform: translateX(-50%); }
+.la-ban .chu-3 { left: 10px; top: 50%; transform: translateY(-50%); }
+.la-ban .kim { position: absolute; left: 50%; top: 14px; transform: translateX(-50%);
+  border: 8px solid transparent; border-top: 0; border-bottom: 96px solid var(--vang); }
+.la-ban .so-do { position: absolute; left: 0; right: 0; top: 122px; text-align: center; font-size: 1.8rem; font-weight: 700; }

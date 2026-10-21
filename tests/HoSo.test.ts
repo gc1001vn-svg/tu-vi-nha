@@ -102,6 +102,10 @@ describe('ho so: kiem du lieu vao', () => {
       { ...hs(), noiSinh: 'Sài Gòn' },
       { ...hs(), noiSinh: 'Nước ngoài' },
       { ...hs(), noiSinh: 'Nước ngoài', muiGio: '../x' },
+      { ...hs(), huongNha: 360 },
+      { ...hs(), huongNha: -1 },
+      { ...hs(), huongNha: 12.5 },
+      { ...hs(), huongNha: '90' },
     ];
     for (const x of sai) expect(() => kiemHoSo(x), JSON.stringify(x)).toThrow();
     expect(() => kiemHoSo(null)).toThrow();
@@ -114,7 +118,9 @@ describe('ho so: kiem du lieu vao', () => {
   });
 
   test('file sao luu: khu hoi y het; sai thi nem loi co so thu tu', () => {
-    const ds = [hs(), hs({ id: 'b', ten: 'Hai', gioiTinh: 'nu', gioSinh: null }), hs({ id: 'c', noiSinh: 'Nước ngoài', muiGio: 'Europe/Paris' })];
+    // File cu (truoc dot 5) khong co huong nha: van doc duoc; co thi giu nguyen.
+    const ds = [hs(), hs({ id: 'b', ten: 'Hai', gioiTinh: 'nu', gioSinh: null }), hs({ id: 'c', noiSinh: 'Nước ngoài', muiGio: 'Europe/Paris' }),
+      hs({ id: 'd', huongNha: 0 }), hs({ id: 'e', huongNha: 359 })];
     expect(docSaoLuu(JSON.parse(JSON.stringify(taoSaoLuu(ds, '2026-10-19T12:00:00Z'))))).toEqual(ds);
     const goc = taoSaoLuu(ds, 'x');
     expect(() => docSaoLuu({ ...goc, ung: 'khac' })).toThrow('Tử Vi Nhà');

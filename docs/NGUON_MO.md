@@ -108,6 +108,7 @@ Cột "Đã kiểm": **máy** = đọc thẳng từ kho npm/PyPI hoặc chạy t
 | Lưu niên, nguyệt, nhật (tử vi) | 9 sao lưu theo can chi năm xem; nguyệt hạn khởi tiểu hạn (Thái Thứ Lang) hoặc Lưu Thái Tuế (Đẩu Quân); nhật hạn từ cung tháng | Nguyệt hạn có nhiều cách → tuỳ chọn `nguyetHanTu`; tháng nhuận khi xem | `QUY_UOC` mục 16, W40 (20/10) |
 | Cung phi Bát trạch | Sinh trước Tết → năm âm trước | Sinh giữa Tết và Lập Xuân: hai trường phái khác nhau | [muaban](https://muaban.net/blog/phong-thuy-bat-trach-518866/), [baodautu](https://baodautu.vn/batdongsan/vi-sao-phong-thuy-bat-trach-pho-bien-d102133.html) |
 | La bàn iPhone | `DeviceOrientationEvent.requestPermission()` gọi ngay trong lúc bấm; đọc `webkitCompassHeading` | Có báo lỗi bị từ chối dù đã cho phép; chưa thấy nguồn riêng cho app ở màn hình chính | [MDN](https://developer.mozilla.org/docs/Web/API/DeviceOrientationEvent), [WebKit 269706](https://bugs.webkit.org/show_bug.cgi?id=269706), [Defold](https://forum.defold.com/t/how-to-force-safari-browser-to-allow-deviceorientation-permission-solved/75641) |
+| 24 sơn, hướng nhà | Mỗi sơn 15°, Nhâm từ 337,5°; hướng nhà = nhìn ra từ cửa chính, lưng vào nhà; độ lệch từ VN −0,4° … −1,8° (WMM-2025) | Wikipedia ghi ranh lệch 0,1°; `webkitCompassHeading` bắc từ hay bắc thật chưa thấy tài liệu Apple | `QUY_UOC` mục 20, W47 (21/10) |
 
 ## Chưa tìm được — cần anh quyết hoặc tra thêm
 

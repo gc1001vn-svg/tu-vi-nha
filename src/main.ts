@@ -1,11 +1,13 @@
 /**
- * Cua vao cua trang: bon the "Hom nay" · "Tra cuu" · "Cua toi" · "Gieo que", dai nhac sao luu / cai app, chan trang so phien ban.
+ * Cua vao cua trang: nam the "Hom nay" · "Tra cuu" · "Cua toi" · "Gieo que" · "Phong thuy", dai nhac sao luu / cai app,
+ * chan trang so phien ban.
  */
 import { registerSW } from 'virtual:pwa-register';
 import { PHIEN_BAN } from './PhienBan';
 import { el, homNay7, isoNgay } from './giaoDien/chung.ts';
 import { veCuaToi, veTraCuu } from './giaoDien/cuaToi.ts';
 import { veGieoQue } from './giaoDien/gieoQue.ts';
+import { vePhongThuy } from './giaoDien/phongThuy.ts';
 import { veHomNay } from './giaoDien/homNay.ts';
 import { docKho, ghiKho, xuatFile, type Kho } from './luuTru.ts';
 import type { HoSo } from './loi/hoSo.ts';
@@ -32,7 +34,7 @@ const dau = docKho();
 let kho: Kho = dau.kho;
 const chanGhi = dau.chanGhi;
 let thongBao: string | null = dau.loi;
-let the: 'homNay' | 'traCuu' | 'cuaToi' | 'gieoQue' = 'homNay';
+let the: 'homNay' | 'traCuu' | 'cuaToi' | 'gieoQue' | 'phongThuy' = 'homNay';
 
 const NGAY_MS = 86_400_000;
 const laAppManHinhChinh = (): boolean =>
@@ -90,7 +92,13 @@ function ve(): void {
     ? veHomNay(kho.hoSo[0], () => { the = 'cuaToi'; ve(); })
     : the === 'traCuu'
       ? veTraCuu(() => { ve(); scrollTo(0, 0); })
-      : the === 'gieoQue' ? veGieoQue() : veCuaToi({
+      : the === 'gieoQue' ? veGieoQue() : the === 'phongThuy' ? vePhongThuy({
+        toi: kho.hoSo[0],
+        luuHuong: (d) => {
+          const [toi, ...conLai] = kho.hoSo;
+          return toi === undefined ? 'Chưa có hồ sơ để lưu.' : doiKho({ ...kho, hoSo: [{ ...toi, huongNha: d }, ...conLai] });
+        },
+      }) : veCuaToi({
         kho,
         doiHoSo: (ds: readonly HoSo[]) => doiKho({ ...kho, hoSo: ds }),
         xuat,
@@ -100,7 +108,7 @@ function ve(): void {
   app.replaceChildren(
     el('h1', {}, 'Tử Vi Nhà'),
     el('nav', { class: 'cac-the', role: 'tablist' }, nutThe('homNay', 'Hôm nay'), nutThe('traCuu', 'Tra cứu'), nutThe('cuaToi', 'Của tôi'),
-      nutThe('gieoQue', 'Gieo quẻ')),
+      nutThe('gieoQue', 'Gieo quẻ'), nutThe('phongThuy', 'Phong thủy')),
     ...daiNhac(),
     noiDung,
     el('p', { class: 'phien-ban' }, `Bản ${PHIEN_BAN}`),

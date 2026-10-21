@@ -228,6 +228,8 @@ function form(tieuDe: string, nutXong: string, tenMacDinh: string, cu: HoSo | nu
         id: cu?.id ?? crypto.randomUUID(), ten: ten.value.trim() === '' ? tenMacDinh : ten.value, gioiTinh,
         ngaySinh: isoNgay(d), gioSinh: g === null ? null : `${hai(g.gio)}:${hai(g.phut)}`, noiSinh,
         ...(noiSinh === NUOC_NGOAI ? { muiGio } : {}),
+        // Form khong co o huong nha (do o the "Phong thuy"): sua ho so thi giu huong da luu.
+        huongNha: cu?.huongNha,
       });
       tinh(hs); // tinh thu truoc: mui gio la, ngay ngoai bang… bao ngay o day
       const loiXong = xong(hs);
