@@ -32,17 +32,15 @@ describe('xuat hanh', () => {
     ], km)).toEqual([]);
   });
 
-  test('gio Ly Thuan Phong: theo sach (vietnamnet, lichngaytot, lichvannien) va tuy chon xemlicham', () => {
-    const ltp = (phai: 'sach' | 'xemlicham', gio: number) => (d: NgayDuong): string => gioLyThuanPhong(duongSangAm(d), phai)[gio]?.ten ?? '';
+  test('gio Ly Thuan Phong theo sach (vietnamnet, hoatieu, lichngaytot, lichvannien)', () => {
+    const ltp = (gio: number) => (d: NgayDuong): string => gioLyThuanPhong(duongSangAm(d))[gio]?.ten ?? '';
     expect(khop([['2025-01-29', 'Đại An'], ['2026-10-13', 'Tuyệt Lộ'], ['2026-10-20', 'Đại An'], ['2026-09-20', 'Tiểu Cát'],
       ['2026-10-29', 'Xích Khẩu'], ['2026-10-14', 'Đại An'], ['2026-10-30', 'Tiểu Cát'], ['2026-07-16', 'Tốc Hỷ'],
-      ['2025-07-25', 'Tuyệt Lộ'], ['2025-07-26', 'Đại An'], ['2026-10-21', 'Tốc Hỷ']], ltp('sach', 0))).toEqual([]);
-    expect(khop([['2025-01-29', 'Tốc Hỷ'], ['2026-10-13', 'Đại An']], ltp('sach', 1))).toEqual([]);
-    expect(khop([['2026-10-13', 'Lưu Niên']], ltp('sach', 3))).toEqual([]);
-    expect(khop([['2025-01-29', 'Tiểu Cát']], ltp('sach', 4))).toEqual([]);
-    expect(khop([['2025-07-26', 'Tuyệt Lộ']], ltp('sach', 5))).toEqual([]);
-    expect(khop([['2026-10-13', 'Đại An'], ['2026-10-14', 'Lưu Niên'], ['2026-10-20', 'Lưu Niên'], ['2026-02-17', 'Lưu Niên'],
-      ['2026-01-14', 'Đại An'], ['2026-10-21', 'Tốc Hỷ'], ['2026-01-21', 'Tốc Hỷ']], ltp('xemlicham', 0))).toEqual([]);
+      ['2025-07-25', 'Tuyệt Lộ'], ['2025-07-26', 'Đại An'], ['2026-10-21', 'Tốc Hỷ']], ltp(0))).toEqual([]);
+    expect(khop([['2025-01-29', 'Tốc Hỷ'], ['2026-10-13', 'Đại An']], ltp(1))).toEqual([]);
+    expect(khop([['2026-10-13', 'Lưu Niên']], ltp(3))).toEqual([]);
+    expect(khop([['2025-01-29', 'Tiểu Cát']], ltp(4))).toEqual([]);
+    expect(khop([['2025-07-26', 'Tuyệt Lộ']], ltp(5))).toEqual([]);
     // sach: (16 + 2 + 5 − 3) chia 6 du 2 = Luu Nien; (21 + 4 + 5 − 3) du 3 = Xich Khau (xemvm, osshcmup)
     expect(gioLyThuanPhong({ nam: 2026, thang: 2, ngay: 16, nhuan: false })[4]?.ten).toBe('Lưu Niên');
     expect(gioLyThuanPhong({ nam: 2026, thang: 4, ngay: 21, nhuan: false })[4]?.ten).toBe('Xích Khẩu');
