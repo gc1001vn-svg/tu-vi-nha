@@ -4,8 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 21/10/2026 — đợt 4 gộp `main` đủ ba môn: bói Kiều, Kinh Dịch (anh bấm thử 21/10 không lỗi), chọn ngày theo việc
-(21/10, chưa thử iPhone). Đợt "lưu hạn + lời giải" anh thử iPhone 20/10 ổn, đã đóng.
+Cập nhật: 21/10/2026 — **đợt 4 đóng**: bói Kiều, Kinh Dịch, chọn ngày theo việc; anh thử iPhone 21/10 ổn cả ba.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -21,13 +20,12 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- Đợt 4 xong phần máy (`docs/ke-hoach/2026-10-20-dot-4.md`); chờ anh thử khối chọn ngày trên iPhone (mục 3).
+- Đợt 4 xong (`docs/ke-hoach/2026-10-20-dot-4.md`). Kế tiếp: đợt 5 — lập kế hoạch, chờ anh duyệt.
 - Kế hoạch tổng còn: đợt 5 (la bàn, Lỗ Ban, phi tinh), 6 (chiêm tinh, tarot),
   7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- Thử khối "Chọn ngày theo việc" trên iPhone (cuối thẻ "Hôm nay"). Nguồn vênh: theo bên được nhiều nguồn công nhận (anh chốt 21/10).
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
