@@ -4,8 +4,8 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 20/10/2026 tối — đợt 4 gộp `main` bói Kiều, Kinh Dịch; còn chọn ngày theo việc. Đợt "lưu hạn + lời giải"
-anh thử iPhone 20/10 (bản 16:43) ổn, đã đóng.
+Cập nhật: 21/10/2026 — đợt 4 gộp `main` bói Kiều, Kinh Dịch; anh bấm thử 3 nút thẻ "Gieo quẻ" 21/10, không báo lỗi.
+Còn chọn ngày theo việc (chờ 4 ảnh lịch). Đợt "lưu hạn + lời giải" anh thử iPhone 20/10 ổn, đã đóng.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
