@@ -285,6 +285,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   iPhone chưa có WebXR để đo bằng camera (bảng tương thích 5–6/2026) → nối qua chép–dán: app Đo có nút Chép (support.apple.com
   102468); ô số đo nhận "81 cm", "0,81 m", "810 mm" (`docSoDoGo`, `tests/Nhap.test.ts`), nút "Dán từ app Đo". App Đo sai ~1–2 cm,
   3–5 % (SlashGear, TechRadar — Apple không công bố) → số dán cách ranh cung dưới 2 cm thì nhắc đo lại bằng thước dây.
+  **Anh thử iPhone 21/10**: chép từ app Đo, bấm "Dán từ app Đo" — chạy ổn.
 - Đã kiểm: `tests/LoBan.test.ts` — ranh cung tới 0,1 mm (tính bằng µm nguyên); 5 khoảng cửa trang Việt công bố (voh: rộng 80,8–82,6,
   cao 210,6–214,8, rộng 105,5–109; batdongsan cửa phòng ngủ 80,5–81,8 × 210,8–214,2) nằm trọn một cung tốt thước 52,2; 10 số bàn
   thờ (41, 48, 61, 67, 69, 81, 107, 127, 153, 175 — thuviennhadat, scrapbox) đều cung tốt thước 38,8. Web qua trích đoạn tìm kiếm.
