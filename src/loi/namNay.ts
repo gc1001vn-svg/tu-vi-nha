@@ -162,32 +162,44 @@ function tra(bang: Bang, ten: string | undefined): Muc {
 
 const CHUA_XET: Muc = { ten: 'Chưa xét', mucDo: 'binh', nghia: 'Các bảng bắt đầu đếm từ 10 tuổi mụ.' };
 
-export function namNay(hs: HoSo, kq: KetQuaHoSo, ngayXem: NgayDuong, tc: TuyChonNamNay = {}): NamNay {
+/** Kim Lau, Hoang Oc, Tam Tai: chi can nam am sinh (the chon ngay cho sua nam sinh, khong can ho so). */
+export function hanNam(namAmSinh: number, ngayXem: NgayDuong, tc: TuyChonNamNay = {}): Pick<NamNay, 'namAm' | 'tuoiMu' | 'kimLau' | 'hoangOc' | 'tamTai'> {
   const namAm = duongSangAm(ngayXem).nam;
-  const n = tuoiMu(kq.am.nam, ngayXem);
+  const n = tuoiMu(namAmSinh, ngayXem);
   if (n < 1) throw new Error('Ngày xem trước năm sinh');
-  const nam = hs.gioiTinh === 'nam';
   // Ban tay: moi chuc sang mot cung, tuoi le dem tiep tu cung cua chuc.
   const viTri = Math.floor(n / 10) + (n % 10);
   const kl = KIM_LAU[n % 9];
   const kimLau: Muc = kl === undefined ? { ten: 'Không phạm', mucDo: 'tot', nghia: 'Không phạm Kim Lâu.' }
     : { ten: kl[0], mucDo: 'xau', nghia: `Dân gian kiêng làm nhà (tuổi gia chủ), cưới hỏi (tuổi cô dâu): sợ ${kl[1]}.` };
+  const chiNam = (namAmSinh + 8) % 12;
   const yChi = (namAm + 8) % 12;
-  const dau = TAM_TAI_DAU[kq.chiNam % 4] ?? 0;
+  const dau = TAM_TAI_DAU[chiNam % 4] ?? 0;
   const thu = (yChi - dau + 12) % 12;
-  const tt = thaiTue(kq.chiNam, yChi);
-
   return {
     namAm,
-    canChi: canChiNam(namAm),
     tuoiMu: n,
-    sao: tra(SAO, (nam ? SAO_NAM : SAO_NU)[n % 9]),
-    han: n < 10 ? CHUA_XET : tra(HAN, (nam ? HAN_NAM : HAN_NU)[viTri % 8]),
     kimLau: n < 10 ? CHUA_XET : kimLau,
     hoangOc: n < 10 ? CHUA_XET : tra(HOANG_OC, HOANG_OC_TEN[(tc.hoangOc === 'demTiep' ? n - 9 : viTri) % 6]),
     tamTai: thu < 3
       ? { ten: `Năm thứ ${String(thu + 1)}/3`, mucDo: 'xau', nghia: 'Dân gian kiêng việc lớn: làm nhà, cưới hỏi, khởi sự làm ăn.' }
-      : { ten: 'Không phạm', mucDo: 'tot', nghia: `Tuổi ${tenChi(kq.chiNam)} gặp Tam Tai các năm ${[0, 1, 2].map((i) => tenChi(dau + i)).join(', ')}.` },
+      : { ten: 'Không phạm', mucDo: 'tot', nghia: `Tuổi ${tenChi(chiNam)} gặp Tam Tai các năm ${[0, 1, 2].map((i) => tenChi(dau + i)).join(', ')}.` },
+  };
+}
+
+export function namNay(hs: HoSo, kq: KetQuaHoSo, ngayXem: NgayDuong, tc: TuyChonNamNay = {}): NamNay {
+  const h = hanNam(kq.am.nam, ngayXem, tc);
+  const n = h.tuoiMu;
+  const nam = hs.gioiTinh === 'nam';
+  const viTri = Math.floor(n / 10) + (n % 10);
+  const yChi = (h.namAm + 8) % 12;
+  const tt = thaiTue(kq.chiNam, yChi);
+
+  return {
+    ...h,
+    canChi: canChiNam(h.namAm),
+    sao: tra(SAO, (nam ? SAO_NAM : SAO_NU)[n % 9]),
+    han: n < 10 ? CHUA_XET : tra(HAN, (nam ? HAN_NAM : HAN_NU)[viTri % 8]),
     thaiTue: tt.length === 0
       ? { ten: 'Không phạm', mucDo: 'tot', nghia: `Năm ${tenChi(yChi)} không trùng, xung, hình, hại, phá tuổi ${tenChi(kq.chiNam)}.` }
       : { ten: tt.map(([ten]) => ten).join(', '), mucDo: 'xau', nghia: `Dân gian cho là ${tt.map(([, nghia]) => nghia).join('; ')}.` },
