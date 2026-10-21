@@ -66,8 +66,9 @@ export function veChonNgay(toi: HoSo | undefined, homNay: NgayDuong): HTMLElemen
     el('div', { class: 'nut-hang' }, nutThang('‹', -1), nhanThang, nutThang('›', 1)),
     ketQua,
     el('p', { class: 'ghi-chu' }, 'Tốt: ngày Hoàng Đạo, lịch ghi nên làm việc này, không phạm ngày kỵ. Tránh: ngày Tam Nương, Nguyệt Kỵ, '
-      + 'Dương Công Kỵ, Sát Chủ, Thọ Tử, hoặc ngày xung tuổi. Còn lại là Được. Nên/kiêng theo hoàng lịch Trung Hoa; hai bộ hoàng lịch '
-      + `máy so được chỉ trùng nhau khoảng 6/10 ở mục kiêng, nên lịch ghi kiêng chỉ hạ xuống Được. Năm sinh sửa ở đây không lưu. ${LOI_SOAN}`));
+      + 'Dương Công Kỵ, Sát Chủ Dương, Thọ Tử, hoặc ngày xung tuổi. Còn lại là Được. Nên/kiêng theo hoàng lịch Trung Hoa; hai bộ hoàng '
+      + 'lịch máy so được chỉ trùng nhau khoảng 6/10 ở mục kiêng, nên lịch ghi kiêng chỉ hạ xuống Được. Xuất hành: ngày Khổng Minh, giờ '
+      + `Lý Thuần Phong theo sách và lịch Việt (xemlicham tính giờ khác). Năm sinh sửa ở đây không lưu. ${LOI_SOAN}`));
   k.addEventListener('toggle', () => { if (ketQua.childElementCount === 0) ve(); });
   return k;
 }

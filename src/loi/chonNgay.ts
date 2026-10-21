@@ -34,90 +34,95 @@ export interface NgayChon {
   readonly xuatHanh?: XuatHanh;
 }
 
-// Duong Cong Ky: [thang am, ngay am] (13 ngay/nam).
+// Duong Cong Ky: [thang am, ngay am], 13 ngay/nam; thang 7 lay mung 1 va 29 (xemlicham, sach Hoa; lichngaytot lay 8 va 29).
 const DUONG_CONG: readonly (readonly [number, number])[] = [
-  [1, 13], [2, 11], [3, 9], [4, 7], [5, 5], [6, 3], [7, 8], [7, 29], [8, 27], [9, 25], [10, 23], [11, 21], [12, 19],
+  [1, 13], [2, 11], [3, 9], [4, 7], [5, 5], [6, 3], [7, 1], [7, 29], [8, 27], [9, 25], [10, 23], [11, 21], [12, 19],
 ];
-// Sat Chu: chi ngay theo thang am (phan tu i = thang i+1).
-const SAT_CHU = '子丑丑戌辰辰丑辰丑辰未辰';
-// Tho Tu: can chi ngay theo thang am.
-const THO_TU = ['Bính Tuất', 'Nhâm Thìn', 'Tân Hợi', 'Đinh Tỵ', 'Mậu Tý', 'Bính Ngọ', 'Ất Sửu', 'Quý Mùi', 'Giáp Dần', 'Mậu Thân', 'Tân Mão', 'Tân Dậu'];
+// Chi ngay theo thang am (ky tu thu i = thang i+1). Sat Chu Am thang 7 Suu, 8 Hoi (lich theo ngay xemlicham, lichngaytot,
+// lichvannien); nhieu bai viet dao lai 7 Hoi, 8 Suu. Tho Tu theo chi (lich theo ngay), khong theo can chi (vai bai viet).
+const SAT_CHU_AM = '巳子未卯申戌丑亥午酉寅辰';
+const SAT_CHU_DUONG = '子丑丑戌辰辰丑辰丑辰未辰';
+const THO_TU = '戌辰亥巳子午丑未寅申卯酉';
 
 // Khong Minh: ba nhom thang am, ngay 1 la ten dau vong. [ten, tot, nghia — Claude soan lai].
 type Ten = readonly [string, boolean, string];
 const KHONG_MINH: readonly (readonly Ten[])[] = [
   [ // thang 1, 4, 7, 10
-    ['Đường Phong', true, 'Đi đâu cũng thuận, cầu gì được nấy, dễ gặp quý nhân.'],
-    ['Kim Thổ', false, 'Ra đi dễ lỡ tàu xe, cầu tài khó được, đề phòng mất của.'],
-    ['Kim Dương', true, 'Đi xa tốt, có quý nhân giúp, tài lộc thông suốt.'],
-    ['Thuần Dương', true, 'Đi thuận lợi, được người tốt giúp, cầu tài được như ý.'],
+    ['Đường Phong', true, 'Đi đâu cũng thuận, dễ gặp người nâng đỡ, cầu tài như ý.'],
+    ['Kim Thổ', false, 'Dễ lỡ tàu xe, mất của dọc đường, cầu tài khó.'],
+    ['Kim Dương', true, 'Đi suôn sẻ, có quý nhân giúp, tiền bạc thông.'],
+    ['Thuần Dương', true, 'Đi về đều thuận, được người giúp, bàn bạc dễ thắng.'],
     ['Đạo Tặc', false, 'Rất xấu: đi dễ gặp hại, mất của.'],
-    ['Hảo Thương', true, 'Đi thuận, gặp người trên vừa lòng, làm việc như ý.'],
+    ['Hảo Thương', true, 'Việc vừa ý, gặp người trên giúp, đi thuận.'],
   ],
   [ // thang 2, 5, 8, 11
-    ['Thiên Đạo', false, 'Cầu tài nên tránh: được cũng tốn kém, dễ thua thiệt.'],
-    ['Thiên Môn', true, 'Đi đâu cũng thông, làm việc gì cũng vừa ý.'],
-    ['Thiên Đường', true, 'Đi được người giúp đỡ, buôn bán may mắn.'],
-    ['Thiên Tài', true, 'Nên đi cầu tài, được người giúp, mọi việc thuận.'],
-    ['Thiên Tặc', false, 'Đi xa xấu, dễ mất của, việc gì cũng không xong.'],
-    ['Thiên Dương', true, 'Đi tốt, cầu tài được, hỏi vợ được vợ.'],
-    ['Thiên Hầu', false, 'Đi xa dễ cãi cọ, xảy chuyện không hay.'],
-    ['Thiên Thương', true, 'Đi gặp người trên thì tốt, cầu tài được.'],
+    ['Thiên Đạo', false, 'Nên tránh cầu tài: có được cũng hao tốn, dễ thua thiệt.'],
+    ['Thiên Môn', true, 'Thuận lợi, việc dễ thành.'],
+    ['Thiên Đường', true, 'Việc như ý, có quý nhân, buôn bán có lời.'],
+    ['Thiên Tài', true, 'Rất hợp cầu tài, nhiều người giúp.'],
+    ['Thiên Tặc', false, 'Cầu tài không được, đi dễ mất cắp.'],
+    ['Thiên Dương', true, 'Cầu tài được, việc như ý.'],
+    ['Thiên Hầu', false, 'Dễ cãi vã, đề phòng tai nạn.'],
+    ['Thiên Thương', true, 'Gặp người trên rất hợp, cầu tài được.'],
   ],
   [ // thang 3, 6, 9, 12
-    ['Bạch Hổ Đầu', true, 'Đi xa, cầu tài được; đi đâu cũng thông đạt.'],
-    ['Bạch Hổ Kiếp', true, 'Đi bốn phương đều tốt, trăm việc được như ý.'],
-    ['Bạch Hổ Túc', false, 'Cấm đi xa, làm việc gì cũng không thành.'],
-    ['Huyền Vũ', false, 'Đi thường gặp cãi cọ, việc xấu, không nên đi.'],
-    ['Chu Tước', false, 'Đi hay mất của, việc thường thua thiệt.'],
-    ['Thanh Long Đầu', true, 'Nên đi sớm, cầu tài thắng lợi, mọi việc như ý.'],
-    ['Thanh Long Kiếp', true, 'Đi bốn phương tám hướng đều tốt.'],
-    ['Thanh Long Túc', false, 'Đi xa không nên, tài lộc không có, dễ kiện cáo.'],
+    ['Chu Tước', false, 'Đi và cầu tài đều xấu, dễ mất của, cãi lý thua.'],
+    ['Bạch Hổ Đầu', true, 'Đi đâu, cầu tài đều thuận.'],
+    ['Bạch Hổ Kiếp', true, 'Đi hướng Bắc hay Nam thuận, cầu tài như ý.'],
+    ['Bạch Hổ Túc', false, 'Không nên đi xa, việc khó thành.'],
+    ['Huyền Vũ', false, 'Dễ cãi cọ, không nên đi.'],
+    ['Thanh Long Đầu', true, 'Nên đi sáng sớm, cầu tài thắng lợi.'],
+    ['Thanh Long Kiếp', true, 'Đi các hướng đều thuận.'],
+    ['Thanh Long Túc', false, 'Không nên đi xa, không có tài lộc, cãi lý thua.'],
   ],
 ];
 
-// Ly Thuan Phong: (ngay am + thang am + khac − 2) chia 6, phan tu i = so du i; khac 1 = gio Ty va Ngo … khac 6 = Ty (蛇) va Hoi.
-const LY_THUAN_PHONG: readonly (readonly [string, boolean])[] = [
-  ['Tuyệt Lộ', false], ['Đại An', true], ['Tốc Hỷ', true], ['Lưu Niên', false], ['Xích Khẩu', false], ['Tiểu Cát', true],
-];
+// Ly Thuan Phong (khac 1 = gio Ty va Ngo … khac 6 = Ty (蛇) va Hoi). `sach`: (ngay + thang + khac − 3) chia 6 tren thu tu Viet
+// (sach, lichngaytot, lichvannien — 17/17 vi du); `xemlicham`: (ngay + thang + khac − 2) chia 6 tren thu tu Trung Hoa (12/12 mau
+// xemlicham qua tom tat may, chua co anh). QUY_UOC muc 19.
+const LTP_VIET = ['Đại An', 'Tốc Hỷ', 'Lưu Niên', 'Xích Khẩu', 'Tiểu Cát', 'Tuyệt Lộ'];
+const LTP_TRUNG_HOA = ['Đại An', 'Lưu Niên', 'Tốc Hỷ', 'Xích Khẩu', 'Tiểu Cát', 'Tuyệt Lộ'];
+const LTP_TOT = new Set(['Đại An', 'Tốc Hỷ', 'Tiểu Cát']);
 
 const hai = (n: number): string => String(n).padStart(2, '0');
 const nghia = (c: string): string => (BANG.nenKieng as Bang)[c]?.nghia ?? hv('nenKieng', c);
 
-/** Ngay Khong Minh cua mot ngay am. */
+/** Ngay Khong Minh cua mot ngay am. Ngay 30 thang 2-5-8-11 la Thien Thuong (4 nguon; vong thuan ra Thien Duong). */
 export function khongMinh(am: NgayAm): XuatHanh['khongMinh'] {
   const vong = KHONG_MINH[(am.thang - 1) % 3] ?? [];
-  const [ten, tot, y] = vong[(am.ngay - 1) % vong.length] ?? ['', false, ''];
+  const i = am.ngay === 30 && vong.length === 8 && am.thang % 3 === 2 ? 7 : (am.ngay - 1) % vong.length;
+  const [ten, tot, y] = vong[i] ?? ['', false, ''];
   return { ten, tot, nghia: y };
 }
 
 /** 12 gio xuat hanh Ly Thuan Phong cua mot ngay am (gio Ty dau ngay). */
-export function gioLyThuanPhong(am: NgayAm): GioXuatHanh[] {
+export function gioLyThuanPhong(am: NgayAm, phai: TuyChonChonNgay['lyThuanPhong'] = 'sach'): GioXuatHanh[] {
   return Array.from({ length: 12 }, (_, i) => {
-    const [ten, tot] = LY_THUAN_PHONG[(am.ngay + am.thang + (i % 6) + 1 - 2) % 6] ?? ['', false];
-    return { chi: hv('chi', CHI.charAt(i)), khoang: `${hai((i * 2 + 23) % 24)}–${hai(i * 2 + 1)}`, ten, tot };
+    const khac = (i % 6) + 1;
+    const ten = (phai === 'xemlicham' ? LTP_TRUNG_HOA[(am.ngay + am.thang + khac - 2) % 6] : LTP_VIET[(am.ngay + am.thang + khac - 3) % 6]) ?? '';
+    return { chi: hv('chi', CHI.charAt(i)), khoang: `${hai((i * 2 + 23) % 24)}–${hai(i * 2 + 1)}`, ten, tot: LTP_TOT.has(ten) };
   });
 }
 
-/** Ten ngay xau theo thang am (Duong Cong Ky, Sat Chu, Tho Tu) cua mot ngay. */
-export function ngayXauThang(am: NgayAm, canChi: string, chiNgay: number): string[] {
+/** Ngay xau theo thang am cua mot ngay: Duong Cong Ky, Sat Chu Duong, Tho Tu (`tranh`) va Sat Chu Am (`xau`). */
+export function ngayXauThang(am: NgayAm, chiNgay: number): LyDo[] {
+  const chi = CHI.charAt(chiNgay);
+  const co = (bang: string): boolean => bang.charAt(am.thang - 1) === chi;
   return [
-    DUONG_CONG.some(([t, n]) => t === am.thang && n === am.ngay) && 'Dương Công Kỵ',
-    SAT_CHU.charAt(am.thang - 1) === CHI.charAt(chiNgay) && 'Sát Chủ',
-    THO_TU[am.thang - 1] === canChi && 'Thọ Tử',
-  ].filter((x): x is string => x !== false);
+    DUONG_CONG.some(([t, n]) => t === am.thang && n === am.ngay) && { loai: 'tranh', chu: 'Dương Công Kỵ: kiêng mọi việc lớn' },
+    co(SAT_CHU_DUONG) && { loai: 'tranh', chu: 'Sát Chủ Dương: kiêng xây dựng, cưới hỏi, buôn bán, đi xa' },
+    co(THO_TU) && { loai: 'tranh', chu: 'Thọ Tử: trăm việc đều kỵ' },
+    co(SAT_CHU_AM) && { loai: 'xau', chu: 'Sát Chủ Âm: kiêng việc mai táng, thờ cúng' },
+  ].filter((x): x is LyDo => x !== false);
 }
 
-const LOI_XAU: Readonly<Record<string, string>> = {
-  'Tam Nương': 'kiêng khởi sự việc lớn', 'Nguyệt Kỵ': 'kiêng đi xa, khởi sự',
-  'Dương Công Kỵ': 'kiêng mọi việc lớn', 'Sát Chủ': 'kiêng việc lớn', 'Thọ Tử': 'trăm việc đều kỵ',
-};
+const LOI_KY: Readonly<Record<string, string>> = { 'Tam Nương': 'kiêng khởi sự việc lớn', 'Nguyệt Kỵ': 'kiêng đi xa, khởi sự' };
 
 /**
  * Lich ghi kieng viec: mac dinh `xau` (chi chan muc Tot) vi muc kieng cua thu vien trung cnlunar chi 58–65% (kappa 0,02–0,16,
  * `scripts/doi-chieu/so-cnlunar.mjs`); `tranh` = xep Tranh nhu ngay ky (QUY_UOC muc 19).
  */
-export interface TuyChonChonNgay { readonly kiengLich?: 'xau' | 'tranh' }
+export interface TuyChonChonNgay { readonly kiengLich?: 'xau' | 'tranh'; readonly lyThuanPhong?: 'sach' | 'xemlicham' }
 
 /** Cham mot ngay cho mot viec. `chiNamSinh` (0 = Ty) bo trong thi khong xet tuoi. */
 export function chamNgay(d: NgayDuong, viec: Viec, chiNamSinh?: number, tc: TuyChonChonNgay = {}): NgayChon {
@@ -128,7 +133,8 @@ export function chamNgay(d: NgayDuong, viec: Viec, chiNamSinh?: number, tc: TuyC
   const ly: LyDo[] = [];
   const kieng = ten.filter((t) => c.kieng.includes(t));
   if (kieng.length > 0) ly.push({ loai: tc.kiengLich ?? 'xau', chu: `Lịch ghi kiêng ${kieng.join(', ').toLowerCase()}` });
-  for (const k of [...c.ngayKy, ...ngayXauThang(n.am, n.canChiNgay, n.chiNgay)]) ly.push({ loai: 'tranh', chu: `${k}: ${LOI_XAU[k] ?? ''}` });
+  for (const k of c.ngayKy) ly.push({ loai: 'tranh', chu: `${k}: ${LOI_KY[k] ?? ''}` });
+  ly.push(...ngayXauThang(n.am, n.chiNgay));
   if (chiNamSinh !== undefined) {
     const lech = (n.chiNgay - chiNamSinh + 12) % 12;
     const tuoi = hv('chi', CHI.charAt(chiNamSinh));
@@ -145,7 +151,7 @@ export function chamNgay(d: NgayDuong, viec: Viec, chiNamSinh?: number, tc: TuyC
   if (viec === 'xuatHanh') {
     const km = khongMinh(n.am);
     ly.push({ loai: km.tot ? 'tot' : 'xau', chu: `Ngày ${km.ten} (Khổng Minh)` });
-    xuatHanh = { khongMinh: km, gio: gioLyThuanPhong(n.am), hyThan: n.hyThan, taiThan: n.thanTai };
+    xuatHanh = { khongMinh: km, gio: gioLyThuanPhong(n.am, tc.lyThuanPhong), hyThan: n.hyThan, taiThan: n.thanTai };
   }
   const danhGia: DanhGia = ly.some((l) => l.loai === 'tranh') ? 'tranh'
     : ly.some((l) => l.loai === 'xau') ? 'duoc' : 'tot';

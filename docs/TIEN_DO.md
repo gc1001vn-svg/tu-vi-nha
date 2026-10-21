@@ -4,8 +4,8 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 21/10/2026 — đợt 4 gộp `main` bói Kiều, Kinh Dịch; anh bấm thử 3 nút thẻ "Gieo quẻ" 21/10, không báo lỗi.
-Còn chọn ngày theo việc: đã có 4 ảnh lịch 21/10 (Khổng Minh khớp 9/9). Đợt "lưu hạn + lời giải" anh thử iPhone 20/10 ổn, đã đóng.
+Cập nhật: 21/10/2026 — đợt 4 gộp `main` đủ ba môn: bói Kiều, Kinh Dịch (anh bấm thử 21/10 không lỗi), chọn ngày theo việc
+(21/10, chưa thử iPhone). Đợt "lưu hạn + lời giải" anh thử iPhone 20/10 ổn, đã đóng.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -14,20 +14,21 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   Chỉ lưu hồ sơ của anh; người nhà để đợt 9 (anh chốt 19/10).
 - Khối mỗi người (`src/giaoDien/khoi/`): tử vi (Altuvi 345/345), năm nay (bảng báo 2026 144/144), bát tự + đại vận (`sxtwl`),
   hướng Bát trạch, tuổi hợp, thần số học, hoàng đạo, nhịp sinh học.
-- 20/10: tử vi hạn năm, tháng, ngày + 9 sao lưu tự tính theo hôm nay (`src/loi/tuVi/luuHan.ts`; khớp `tuvi-mcp-server`, `iztro`
-  200/200 mỗi bên) · lời giải dài: tử vi (`nghia.ts`), 9 sao hạn + 8 hạn (tháng kỵ, ngày cúng khi ≥2 nguồn), bát tự.
-- 20/10: hạn tháng theo *Tân Biên* (`QUY_UOC` mục 16); vòng sao Cửu Diệu trùng kinh đời Đường, chùa Nhật, *Ngọc Hạp Ký*;
-  8 hạn chưa có nguồn ngoài VN (`QUY_UOC` mục 14, W43–W45).
+- Tử vi hạn năm, tháng, ngày + 9 sao lưu theo hôm nay (`luuHan.ts`, `QUY_UOC` mục 16) · lời giải dài tử vi, sao hạn, bát tự.
 - Thẻ "Gieo quẻ" (đợt 4): Kinh Dịch gieo xu hoặc Mai Hoa, lời 64 quẻ, 386 hào; bói Kiều 3.254 câu (`QUY_UOC` mục 17, 18).
+- Khối "Chọn ngày theo việc" cuối thẻ "Hôm nay" (đợt 4, `src/loi/chonNgay.ts`, `QUY_UOC` mục 19): 5 việc × tháng → Tốt/Được/Tránh
+  kèm lý do; Dương Công, Sát Chủ Âm/Dương, Thọ Tử, Khổng Minh, giờ Lý Thuần Phong; tài thần đổi theo sách Việt (cả thẻ "Hôm nay").
 
 ## 2. Việc kế
 
-- Đợt 4 (`docs/ke-hoach/2026-10-20-dot-4.md`, anh duyệt A): xong bói Kiều, Kinh Dịch (`QUY_UOC` mục 17, 18); còn chọn ngày (phiên mới, effort high).
+- Đợt 4 xong phần máy (`docs/ke-hoach/2026-10-20-dot-4.md`); chờ anh thử khối chọn ngày trên iPhone + 1 ảnh (mục 3).
 - Kế hoạch tổng còn: đợt 5 (la bàn, Lỗ Ban, phi tinh), 6 (chiêm tinh, tarot),
   7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
+- **Chụp 2 ảnh xemlicham** (https://www.xemlicham.com/am-lich/nam/2026/thang/10/ngay/14 và …/ngay/16): giờ xuất hành giờ Tý,
+  dòng "đón Tài Thần". App theo sách: 14/10 Đại An, 16/10 Tây Bắc; ảnh ghi Lưu Niên, Chính Tây thì đổi theo xemlicham (mục 19).
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
@@ -39,7 +40,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Lời giải tử vi theo Tân Biên (Claude viết lại), sao hạn theo trang dân gian, bát tự theo nghĩa phổ biến, 450 đoạn Kinh Dịch
   (agent soát một lượt, sửa 1 lỗi) — chưa ai rành đọc lại;
   bát tự chỉ đếm thô, chưa xét vượng suy. Tốt/xấu từng phụ tinh theo bảng `ansaotuvi`, có sao lệch với sách (vd Mộ).
-- Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng, sao ngày theo hoàng lịch Trung Hoa (lịch Việt có hệ sao khác).
-- Thần tài, hỷ thần, hướng sát chưa có nguồn Việt; cung hoàng đạo theo bảng ngày cố định. Tuỳ chọn `QUY_UOC` chưa có màn chỉnh.
+- Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng, sao ngày theo hoàng lịch Trung Hoa (lịch Việt có hệ sao khác);
+  mục kiêng trùng `cnlunar` chỉ 61 % → chọn ngày chỉ hạ Được. Ca kiểm chọn ngày lấy qua tóm tắt tìm kiếm, chưa mở trang gốc.
+- Hướng sát chưa có nguồn Việt; cung hoàng đạo theo bảng ngày cố định. Tuỳ chọn `QUY_UOC` chưa có màn chỉnh.
 - Máy ảo chỉ thử Chromium; anh thử iPhone thật 20/10 ổn. `lunar-typescript` 1.8.6 lộ mã `sn.*` (bảng Hán–Việt đỡ); bảng cần người rành lịch
   đọc lại vài mục (Bành Tổ, lộc, 28 tú).
