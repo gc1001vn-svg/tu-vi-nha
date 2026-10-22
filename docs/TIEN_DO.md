@@ -27,7 +27,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 3. Cần anh
 
-- Thử iPhone: khối "Chiêm tinh hôm nay"; tarot (tắt mạng vẫn rút được); điền giờ sinh để so cung Mọc, nhà.
+- Thử iPhone: khối "Chiêm tinh hôm nay"; điền giờ sinh để so cung Mọc, nhà. Tarot anh thử 22/10: chế độ máy bay rút đủ 10 lá.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich`, `claude/blissful-sagan-ur507y` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
