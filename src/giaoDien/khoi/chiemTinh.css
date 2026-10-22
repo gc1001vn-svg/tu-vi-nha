@@ -1,0 +1,25 @@
+/* Khoi chiem tinh (`chiemTinhVe.ts`): ba diem chinh, banh xe, bang vi tri, loi giai. Mau lay bien o `src/style.css`. */
+.chiem-tinh .ct-ba { display: flex; flex-wrap: wrap; gap: 2px 14px; margin: 4px 0 6px; font-size: 1.15rem; font-weight: 600; color: var(--vang); }
+.chiem-tinh svg { display: block; width: 100%; max-width: 360px; height: auto; margin: 8px auto; }
+.chiem-tinh .ct-vong { fill: none; stroke: var(--vien); stroke-width: 1.2; }
+.chiem-tinh .ct-vach { stroke: var(--mo); stroke-width: 1; }
+.chiem-tinh .ct-nha { stroke: var(--vien); stroke-width: 1; }
+.chiem-tinh .ct-truc { stroke: var(--vang); stroke-width: 1.6; }
+.chiem-tinh .ct-ky { fill: var(--vang); }
+.chiem-tinh .ct-sao { fill: var(--chu); }
+.chiem-tinh .ct-so { fill: var(--mo); font-size: 13px; text-anchor: middle; }
+.chiem-tinh .ct-goc-tot { stroke: var(--xanh); stroke-width: 1.2; opacity: 0.85; }
+.chiem-tinh .ct-goc-xau { stroke: var(--do); stroke-width: 1.2; opacity: 0.85; }
+
+.chiem-tinh table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 8px 0; }
+.chiem-tinh th, .chiem-tinh td { border-top: 1px solid var(--vien); padding: 5px 4px; text-align: left; vertical-align: top; }
+.chiem-tinh thead th { color: var(--vang); border-top: 0; }
+.chiem-tinh tbody th { font-weight: 400; }
+.chiem-tinh tbody th small { display: block; color: var(--mo); font-size: 15px; }
+.chiem-tinh td:last-child, .chiem-tinh thead th:last-child { width: 3em; text-align: center; }
+.chiem-tinh .nghich { color: var(--do); font-size: 15px; }
+.chiem-tinh h3 { margin: 14px 0 4px; font-size: 1rem; color: var(--vang); }
+.chiem-tinh p { margin: 6px 0; }
+.chiem-tinh ul { margin: 4px 0; padding-left: 18px; }
+.chiem-tinh li { margin: 6px 0; }
+.chiem-tinh .ct-them > summary { min-height: 44px; display: flex; align-items: center; font-weight: 600; color: var(--vang); cursor: pointer; }

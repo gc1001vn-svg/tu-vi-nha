@@ -1,9 +1,9 @@
 /**
- * Than so hoc, cung hoang dao, nhip sinh hoc (`src/loi/soHoc.ts`). Ngay sinh trong file nay deu la ngay GIA (luat 1 CLAUDE.md);
+ * Than so hoc, nhip sinh hoc (`src/loi/soHoc.ts`). Ngay sinh trong file nay deu la ngay GIA (luat 1 CLAUDE.md);
  * vai ca la vi du tinh tay trong ket qua tim kiem (URL o bao cao C3), de biet cong thuc khop nguon chu khong chi khop chinh no.
  */
 import { soNgay, tuSoNgay, type NgayDuong } from '../src/loi/amLich.ts';
-import { cungHoangDao, nhipSinhHoc, tenSo, thanSo } from '../src/loi/soHoc.ts';
+import { nhipSinhHoc, tenSo, thanSo } from '../src/loi/soHoc.ts';
 
 const d = (s: string): NgayDuong => {
   const [ngay = 0, thang = 0, nam = 0] = s.split('/').map(Number);
@@ -85,35 +85,6 @@ describe('so ngay sinh, nam/thang ca nhan, bieu do', () => {
   test('bieu do ngay sinh: dem chu so 1–9, bo so 0', () => {
     expect(thanSo(d('15/03/1985'), XEM).luoi).toEqual([2, 0, 1, 0, 2, 0, 0, 1, 1]);
     expect(thanSo(d('20/10/2000'), XEM).luoi).toEqual([1, 2, 0, 0, 0, 0, 0, 0, 0]);
-  });
-});
-
-describe('cung hoang dao', () => {
-  // Ranh ngay cua `lunar-typescript` (Solar.getXingZuo): [ngay cuoi cung truoc, ngay dau cung sau].
-  const RANH: [string, string, string, string][] = [
-    ['19/01', 'Ma Kết', '20/01', 'Bảo Bình'], ['18/02', 'Bảo Bình', '19/02', 'Song Ngư'],
-    ['20/03', 'Song Ngư', '21/03', 'Bạch Dương'], ['19/04', 'Bạch Dương', '20/04', 'Kim Ngưu'],
-    ['20/05', 'Kim Ngưu', '21/05', 'Song Tử'], ['21/06', 'Song Tử', '22/06', 'Cự Giải'],
-    ['22/07', 'Cự Giải', '23/07', 'Sư Tử'], ['22/08', 'Sư Tử', '23/08', 'Xử Nữ'],
-    ['22/09', 'Xử Nữ', '23/09', 'Thiên Bình'], ['23/10', 'Thiên Bình', '24/10', 'Thiên Yết'],
-    ['22/11', 'Thiên Yết', '23/11', 'Nhân Mã'], ['21/12', 'Nhân Mã', '22/12', 'Ma Kết'],
-  ];
-
-  test.each(RANH)('%s %s | %s %s, hai ngay ranh ghi cung ben kia', (a, cungA, b, cungB) => {
-    expect(cungHoangDao(d(`${a}/1990`))).toMatchObject({ ten: cungA, satRanh: cungB });
-    expect(cungHoangDao(d(`${b}/1990`))).toMatchObject({ ten: cungB, satRanh: cungA });
-  });
-
-  test('giua cung khong ghi sat ranh; ca nam nhuan cung nao cung co loi', () => {
-    expect(cungHoangDao(d('15/07/1990'))).toMatchObject({ ten: 'Cự Giải', satRanh: null });
-    expect(cungHoangDao(d('29/02/2024')).ten).toBe('Song Ngư');
-    const ten = new Set<string>();
-    for (let n = soNgay(d('01/01/2024')); n <= soNgay(d('31/12/2024')); n++) {
-      const c = cungHoangDao(tuSoNgay(n));
-      expect(c.nghia).not.toBe('');
-      ten.add(c.ten);
-    }
-    expect(ten.size).toBe(12);
   });
 });
 

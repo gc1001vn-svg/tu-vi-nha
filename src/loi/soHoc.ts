@@ -1,11 +1,9 @@
 /**
- * Than so hoc (Pitago), cung hoang dao (Tay), nhip sinh hoc cua mot nguoi — chi dung ngay DUONG sinh (ngay ghi trong ho so).
+ * Than so hoc (Pitago), nhip sinh hoc cua mot nguoi — chi dung ngay DUONG sinh (ngay ghi trong ho so).
  * Quy uoc: `docs/QUY_UOC.md` muc 1 (nam ca nhan doi ngay 01/01), bang tuy chon (`namCaNhan`, `soChuDao`).
  * Thuoc: `tests/SoHoc.test.ts`. Loi do Claude soan lai theo quan niem pho bien (luat 6), khong chep sach.
  */
-import { Solar } from 'lunar-typescript';
-import { soNgay, tuSoNgay, type NgayDuong } from './amLich.ts';
-import { hv } from './hanViet/index.ts';
+import { soNgay, type NgayDuong } from './amLich.ts';
 
 export interface TuyChonSoHoc {
   /** `motLuot` (mac dinh, pho bien o VN): cong moi chu so ngay sinh mot luot, ra 2–11, 22/4, 33/6. `rutGonRieng`: rut gon ngay, thang, nam rieng roi cong, ra 1–9, 11, 22, 33. */
@@ -55,21 +53,6 @@ const NGHIA_CHU_KY = [
   'Khép lại: dọn dẹp, buông cái cũ, chuẩn bị bắt đầu mới.',
 ];
 
-const NGHIA_CUNG: Readonly<Record<string, string>> = {
-  'Bạch Dương': 'Hăng hái, thẳng thắn, thích đi đầu; dễ nóng vội.',
-  'Kim Ngưu': 'Kiên nhẫn, thực tế, thích ổn định và hưởng thụ; hơi bảo thủ.',
-  'Song Tử': 'Lanh lợi, tò mò, giỏi giao tiếp; dễ đổi ý.',
-  'Cự Giải': 'Giàu tình cảm, gắn bó gia đình, hay lo cho người khác; dễ tủi thân.',
-  'Sư Tử': 'Tự tin, hào phóng, thích được ghi nhận; đôi khi sĩ diện.',
-  'Xử Nữ': 'Tỉ mỉ, chu đáo, thích ngăn nắp; hay cầu toàn.',
-  'Thiên Bình': 'Hòa nhã, trọng công bằng, có óc thẩm mỹ; khó ra quyết định.',
-  'Thiên Yết': 'Sâu sắc, kín đáo, quyết liệt; khó tin người.',
-  'Nhân Mã': 'Lạc quan, ưa tự do, thích đi xa và học hỏi; thiếu kiên nhẫn.',
-  'Ma Kết': 'Chăm chỉ, kỷ luật, có chí tiến thủ; hơi khô khan.',
-  'Bảo Bình': 'Độc lập, sáng tạo, nghĩ khác người; có lúc xa cách.',
-  'Song Ngư': 'Mơ mộng, giàu lòng trắc ẩn, nhạy cảm; dễ xa thực tế.',
-};
-
 const lay = (bang: Readonly<Record<number, string>>, so: number): string => {
   const loi = bang[so];
   if (loi === undefined) throw new Error(`Thiếu lời cho số ${String(so)}`);
@@ -110,21 +93,6 @@ export function thanSo(sinh: NgayDuong, xem: NgayDuong, tc: TuyChonSoHoc = {}): 
     thangCaNhan, nghiaThang: lay(NGHIA_CHU_KY, thangCaNhan),
     luoi: [1, 2, 3, 4, 5, 6, 7, 8, 9].map((k) => tatCa.filter((c) => c === k).length),
   };
-}
-
-export interface CungHoangDao {
-  readonly ten: string; readonly nghia: string;
-  /** Cung ben canh khi sinh sat ngay giao cung (±1 ngay): bang moi noi lech mot ngay, moc that xe dich theo nam. */
-  readonly satRanh: string | null;
-}
-
-export function cungHoangDao(d: NgayDuong): CungHoangDao {
-  const cung = (x: NgayDuong): string => hv('cungHoangDao', Solar.fromYmd(x.nam, x.thang, x.ngay).getXingZuo());
-  const ten = cung(d);
-  const benCanh = [-1, 1].map((k) => cung(tuSoNgay(soNgay(d) + k))).find((c) => c !== ten);
-  const nghia = NGHIA_CUNG[ten];
-  if (nghia === undefined) throw new Error(`Thiếu lời cho cung ${ten}`);
-  return { ten, nghia, satRanh: benCanh ?? null };
 }
 
 export interface Nhip {

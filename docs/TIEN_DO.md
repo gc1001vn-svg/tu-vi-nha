@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 22/10/2026 — **kế hoạch đợt 6 duyệt** · đợt 5 đóng 21/10 (anh thử iPhone cả ba khối, ổn).
+Cập nhật: 22/10/2026 — **đợt 6 phần 1 (lá số chiêm tinh) đã gộp `main`, chờ anh thử iPhone**.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -13,7 +13,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   "Phong thủy".
   Chỉ lưu hồ sơ của anh; người nhà để đợt 9 (anh chốt 19/10).
 - Khối mỗi người (`src/giaoDien/khoi/`): tử vi (Altuvi 345/345), năm nay (bảng báo 2026 144/144), bát tự + đại vận (`sxtwl`),
-  hướng Bát trạch, tuổi hợp, thần số học, hoàng đạo, nhịp sinh học.
+  hướng Bát trạch, tuổi hợp, thần số học, chiêm tinh (lá số + bánh xe, `QUY_UOC` mục 23), nhịp sinh học.
 - Tử vi hạn năm, tháng, ngày + 9 sao lưu theo hôm nay (`luuHan.ts`, `QUY_UOC` mục 16) · lời giải dài tử vi, sao hạn, bát tự.
 - Đợt 4: thẻ "Gieo quẻ" (Kinh Dịch, bói Kiều) · khối "Chọn ngày theo việc" cuối thẻ "Hôm nay" (`QUY_UOC` mục 17–19).
 - Thẻ "Phong thủy" (đợt 5, `QUY_UOC` mục 20–22): la bàn + lưu hướng nhà · thước Lỗ Ban (chỉ cung lớn; dán số từ app Đo) ·
@@ -21,12 +21,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đợt 6 anh duyệt 22/10** (`docs/ke-hoach/2026-10-22-dot-6.md`, phương án A): lá số chiêm tinh (bảng + bánh xe) → chiêm
-  tinh hôm nay (thẻ "Hôm nay") → tarot. **Kế: phần 1, lá số.** Chuẩn cuối: Swiss Ephemeris (`pyswisseph` ở thư mục tạm).
+- **Đợt 6** (`docs/ke-hoach/2026-10-22-dot-6.md`): phần 1 lá số xong 22/10 → **kế: phần 2, chiêm tinh hôm nay** (thẻ
+  "Hôm nay") → phần 3 tarot.
 - Sau đợt 6: 7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
+- Thử khối "Chiêm tinh" trên iPhone (thẻ Tra cứu hoặc Của tôi): so lá số của anh với một trang chiêm tinh anh tin.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich`, `claude/blissful-sagan-ur507y` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
@@ -41,6 +42,6 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   bát tự chỉ đếm thô, chưa xét vượng suy. Tốt/xấu từng phụ tinh theo bảng `ansaotuvi`, có sao lệch với sách (vd Mộ).
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng, sao ngày theo hoàng lịch Trung Hoa (lịch Việt có hệ sao khác);
   mục kiêng trùng `cnlunar` chỉ 61 % → chọn ngày chỉ hạ Được. Ca kiểm chọn ngày lấy qua tóm tắt tìm kiếm, chưa mở trang gốc.
-- Hướng sát chưa có nguồn Việt; cung hoàng đạo theo bảng ngày cố định. Tuỳ chọn `QUY_UOC` chưa có màn chỉnh.
+- Hướng sát chưa có nguồn Việt. Chiêm tinh: toạ độ tỉnh lỵ (cung Mọc lệch tới ~1°), lời giải chưa ai rành đọc lại. Tuỳ chọn `QUY_UOC` chưa có màn chỉnh.
 - Máy ảo chỉ thử Chromium; anh thử iPhone thật 20/10 ổn. `lunar-typescript` 1.8.6 lộ mã `sn.*` (bảng Hán–Việt đỡ); bảng cần người rành lịch
   đọc lại vài mục (Bành Tổ, lộc, 28 tú).

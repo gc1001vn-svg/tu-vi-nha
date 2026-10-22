@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@tuquet/lunar": "0.1.0",
+    "astronomy-engine": "2.1.19",
     "lunar-typescript": "1.8.6"
   }
 }

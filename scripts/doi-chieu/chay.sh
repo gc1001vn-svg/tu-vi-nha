@@ -5,6 +5,7 @@
 #   -> tu-vi-py.py + so-tu-vi.ts (loi tu vi TS so ansaotuvi 3.000 la + 5 la Altuvi; them 19/10 de lenh do lai chung do ca tu vi)
 #   -> luu-han-mcp.py + luu-han-iztro.mjs (ghi lai tests/vang/luu-han-*.json — 20/10; doi thi `git diff` thay ngay).
 #   -> sinh-cnlunar.py + so-cnlunar.mjs (nen/kieng 7 viec: lunar-typescript so cnlunar 0.2.5, 2.008 ngay; 21/10, khong ghi gi vao repo).
+#   -> chiem-tinh-swe.py (ghi lai tests/vang/chiem-tinh-swe.json bang Swiss Ephemeris — 22/10, dot 6).
 # Chay: bash scripts/doi-chieu/chay.sh [thu_muc_tam]   (mac dinh ${TMPDIR:-/tmp}/tu-vi-doi-chieu)
 # Mat bao lau (do 14/10/2026, may ao 4 nhan): lan dau 6 phut 48 giay (thu muc tam moi, cache npm/pip rong),
 #   chay lai 6 phut 42 giay. Gan het la so.mjs (383 giay, iztro lap 6.000 la so); cai dat chi vai giay.
@@ -18,6 +19,7 @@ mkdir -p "$S/pk/js"
 # tuvi-mcp-server keo theo may chu MCP; phan han (`tuvi_mcp._transit`) chi can pillow.
 "$P" -m pip install -q --disable-pip-version-check --no-deps tuvi-mcp-server==0.5.0
 "$P" -m pip install -q --disable-pip-version-check cnlunar==0.2.5
+"$P" -m pip install -q --disable-pip-version-check pyswisseph==2.10.3.2
 npm install --prefix "$S/pk/js" --no-audit --no-fund --loglevel=error \
   iztro@2.6.2 lunar-javascript@1.7.7 @tuquet/lunar@0.1.0 @dqcai/vn-lunar@1.0.1
 "$P" "$D/tv_py.py" "$S/tv_data.json"
@@ -32,4 +34,5 @@ node --experimental-strip-types --disable-warning=ExperimentalWarning "$D/so-tu-
 node "$D/luu-han-iztro.mjs" "$S/pk/js" "$D/../../tests/vang/luu-han-iztro.json"
 "$P" -I "$D/sinh-cnlunar.py" "$S/cnlunar.json"
 node --experimental-strip-types --disable-warning=ExperimentalWarning "$D/so-cnlunar.mjs" "$S/cnlunar.json"
+"$P" -I "$D/chiem-tinh-swe.py" "$D/../../tests/vang/chiem-tinh-swe.json"
 echo "Xong sau ${SECONDS} giay"

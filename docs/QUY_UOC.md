@@ -99,7 +99,7 @@ Giờ sinh (đã đổi về +7) cách một ranh không quá 15 phút thì tín
 | Âm lịch, can chi năm/tháng/ngày, nạp âm, con giáp, tuổi mụ, Kim Lâu, Hoang Ốc, Tam Tai, sao hạn, cung phi, hợp tuổi, xem ngày theo tuổi, thần số học, nhịp sinh học | Tính đủ. Riêng ngày sinh trùng ngày Tết, ngày Lập Xuân hoặc ngày giao tiết thì hiện 2 phương án |
 | Bát tự | Có 3 trụ năm, tháng, ngày; trụ giờ để "?"; thập thần, vượng suy chỉ xét 3 trụ; tuổi khởi vận lấy giờ 12:00 và ghi "có thể lệch tới ±2 tháng" |
 | Tử vi | Không lập được một lá duy nhất (Mệnh, Thân, cục và phần lớn sao an theo giờ), nên hiện 12 phương án theo 12 giờ cho người dùng chọn |
-| Chiêm tinh | Tính lúc 12:00: Mặt Trời và các hành tinh dùng được; Mặt Trăng đổi cung trong ngày thì hiện 2 phương án; bỏ cung Mọc và các nhà |
+| Chiêm tinh | Tính lúc 12:00: Mặt Trời và các hành tinh dùng được; điểm nào đổi cung trong ngày (thường là Mặt Trăng) thì ghi cả hai cung; bỏ cung Mọc và các nhà (mục 23) |
 | Kinh Dịch, bói Kiều, tarot, xin xăm, tướng mặt, chỉ tay | Không cần giờ sinh |
 
 Cách làm trong mã (đợt 1, `src/loi/hoSo.ts`): không rõ giờ thì thử 00:00 và 22:59 của ngày ghi (giờ +7), ra khác nhau thì hiện cả hai — bắt được ngày Lập Xuân, ngày giao tiết. Không thử 23:00 trở đi: theo phái A (mục 4) mọi ngày đều sang ngày hôm sau, ngày sinh nào cũng thành 2 phương án; nên người sinh đêm 30 Tết sau 23:00 mà không rõ giờ thì app vẫn lấy năm cũ (**chưa chắc**, chưa thấy nguồn bàn).
@@ -125,7 +125,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 ## 13. Thần số học, cung hoàng đạo, nhịp sinh học (`src/loi/soHoc.ts`, chỉ dùng ngày dương)
 - Số chủ đạo: cộng mọi chữ số dd/mm/yyyy, còn >11 thì cộng tiếp; giữ 10, 11, 22/4, 33/6; không có số 1 [W29]. Vênh: fptshop, hellobacsi chỉ kê 2–11 và 22/4 (tổng 33 về 6); mytour, thuviennhadat giữ 33 → app ghi "33/6". Tuỳ chọn `rutGonRieng`: rút gọn ngày, tháng, năm riêng rồi cộng (trang nước ngoài) [W30].
 - Năm cá nhân = ngày + tháng sinh + năm xem, rút về 1–9 (đổi 01/01, mục 1); tháng cá nhân = năm cá nhân + tháng. Số ngày sinh: rút gọn ngày, giữ 11, 22. Lưới 3×3 bỏ số 0; mũi tên chưa làm (các trang đặt tên vênh) [W31].
-- Cung hoàng đạo theo bảng ngày cố định của `lunar-typescript`. Vênh 1 ngày ở 21/6, 23/10, 22/11 (thư viện: Song Tử, Thiên Bình, Thiên Yết; nhiều bảng: Cự Giải, Thiên Yết, Nhân Mã) → ngày cách giao cung ±1 thì ghi thêm cung bên cạnh [W32].
+- Cung hoàng đạo: tới 22/10 tra bảng ngày cố định của `lunar-typescript` (vênh 1 ngày ở 21/6, 23/10, 22/11 [W32]); nay lấy Mặt Trời tính thật ở khối Chiêm tinh (mục 23). Bảng Hán–Việt `cungHoangDao` giữ vì thư viện vẫn trả chữ đó.
 - Nhịp sinh học: sin(2πt/T), T = 23, 28, 33 ngày, t = số ngày từ ngày sinh; ghi rõ không có cơ sở khoa học [W33].
 ## 14. Năm nay, hướng Bát trạch, tuổi hợp (`src/loi/namNay.ts`, `batTrach.ts`, `tuoiHop.ts`, đo 19/10)
 - Năm xem = năm âm (Tết) của ngày xem; tuổi mụ theo mục 3.
@@ -310,6 +310,32 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   theo 24 sơn (`tests/PhiTinh.test.ts`). La bàn báo khi hướng hay tọa đo được trùng hướng kỵ năm.
 - Đã kiểm: `tests/PhiTinh.test.ts`, Playwright khổ 390×844 đồng hồ cố định 21/10/2026; web qua trích đoạn tìm kiếm.
 
+## 23. Chiêm tinh (`src/loi/chiemTinh.ts`, tra 22/10)
+- **Vị trí**: hoàng đạo nhiệt đới, kinh độ biểu kiến địa tâm trên hoàng đạo thật của ngày (như Swiss Ephemeris mặc định), thư viện
+  `astronomy-engine` 2.1.19. Nút Bắc thật = nút quỹ đạo Mặt Trăng tức thời (r × v); nút trung bình theo Meeus (47.7); cung Mọc,
+  Thiên Đỉnh từ giờ sao và độ nghiêng thật; nghịch hành = kinh độ giảm giữa 12 giờ trước và sau. Đo 22/10: 300 ca 1900–2100, toạ
+  độ trong VN, so `pyswisseph` [M11] lệch ≤2′ mọi điểm (thử 1.000 ca: Mặt Trời ≤7″, Mặt Trăng ≤71″, hành tinh ≤21″, cung Mọc,
+  Thiên Đỉnh ≤3″, nút ≤50″); cung, nhà, chiều nghịch hành khớp hết. Đối chiếu ngoài: 2.484 lần sóc rơi vào mùng 1 HND (2 ca sóc cách
+  nửa đêm <1 phút); Mặt Trời qua 0°, 90°, 180°, 270° năm 2026 đúng giờ trang lịch ±5 phút [W51].
+- **Giờ**: đổi ra UTC theo bảng múi giờ lịch sử (mục 7, không theo tuỳ chọn `doiVeGio7`). Giờ sinh ±15 phút, múi giờ chưa chắc:
+  xét lại Mặt Trời, Mặt Trăng, cung Mọc (mục 8). Không rõ giờ: tính 12:00, bỏ cung Mọc và nhà, ghi điểm đổi cung trong ngày (mục 9).
+- **Nơi sinh**: toạ độ tỉnh lỵ trước 07/2025 (`src/loi/toaDo.ts`, 64 nơi) — GeoNames, 52 nơi so Natural Earth lệch ≤0,08° [M12].
+  Tỉnh rộng thì cung Mọc lệch tới ~1° so nơi sinh thật; tỉnh đổi tỉnh lỵ (Lai Châu trước 2004 đặt ở Điện Biên Phủ) chưa xét.
+  Sinh nước ngoài: chưa có toạ độ nên bỏ cung Mọc và nhà.
+- **Hệ nhà**: Placidus — phổ biến nhất, mặc định của nhiều phần mềm [W50]. Phép lặp tự viết; lưới vĩ độ 8–24° × thiên đỉnh mỗi 1°
+  hội tụ hết. Tuỳ chọn `heNha` (Whole Sign) chưa có trong mã.
+- **Bắc Giao Điểm**: nút thật (mặc định của kerykeion, "lựa chọn hiện đại"); astromitra dùng nút trung bình; hai cách khác cung
+  31/1.000 ca → tuỳ chọn `nutBac` [W50]. Nam Giao Điểm luôn ở cung đối diện, không vẽ riêng.
+- **Góc chiếu**: 5 góc chính, orb 8° cho Hợp, Vuông, Tam hợp, Đối, 6° cho Lục hợp (skyscript 8° và 4°; my-zodiac-ai hợp 8°, lục hợp
+  ~6°; astrotheme 7,8–10,5°, lục hợp 6,1°); không nới riêng cho Mặt Trời, Mặt Trăng (astrotheme +0,3°, có trang nới tới 10°). Xét
+  giữa 10 thiên thể, cung Mọc, Thiên Đỉnh; bỏ Bắc Giao Điểm và cặp cung Mọc – Thiên Đỉnh [W50].
+- **Tên**: 12 cung như bảng Hán–Việt `cungHoangDao` [W32]; hành tinh theo tên thiên văn phổ thông; "cung Mọc", "Thiên Đỉnh", góc
+  Hợp, Lục hợp, Vuông, Tam hợp, Đối theo trang Việt (có trang ghi "Vuông góc", "Đối đỉnh"); "Bắc Giao Điểm" chưa thấy trang Việt ghi
+  rõ. Bảng và góc chiếu luôn kèm tên Anh [W50].
+- Lời giải Claude soạn lại theo quan niệm chiêm tinh phương Tây phổ biến (`src/loi/chiemTinhGiai.ts`); 3 hành tinh xa ghi theo thế
+  hệ. Ký hiệu vẽ bằng đường lấy từ phông DejaVu Sans (`scripts/ky_hieu_sao.py`) vì iPhone đổi ♈… thành emoji. Đã kiểm:
+  `tests/ChiemTinh.test.ts`, Playwright khổ 390×844 (có giờ, không rõ giờ, nước ngoài).
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -332,6 +358,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `kiengLich` | `xau` · `tranh` | `xau` (kiêng của hai hoàng lịch trùng 61 %) | chọn ngày: lịch ghi kiêng việc (mục 19) |
 | `taiThan` | `sachViet` · `hoangLich` | `sachViet` (chưa có trong mã) | hướng tài thần (mục 19) |
 | `duongCongThang7` | `mung1` · `mung8` | `mung1` (chưa có trong mã) | chọn ngày: Dương Công Kỵ tháng 7 (mục 19) |
+| `heNha` | `placidus` · `cungNguyen` (Whole Sign) | `placidus` (chưa có trong mã) | chiêm tinh: nhà (mục 23) |
+| `nutBac` | `that` · `trungBinh` | `that` | chiêm tinh: Bắc Giao Điểm (mục 23) |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
 ## Nguồn
@@ -342,6 +370,8 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - M4: `lunar-javascript` 1.7.7 và `lunar-typescript` 1.8.6 (repo đang dùng; chạy thử ra kết quả giống nhau). `EightChar` lấy năm, tháng theo Lập Xuân, tiết đúng thời khắc; `setSect(2)` (mặc định) là phái B, `setSect(1)` là phái A; `getYearNineStar(1|2|3)` là Tết / ngày Lập Xuân / thời khắc Lập Xuân; `getMonthNineStar`, `getZhiXing`, `getDayTianShen` theo tháng tiết; `getYearPositionTaiSui` mặc định Lập Xuân; giờ tiết là +8 (`ONE_THIRD`).
 - M5: `sxtwl` 2.0.7 (mã C++ tải từ PyPI). `getYearGZ()` mặc định theo ngày Lập Xuân; `getMonthGZ()` theo tiết; `getShiGz(…, isZaoWanZiShi=true)` cho giờ 23 lấy can Tý của ngày sau. M6: `bazi_core` 1.1.0 (Dart, mã ở https://pub.dev/documentation/bazi_core/1.1.0/): `ratHourMode` mặc định `nextDay`, có thêm `currentDay`, `currentDayTomorrowStem`; `clockMode` mặc định `civil`.
 - M8: `Intl` của Node 22.22 (ICU 77.1, tzdata 2025b); các file `asia`, `backzone`, `zone1970.tab` ở https://github.com/eggert/tz. M9: lịch HND trong `ansaotuvi`, chạy với +7 và +8 cho 1930–2030. M10: `astronomy-engine` 2.1.19, tính phương trình thời gian từng ngày năm 2026.
+
+- M11: `pyswisseph` 2.10.3.2 (Swiss Ephemeris 2.10.03, bản Moshier; AGPL nên chỉ cài ở thư mục tạm qua `chay.sh`): `scripts/doi-chieu/chiem-tinh-swe.py` → `tests/vang/chiem-tinh-swe.json`. M12: toạ độ GeoNames cities1000 (bản chép `lutangar/cities.json`, CC BY 4.0) và Natural Earth 10m populated places (`nvkelso/natural-earth-vector`, phạm vi công cộng), tải 22/10.
 
 **Web** (đoạn trích kết quả tìm kiếm, chưa mở được trang gốc):
 - W1 https://uptogo.com.tw/?p=1144631: tử vi lấy mùng 1 Giêng làm đầu năm; bát tự và cửu tinh lấy Lập Xuân. W2 https://www.masterseanchan.com/vi/bazi-1945/: năm bát tự bắt đầu từ Lập Xuân; https://www.masterseanchan.com/fengshui-flying-star-charts-by-year/: bàn phi tinh năm chạy từ Lập Xuân tới Lập Xuân năm sau.
@@ -383,6 +413,8 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W47 (la bàn, tra 21/10 qua tóm tắt tìm kiếm) 24 sơn: https://en.wikipedia.org/wiki/Flying_Star_Feng_Shui · https://www.scmp.com/article/640689/mastering-degrees · https://en.wikibooks.org/wiki/Feng_Shui/Flying_Star_Feng_Shui/Period_9 · https://vnexpress.net/sua-nha-bep-hop-phong-thuy-2883438.html (215° Sửu sơn Mùi hướng); cách đo: https://muaban.net/blog/cach-xac-dinh-huong-nha-579475/ · https://voh.com.vn/nha/cach-xem-huong-nha-396077.html · https://mytour.vn/vi/blog/bai-viet/bi-quyet-xac-dinh-huong-nha-va-cua-theo-phong-thuy.html · https://wiki.batdongsan.com.vn/wiki/cach-su-dung-la-ban-chinh-xac-32799; cảm biến: https://developer.mozilla.org/docs/Web/API/DeviceOrientationEvent · https://bugs.webkit.org/show_bug.cgi?id=269706 · https://forum.defold.com/t/how-to-force-safari-browser-to-allow-deviceorientation-permission-solved/75641
 - W48 (thước Lỗ Ban, tra 21/10 qua tóm tắt tìm kiếm): https://quantrimang.com/cuoc-song/thuoc-lo-ban-175844 · https://wiki.batdongsan.com.vn/wiki/thuoc-lo-ban-la-gi-106076 · https://mytour.vn/vi/blog/bai-viet/huong-dan-cach-su-dung-thuoc-lo-ban-theo-phong-thuy.html · https://nukeviet.vn/en/store/modules/thuocloban/ · https://baohatinh.vn/cong-cu/lo-ban · https://uptogo.com.tw/?p=1257981 · https://uptogo.com.tw/?p=521421 · https://uptogo.com.tw/?p=521428 · https://catalog.digitalarchives.tw/item/00/32/a2/3b.html · cửa: https://voh.com.vn/nha/nhung-dieu-can-biet-de-tinh-kich-thuoc-cua-chinh-chuan-phong-thuy-400448.html · https://wiki.batdongsan.com.vn/wiki/kich-thuoc-cua-phong-ngu-768920 · bàn thờ: https://thuviennhadat.vn/cam-nang-nha-dat/goi-y-kich-thuoc-ban-tho-chuan-phong-thuy-631946.html · https://scrapbox.io/banthodunggiaan/
 - W49 (phi tinh, tra 21/10 qua tóm tắt tìm kiếm): https://global.hk01.com/开罐/60297690/ · https://sina.cn/news/detail/5242703902410218.html · https://fengshuitoday.com/feng-shui-for-the-bing-fire-horse-year-2026/ · https://www.masterseanchan.com/fengshui-2026-flying-star-chart/ · https://en.wikibooks.org/wiki/Feng_Shui/Flying_Star_Feng_Shui/Period_9 · https://www.masterseanchan.com/fengshui-2027-san-sha/ · https://www.masterseanchan.com/fengshui-2028-san-sha/ · https://www.stheadline.com/realtime-property/3545457/ · https://www.chinatimes.com/newspapers/20230102000164-260210 · https://www.taiwannews.com.tw/zh/news/4378568 · https://www.rong0922.url.tw/File/819.doc · https://thuviennhadat.vn/cam-nang-nha-dat/cac-huong-nha-vuong-khi-trong-van-9-642310.html · vênh: https://cafeland.vn/xu-huong/phong-thuy/17/
+- W50 (chiêm tinh, tra 22/10 qua tóm tắt tìm kiếm) hệ nhà: https://theastrologypodcast.com/transcripts/ep-244-transcript-how-did-placidus-become-the-most-popular-house-system/ · https://help.optuma.com/kb/faq.php?id=1218 · https://kerykeion.net/content/learn-astrology/foundation-house-systems · orb: https://www.skyscript.co.uk/glossary/orbs · https://www.astrotheme.com/astrology_aspects.php · https://my-zodiac-ai.com/vi/glossary/sextile · https://my-zodiac-ai.com/vi/glossary/conjunction · nút: https://kerykeion.net/content/learn-astrology/foundation-mean-true-node · https://www.astromitra.com/western-astrology/north-node-calculator.php · https://glama.ai/mcp/servers/cwkgwfkaw1 · tên: https://glints.com/vn/blog/cung-moc-la-gi/ · https://shopee.vn/blog/cung-moc-la-gi/ · https://viettelstore.vn/tin-tuc/cung-moc-la-gi-kham-pha-y-nghia-va-anh-huong-den-tinh-cach · https://jobsgo.vn/blog/cung-moc/ · https://www.careerlink.vn/cam-nang-viec-lam/goc-ky-nang/ban-do-sao-la-gi-cach-doc-ban-do-sao-cung-hoang-dao · https://fptshop.com.vn/tin-tuc/danh-gia/cach-xem-ban-do-sao-173466 · https://tianqi.masterseanchan.com/vi/learn/western · https://www.vietnamworks.com/hrinsider/ban-do-sao-la-gi-giai-ma-cach-doc-ban-do-sao-hoang-dao.html
+- W51 (phân điểm, chí điểm 2026, tra 22/10): https://icalendars.net/tools/equinoxes-solstices · https://starwalk.space/news/what-is-an-equinox · https://www.universaltimedate.com/articles/equinoxes-and-solstices-2026 · https://www.farmersalmanac.com/equinox-solstice — 20/03 14:46, 21/06 08:24, 23/09 00:05, 21/12 20:50 UTC (khớp máy); hai trang sau ghi tháng 6, tháng 9 lệch đúng vài giờ, nghi nhầm múi giờ, không theo.
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.

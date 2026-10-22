@@ -7,9 +7,10 @@ import type { VeKhoi } from '../chung.ts';
 import { veKhoiBatTu } from './batTu.ts';
 import { veKhoiNamNay } from './namNay.ts';
 import { veKhoiHuong, veKhoiTuoiHop } from './phongThuy.ts';
-import { veKhoiHoangDao, veKhoiNhipSinhHoc, veKhoiThanSo } from './soHoc.ts';
+import { veKhoiChiemTinh } from './chiemTinh.ts';
+import { veKhoiNhipSinhHoc, veKhoiThanSo } from './soHoc.ts';
 import { veKhoiTuVi } from './tuVi.ts';
 
 export const CAC_KHOI: readonly VeKhoi[] = [
-  veKhoiTuVi, veKhoiNamNay, veKhoiBatTu, veKhoiHuong, veKhoiTuoiHop, veKhoiThanSo, veKhoiHoangDao, veKhoiNhipSinhHoc,
+  veKhoiTuVi, veKhoiNamNay, veKhoiBatTu, veKhoiHuong, veKhoiTuoiHop, veKhoiThanSo, veKhoiChiemTinh, veKhoiNhipSinhHoc,
 ];

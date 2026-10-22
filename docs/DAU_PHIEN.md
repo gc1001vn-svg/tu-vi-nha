@@ -21,6 +21,7 @@ thư viện + số đo `docs/NGUON_MO.md` — đọc khi làm tới đúng môn,
 | `bash scripts/doi-chieu/chay.sh` | đo lại thư viện với nhau, ~7 phút (cài Python/npm vào thư mục tạm, không đụng repo) |
 | `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/sinh_am_doi_chieu.mjs` | khi nâng `lunar-typescript` — sinh lại âm Hán–Việt độc lập cho thước đối chiếu |
 | `python3 scripts/ve_icon.py` | vẽ lại icon (Thái cực + Bát quái, anh chọn 14/10) |
+| `python3 scripts/ky_hieu_sao.py` | vẽ lại ký hiệu chiêm tinh từ phông DejaVu (cần `pip install fonttools`) |
 
 `npm run do` chạy ra file rồi `grep`, đừng `| tail` (không in gì tới lúc xong):
 `npm run do > <scratchpad>/do.txt 2>&1`.

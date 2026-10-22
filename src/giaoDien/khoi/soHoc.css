@@ -1,7 +1,6 @@
-/* Khoi than so hoc, cung hoang dao, nhip sinh hoc (`soHoc.ts`). Moi chu >= 15px; mau lay bien o `src/style.css`. */
+/* Khoi than so hoc, nhip sinh hoc (`soHoc.ts`). Moi chu >= 15px; mau lay bien o `src/style.css`. */
 .so-hoc .sh-lon { display: flex; align-items: baseline; gap: 10px; margin: 2px 0 4px; }
 .so-hoc .sh-so { font-size: 2.6rem; font-weight: 700; line-height: 1.1; color: var(--vang); }
-.so-hoc .sh-ten { font-size: 1.6rem; font-weight: 700; color: var(--vang); }
 .so-hoc .sh-loi, .so-hoc .sh-chu-thich { font-size: 0.9rem; color: var(--mo); }
 .so-hoc .dong .sh-loi { flex-basis: 100%; }
 

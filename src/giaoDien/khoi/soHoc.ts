@@ -1,10 +1,10 @@
 /**
- * Ba khoi mot nguoi tu ngay DUONG sinh (`src/loi/soHoc.ts`): than so hoc, cung hoang dao, nhip sinh hoc hom nay.
+ * Hai khoi mot nguoi tu ngay DUONG sinh (`src/loi/soHoc.ts`): than so hoc, nhip sinh hoc hom nay (cung hoang dao: khoi chiem tinh).
  * Dung tuy chon mac dinh (`docs/QUY_UOC.md` bang tuy chon) va ghi ro cach tinh ngay tren khoi.
  */
 import { dinhDangNgay, type NgayDuong } from '../../loi/amLich.ts';
 import type { HoSo } from '../../loi/hoSo.ts';
-import { cungHoangDao, nhipSinhHoc, tenSo, thanSo } from '../../loi/soHoc.ts';
+import { nhipSinhHoc, tenSo, thanSo } from '../../loi/soHoc.ts';
 import { el, khoi, type VeKhoi } from '../chung.ts';
 import './soHoc.css';
 
@@ -34,15 +34,6 @@ export const veKhoiThanSo: VeKhoi = (hs, _tr, ngayXem) => {
     el('p', { class: 'sh-chu-thich' }, 'Biểu đồ ngày sinh: mỗi chữ số trong ngày sinh vào đúng ô của nó (bỏ số 0). '
       + 'Hàng trên 3-6-9 thiên về trí óc, giữa 2-5-8 tình cảm, dưới 1-4-7 thể chất.'),
     el('p', { class: 'sh-chu-thich' }, `Số chủ đạo: cộng mọi chữ số ngày sinh dương lịch (cách phổ biến ở Việt Nam). Năm cá nhân đổi ngày 01/01. ${LOI}`)));
-};
-
-export const veKhoiHoangDao: VeKhoi = (hs) => {
-  const c = cungHoangDao(ngaySinh(hs));
-  return khoi('Cung hoàng đạo', false, el('div', { class: 'so-hoc' },
-    el('div', { class: 'sh-lon' }, el('span', { class: 'sh-ten' }, c.ten)),
-    el('p', {}, c.nghia),
-    c.satRanh === null ? null : el('p', { class: 'canh-bao' }, `Sinh sát ngày giao cung: tùy năm, tùy bảng có thể là ${c.satRanh}.`),
-    el('p', { class: 'sh-chu-thich' }, `Theo ngày dương lịch (bảng ngày của thư viện lunar-typescript). ${LOI}`)));
 };
 
 export const veKhoiNhipSinhHoc: VeKhoi = (hs, _tr, ngayXem) => {
