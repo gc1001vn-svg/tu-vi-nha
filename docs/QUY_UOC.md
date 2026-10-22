@@ -324,8 +324,9 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   Sinh nước ngoài: chưa có toạ độ nên bỏ cung Mọc và nhà.
 - **Hệ nhà**: Placidus — phổ biến nhất, mặc định của nhiều phần mềm [W50]. Phép lặp tự viết; lưới vĩ độ 8–24° × thiên đỉnh mỗi 1°
   hội tụ hết. Tuỳ chọn `heNha` (Whole Sign) chưa có trong mã.
-- **Bắc Giao Điểm**: nút thật (mặc định của kerykeion, "lựa chọn hiện đại"); astromitra dùng nút trung bình; hai cách khác cung
-  31/1.000 ca → tuỳ chọn `nutBac` [W50]. Nam Giao Điểm luôn ở cung đối diện, không vẽ riêng.
+- **Bắc Giao Điểm**: nút trung bình (anh chốt 22/10: khớp astro-seek, trang anh dùng để so — ghi "Node (M)"; astromitra cũng
+  dùng); kerykeion mặc định nút thật. Hai cách khác cung 31/1.000 ca → tuỳ chọn `nutBac` [W50]. So ảnh astro-seek anh chụp 22/10
+  (cùng giờ, toạ độ): 10 thiên thể, nút, cung Mọc, Thiên Đỉnh khớp từng phút, đỉnh nhà 3 và 9 lệch 1′. Nam Giao Điểm luôn ở cung đối diện, không vẽ riêng.
 - **Góc chiếu**: 5 góc chính, orb 8° cho Hợp, Vuông, Tam hợp, Đối, 6° cho Lục hợp (skyscript 8° và 4°; my-zodiac-ai hợp 8°, lục hợp
   ~6°; astrotheme 7,8–10,5°, lục hợp 6,1°); không nới riêng cho Mặt Trời, Mặt Trăng (astrotheme +0,3°, có trang nới tới 10°). Xét
   giữa 10 thiên thể, cung Mọc, Thiên Đỉnh; bỏ Bắc Giao Điểm và cặp cung Mọc – Thiên Đỉnh [W50].
@@ -359,7 +360,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `taiThan` | `sachViet` · `hoangLich` | `sachViet` (chưa có trong mã) | hướng tài thần (mục 19) |
 | `duongCongThang7` | `mung1` · `mung8` | `mung1` (chưa có trong mã) | chọn ngày: Dương Công Kỵ tháng 7 (mục 19) |
 | `heNha` | `placidus` · `cungNguyen` (Whole Sign) | `placidus` (chưa có trong mã) | chiêm tinh: nhà (mục 23) |
-| `nutBac` | `that` · `trungBinh` | `that` | chiêm tinh: Bắc Giao Điểm (mục 23) |
+| `nutBac` | `trungBinh` · `that` | `trungBinh` (anh chốt 22/10, như astro-seek) | chiêm tinh: Bắc Giao Điểm (mục 23) |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
 ## Nguồn
@@ -424,3 +425,4 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 5. (19/10) Trực, ngày hoàng/hắc đạo, nên/kiêng, sao theo tháng: theo **tháng âm** như lịch Việt trên mạng (baohatinh, chogia, baolamdong, xemlicham khớp 4/4 ngày thử) — không cần ảnh lịch nữa.
 6. (20/10) Tốt/xấu 9 sao Cửu Diệu: **giữ như dân gian** (3 tốt: Thái Dương, Thái Âm, Mộc Đức · 3 xấu: La Hầu, Kế Đô, Thái Bạch · 3 trung tính: Thổ Tú, Thủy Diệu, Vân Hớn), không theo kinh gốc (Thổ Tú, Vân Hớn xấu; Thủy Diệu tốt — mục 14), không làm tuỳ chọn.
 7. (21/10) Không có trang lịch "anh tin": xemlicham chỉ là trang anh tìm trên mạng. Chỗ các nguồn vênh: **theo bên được nhiều nguồn uy tín công nhận nhất**; bên chỉ có một trang thì không theo, không làm tuỳ chọn.
+8. (22/10) Chiêm tinh: Bắc Giao Điểm tính kiểu **trung bình** như astro-seek (mục 23).

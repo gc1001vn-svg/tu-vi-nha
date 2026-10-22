@@ -27,7 +27,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 3. Cần anh
 
-- Thử khối "Chiêm tinh" trên iPhone (thẻ Tra cứu hoặc Của tôi): so lá số của anh với một trang chiêm tinh anh tin.
+- Chiêm tinh: anh thử iPhone 22/10 (bánh xe, ký hiệu hiện đúng; so astro-seek khớp). Còn: điền giờ sinh để so cung Mọc, nhà.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich`, `claude/blissful-sagan-ur507y` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.

@@ -44,7 +44,7 @@ export const GOC = [
   { ten: 'Đối', anh: 'Opposition', do: 180, orb: 8 },
 ] as const;
 
-/** Bac Giao Diem: nut that (quy dao Mat Trang tuc thoi, mac dinh) hay nut trung binh — tuy chon `nutBac`. */
+/** Bac Giao Diem: nut trung binh (mac dinh nhu astro-seek, anh chot 22/10) hay nut that (quy dao Mat Trang tuc thoi) — tuy chon `nutBac`. */
 export type Nut = 'that' | 'trungBinh';
 
 export interface ViTri { readonly kinh: number; readonly nghich: boolean }
@@ -114,7 +114,7 @@ export function placidus(ramc: number, nghieng: number, viDo: number): { moc: nu
 }
 
 /** La so tai mot thoi diem. `toaDo` = [vi do Bac, kinh do Dong]; null thi bo cung Moc va nha. */
-export function laSo(phutUtc: number, toaDo: readonly [number, number] | null, nut: Nut = 'that'): LaSo {
+export function laSo(phutUtc: number, toaDo: readonly [number, number] | null, nut: Nut = 'trungBinh'): LaSo {
   const t = thoiGian(phutUtc), truoc = t.AddDays(-0.5), sau = t.AddDays(0.5);
   const diem = DIEM.slice(0, 11).map((_, i) => ({
     kinh: kinhCua(i, t, nut),
@@ -162,7 +162,7 @@ export interface LaSoNguoi {
 }
 
 /** La so mot nguoi tu ho so (da kiem). `lechNuocNgoai`: phut lech UTC luc sinh khi sinh o nuoc ngoai. */
-export function laSoNguoi(hs: HoSo, lechNuocNgoai?: number, nut: Nut = 'that'): LaSoNguoi {
+export function laSoNguoi(hs: HoSo, lechNuocNgoai?: number, nut: Nut = 'trungBinh'): LaSoNguoi {
   const [nam = 0, thang = 0, ngay = 0] = hs.ngaySinh.split('-').map(Number);
   const dau = soNgay({ nam, thang, ngay }) * 1440;
   const nuocNgoai = hs.noiSinh === NUOC_NGOAI;

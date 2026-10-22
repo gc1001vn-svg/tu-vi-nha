@@ -25,15 +25,15 @@ const hs = (o: Partial<HoSo>): HoSo =>
 describe('chiem tinh: 300 ca Swiss Ephemeris', () => {
   const ca = vang.ca.map((c) => {
     const phut = (c.jd + 0.5) * 1440, td = [c.viDo, c.kinhDo] as const;
-    return { c, ls: laSo(phut, td), tb: laSo(phut, td, 'trungBinh') };
+    return { c, ls: laSo(phut, td), th: laSo(phut, td, 'that') };
   });
 
   test('moi diem lech <= 2′: 10 thien the, nut that va trung binh, cung Moc, Thien Dinh, 12 dinh nha', () => {
     const lon: string[] = [];
-    for (const { c, ls, tb } of ca) {
+    for (const { c, ls, th } of ca) {
       const cap: [string, number | null | undefined, number][] = [
         ...c.kinh.map((k, i): [string, number | undefined, number] => [`diem ${String(i)}`, ls.diem[i]?.kinh, k]),
-        ['nut that', ls.diem[10]?.kinh, c.nutThat], ['nut trung binh', tb.diem[10]?.kinh, c.nutTB],
+        ['nut trung binh (mac dinh)', ls.diem[10]?.kinh, c.nutTB], ['nut that', th.diem[10]?.kinh, c.nutThat],
         ['cung Moc', ls.moc, c.moc], ['Thien Dinh', ls.dinh, c.dinh],
         ...c.nha.map((k, i): [string, number | undefined, number] => [`nha ${String(i + 1)}`, ls.nha?.[i], k]),
       ];

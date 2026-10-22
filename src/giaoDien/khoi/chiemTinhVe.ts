@@ -139,7 +139,7 @@ export function veChiemTinh(hs: HoSo, lechNuoc: number | undefined): Node[] {
     // Goc chieu thuong 20–30 dong: gap lai cho khoi khoi dai, bam moi mo.
     el('details', { class: 'ct-them' }, el('summary', {}, `Góc chiếu (${String(gc.length)}) — lệch càng nhỏ càng mạnh`),
       gc.length === 0 ? el('p', {}, 'Không có góc chiếu chính nào.') : goc),
-    el('p', { class: 'ghi-chu' }, `Chiêm tinh nhiệt đới, hệ nhà Placidus, Bắc Giao Điểm thật, sai số góc 8° (lục hợp 6°); ${noi}. `
+    el('p', { class: 'ghi-chu' }, `Chiêm tinh nhiệt đới, hệ nhà Placidus, Bắc Giao Điểm trung bình, sai số góc 8° (lục hợp 6°); ${noi}. `
       + `Vị trí tính bằng thư viện astronomy-engine, đã so 300 lá với Swiss Ephemeris (lệch dưới 2′). ${LOI}`),
     el('p', { class: 'ghi-chu' }, `Tên Anh 12 cung: ${CUNG.map((c, i) => `${c} – ${CUNG_ANH[i] ?? ''}`).join(', ')}.`),
   ];
