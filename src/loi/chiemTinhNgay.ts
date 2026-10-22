@@ -58,6 +58,15 @@ export function khoangNghich(i: number, phutUtc: number): readonly [number, numb
   return [bien(-1), bien(1)];
 }
 
+/** Khoang nghich hanh bat dau trong `soNgay` ngay toi (xet tung ngay) cua hanh tinh dang thuan; khong co, hay dang nghich, thi null. */
+export function sapNghich(i: number, phutUtc: number, soNgay: number): readonly [number, number] | null {
+  for (let d = 1; d <= soNgay; d++) {
+    const k = khoangNghich(i, phutUtc + d * 1440);
+    if (k !== null) return k[0] > phutUtc ? k : null;
+  }
+  return null;
+}
+
 /** Tam tuan trang, moi tuan 45° goc Mat Trang – Mat Troi, tam o 0°, 45°, 90°… (QUY_UOC muc 23). */
 export const TUAN_TRANG = [
   'Trăng non', 'Trăng lưỡi liềm đầu tháng', 'Bán nguyệt đầu tháng (thượng huyền)', 'Trăng khuyết đầu tháng', 'Trăng tròn',

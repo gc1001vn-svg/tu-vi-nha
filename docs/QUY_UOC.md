@@ -337,7 +337,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   tới nửa phút — 100 ca so Swiss Ephemeris lệch ≤1,8 phút. Nghịch hành: cùng cách xét của lá số (kinh độ ±12 giờ), lùi/tới từng ngày
   rồi chia đôi tới 5 phút — 40 khoảng so Swiss Ephemeris lệch ≤27 phút (hành tinh xa đứng lâu nên giờ đứng khó định); Sao Thủy 2026
   khớp Chani, Cafe Astrology ±5 phút. Ngày ghi theo giờ Việt Nam: đợt 1 năm 2026 hết ngày 21/03 (trang ghi 20/03 là theo giờ Mỹ,
-  UTC) [W52]. Tuần trăng: 8 tuần, mỗi tuần 45° góc Mặt Trăng – Mặt Trời, tâm ở 0°, 45°…; tên trăng non, lưỡi liềm, bán nguyệt
+  UTC) [W52]. Sắp nghịch hành: hành tinh đang thuận mà bắt đầu nghịch trong 7 ngày tới (xét từng ngày); chỉ ghi ngày vì giờ
+  đứng lệch tới 27 phút (anh yêu cầu 22/10). Tuần trăng: 8 tuần, mỗi tuần 45° góc Mặt Trăng – Mặt Trời, tâm ở 0°, 45°…; tên trăng non, lưỡi liềm, bán nguyệt
   (thượng huyền, hạ huyền), khuyết, tròn theo trang Việt [W52]; 2.484 lần sóc 1900–2100 đều ra Trăng non. Góc chiếu với lá số:
   10 thiên thể lúc xem × 10 thiên thể, cung Mọc, Thiên Đỉnh gốc, orb 1°; không rõ giờ sinh thì bỏ Mặt Trăng gốc (lệch tới ~6°).
 - Lời giải Claude soạn lại theo quan niệm chiêm tinh phương Tây phổ biến (`src/loi/chiemTinhGiai.ts`); 3 hành tinh xa ghi theo thế

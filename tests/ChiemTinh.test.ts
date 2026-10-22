@@ -14,7 +14,7 @@ import {
   CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NGHICH_HANH, NHA, TRANG_QUA_CUNG, TU_KHOA, Y_GOC, Y_TUAN_TRANG,
 } from '../src/loi/chiemTinhGiai.ts';
 import {
-  TUAN_TRANG, gioVN, gocChieuQua, khoangNghich, ngayVN, phutUtcTuMs, trangDoiCung, tuanTrang,
+  TUAN_TRANG, gioVN, gocChieuQua, khoangNghich, ngayVN, phutUtcTuMs, sapNghich, trangDoiCung, tuanTrang,
 } from '../src/loi/chiemTinhNgay.ts';
 import { dan } from '../src/giaoDien/khoi/chiemTinhVe.ts';
 import type { HoSo } from '../src/loi/hoSo.ts';
@@ -231,6 +231,22 @@ describe('chiem tinh hom nay (phan 2)', () => {
     // Vi tri luc dung thuan: 16°18′ Cu Giai (Chani), 5°02′ Thien Yet (Cafe Astrology, Astrosynthesis).
     const thuan = [khoangNghich(2, utc(7, 1, 0, 0))?.[1] ?? 0, khoangNghich(2, utc(11, 1, 0, 0))?.[1] ?? 0];
     expect(thuan.map((t, i) => sai(kinhDo(2, t), [90 + 16.3, 210 + 5 + 2 / 60][i] ?? 0) <= HAI_PHUT)).toEqual([true, true]);
+  });
+
+  test('sap nghich hanh 7 ngay: xem truoc 0,5–6,5 ngay ra dung khoang Swiss Ephemeris (<= 30 phut); truoc 7,5 ngay, dang nghich thi null', () => {
+    const lon = vang.nghich.flatMap(([b = 0, jd = 0, dau = 0, cuoi = 0], j) => {
+      const k = sapNghich(b, p(dau) - ((j % 7) + 0.5) * 1440, 7);
+      if (k === null) return [`hanh tinh ${String(b)} jd ${String(jd)}: khong bao sap nghich`];
+      const d = Math.max(Math.abs(k[0] - p(dau)), Math.abs(k[1] - p(cuoi)));
+      return d > 30 ? [`hanh tinh ${String(b)} jd ${String(jd)}: lech ${d.toFixed(0)} phut`] : [];
+    });
+    expect(lon).toEqual([]);
+    expect(vang.nghich.filter(([b = 0, jd = 0, dau = 0]) => sapNghich(b, p(dau) - 7.5 * 1440, 7) !== null || sapNghich(b, p(jd), 7) !== null))
+      .toEqual([]);
+    // Luc anh thu 22/10/2026 16:41 (+7): chi Sao Thuy sap nghich (Chani: 07:12 UTC 24/10 toi 13/11); Sao Kim dang nghich nen khong tinh.
+    const ds = [2, 3, 4, 5, 6, 7, 8, 9].map((i) => sapNghich(i, utc(10, 22, 9, 41), 7));
+    expect(ds.map((k) => k !== null)).toEqual([true, false, false, false, false, false, false, false]);
+    expect([Math.abs((ds[0]?.[0] ?? 0) - utc(10, 24, 7, 12)) <= 10, ngayVN(ds[0]?.[1] ?? 0)]).toEqual([true, '13/11/2026']);
   });
 
   test('tuan trang: tam pha moi pha 45°, ranh o 22,5°; phan tram sang', () => {

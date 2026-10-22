@@ -6,7 +6,7 @@ import { CUNG, CUNG_ANH, DIEM, DIEM_ANH, GOC, chuan, kinhDo, laSo, cungCua, dinh
 import {
   BAC_GIAO_DIEM, CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NGHICH_HANH, NHA, THIEN_DINH, TRANG_QUA_CUNG, TU_KHOA, Y_GOC, Y_TUAN_TRANG,
 } from '../../loi/chiemTinhGiai.ts';
-import { TUAN_TRANG, gioVN, gocChieuQua, khoangNghich, ngayVN, phutUtcTuMs, trangDoiCung, tuanTrang } from '../../loi/chiemTinhNgay.ts';
+import { TUAN_TRANG, gioVN, gocChieuQua, khoangNghich, ngayVN, phutUtcTuMs, sapNghich, trangDoiCung, tuanTrang } from '../../loi/chiemTinhNgay.ts';
 import type { HoSo } from '../../loi/hoSo.ts';
 import { el } from '../chung.ts';
 import { KY_HIEU } from './kyHieu.ts';
@@ -155,15 +155,18 @@ export function veChiemTinhHomNay(toi: HoSo | undefined, lechNuoc: number | unde
   const doan = (tieuDe: string, loi: string): HTMLElement => el('p', {}, el('b', {}, tieuDe), ` — ${loi}`);
   const nghich = [2, 3, 4, 5, 6, 7, 8, 9].flatMap((i) => {
     const k = khoangNghich(i, p);
-    return k === null ? [] : [el('li', {}, el('b', {}, `${DIEM[i] ?? ''} ở ${tenCung(kinhDo(i, p))}`),
+    if (k !== null) return [el('li', {}, el('b', {}, `${DIEM[i] ?? ''} ở ${tenCung(kinhDo(i, p))}`),
       ` nghịch hành từ ${ngayVN(k[0])} đến ${ngayVN(k[1])}: ${NGHICH_HANH[i] ?? ''}`)];
+    const s = sapNghich(i, p, 7);
+    return s === null ? [] : [el('li', {}, el('b', {}, `${DIEM[i] ?? ''} ở ${tenCung(kinhDo(i, s[0]))} sắp nghịch hành`),
+      ` từ ${ngayVN(s[0])} đến ${ngayVN(s[1])}: ${NGHICH_HANH[i] ?? ''}`)];
   });
   const ra: Node[] = [
     el('div', { class: 'ct-ba' }, el('span', {}, `Mặt Trăng ${tenCung(trang)}`), el('span', {}, TUAN_TRANG[tt.pha] ?? '')),
     doan(`Mặt Trăng ở ${tenCung(trang)}`, `${TRANG_QUA_CUNG[cungCua(trang)] ?? ''} Sang ${tenCung(kinhDo(1, doi))} lúc ${gioVN(doi)}.`),
     doan(`${TUAN_TRANG[tt.pha] ?? ''}, sáng ${String(tt.sang)} %`, Y_TUAN_TRANG[tt.pha] ?? ''),
     el('h3', {}, 'Hành tinh nghịch hành'),
-    nghich.length === 0 ? el('p', {}, 'Hôm nay không hành tinh nào nghịch hành.') : el('ul', {}, ...nghich),
+    nghich.length === 0 ? el('p', {}, 'Hôm nay và 7 ngày tới không hành tinh nào nghịch hành.') : el('ul', {}, ...nghich),
   ];
   if (toi === undefined) {
     ra.push(el('p', { class: 'ghi-chu' }, 'Nhập hồ sơ ở thẻ "Của tôi" để xem Mặt Trăng đi qua nhà nào và góc chiếu hôm nay với lá số của mình.'));
