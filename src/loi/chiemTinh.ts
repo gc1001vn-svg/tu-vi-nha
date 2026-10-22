@@ -60,7 +60,7 @@ export interface LaSo {
 
 const R = Math.PI / 180;
 export const chuan = (x: number): number => ((x % 360) + 360) % 360;
-const lech = (a: number, b: number): number => {
+export const lech = (a: number, b: number): number => {
   const d = chuan(a - b);
   return d > 180 ? d - 360 : d;
 };
@@ -87,6 +87,9 @@ function kinhCua(i: number, t: AstroTime, nut: Nut): number {
   const r = RotateVector(xoay, new Vector(s.x, s.y, s.z, t)), v = RotateVector(xoay, new Vector(s.vx, s.vy, s.vz, t));
   return chuan(Math.atan2(r.y * v.z - r.z * v.y, r.x * v.z - r.z * v.x) / R);
 }
+
+/** Kinh do hoang dao cua diem `i` (0..10 theo `DIEM`) luc `phutUtc`. */
+export const kinhDo = (i: number, phutUtc: number, nut: Nut = 'trungBinh'): number => kinhCua(i, thoiGian(phutUtc), nut);
 
 /**
  * Cung Moc, Thien Dinh, 12 dinh nha Placidus tu RAMC, do nghieng hoang dao, vi do (deu tinh bang do). Dinh 11, 12 chia

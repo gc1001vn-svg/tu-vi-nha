@@ -193,3 +193,43 @@ export const Y_GOC: readonly string[] = [
 
 export const BAC_GIAO_DIEM = 'Điểm Mặt Trăng cắt đường Mặt Trời đi lên phía bắc: hướng nên lớn lên trong đời. Nam Giao Điểm ở cung đối diện là thói quen cũ, vùng quen thuộc.';
 export const THIEN_DINH = 'Đỉnh nhà 10, điểm cao nhất của bầu trời lúc sinh: cho biết kiểu thành tựu và hình ảnh ngoài xã hội hợp với mình.';
+
+/** Phan 2 — Mat Trang hom nay qua 12 cung: khong khi chung cua ngay. */
+export const TRANG_QUA_CUNG: readonly string[] = [
+  'Ngày hợp bắt đầu việc mới, làm nhanh gọn; dễ nóng vội, nên bớt tranh cãi.',
+  'Ngày hợp lo chuyện tiền bạc, ăn uống, nghỉ ngơi; làm chậm mà chắc, ngại thay đổi.',
+  'Ngày nhiều tin nhắn, gặp gỡ, giấy tờ; hợp học hỏi, trao đổi; dễ phân tán.',
+  'Ngày hướng về gia đình, nhà cửa; cảm xúc nhạy hơn thường, nên chăm lo người thân.',
+  'Ngày muốn được để ý, hợp vui chơi, sáng tạo, thể hiện mình; tránh sĩ diện.',
+  'Ngày hợp dọn dẹp, sắp xếp, làm việc tỉ mỉ, chăm sức khỏe; đừng quá khắt khe.',
+  'Ngày hợp gặp gỡ, thương lượng, làm đẹp; khó quyết, nên hỏi ý người tin cậy.',
+  'Ngày cảm xúc sâu, hợp tập trung, tìm hiểu tận gốc; dễ nghi ngờ, nên giữ kín chuyện riêng.',
+  'Ngày lạc quan, hợp đi xa, học hỏi, mở rộng; dễ hứa quá sức.',
+  'Ngày hợp làm việc nghiêm túc, lên kế hoạch dài; cảm xúc kín, dễ mệt vì trách nhiệm.',
+  'Ngày hợp gặp bạn bè, làm việc nhóm, thử cái mới; cần khoảng riêng.',
+  'Ngày mơ màng, giàu trực giác, hợp nghệ thuật, nghỉ ngơi, giúp người; dễ lơ đễnh.',
+];
+
+/** Phan 2 — y nghia tam tuan trang, theo thu tu `TUAN_TRANG`. */
+export const Y_TUAN_TRANG: readonly string[] = [
+  'Lúc khởi đầu: hợp đặt ý định, gieo việc mới.',
+  'Sức đang lên: hợp xúc tiến việc vừa bắt đầu.',
+  'Lúc gặp trở ngại đầu tiên: cần quyết đoán, sửa hướng.',
+  'Gần tròn: hợp hoàn thiện, chỉnh sửa trước khi xong.',
+  'Đỉnh của chu kỳ: thấy rõ kết quả, cảm xúc dâng cao.',
+  'Sau rằm: hợp chia sẻ, tổng kết điều đã học.',
+  'Lúc xét lại: bỏ bớt việc không cần.',
+  'Cuối chu kỳ: nghỉ ngơi, dọn dẹp, chuẩn bị bắt đầu lại.',
+];
+
+/** Phan 2 — y nghia khi hanh tinh nghich hanh (so thu tu 2..9 theo `DIEM`). */
+export const NGHICH_HANH: Readonly<Record<number, string>> = {
+  2: 'Dễ trục trặc giấy tờ, máy móc, lời nói, đi lại; hợp xem lại, sửa sai, liên lạc người cũ; cân nhắc trước khi ký kết.',
+  3: 'Chuyện tình cảm, tiền bạc, cái đẹp được xét lại; người cũ có thể quay về; chưa nên mua sắm lớn.',
+  4: 'Sức lực, ý chí hay chững lại, dễ bực bội; hợp làm nốt việc dở dang hơn là khởi sự lớn.',
+  5: 'Lúc nhìn lại niềm tin và kế hoạch mở rộng; may mắn đến từ bên trong hơn bên ngoài.',
+  6: 'Xét lại trách nhiệm, kỷ luật, cam kết lâu dài; việc cũ chưa xong sẽ đòi làm cho xong.',
+  7: 'Đổi mới hướng vào bên trong; hợp nghĩ lại cách sống cho tự do hơn.',
+  8: 'Ảo tưởng dần lộ rõ; hợp nhìn thẳng sự thật, nghỉ ngơi tinh thần.',
+  9: 'Lúc biến đổi bên trong: nhìn lại nỗi sợ, quyền lực, thói quen cần buông.',
+};

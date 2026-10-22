@@ -6,6 +6,7 @@ import { dinhDangAm, dinhDangNgay, type NgayDuong } from '../loi/amLich.ts';
 import { tuoiMu, type HoSo } from '../loi/hoSo.ts';
 import { chiTietNgay, gioTotTheoTuoi, theoTuoi, xemNgay, type ChiTietNgay, type GioHoangDao, type NgayXem } from '../loi/homNay.ts';
 import { veChonNgay } from './chonNgay.ts';
+import { veKhoiChiemTinhHomNay } from './khoi/chiemTinh.ts';
 import { el, homNay7, khoi, THU, tinh } from './chung.ts';
 
 const NHAN = { xung: 'Xung', hop: 'Hợp', binh: 'Bình thường' } as const;
@@ -80,5 +81,5 @@ export function veHomNay(toi: HoSo | undefined, moToi: () => void): HTMLElement 
   } else {
     voiToi.append(dongTheoTuoi(toi, n, d));
   }
-  return el('div', {}, chung, voiToi, ...veChiTiet(c), veChonNgay(toi, d));
+  return el('div', {}, chung, voiToi, ...veChiTiet(c), veKhoiChiemTinhHomNay(toi), veChonNgay(toi, d));
 }

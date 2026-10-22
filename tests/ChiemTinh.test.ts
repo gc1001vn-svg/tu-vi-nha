@@ -8,9 +8,14 @@ import { MakeTime, SearchMoonPhase } from 'astronomy-engine';
 import vang from './vang/chiem-tinh-swe.json';
 import { duongSangAm, soNgay, tuSoNgay } from '../src/loi/amLich.ts';
 import {
-  DIEM, GOC, chuan, cungCua, dinhDang, gocChieu, laSo, laSoNguoi, nhaCua, placidus, type LaSo,
+  DIEM, GOC, chuan, cungCua, dinhDang, gocChieu, kinhDo, laSo, laSoNguoi, nhaCua, placidus, type LaSo,
 } from '../src/loi/chiemTinh.ts';
-import { CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NHA, TU_KHOA, Y_GOC } from '../src/loi/chiemTinhGiai.ts';
+import {
+  CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NGHICH_HANH, NHA, TRANG_QUA_CUNG, TU_KHOA, Y_GOC, Y_TUAN_TRANG,
+} from '../src/loi/chiemTinhGiai.ts';
+import {
+  TUAN_TRANG, gioVN, gocChieuQua, khoangNghich, ngayVN, phutUtcTuMs, trangDoiCung, tuanTrang,
+} from '../src/loi/chiemTinhNgay.ts';
 import { dan } from '../src/giaoDien/khoi/chiemTinhVe.ts';
 import type { HoSo } from '../src/loi/hoSo.ts';
 import { NUOC_NGOAI, TINH } from '../src/loi/tinh.ts';
@@ -181,5 +186,88 @@ describe('chiem tinh: doi chieu ngoai', () => {
       const ky = (dp: number): number => ((laSo(p + dp, null).diem[0]?.kinh ?? 0) - doMoc + 540) % 360 - 180;
       expect([ky(-5) < 0, ky(5) > 0]).toEqual([true, true]);
     }
+  });
+});
+
+describe('chiem tinh hom nay (phan 2)', () => {
+  const p = (jd: number): number => (jd + 0.5) * 1440;
+  const utc = (thang: number, ngay: number, gio: number, phut: number): number =>
+    soNgay({ nam: 2026, thang, ngay }) * 1440 + gio * 60 + phut;
+  const hai = (sun: number, moon: number): LaSo =>
+    ({ diem: [{ kinh: sun, nghich: false }, { kinh: moon, nghich: false }], moc: null, dinh: null, nha: null });
+
+  test('100 lan Mat Trang doi cung: lech Swiss Ephemeris <= 2 phut', () => {
+    const lon = vang.vaoCung.flatMap(([jd = 0, vao = 0]) => {
+      const d = Math.abs(trangDoiCung(p(jd)) - p(vao));
+      return d > 2 ? [`jd ${String(jd)}: lech ${d.toFixed(1)} phut`] : [];
+    });
+    expect(lon).toEqual([]);
+  });
+
+  test('40 khoang nghich hanh (5 moi hanh tinh Thuy..Diem Vuong): bat dau, ket thuc lech Swiss Ephemeris <= 30 phut', () => {
+    // Do 22/10: Thuy, Kim, Hoa, Moc <= 7 phut; Tho 13; ba hanh tinh xa 18–27 (dung lau, toc do gan 0 nen gio dung kho dinh).
+    const lon = vang.nghich.flatMap(([b = 0, jd = 0, dau = 0, cuoi = 0]) => {
+      const k = khoangNghich(b, p(jd));
+      if (k === null) return [`hanh tinh ${String(b)} jd ${String(jd)}: may bao thuan hanh`];
+      const d = Math.max(Math.abs(k[0] - p(dau)), Math.abs(k[1] - p(cuoi)));
+      return d > 30 ? [`hanh tinh ${String(b)} jd ${String(jd)}: lech ${d.toFixed(0)} phut`] : [];
+    });
+    expect(lon).toEqual([]);
+    expect(new Set(vang.nghich.map(([b]) => b)).size).toBe(8);
+  });
+
+  test('Sao Thuy nghich hanh 2026 dung gio Chani, Cafe Astrology (±10 phut); ngay theo gio Viet Nam', () => {
+    // Gio UTC doi tu gio Thai Binh Duong (Chani) va gio mien Dong My (Cafe Astrology), tra 22/10/2026.
+    const DOT: [number, number, number, string, string][] = [
+      [utc(3, 1, 0, 0), utc(2, 26, 6, 48), utc(3, 20, 19, 32), '26/02/2026', '21/03/2026'],
+      [utc(7, 1, 0, 0), utc(6, 29, 17, 35), utc(7, 23, 22, 57), '30/06/2026', '24/07/2026'],
+      [utc(11, 1, 0, 0), utc(10, 24, 7, 12), utc(11, 13, 15, 53), '24/10/2026', '13/11/2026'],
+    ];
+    for (const [giua, dau, cuoi, ngayDau, ngayCuoi] of DOT) {
+      const k = khoangNghich(2, giua);
+      expect(k === null ? null : [Math.abs(k[0] - dau) <= 10, Math.abs(k[1] - cuoi) <= 10, ngayVN(k[0]), ngayVN(k[1])])
+        .toEqual([true, true, ngayDau, ngayCuoi]);
+    }
+    // Vi tri luc dung thuan: 16°18′ Cu Giai (Chani), 5°02′ Thien Yet (Cafe Astrology, Astrosynthesis).
+    const thuan = [khoangNghich(2, utc(7, 1, 0, 0))?.[1] ?? 0, khoangNghich(2, utc(11, 1, 0, 0))?.[1] ?? 0];
+    expect(thuan.map((t, i) => sai(kinhDo(2, t), [90 + 16.3, 210 + 5 + 2 / 60][i] ?? 0) <= HAI_PHUT)).toEqual([true, true]);
+  });
+
+  test('tuan trang: tam pha moi pha 45°, ranh o 22,5°; phan tram sang', () => {
+    expect([0, 22.4, 22.6, 90, 180, 270, 337.4, 337.6].map((g) => tuanTrang(hai(100, 100 + g)).pha)).toEqual([0, 0, 1, 2, 4, 6, 7, 0]);
+    expect([0, 90, 180].map((g) => tuanTrang(hai(10, 10 + g)).sang)).toEqual([0, 50, 100]);
+    expect(TUAN_TRANG).toHaveLength(8);
+  });
+
+  test('2.484 lan soc 1900–2100 deu ra Trang non', () => {
+    let t = MakeTime(new Date(Date.UTC(1900, 1, 1))), khac = 0;
+    while (t.ut < MakeTime(new Date(Date.UTC(2100, 11, 1))).ut) {
+      const soc = SearchMoonPhase(0, t, 40);
+      if (soc === null) throw new Error('không thấy sóc');
+      const q = p(soc.ut + 2451545);
+      if (tuanTrang(hai(kinhDo(0, q), kinhDo(1, q))).pha !== 0) khac++;
+      t = soc.AddDays(20);
+    }
+    expect(khac).toBe(0);
+  });
+
+  test('goc chieu hom nay voi la so: orb 1°, xet ca cung Moc, Thien Dinh; chat nhat truoc', () => {
+    // Diem dem (hom nay 333°, goc 147°) cach moi diem khac ngoai orb; Bac Giao Diem (phan tu 10) khong xet.
+    const nay: LaSo = { diem: [10, 101, 200, 333, 333, 333, 333, 333, 333, 333, 10].map((k) => ({ kinh: k, nghich: false })), moc: null, dinh: null, nha: null };
+    const goc: LaSo = { diem: [10.3, 41.8, 147, 147, 147, 147, 147, 147, 147, 147, 101].map((k) => ({ kinh: k, nghich: false })), moc: 280.6, dinh: 190.9, nha: null };
+    const ra = gocChieuQua(nay, goc).map((x) => `${String(x.a)}-${String(x.b)} ${String(x.goc)} ${x.orb.toFixed(1)}`);
+    expect(ra).toEqual(['1-12 2 0.1', '0-0 0 0.3', '1-11 4 0.4', '0-11 2 0.6', '1-0 2 0.7', '1-1 1 0.8', '0-12 4 0.9']);
+  });
+
+  test('gio Viet Nam, phut UTC tu mili giay Unix', () => {
+    expect(phutUtcTuMs(0)).toBe(soNgay({ nam: 1970, thang: 1, ngay: 1 }) * 1440);
+    expect(gioVN(phutUtcTuMs(Date.UTC(2026, 9, 22, 7, 5)))).toBe('14:05 22/10/2026');
+    expect(gioVN(phutUtcTuMs(Date.UTC(2026, 9, 22, 17, 0)))).toBe('00:00 23/10/2026');
+    expect(ngayVN(phutUtcTuMs(Date.UTC(2026, 9, 22, 16, 59)))).toBe('22/10/2026');
+  });
+
+  test('loi giai phan 2 du: 12 cung Mat Trang qua, 8 tuan trang, nghich hanh Thuy..Diem Vuong', () => {
+    expect([TRANG_QUA_CUNG.length, Y_TUAN_TRANG.length]).toEqual([12, TUAN_TRANG.length]);
+    expect(Object.keys(NGHICH_HANH).map(Number)).toEqual([2, 3, 4, 5, 6, 7, 8, 9]);
   });
 });

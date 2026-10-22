@@ -3,7 +3,9 @@
  * 10 thap than, chiem tinh — va chu dung quy uoc (`docs/QUY_UOC.md` muc 10: NFC, dau kieu cu Hỏa Thủy Hòa, Tỵ Kỷ Kỵ). Ngay sinh GIA.
  */
 import { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH, tinhBatTu } from '../src/loi/batTu.ts';
-import { BAC_GIAO_DIEM, CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NHA, THIEN_DINH, TU_KHOA, Y_GOC } from '../src/loi/chiemTinhGiai.ts';
+import {
+  BAC_GIAO_DIEM, CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NGHICH_HANH, NHA, THIEN_DINH, TRANG_QUA_CUNG, TU_KHOA, Y_GOC, Y_TUAN_TRANG,
+} from '../src/loi/chiemTinhGiai.ts';
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 import { HOI } from '../src/loi/kieu.ts';
 import { LUAN } from '../src/loi/kinhDich.ts';
@@ -33,7 +35,7 @@ function moiDoan(): [string, string][] {
   them('tuVi', { NGHIA_CUNG, CHU_DE, CHINH_TINH, PHU_TINH, SAO_LUU, SAO_LUU_TRUNG, THAN_CU, THAN_CHUNG, HAN, BINH, TUAN, TRIET, VO_CHINH_DIEU });
   them('batTu', { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH });
   them('namNay', { NGUON_SAO_HAN });
-  them('chiemTinh', { MAT_TROI, MAT_TRANG, CUNG_MOC, HANH_TINH, TU_KHOA, NHA, Y_GOC, BAC_GIAO_DIEM, THIEN_DINH });
+  them('chiemTinh', { MAT_TROI, MAT_TRANG, CUNG_MOC, HANH_TINH, TU_KHOA, NHA, Y_GOC, BAC_GIAO_DIEM, THIEN_DINH, TRANG_QUA_CUNG, Y_TUAN_TRANG, NGHICH_HANH });
   for (let i = 0; i < 10; i++) {
     const h = hs({ ngaySinh: ngay(i) });
     ra.push([`nhatChu ${ngay(i)}`, tinhBatTu(h, tinhHoSo(h).chinh, { nam: 2026, thang: 10, ngay: 20 }).nghiaNhatChu]);

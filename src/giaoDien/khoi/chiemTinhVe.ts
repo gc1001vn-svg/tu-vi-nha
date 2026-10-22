@@ -2,8 +2,11 @@
  * Noi dung khoi "Chiem tinh" (nap luoi tu `chiemTinh.ts`): ba diem chinh, banh xe, bang vi tri, loi giai, goc chieu.
  * Loi `src/loi/chiemTinh.ts`, loi giai `src/loi/chiemTinhGiai.ts`, quy uoc `docs/QUY_UOC.md` muc 23.
  */
-import { CUNG, CUNG_ANH, DIEM, DIEM_ANH, GOC, chuan, cungCua, dinhDang, gocChieu, laSoNguoi, nhaCua, type GocChieu, type LaSo } from '../../loi/chiemTinh.ts';
-import { BAC_GIAO_DIEM, CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NHA, THIEN_DINH, TU_KHOA, Y_GOC } from '../../loi/chiemTinhGiai.ts';
+import { CUNG, CUNG_ANH, DIEM, DIEM_ANH, GOC, chuan, kinhDo, laSo, cungCua, dinhDang, gocChieu, laSoNguoi, nhaCua, type GocChieu, type LaSo } from '../../loi/chiemTinh.ts';
+import {
+  BAC_GIAO_DIEM, CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NGHICH_HANH, NHA, THIEN_DINH, TRANG_QUA_CUNG, TU_KHOA, Y_GOC, Y_TUAN_TRANG,
+} from '../../loi/chiemTinhGiai.ts';
+import { TUAN_TRANG, gioVN, gocChieuQua, khoangNghich, ngayVN, phutUtcTuMs, trangDoiCung, tuanTrang } from '../../loi/chiemTinhNgay.ts';
 import type { HoSo } from '../../loi/hoSo.ts';
 import { el } from '../chung.ts';
 import { KY_HIEU } from './kyHieu.ts';
@@ -143,4 +146,39 @@ export function veChiemTinh(hs: HoSo, lechNuoc: number | undefined): Node[] {
       + `Vị trí tính bằng thư viện astronomy-engine, đã so 300 lá với Swiss Ephemeris (lệch dưới 2′). ${LOI}`),
     el('p', { class: 'ghi-chu' }, `Tên Anh 12 cung: ${CUNG.map((c, i) => `${c} – ${CUNG_ANH[i] ?? ''}`).join(', ')}.`),
   ];
+}
+
+/** Khoi "Chiem tinh hom nay": bau troi luc mo khoi; co ho so thi them Mat Trang qua nha va goc chieu voi la so (orb 1°). */
+export function veChiemTinhHomNay(toi: HoSo | undefined, lechNuoc: number | undefined, ms: number): Node[] {
+  const p = phutUtcTuMs(ms), nay = laSo(p, null), tt = tuanTrang(nay), trang = nay.diem[1]?.kinh ?? 0, doi = trangDoiCung(p);
+  const tenCung = (k: number): string => CUNG[cungCua(k)] ?? '';
+  const doan = (tieuDe: string, loi: string): HTMLElement => el('p', {}, el('b', {}, tieuDe), ` — ${loi}`);
+  const nghich = [2, 3, 4, 5, 6, 7, 8, 9].flatMap((i) => {
+    const k = khoangNghich(i, p);
+    return k === null ? [] : [el('li', {}, el('b', {}, `${DIEM[i] ?? ''} ở ${tenCung(kinhDo(i, p))}`),
+      ` nghịch hành từ ${ngayVN(k[0])} đến ${ngayVN(k[1])}: ${NGHICH_HANH[i] ?? ''}`)];
+  });
+  const ra: Node[] = [
+    el('div', { class: 'ct-ba' }, el('span', {}, `Mặt Trăng ${tenCung(trang)}`), el('span', {}, TUAN_TRANG[tt.pha] ?? '')),
+    doan(`Mặt Trăng ở ${tenCung(trang)}`, `${TRANG_QUA_CUNG[cungCua(trang)] ?? ''} Sang ${tenCung(kinhDo(1, doi))} lúc ${gioVN(doi)}.`),
+    doan(`${TUAN_TRANG[tt.pha] ?? ''}, sáng ${String(tt.sang)} %`, Y_TUAN_TRANG[tt.pha] ?? ''),
+    el('h3', {}, 'Hành tinh nghịch hành'),
+    nghich.length === 0 ? el('p', {}, 'Hôm nay không hành tinh nào nghịch hành.') : el('ul', {}, ...nghich),
+  ];
+  if (toi === undefined) {
+    ra.push(el('p', { class: 'ghi-chu' }, 'Nhập hồ sơ ở thẻ "Của tôi" để xem Mặt Trăng đi qua nhà nào và góc chiếu hôm nay với lá số của mình.'));
+  } else {
+    const goc = laSoNguoi(toi, lechNuoc).laSo, nha = goc.nha;
+    // Khong ro gio sinh: Mat Trang goc co the lech toi ~6° nen khong xet goc chieu toi no.
+    const gc = gocChieuQua(nay, goc).filter((x) => !(toi.gioSinh === null && x.b === 1));
+    ra.push(el('h3', {}, 'Với lá số của tôi'),
+      nha === null
+        ? el('p', { class: 'ghi-chu' }, 'Hồ sơ chưa có giờ sinh hoặc sinh ở nước ngoài nên chưa xét Mặt Trăng qua nhà nào.')
+        : el('p', {}, el('b', {}, `Mặt Trăng đi qua nhà ${String(nhaCua(trang, nha))}`), ` — cảm xúc hôm nay xoay quanh ${NHA[nhaCua(trang, nha) - 1] ?? ''}.`),
+      gc.length === 0 ? el('p', {}, 'Hôm nay không có góc chiếu chặt (lệch dưới 1°) nào với lá số.')
+        : el('ul', {}, ...gc.map((x) => el('li', {}, el('b', {}, `${DIEM[x.a] ?? ''} hôm nay ${tenGoc(x.goc)} ${DIEM[x.b] ?? ''} trong lá số`),
+          ` (lệch ${so1(x.orb)}°): ${TU_KHOA[x.a] ?? ''} gặp ${TU_KHOA[x.b] ?? ''} — ${Y_GOC[x.goc] ?? ''}.`))));
+  }
+  ra.push(el('p', { class: 'ghi-chu' }, `Tính lúc ${gioVN(p)} (giờ Việt Nam); đóng mở lại thẻ để tính lại. ${LOI}`));
+  return ra;
 }

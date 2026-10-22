@@ -20,6 +20,30 @@ for _ in range(300):
     ca.append(dict(jd=round(jd, 6), viDo=tron(lat), kinhDo=tron(lon), kinh=[tron(x[0]) for x in th], toc=[tron(x[3]) for x in th[2:]],
                    nutThat=tron(swe.calc_ut(jd, swe.TRUE_NODE, F)[0][0]), nutTB=tron(swe.calc_ut(jd, swe.MEAN_NODE, F)[0][0]),
                    moc=tron(ascmc[0]), dinh=tron(ascmc[1]), nha=[tron(c) for c in cusps[:12]]))
+# Phan 2 (chiem tinh hom nay): lan Mat Trang doi cung ke tiep (100 ca) va khoang nghich hanh (5 khoang moi hanh tinh
+# Thuy..Diem Vuong) — chia doi toi 1e-6 ngay (~0,1 giay).
+kinh = lambda jd, b: swe.calc_ut(jd, b, F)[0][0]
+toc = lambda jd, b: swe.calc_ut(jd, b, F)[0][3]
+def chia(a, b, dung):  # dung(a) sai, dung(b) dung
+    while b - a > 1e-6:
+        m = (a + b) / 2
+        a, b = (a, m) if dung(m) else (m, b)
+    return b
+vao = []
+for _ in range(100):
+    jd = rd.uniform(j0, j1 - 5); c = int(kinh(jd, swe.MOON) // 30); t = jd
+    while int(kinh(t, swe.MOON) // 30) == c: t += 1 / 24
+    vao.append([round(jd, 6), round(chia(t - 1 / 24, t, lambda x: int(kinh(x, swe.MOON) // 30) != c), 6)])
+dung = []
+for b in range(2, 10):
+    while sum(1 for d in dung if d[0] == b) < 5:
+        jd = rd.uniform(j0 + 400, j1 - 400)
+        if toc(jd, b) >= 0: continue
+        t0 = jd
+        while toc(t0, b) < 0: t0 -= 1
+        t1 = jd
+        while toc(t1, b) < 0: t1 += 1
+        dung.append([b, round(jd, 6), round(chia(t0, t0 + 1, lambda x: toc(x, b) < 0), 6), round(chia(t1 - 1, t1, lambda x: toc(x, b) >= 0), 6)])
 with open(sys.argv[1], 'w') as f:
-    json.dump({'nguon': f'pyswisseph {swe.version}, Moshier', 'ca': ca}, f, separators=(',', ':'))
-print(f'{len(ca)} ca -> {sys.argv[1]}')
+    json.dump({'nguon': f'pyswisseph {swe.version}, Moshier', 'ca': ca, 'vaoCung': vao, 'nghich': dung}, f, separators=(',', ':'))
+print(f'{len(ca)} ca, {len(vao)} lan doi cung, {len(dung)} khoang nghich -> {sys.argv[1]}')
