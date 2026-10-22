@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 21/10/2026 — **đợt 5 đóng** (anh thử iPhone 21/10 cả ba khối + dán số từ app Đo vào thước Lỗ Ban, ổn).
+Cập nhật: 22/10/2026 — **kế hoạch đợt 6 duyệt** · đợt 5 đóng 21/10 (anh thử iPhone cả ba khối, ổn).
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -21,8 +21,9 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- Đợt 5 xong. **Kế: đợt 6** (chiêm tinh, tarot) — lập kế hoạch, chờ duyệt.
-- Sau đợt 5: 6 (chiêm tinh, tarot), 7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
+- **Đợt 6 anh duyệt 22/10** (`docs/ke-hoach/2026-10-22-dot-6.md`, phương án A): lá số chiêm tinh (bảng + bánh xe) → chiêm
+  tinh hôm nay (thẻ "Hôm nay") → tarot. **Kế: phần 1, lá số.** Chuẩn cuối: Swiss Ephemeris (`pyswisseph` ở thư mục tạm).
+- Sau đợt 6: 7 (AI), 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
