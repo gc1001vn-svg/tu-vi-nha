@@ -18,7 +18,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg,json}'],
+        // webp: 78 anh tarot (~2,5 MB) cai san cung app de tat mang van rut duoc bai (ke hoach dot 6).
+        globPatterns: ['**/*.{js,css,html,png,svg,json,webp}'],
         // Ban moi chiem quyen ngay, khong doi dong het tab — iOS giu service worker cu rat lau
         // (quoc-chien mat mot buoi sang 08/09 vi thieu hai dong nay).
         skipWaiting: true,

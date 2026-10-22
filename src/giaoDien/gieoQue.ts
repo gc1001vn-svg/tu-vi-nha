@@ -1,5 +1,5 @@
 /**
- * The "Gieo que" (dot 4): Kinh Dich (gieo dong xu, Mai Hoa theo gio) va boi Kieu. So ngau nhien, gio "bay gio" lay o day
+ * The "Gieo que" (dot 4, tarot dot 6): Kinh Dich (gieo dong xu, Mai Hoa theo gio), boi Kieu, tarot. So ngau nhien, gio "bay gio" lay o day
  * (loi cam ngau nhien, dong ho). Chu Kinh Dich, chu Kieu tai rieng luc bam lan dau (`import()`); service worker van luu.
  */
 import { canChiNam, CHI } from '../loi/amLich.ts';
@@ -10,6 +10,7 @@ import type { DoanDoc, Gieo, Hao, MaiHoaGio } from '../loi/kinhDich.ts';
 import type * as Chu from '../loi/kinhDichChu.ts';
 import type * as Giai from '../loi/kinhDichGiai.ts';
 import { el } from './chung.ts';
+import './gieoQue.css';
 import { LOI_SOAN } from './khoi/namNay.ts';
 
 type KinhDich = typeof Tinh & typeof Chu & typeof Giai;
@@ -123,6 +124,46 @@ function veBoiKieu(): HTMLElement {
       'Bói Kiều là thú chơi dân gian: tự đặt hai câu thơ vào việc mình đang hỏi mà suy ngẫm. Chữ theo bản phổ thông, đã soát với hai bản khác.'));
 }
 
+type Tarot = typeof import('../loi/tarot.ts');
+type KieuTrai = keyof Tarot['TRAI'];
+
+/** Mot la da rut: anh (lat nguoc neu la nguoc), vi tri, ten Anh + ten Viet, nghia. */
+function veLa(t: Tarot, so: number, nguoc: boolean, viTri: readonly [string, string]): HTMLElement {
+  const la = t.LA[so];
+  if (la === undefined) throw new Error(`Không có lá ${String(so)}`);
+  const ten = `${la.anh} — ${la.ten}${la.khac === null ? '' : ` (còn gọi ${la.khac})`}`;
+  return el('figure', { class: 'la-tarot' },
+    el('img', { src: `tarot/${String(so).padStart(2, '0')}.webp`, alt: `${ten}${nguoc ? ', lá ngược' : ''}`, class: nguoc ? 'nguoc' : '', width: '300', height: '520' }),
+    el('figcaption', {},
+      el('span', { class: 'am' }, viTri[0]), el('small', { class: 'ghi-chu' }, ` · ${viTri[1]}`),
+      el('b', {}, ten), nguoc ? el('span', { class: 'loi' }, ' · ngược') : null,
+      el('p', {}, nguoc ? la.nguoc : la.xuoi)));
+}
+
+function veTarot(): HTMLElement {
+  const ketQua = el('div', { 'aria-live': 'polite' });
+  const oNguoc = el('input', { type: 'checkbox', checked: '' });
+  const nut = (kieu: KieuTrai, chu: string): HTMLElement => {
+    const n = el('button', { type: 'button', class: 'chinh' }, chu);
+    n.addEventListener('click', () => {
+      import('../loi/tarot.ts').then((t) => {
+        const viTri = t.TRAI[kieu].viTri;
+        const rut = t.rutBai([...crypto.getRandomValues(new Uint32Array(2 * viTri.length))], viTri.length, oNguoc.checked);
+        ketQua.replaceChildren(el('div', { class: 'cac-la' }, ...rut.map((r, i) => veLa(t, r.so, r.nguoc, viTri[i] ?? ['', '']))));
+      }, (e: unknown) => { ketQua.replaceChildren(loi(e)); });
+    });
+    return n;
+  };
+  return el('section', { class: 'the' },
+    el('h2', {}, 'Tarot'),
+    el('p', {}, 'Bộ bài 1909 do Pamela Colman Smith vẽ, A. E. Waite soạn (đã hết bản quyền). Lặng lòng nghĩ câu hỏi rồi chọn cách trải; máy xáo đủ 78 lá.'),
+    el('div', { class: 'nut-hang' }, nut('motLa', 'Rút 1 lá'), nut('baLa', 'Rút 3 lá'), nut('thapTu', 'Thập tự Celtic (10 lá)')),
+    el('label', { class: 'chon-nguoc' }, oNguoc, ' Dùng lá ngược (lá rút ra có thể bị lộn ngược, đọc nghĩa ngược)'),
+    ketQua,
+    el('p', { class: 'ghi-chu' }, 'Tên Anh là tên chính vì tên Việt mỗi nơi gọi một khác. Nghĩa lá do Claude soạn lại theo sách của Waite (1910) '
+      + 'và cách đọc phổ biến; chỉ để tham khảo.'));
+}
+
 export function veGieoQue(): HTMLElement {
-  return el('div', {}, veKinhDich(), veBoiKieu());
+  return el('div', {}, veKinhDich(), veBoiKieu(), veTarot());
 }

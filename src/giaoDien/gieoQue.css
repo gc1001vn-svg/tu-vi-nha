@@ -1,0 +1,10 @@
+/* Tarot o the "Gieo que" (`gieoQue.ts`). Mau lay bien o `src/style.css`. */
+.chon-nguoc { display: flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 6px; }
+.chon-nguoc input { width: 22px; height: 22px; accent-color: var(--vang); }
+.cac-la { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; margin-top: 12px; }
+.la-tarot { margin: 0; }
+.la-tarot img { display: block; width: 100%; max-width: 220px; height: auto; border-radius: 8px; border: 1px solid var(--vien); }
+.la-tarot img.nguoc { transform: rotate(180deg); }
+.la-tarot figcaption { margin-top: 6px; }
+.la-tarot figcaption b { display: block; margin-top: 2px; }
+.la-tarot figcaption p { margin: 4px 0 0; }

@@ -9,6 +9,7 @@ import {
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 import { HOI } from '../src/loi/kieu.ts';
 import { LUAN } from '../src/loi/kinhDich.ts';
+import { LA, TRAI } from '../src/loi/tarot.ts';
 import { GIAI, GIAI_DUNG_CUU, GIAI_DUNG_LUC } from '../src/loi/kinhDichGiai.ts';
 import { NGUON_SAO_HAN, namNay } from '../src/loi/namNay.ts';
 import { lapLaSo } from '../src/loi/tuVi/laSo.ts';
@@ -35,6 +36,7 @@ function moiDoan(): [string, string][] {
   them('tuVi', { NGHIA_CUNG, CHU_DE, CHINH_TINH, PHU_TINH, SAO_LUU, SAO_LUU_TRUNG, THAN_CU, THAN_CHUNG, HAN, BINH, TUAN, TRIET, VO_CHINH_DIEU });
   them('batTu', { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH });
   them('namNay', { NGUON_SAO_HAN });
+  them('tarot', { LA, TRAI });
   them('chiemTinh', { MAT_TROI, MAT_TRANG, CUNG_MOC, HANH_TINH, TU_KHOA, NHA, Y_GOC, BAC_GIAO_DIEM, THIEN_DINH, TRANG_QUA_CUNG, Y_TUAN_TRANG, NGHICH_HANH });
   for (let i = 0; i < 10; i++) {
     const h = hs({ ngaySinh: ngay(i) });

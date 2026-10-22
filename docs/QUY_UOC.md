@@ -344,6 +344,24 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   hệ. Ký hiệu vẽ bằng đường lấy từ phông DejaVu Sans (`scripts/ky_hieu_sao.py`) vì iPhone đổi ♈… thành emoji. Đã kiểm:
   `tests/ChiemTinh.test.ts`, Playwright khổ 390×844 (có giờ, không rõ giờ, nước ngoài).
 
+## 24. Tarot (`src/loi/tarot.ts`, thẻ "Gieo quẻ", tra 22/10)
+- **Bộ bài**: bộ 1909 do Pamela Colman Smith vẽ, A. E. Waite soạn — hết bản quyền ở Mỹ (in 1909) và Anh/EU (Smith mất 1951, Waite
+  1942). Không dùng tên "Rider-Waite" (nhãn hiệu US Games) và bản tô màu 1971. Ảnh: bản quét "Pam-A" của Holly Voley trên Wikimedia
+  Commons (dấu Public Domain Mark) — trang Commons không mở được từ máy ảo, xác minh qua kết quả tìm kiếm (trang tệp Lovers, Cups04)
+  và xem đủ 78 ảnh cùng một bản quét [W53]. WebP rộng 300 px, chất lượng 70 (`scripts/tai_tarot.py`), cài sẵn cùng app.
+- **Thứ tự**: 0–21 ẩn chính theo số 1909 (Sức Mạnh VIII, Công Lý XI); 22–77 ẩn phụ Gậy, Cốc, Kiếm, Tiền, mỗi bộ Át, 2–10, Tiểu
+  Đồng, Hiệp Sĩ, Hoàng Hậu, Vua.
+- **Tên**: tên Việt mỗi trang một khác (The Magician: Nhà Ảo Thuật / Pháp Sư; The Empress: Hoàng Hậu / Mẹ Đại Địa; The Hierophant:
+  Giáo Hoàng / Thượng Giáo; Temperance: Tiết Chế / Tiết Độ; Page: Tiểu Đồng / Thị Đồng / Thị Vệ; Queen: Hoàng Hậu / Nữ Hoàng;
+  Pentacles: Tiền / Xu) và máy ảo không mở được trang nào để đếm → **tên Anh là tên chính**, kèm tên Việt hay gặp và tên khác [W53].
+- **Lá ngược**: tuỳ chọn `laNguoc`, mặc định có (sách Waite ghi nghĩa ngược cho từng lá); ô chọn ngay trên màn hình.
+- **Kiểu trải**: 1 lá; 3 lá (quá khứ – hiện tại – tương lai); Thập tự Celtic 10 lá theo Waite, "An Ancient Celtic Method of
+  Divination" (đã đọc bản 1910 trên archive.org: covers, crosses, crowns, beneath, behind, before, himself, his house, hopes or fears,
+  what will come) — app không chọn lá đại diện (Significator) mà rút đủ 10 lá từ 78 lá.
+- **Xáo bài**: Fisher–Yates một phần, số ngẫu nhiên 32 bit từ `crypto.getRandomValues` ở vỏ ngoài; test 78.000 lần rút đều (khi
+  bình phương), 10.000 lần trải 10 lá không trùng, lá ngược 50 % ± 1 %.
+- Nghĩa xuôi, ngược: Claude soạn lại theo Waite (1910) và cách đọc phổ biến; chưa người rành đọc lại.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -368,6 +386,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `duongCongThang7` | `mung1` · `mung8` | `mung1` (chưa có trong mã) | chọn ngày: Dương Công Kỵ tháng 7 (mục 19) |
 | `heNha` | `placidus` · `cungNguyen` (Whole Sign) | `placidus` (chưa có trong mã) | chiêm tinh: nhà (mục 23) |
 | `nutBac` | `trungBinh` · `that` | `trungBinh` (anh chốt 22/10, như astro-seek) | chiêm tinh: Bắc Giao Điểm (mục 23) |
+| `laNguoc` | có · không | có (ô chọn trên màn hình) | tarot (mục 24) |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
 ## Nguồn
@@ -424,6 +443,7 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W50 (chiêm tinh, tra 22/10 qua tóm tắt tìm kiếm) hệ nhà: https://theastrologypodcast.com/transcripts/ep-244-transcript-how-did-placidus-become-the-most-popular-house-system/ · https://help.optuma.com/kb/faq.php?id=1218 · https://kerykeion.net/content/learn-astrology/foundation-house-systems · orb: https://www.skyscript.co.uk/glossary/orbs · https://www.astrotheme.com/astrology_aspects.php · https://my-zodiac-ai.com/vi/glossary/sextile · https://my-zodiac-ai.com/vi/glossary/conjunction · nút: https://kerykeion.net/content/learn-astrology/foundation-mean-true-node · https://www.astromitra.com/western-astrology/north-node-calculator.php · https://glama.ai/mcp/servers/cwkgwfkaw1 · tên: https://glints.com/vn/blog/cung-moc-la-gi/ · https://shopee.vn/blog/cung-moc-la-gi/ · https://viettelstore.vn/tin-tuc/cung-moc-la-gi-kham-pha-y-nghia-va-anh-huong-den-tinh-cach · https://jobsgo.vn/blog/cung-moc/ · https://www.careerlink.vn/cam-nang-viec-lam/goc-ky-nang/ban-do-sao-la-gi-cach-doc-ban-do-sao-cung-hoang-dao · https://fptshop.com.vn/tin-tuc/danh-gia/cach-xem-ban-do-sao-173466 · https://tianqi.masterseanchan.com/vi/learn/western · https://www.vietnamworks.com/hrinsider/ban-do-sao-la-gi-giai-ma-cach-doc-ban-do-sao-hoang-dao.html
 - W51 (phân điểm, chí điểm 2026, tra 22/10): https://icalendars.net/tools/equinoxes-solstices · https://starwalk.space/news/what-is-an-equinox · https://www.universaltimedate.com/articles/equinoxes-and-solstices-2026 · https://www.farmersalmanac.com/equinox-solstice — 20/03 14:46, 21/06 08:24, 23/09 00:05, 21/12 20:50 UTC (khớp máy); hai trang sau ghi tháng 6, tháng 9 lệch đúng vài giờ, nghi nhầm múi giờ, không theo.
 - W52 (chiêm tinh hôm nay, tra 22/10 qua tóm tắt tìm kiếm) Sao Thủy nghịch hành 2026: https://chani.com/this-year/key-dates/2026-astrological-key-dates-mercury-retrogrades · https://cafeastrology.com/events/mercury-turns-direct-in-cancer-2026/ · https://cafeastrology.com/events/mercury-turns-direct-in-scorpio-2026/ · https://www.almanac.com/content/mercury-retrograde-dates · https://miniwebtool.com/vi/l%E1%BB%8Bch-sao-th%E1%BB%A7y-ngh%E1%BB%8Bch-h%C3%A0nh/?year=2026 · https://my-zodiac-ai.com/vi/blog/mercury-retrograde-2026-complete-calendar-survival-guide · tuần trăng: https://viettelstore.vn/tin-tuc/cach-xem-chu-ky-trang-cuc-don-gian-va-chinh-xac · https://hoanghamobile.com/tin-tuc/bat-trend-the-moon-on-ngay-thang-nam-sinh/ · https://hoatieu.vn/tai-lieu/moon-phase-la-gi-212830 · https://vjol.info.vn/index.php/NNDS/article/download/15768/14176 (thượng huyền ngày 7–9, hạ huyền 22–23 âm)
+- W53 (tarot, tra 22/10 qua tóm tắt tìm kiếm) ảnh, bản quyền: https://en.wikipedia.org/wiki/Rider%E2%80%93Waite_Tarot · https://download.osmand.net/wiki/File:TheLovers.jpg · https://download.osmand.net/wiki/File:Cups04.jpg · https://www.glorioustrainwrecks.com/node/10985 · https://luciellaes.itch.io/rider-waite-smith-tarot-cards-cc0 · tên Việt: https://soitarot.vn/tarot · https://liu.com.vn/tarot · https://fptshop.com.vn/tin-tuc/dien-may/y-nghia-78-la-bai-tarot-168493 · https://jobsgo.vn/blog/y-nghia-78-la-bai-tarot/ · https://www.elle.vn/cung-hoang-dao/bai-tarot-tuong-trung-cung-hoang-dao/ · https://www.tarothuyenbi.info/2014/08/bon-la-queen-la-hoang-hau-trong-tarot.html · https://yody.vn/post/y-nghia-bai-tarot · https://dich.kabala.vn/tarot/bai-cards · https://aitamsu.com/tarot · https://phogotarot.com/blog/bo-an-phu-tarot-4-nguyen-to · sách Waite (bản sacred-texts 1910 lưu trên archive.org): https://archive.org/details/a.-e.-waite-the-pictorial-key-to-the-tarot
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.
