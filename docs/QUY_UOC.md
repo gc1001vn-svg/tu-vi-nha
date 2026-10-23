@@ -374,7 +374,9 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   (12 cung, sao, độ sáng, hạn năm/tháng/ngày, sao lưu), năm nay, bát tự, hướng, tuổi hợp, thần số, nhịp sinh học, chiêm tinh; quẻ:
   quẻ chủ, hào động, biến, hỗ, Mai Hoa, đoạn nên đọc kèm nguyên văn và lời app; tarot: vị trí, lá, xuôi/ngược, lời app. **Không gửi
   tên.** Hồ sơ giả 10/05/1990 06:14 Hà Nội: ~10 nghìn ký tự. Groq ghi không huấn luyện bằng dữ liệu API, có nút tắt lưu log
-  (Zero Data Retention) — đọc qua trang thứ ba, chưa mở được trang gốc [W54].
+  (Zero Data Retention) — đọc qua trang thứ ba [W54]. Ảnh Console Groq anh chụp 23/10 (Data Controls) xác nhận: chưa bật ZDR thì
+  Groq "may store inputs and outputs for up to 30 days" (giữ ổn định, tuân thủ); bật Global ZDR thì không lưu, tắt luôn Batch,
+  Fine-tuning (app không dùng).
 - **Lời dặn** (`loiDan.ts`, Claude soạn): chỉ dùng DỮ LIỆU, không tự tính; không nêu tên ngoài DỮ LIỆU; thiếu thì nói "Dữ liệu app
   tính chưa có …"; không phán chắc bệnh tật, tai nạn, kiện tụng, đầu tư; mục "## ", ý "- ".
 - **Dò bịa** (`kiemBia.ts`): từ điển tên riêng — sao tử vi, 9 sao hạn, 8 hạn, 60 can chi, 30 nạp âm, thập thần, 12 cung hoàng đạo,
