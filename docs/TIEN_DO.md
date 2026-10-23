@@ -22,12 +22,12 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đợt 6 xong 22/10** (`docs/ke-hoach/2026-10-22-dot-6.md`). **Kế: đợt 7 (AI)** — kế hoạch 23/10 chờ duyệt.
+- **Đợt 6 xong 22/10** (`docs/ke-hoach/2026-10-22-dot-6.md`). **Kế: đợt 7 (AI)** — anh duyệt A 23/10; phần 1 chờ khoá đo.
 - Sau đợt 7: 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- So cung Mọc với astro-seek (anh đã điền giờ sinh). Anh thử iPhone ổn: tarot không mạng, "Chiêm tinh hôm nay" (cả sắp nghịch hành).
+- Đợt 7: tạo khoá đo `ANTHROPIC_API_KEY` (mục "Cần anh" kế hoạch), phiên mới gõ "làm phần 1" · so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich`, `claude/blissful-sagan-ur507y` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.
