@@ -22,7 +22,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đợt 6 xong 22/10** (`docs/ke-hoach/2026-10-22-dot-6.md`). **Kế: đợt 7 (AI)** — lập kế hoạch, chờ duyệt.
+- **Đợt 6 xong 22/10** (`docs/ke-hoach/2026-10-22-dot-6.md`). **Kế: đợt 7 (AI)** — kế hoạch 23/10 chờ duyệt.
 - Sau đợt 7: 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
