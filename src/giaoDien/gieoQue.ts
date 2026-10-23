@@ -9,6 +9,7 @@ import type * as Tinh from '../loi/kinhDich.ts';
 import type { DoanDoc, Gieo, Hao, MaiHoaGio } from '../loi/kinhDich.ts';
 import type * as Chu from '../loi/kinhDichChu.ts';
 import type * as Giai from '../loi/kinhDichGiai.ts';
+import { khoiAI } from './ai/index.ts';
 import { el } from './chung.ts';
 import './gieoQue.css';
 import { LOI_SOAN } from './khoi/namNay.ts';
@@ -19,6 +20,9 @@ const taiKinhDich = (): Promise<KinhDich> =>
     .then(([tinh, chu, giai]) => ({ ...tinh, ...chu, ...giai }));
 
 const loi = (e: unknown): HTMLElement => el('p', { class: 'loi' }, `Không mở được: ${e instanceof Error ? e.message : String(e)}`);
+
+/** Moi lan gieo, rut mot phien AI moi. */
+let soLanGieo = 0;
 
 /** Hinh que, hao 6 o tren: hao duong mot vach, hao am hai vach; hao dong to mau khac. */
 const veHinh = (hao: readonly Hao[]): HTMLElement =>
@@ -59,7 +63,8 @@ function veQueDich(k: KinhDich, g: Gieo, mh: MaiHoaGio | null): HTMLElement {
       el('small', { class: 'ghi-chu' }, `Nguyên văn: ${chuQue?.thoan ?? ''}`)),
     el('p', { class: 'ghi-chu' }, 'Đoạn nên đọc theo số hào động (luật Chu Hy):'),
     ...doan.map(veDoan),
-    el('p', { class: 'ghi-chu' }, `Nguyên văn theo bản Kanripo (bỏ dấu câu). Lời giải: ${LOI_SOAN}`));
+    el('p', { class: 'ghi-chu' }, `Nguyên văn theo bản Kanripo (bỏ dấu câu). Lời giải: ${LOI_SOAN}`),
+    khoiAI('AI giải quẻ (Claude)', `que:${String(++soLanGieo)}`, { loai: 'que', k, g, mh }));
 }
 
 function veKinhDich(): HTMLElement {
@@ -149,7 +154,8 @@ function veTarot(): HTMLElement {
       import('../loi/tarot.ts').then((t) => {
         const viTri = t.TRAI[kieu].viTri;
         const rut = t.rutBai([...crypto.getRandomValues(new Uint32Array(2 * viTri.length))], viTri.length, oNguoc.checked);
-        ketQua.replaceChildren(el('div', { class: 'cac-la' }, ...rut.map((r, i) => veLa(t, r.so, r.nguoc, viTri[i] ?? ['', '']))));
+        ketQua.replaceChildren(el('div', { class: 'cac-la' }, ...rut.map((r, i) => veLa(t, r.so, r.nguoc, viTri[i] ?? ['', '']))),
+          khoiAI('AI đọc trải bài (Claude)', `tarot:${String(++soLanGieo)}`, { loai: 'tarot', t, kieu, rut }));
       }, (e: unknown) => { ketQua.replaceChildren(loi(e)); });
     });
     return n;

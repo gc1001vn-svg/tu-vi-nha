@@ -363,6 +363,29 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   bình phương), 10.000 lần trải 10 lá không trùng, lá ngược 50 % ± 1 %.
 - Nghĩa xuôi, ngược: Claude soạn lại theo Waite (1910) và cách đọc phổ biến; chưa người rành đọc lại.
 
+## 25. AI (đợt 7 phần 1: `src/loi/ai/`, `src/giaoDien/ai/`, làm 23/10, chưa đo thật)
+- **Hãng, cách gọi**: Claude (anh chọn 23/10) qua thư viện chính thức `@anthropic-ai/sdk` 1.1.0, gọi thẳng từ trình duyệt bằng khoá
+  anh dán (khoá đi ở đầu `authorization`; đo 23/10: máy chủ cho mọi đầu thư viện gửi, `access-control-allow-origin: *`) [W54].
+  Mô hình tạm `claude-opus-5-5` (mặc định của Anthropic) tới khi đo 3 mô hình; effort `medium`; Opus, Sonnet bật `fallbacks:
+  "default"` — AI từ chối thì máy chủ chuyển mô hình dự phòng (Haiku 5.5 không có). Bộ nhớ đệm tự động của API: lời dặn + dữ liệu
+  đứng yên nên câu hỏi tiếp đọc đệm (giá đọc đệm Opus 5.5 bằng 5 % giá vào).
+- **Gửi đi** (`duLieu.ts`): giới tính, ngày giờ sinh, tỉnh (hay múi giờ nước ngoài) và số app đã tính của 9 mục — người xem, tử vi
+  (12 cung, sao, độ sáng, hạn năm/tháng/ngày, sao lưu), năm nay, bát tự, hướng, tuổi hợp, thần số, nhịp sinh học, chiêm tinh; quẻ:
+  quẻ chủ, hào động, biến, hỗ, Mai Hoa, đoạn nên đọc kèm nguyên văn và lời app; tarot: vị trí, lá, xuôi/ngược, lời app. **Không gửi
+  tên.** Hồ sơ giả 10/05/1990 06:14 Hà Nội: ~10 nghìn ký tự. Anthropic không dùng dữ liệu API để huấn luyện [W54].
+- **Lời dặn** (`loiDan.ts`, Claude soạn): chỉ dùng DỮ LIỆU, không tự tính; không nêu tên ngoài DỮ LIỆU; thiếu thì nói "Dữ liệu app
+  tính chưa có …"; không phán chắc bệnh tật, tai nạn, kiện tụng, đầu tư; mục "## ", ý "- ".
+- **Dò bịa** (`kiemBia.ts`): từ điển tên riêng — sao tử vi, 9 sao hạn, 8 hạn, 60 can chi, 30 nạp âm, thập thần, 12 cung hoàng đạo,
+  8 sao Bát trạch (quẻ: thêm 64 tên quẻ; tarot: 78 lá tên Anh, Việt), chỉ tên ≥2 chữ, đúng chữ hoa, tròn chữ. Tên AI nêu mà DỮ LIỆU
+  không có → gạch chân. Không bắt được tên có thật mà gán sai chỗ (sao X ở cung Y) — để kịch bản đo thật.
+- **Tiền** (`chiPhi.ts`): usage × bảng giá Anthropic tra 23/10 (USD mỗi triệu token vào / ghi đệm 5 phút / đọc đệm / ra): Opus 5.5
+  4 / 5 / 0,20 / 20 · Sonnet 5.5 2 / 2,5 / 0,10 / 10 · Haiku 5.5 0,10 / 0,125 / 0,01 / 0,50 (prompt trên 100 nghìn token gấp 5);
+  mô hình ngoài bảng (dự phòng) tính giá Opus 5. Hạn mức tháng (giờ VN) mặc định 5 USD, đã tiêu tới mức thì không gọi; dừng giữa
+  chừng thì phần đã chạy chưa cộng (không có usage) — chặn cứng là hạn mức đặt trong Console [W54].
+- **Lưu**: khoá, hạn mức, số đã tiêu ở `localStorage` khoá riêng `tvn.ai.v1`, không vào file sao lưu; hỏi đáp chỉ trong bộ nhớ.
+- **Đo**: test không mạng (máy chủ giả trả dòng sự kiện qua đúng thư viện; lỗi 401, 403, 429, 529, 402, 400, mất mạng, dừng) +
+  Playwright chặn mạng. Đo thật `scripts/doi-chieu/do-ai.ts` (20 hồ sơ giả × 3 mô hình + 10 câu bẫy) **chờ khoá đo**.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -444,6 +467,10 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W50 (chiêm tinh, tra 22/10 qua tóm tắt tìm kiếm) hệ nhà: https://theastrologypodcast.com/transcripts/ep-244-transcript-how-did-placidus-become-the-most-popular-house-system/ · https://help.optuma.com/kb/faq.php?id=1218 · https://kerykeion.net/content/learn-astrology/foundation-house-systems · orb: https://www.skyscript.co.uk/glossary/orbs · https://www.astrotheme.com/astrology_aspects.php · https://my-zodiac-ai.com/vi/glossary/sextile · https://my-zodiac-ai.com/vi/glossary/conjunction · nút: https://kerykeion.net/content/learn-astrology/foundation-mean-true-node · https://www.astromitra.com/western-astrology/north-node-calculator.php · https://glama.ai/mcp/servers/cwkgwfkaw1 · tên: https://glints.com/vn/blog/cung-moc-la-gi/ · https://shopee.vn/blog/cung-moc-la-gi/ · https://viettelstore.vn/tin-tuc/cung-moc-la-gi-kham-pha-y-nghia-va-anh-huong-den-tinh-cach · https://jobsgo.vn/blog/cung-moc/ · https://www.careerlink.vn/cam-nang-viec-lam/goc-ky-nang/ban-do-sao-la-gi-cach-doc-ban-do-sao-cung-hoang-dao · https://fptshop.com.vn/tin-tuc/danh-gia/cach-xem-ban-do-sao-173466 · https://tianqi.masterseanchan.com/vi/learn/western · https://www.vietnamworks.com/hrinsider/ban-do-sao-la-gi-giai-ma-cach-doc-ban-do-sao-hoang-dao.html
 - W51 (phân điểm, chí điểm 2026, tra 22/10): https://icalendars.net/tools/equinoxes-solstices · https://starwalk.space/news/what-is-an-equinox · https://www.universaltimedate.com/articles/equinoxes-and-solstices-2026 · https://www.farmersalmanac.com/equinox-solstice — 20/03 14:46, 21/06 08:24, 23/09 00:05, 21/12 20:50 UTC (khớp máy); hai trang sau ghi tháng 6, tháng 9 lệch đúng vài giờ, nghi nhầm múi giờ, không theo.
 - W52 (chiêm tinh hôm nay, tra 22/10 qua tóm tắt tìm kiếm) Sao Thủy nghịch hành 2026: https://chani.com/this-year/key-dates/2026-astrological-key-dates-mercury-retrogrades · https://cafeastrology.com/events/mercury-turns-direct-in-cancer-2026/ · https://cafeastrology.com/events/mercury-turns-direct-in-scorpio-2026/ · https://www.almanac.com/content/mercury-retrograde-dates · https://miniwebtool.com/vi/l%E1%BB%8Bch-sao-th%E1%BB%A7y-ngh%E1%BB%8Bch-h%C3%A0nh/?year=2026 · https://my-zodiac-ai.com/vi/blog/mercury-retrograde-2026-complete-calendar-survival-guide · tuần trăng: https://viettelstore.vn/tin-tuc/cach-xem-chu-ky-trang-cuc-don-gian-va-chinh-xac · https://hoanghamobile.com/tin-tuc/bat-trend-the-moon-on-ngay-thang-nam-sinh/ · https://hoatieu.vn/tai-lieu/moon-phase-la-gi-212830 · https://vjol.info.vn/index.php/NNDS/article/download/15768/14176 (thượng huyền ngày 7–9, hạ huyền 22–23 âm)
+- W54 (AI, tra 23/10) giá: https://platform.claude.com/docs/en/about-claude/pricing (đọc trang) · tín dụng gói Max/Team:
+  https://platform.claude.com/docs/en/about-claude/api-credits-for-subscribers (đọc trang) · không huấn luyện bằng dữ liệu API:
+  https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training · gọi từ trình duyệt:
+  https://simonwillison.net/2024/Aug/23/anthropic-dangerous-direct-browser-access · hạn mức chi: https://platform.claude.com/docs/en/api/rate-limits
 - W53 (tarot, tra 22/10 qua tóm tắt tìm kiếm) ảnh, bản quyền: https://en.wikipedia.org/wiki/Rider%E2%80%93Waite_Tarot · https://download.osmand.net/wiki/File:TheLovers.jpg · https://download.osmand.net/wiki/File:Cups04.jpg · https://www.glorioustrainwrecks.com/node/10985 · https://luciellaes.itch.io/rider-waite-smith-tarot-cards-cc0 · tên Việt: https://soitarot.vn/tarot · https://liu.com.vn/tarot · https://fptshop.com.vn/tin-tuc/dien-may/y-nghia-78-la-bai-tarot-168493 · https://jobsgo.vn/blog/y-nghia-78-la-bai-tarot/ · https://www.elle.vn/cung-hoang-dao/bai-tarot-tuong-trung-cung-hoang-dao/ · https://www.tarothuyenbi.info/2014/08/bon-la-queen-la-hoang-hau-trong-tarot.html · https://yody.vn/post/y-nghia-bai-tarot · https://dich.kabala.vn/tarot/bai-cards · https://aitamsu.com/tarot · https://phogotarot.com/blog/bo-an-phu-tarot-4-nguyen-to · sách Waite (bản sacred-texts 1910 lưu trên archive.org): https://archive.org/details/a.-e.-waite-the-pictorial-key-to-the-tarot
 ## Anh đã quyết (15/10/2026)
 
@@ -455,3 +482,4 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 6. (20/10) Tốt/xấu 9 sao Cửu Diệu: **giữ như dân gian** (3 tốt: Thái Dương, Thái Âm, Mộc Đức · 3 xấu: La Hầu, Kế Đô, Thái Bạch · 3 trung tính: Thổ Tú, Thủy Diệu, Vân Hớn), không theo kinh gốc (Thổ Tú, Vân Hớn xấu; Thủy Diệu tốt — mục 14), không làm tuỳ chọn.
 7. (21/10) Không có trang lịch "anh tin": xemlicham chỉ là trang anh tìm trên mạng. Chỗ các nguồn vênh: **theo bên được nhiều nguồn uy tín công nhận nhất**; bên chỉ có một trang thì không theo, không làm tuỳ chọn.
 8. (22/10) Chiêm tinh: Bắc Giao Điểm tính kiểu **trung bình** như astro-seek (mục 23).
+9. (23/10) AI: hãng **Claude**; đợt 7 đủ 3 phần (chỉ tay làm sau cùng, bỏ được); khoá đo riêng hạn mức 5 USD trong bí mật môi trường cloud (mục 25).

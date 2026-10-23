@@ -3,6 +3,7 @@
  * Moi mon mot file `src/giaoDien/khoi/<mon>.ts` (CSS rieng thi import ngay trong file do), export mot ham `VeKhoi`.
  * Ke hoach: `docs/ke-hoach/2026-10-19-tang-toc.md`.
  */
+import { veKhoiAI } from '../ai/index.ts';
 import type { VeKhoi } from '../chung.ts';
 import { veKhoiBatTu } from './batTu.ts';
 import { veKhoiNamNay } from './namNay.ts';
@@ -12,5 +13,5 @@ import { veKhoiNhipSinhHoc, veKhoiThanSo } from './soHoc.ts';
 import { veKhoiTuVi } from './tuVi.ts';
 
 export const CAC_KHOI: readonly VeKhoi[] = [
-  veKhoiTuVi, veKhoiNamNay, veKhoiBatTu, veKhoiHuong, veKhoiTuoiHop, veKhoiThanSo, veKhoiChiemTinh, veKhoiNhipSinhHoc,
+  veKhoiTuVi, veKhoiNamNay, veKhoiBatTu, veKhoiHuong, veKhoiTuoiHop, veKhoiThanSo, veKhoiChiemTinh, veKhoiNhipSinhHoc, veKhoiAI,
 ];

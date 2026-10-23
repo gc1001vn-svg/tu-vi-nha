@@ -5,7 +5,7 @@
  */
 import { LunarUtil, Solar } from 'lunar-typescript';
 import {
-  CAN, CHI, canChiNam, canChiNgay, canChiThang, duongSangAm, soNgay, tuSoNgay, type NgayAm, type NgayDuong,
+  CAN, CHI, canChiNam, canChiNgay, canChiThang, dinhDangAm, duongSangAm, soNgay, tuSoNgay, type NgayAm, type NgayDuong,
 } from './amLich.ts';
 import { BANG, hv } from './hanViet/index.ts';
 import { lechGio } from './muiGio.ts';
@@ -123,6 +123,15 @@ const SO_SANH: readonly (readonly [keyof KetQuaHoSo, string])[] = [
   ['am', 'ngày âm'], ['canChiNam', 'năm'], ['canChiThang', 'tháng'], ['canChiNgay', 'ngày'], ['chiGio', 'giờ'],
   ['napAm', 'mệnh'], ['cungPhi', 'cung phi'],
 ];
+
+const GIA_TRI: Readonly<Record<string, (k: KetQuaHoSo) => string>> = {
+  'ngày âm': (k) => dinhDangAm(k.am), 'năm': (k) => k.canChiNam, 'tháng': (k) => k.canChiThang,
+  'ngày': (k) => k.canChiNgay, 'giờ': (k) => k.chiGio ?? '?', 'mệnh': (k) => k.napAm, 'cung phi': (k) => k.cungPhi,
+};
+
+/** "ngày âm 6/9/2026, ngày Nhâm Tuất" — gia tri cua cac truong khac ban chinh (nhan theo `SO_SANH`). */
+export const moTaKhac = (truong: readonly string[], k: KetQuaHoSo): string =>
+  truong.map((t) => `${t} ${GIA_TRI[t]?.(k) ?? ''}`.trim()).join(', ');
 
 /**
  * Tinh ho so. `lechNuocNgoai`: phut lech UTC luc sinh khi sinh o nuoc ngoai (giao dien lay tu `Intl` — loi cam locale).

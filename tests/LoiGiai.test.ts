@@ -2,6 +2,7 @@
  * Loi giai (luat 6, Claude soan lai): phu du — moi cung, moi sao co trong la so, 9 sao luu, 9 sao han, 8 han, 10 nhat chu,
  * 10 thap than, chiem tinh — va chu dung quy uoc (`docs/QUY_UOC.md` muc 10: NFC, dau kieu cu Hỏa Thủy Hòa, Tỵ Kỷ Kỵ). Ngay sinh GIA.
  */
+import { LOI_DAN, YEU_CAU } from '../src/loi/ai/loiDan.ts';
 import { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH, tinhBatTu } from '../src/loi/batTu.ts';
 import {
   BAC_GIAO_DIEM, CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NGHICH_HANH, NHA, THIEN_DINH, TRANG_QUA_CUNG, TU_KHOA, Y_GOC, Y_TUAN_TRANG,
@@ -38,6 +39,7 @@ function moiDoan(): [string, string][] {
   them('namNay', { NGUON_SAO_HAN });
   them('tarot', { LA, TRAI });
   them('chiemTinh', { MAT_TROI, MAT_TRANG, CUNG_MOC, HANH_TINH, TU_KHOA, NHA, Y_GOC, BAC_GIAO_DIEM, THIEN_DINH, TRANG_QUA_CUNG, Y_TUAN_TRANG, NGHICH_HANH });
+  them('ai', { LOI_DAN, nguoi: YEU_CAU.nguoi(), que: YEU_CAU.que('việc nhà'), tarot: YEU_CAU.tarot('') });
   for (let i = 0; i < 10; i++) {
     const h = hs({ ngaySinh: ngay(i) });
     ra.push([`nhatChu ${ngay(i)}`, tinhBatTu(h, tinhHoSo(h).chinh, { nam: 2026, thang: 10, ngay: 20 }).nghiaNhatChu]);
