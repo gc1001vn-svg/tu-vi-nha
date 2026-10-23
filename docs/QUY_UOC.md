@@ -363,13 +363,15 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   bình phương), 10.000 lần trải 10 lá không trùng, lá ngược 50 % ± 1 %.
 - Nghĩa xuôi, ngược: Claude soạn lại theo Waite (1910) và cách đọc phổ biến; chưa người rành đọc lại.
 
-## 25. AI (đợt 7 phần 1: `src/loi/ai/`, `src/giaoDien/ai/`, làm 23/10, chưa đo thật)
+## 25. AI (đợt 7 phần 1: `src/loi/ai/`, `src/giaoDien/ai/`, làm và đo thật 23/10)
 - **Hãng, cách gọi**: Groq miễn phí (anh chọn 23/10: "không tốn tiền, ưu tiên ngay trong app"; bản đầu dùng Claude trả phí, bỏ
   cùng ngày). API kiểu OpenAI, gọi thẳng từ trình duyệt bằng `fetch` (không thêm thư viện), khoá Groq anh dán; tài khoản không
   gắn thẻ nên không bao giờ mất tiền, hết lượt thì chờ. **Groq cho trình duyệt gọi thẳng** (thử 23/10, khoá giả: hỏi trước ra
-  204, `access-control-allow-origin: *`, cho đầu `authorization`; Chromium thật đọc được lỗi 401) → không cần trạm trung gian.
-  Groq không mở đầu `retry-after` cho trình duyệt → số giây chờ lấy từ lời lỗi ("try again in 1m2.5s"). Mô hình tạm
-  `openai/gpt-oss-120b` (Groq bỏ Llama 3.3 70B 16/08, Qwen3 32B 17/07), suy nghĩ ít (`reasoning_effort: low`).
+  204, `access-control-allow-origin: *`, cho đầu `authorization`; Chromium thật đọc được lỗi 401; khoá thật 23/10: 200, chữ chảy
+  dần đủ tới `[DONE]`) → không cần trạm trung gian.
+  Groq không mở đầu `retry-after` cho trình duyệt → số giây chờ lấy từ lời lỗi ("try again in 1m2.5s"). Mô hình
+  `openai/gpt-oss-120b`, chọn sau đo (mục **Đo**; Groq bỏ Llama 3.3 70B 16/08, Qwen3 32B 17/07; 23/10 có `qwen/qwen3.8-27b`, chưa
+  đo), suy nghĩ ít (`reasoning_effort: low`).
 - **Hạn mức** gói miễn phí gpt-oss-120b, 20b: 30 lượt/phút, 1.000 lượt/ngày, 8.000 token/phút, 200.000 token/ngày, tính theo tài
   khoản chứ không theo khoá; Groq giữ trước cả trần đầu ra xin (người dùng báo: 20 token vào + trần 8.192 → 413 "Requested
   8,271"; chưa thấy lời Groq) [W54]. Đếm 23/10 (bộ tách chữ o200k_harmony của gpt-oss, 10 hồ sơ giả): lời dặn + dữ liệu + yêu cầu
@@ -387,11 +389,21 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   tính chưa có …"; không phán chắc bệnh tật, tai nạn, kiện tụng, đầu tư; mục "## ", ý "- ".
 - **Dò bịa** (`kiemBia.ts`): từ điển tên riêng — sao tử vi, 9 sao hạn, 8 hạn, 60 can chi, 30 nạp âm, thập thần, 12 cung hoàng đạo,
   8 sao Bát trạch (quẻ: thêm 64 tên quẻ; tarot: 78 lá tên Anh, Việt), chỉ tên ≥2 chữ, đúng chữ hoa, tròn chữ. Tên AI nêu mà DỮ LIỆU
-  không có → gạch chân. Không bắt được tên có thật mà gán sai chỗ (sao X ở cung Y) — để kịch bản đo thật.
+  không có → gạch chân. Không bắt được tên có thật mà gán sai chỗ (sao X ở cung Y) — đo thật 23/10 thấy có (mục **Đo**) → khối AI
+  ghi "AI có thể chép nhầm chỗ (sao, cung), đối chiếu với số app bên trên".
 - **Lưu**: khoá ở `localStorage` khoá riêng `tvn.ai.v1`, không vào file sao lưu; hỏi đáp chỉ trong bộ nhớ.
 - **Đo**: test không mạng (máy chủ giả trả dòng sự kiện, cắt giữa chừng; lỗi 401, 404, 413, 429 có số giây chờ, 503, mất mạng,
-  dừng) + Playwright chặn mạng. Đo thật `scripts/doi-chieu/do-ai.ts` (10 hồ sơ giả × 2 mô hình + 10 câu bẫy) **chờ phiên có khoá**
-  (mạng mở 23/10; bí mật môi trường chỉ vào phiên mở sau khi thêm).
+  dừng) + Playwright chặn mạng. Đo thật 23/10 `scripts/doi-chieu/do-ai.ts` (10 hồ sơ giả × 2 mô hình + 10 câu bẫy; 40 lượt không
+  lỗi, ~20 phút vì hạn mức token/phút):
+  - `gpt-oss-120b`: lời có tên bịa 0/10, bẫy nói "chưa có" 10/10, 2,8 giây/lời. `gpt-oss-20b`: bịa 0/10, bẫy 8/10 theo thước
+    (đọc tay 9/10: thước chỉ nhận "chưa có|không có", câu đúng "không được tính" bị chấm hỏng; câu hỏng thật: lấy số chủ đạo làm
+    "số may mắn"), 1,5 giây. Ngưỡng gộp (bịa ≤1/10 hồ sơ, app gạch đủ tên bịa) → **chọn 120b**.
+  - Soát thêm một lần, ngoài repo, đọc tay: so không phân biệt hoa thường thì app không gạch sót tên bịa nào (không có tên bịa
+    thật nên "gạch đủ 100 %" chưa được thử bằng lời thật — test giả đỡ). Gán sai chỗ, đếm tối thiểu (câu "sao S ở cung X", câu
+    nêu một cung): 120b 1 chỗ/10 hồ sơ (Lưu Đà La sang Tài Bạch, cùng câu gọi Kình Dương, Đà La là "hỗ trợ tài chính"); 20b 2 chỗ
+    (sao Phu Thê đặt sang Phụ Mẫu, gọi Đại Hao là sao tốt) + "Mệnh chính là Văn Khúc" (là Mệnh chủ); chi của cung 36/36 đúng.
+  - Cả hai còn thêm lời khuyên ngoài DỮ LIỆU (ăn uống, màu sơn, vitamin; "Kế Đô… tiêu hoá, xương khớp") dù lời dặn bảo chỉ
+    dùng DỮ LIỆU.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

@@ -6,7 +6,7 @@
 import { LOI_DAN } from '../../loi/ai/loiDan.ts';
 
 export const DIA_CHI = 'https://api.groq.com/openai/v1/chat/completions';
-/** Mo hinh tam: Groq hay bo mo hinh, gpt-oss-120b la mo hinh chinh con lai (tra 23/10) — do roi chon (ke hoach dot 7). */
+/** Chon sau do that 23/10 (QUY_UOC muc 25): bay 10/10, khong bia ten; gpt-oss-20b nhanh hon nhung bia bay, gan sai cung nhieu hon. */
 export const MO_HINH = 'openai/gpt-oss-120b';
 
 export interface TinNhan { readonly role: 'user' | 'assistant'; readonly content: string }

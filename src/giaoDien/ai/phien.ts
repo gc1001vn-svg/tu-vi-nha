@@ -146,7 +146,7 @@ export function vePhien(ma: string, cd: ChuDe): Node[] {
       con.push(el('div', { class: 'ai-o-hoi' }, o, nut));
     }
     con.push(el('p', { class: 'ghi-chu' }, 'AI chỉ đọc số app đã tính, không gửi tên; hỏi đáp không lưu, đóng app là mất. '
-      + 'Lời AI là quan niệm dân gian, để tham khảo.'));
+      + 'Lời AI là quan niệm dân gian, để tham khảo; AI có thể chép nhầm chỗ (sao, cung), đối chiếu với số app bên trên.'));
     goc.replaceChildren(...con);
   };
   p.nghe.add(ve);
