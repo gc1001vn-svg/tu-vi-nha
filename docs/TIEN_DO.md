@@ -21,12 +21,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 ## 2. Việc kế
 
 - **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`, `QUY_UOC` mục 25): phần 1 (anh đổi sang Groq miễn phí 23/10) xong ở
-  nhánh trên. Có khoá + mạng → `do-ai.ts` (`DAU_PHIEN`), xem Groq có cho trình duyệt gọi không, chọn mô hình, gộp; rồi phần 2.
+  nhánh trên; Groq cho trình duyệt gọi thẳng. Phiên có khoá → `do-ai.ts` (`DAU_PHIEN`), chọn mô hình, gộp; rồi phần 2.
 - Sau đợt 7: 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- Đợt 7: anh đã bật Global ZDR, thêm `GROQ_API_KEY`, mở mạng `api.groq.com` (23/10) → phiên mới gõ "đo AI phần 1" · so cung Mọc.
+- Đợt 7: anh đã bật Global ZDR, thêm `GROQ_API_KEY`, mở mạng `api.groq.com` (23/10); khoá chỉ vào phiên mở sau đó → phiên
+  mới gõ "đo AI phần 1" kèm tên nhánh · so cung Mọc.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich`, `claude/blissful-sagan-ur507y` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.

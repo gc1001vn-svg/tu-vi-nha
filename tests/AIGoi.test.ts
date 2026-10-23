@@ -3,10 +3,12 @@
  * (ca khi dong bi cat giua chung), dau goi, than yeu cau (mo hinh, loi dan + du lieu, tran token), het tran / bi chan, cau bao
  * loi tieng Viet khong kem khoa, khoa khong vao file sao luu. Khong goi mang that.
  */
-import { DIA_CHI, MO_HINH, goiAI, loiTiengViet, type TuyChonGoi } from '../src/giaoDien/ai/goi.ts';
+import { DIA_CHI, MO_HINH, goiAI, loiTiengViet, vuaHanMuc, type TinNhan, type TuyChonGoi } from '../src/giaoDien/ai/goi.ts';
 import { docAI, ghiAI } from '../src/giaoDien/ai/luu.ts';
 import { docKho } from '../src/luuTru.ts';
-import { taoSaoLuu } from '../src/loi/hoSo.ts';
+import { duLieuNguoi } from '../src/loi/ai/duLieu.ts';
+import { LOI_DAN, YEU_CAU } from '../src/loi/ai/loiDan.ts';
+import { taoSaoLuu, tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 
 interface YeuCau { readonly url: string; readonly dau: Headers; readonly than: Record<string, unknown> }
 
@@ -77,6 +79,31 @@ describe('goi AI qua mang gia', () => {
       'Câu hỏi và dữ liệu dài quá hạn mức mỗi phút của gói miễn phí', 'Hết lượt miễn phí tạm thời ', 'Hết lượt miễn phí tạm thời ',
       'Groq đang quá tải hoặc bảo trì', 'Groq báo lỗi 400', 'Không kết nối được tới Groq ', 'Đã dừng.']);
     expect([cau[3]?.includes('37 giây'), cau[4]?.includes('ít phút'), cau.some((c) => c.includes(KHOA))]).toEqual([true, true, false]);
+  });
+
+  test('429: trinh duyet khong doc duoc retry-after thi lay so giay trong loi Groq', async () => {
+    const cau = await Promise.all(['Please try again in 16.575s.', 'try again in 1m2.5s', 'try again in 2h13m5s', 'try again in 500ms', 'rate limit']
+      .map(async (tb) => goiAI(KHOA, '', tin, () => undefined, new AbortController().signal,
+        mang(() => new Response(JSON.stringify({ error: { message: tb } }), { status: 429 })).tc).then(() => '', loiTiengViet)));
+    expect(cau.map((c) => /sau (.+)\.$/.exec(c)?.[1])).toEqual(['17 giây', '63 giây', '134 phút', '1 giây', 'ít phút']);
+  });
+
+  test('vua han muc 8.000 token/phut: luot dau xin 3.000 ra, hoi them 1.500; dai qua thi bo cap hoi dap cu nhat, giu cau moi', async () => {
+    const x = (n: number, role: TinNhan['role'] = 'user'): TinNhan => ({ role, content: 'x'.repeat(n) });
+    const he = 'x'.repeat(9000);
+    const mot = [x(150), x(3300, 'assistant'), x(40)];
+    const dai = [x(150), x(3300, 'assistant'), x(41), x(1500, 'assistant'), x(42), x(1500, 'assistant'), x(43)];
+    expect([vuaHanMuc(he, [x(150)]), vuaHanMuc(he, mot), vuaHanMuc(he, dai), vuaHanMuc(he, [x(150), x(3300, 'assistant'), x(4000)]), vuaHanMuc(he, [x(9000)])])
+      .toEqual([{ tin: [x(150)], ra: 3000 }, { tin: mot, ra: 1500 }, { tin: dai.slice(2), ra: 1500 }, { tin: [x(4000)], ra: 1500 }, { tin: [x(9000)], ra: 1000 }]);
+    // Ho so gia that: luot dau xin du 3.000; hoi them sau loi tong hop ~3.300 ky tu van giu loi do.
+    const hs: HoSo = { id: 'a', ten: 'Người Giả', gioiTinh: 'nam', ngaySinh: '1990-05-10', gioSinh: '06:14', noiSinh: 'Hà Nội' };
+    const that = `${LOI_DAN}\n\nDỮ LIỆU:\n${duLieuNguoi(hs, tinhHoSo(hs), { nam: 2026, thang: 10, ngay: 23 }, undefined)}`;
+    const hoi = [{ role: 'user' as const, content: YEU_CAU.nguoi() }, x(3300, 'assistant'), x(40)];
+    expect([vuaHanMuc(that, hoi.slice(0, 1)).ra, vuaHanMuc(that, hoi).tin.length]).toEqual([3000, 3]);
+    // goiAI gui dung tin da cat va tran.
+    const m = mang(() => suKien(['ok']));
+    await goiAI(KHOA, 'x'.repeat(7900), dai, () => undefined, new AbortController().signal, m.tc);
+    expect([(m.yc[0]?.than['messages'] as unknown[]).slice(1), m.yc[0]?.than['max_completion_tokens']]).toEqual([dai.slice(2), 1500]);
   });
 });
 

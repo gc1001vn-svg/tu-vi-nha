@@ -366,14 +366,20 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 ## 25. AI (đợt 7 phần 1: `src/loi/ai/`, `src/giaoDien/ai/`, làm 23/10, chưa đo thật)
 - **Hãng, cách gọi**: Groq miễn phí (anh chọn 23/10: "không tốn tiền, ưu tiên ngay trong app"; bản đầu dùng Claude trả phí, bỏ
   cùng ngày). API kiểu OpenAI, gọi thẳng từ trình duyệt bằng `fetch` (không thêm thư viện), khoá Groq anh dán; tài khoản không
-  gắn thẻ nên không bao giờ mất tiền, hết lượt thì chờ. **Chưa biết Groq có cho trình duyệt gọi thẳng không** (máy ảo chặn
-  api.groq.com) — chặn thì dựng trạm trung gian, `goi.ts` chỉ đổi địa chỉ. Mô hình tạm `openai/gpt-oss-120b` (Groq bỏ Llama
-  3.3 70B 16/08, Qwen3 32B 17/07), suy nghĩ ít (`reasoning_effort: low`), trần 3.000 token ra — hạn mức token mỗi phút của gói
-  miễn phí tính cả trần xin trước [W54].
+  gắn thẻ nên không bao giờ mất tiền, hết lượt thì chờ. **Groq cho trình duyệt gọi thẳng** (thử 23/10, khoá giả: hỏi trước ra
+  204, `access-control-allow-origin: *`, cho đầu `authorization`; Chromium thật đọc được lỗi 401) → không cần trạm trung gian.
+  Groq không mở đầu `retry-after` cho trình duyệt → số giây chờ lấy từ lời lỗi ("try again in 1m2.5s"). Mô hình tạm
+  `openai/gpt-oss-120b` (Groq bỏ Llama 3.3 70B 16/08, Qwen3 32B 17/07), suy nghĩ ít (`reasoning_effort: low`).
+- **Hạn mức** gói miễn phí gpt-oss-120b, 20b: 30 lượt/phút, 1.000 lượt/ngày, 8.000 token/phút, 200.000 token/ngày, tính theo tài
+  khoản chứ không theo khoá; Groq giữ trước cả trần đầu ra xin (người dùng báo: 20 token vào + trần 8.192 → 413 "Requested
+  8,271"; chưa thấy lời Groq) [W54]. Đếm 23/10 (bộ tách chữ o200k_harmony của gpt-oss, 10 hồ sơ giả): lời dặn + dữ liệu + yêu cầu
+  3,7–4,0 nghìn token khi có giờ sinh, 2,1–2,3 nghìn khi không → `vuaHanMuc` (`goi.ts`): lượt đầu xin 3.000 token ra, hỏi thêm
+  1.500, ước 2,2 ký tự/token; vượt 8.000 thì bỏ cặp hỏi đáp cũ nhất (AI không thấy lời đó nữa). Một lời tổng hợp xin ~7 nghìn
+  token → khoảng 1 lượt/phút, ~30 lượt/ngày cho cả nhà chung một khoá (ước).
 - **Gửi đi** (`duLieu.ts`): giới tính, ngày giờ sinh, tỉnh (hay múi giờ nước ngoài) và số app đã tính của 9 mục — người xem, tử vi
   (12 cung, sao, độ sáng, hạn năm/tháng/ngày, sao lưu), năm nay, bát tự, hướng, tuổi hợp, thần số, nhịp sinh học, chiêm tinh; quẻ:
   quẻ chủ, hào động, biến, hỗ, Mai Hoa, đoạn nên đọc kèm nguyên văn và lời app; tarot: vị trí, lá, xuôi/ngược, lời app. **Không gửi
-  tên.** Hồ sơ giả 10/05/1990 06:14 Hà Nội: ~10 nghìn ký tự. Groq ghi không huấn luyện bằng dữ liệu API, có nút tắt lưu log
+  tên.** Hồ sơ giả 10/05/1990 06:14 Hà Nội: 8.055 ký tự (10.242 byte). Groq ghi không huấn luyện bằng dữ liệu API, có nút tắt lưu log
   (Zero Data Retention) — đọc qua trang thứ ba [W54]. Ảnh Console Groq anh chụp 23/10 (Data Controls) xác nhận: chưa bật ZDR thì
   Groq "may store inputs and outputs for up to 30 days" (giữ ổn định, tuân thủ); bật Global ZDR thì không lưu, tắt luôn Batch,
   Fine-tuning (app không dùng).
@@ -384,8 +390,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   không có → gạch chân. Không bắt được tên có thật mà gán sai chỗ (sao X ở cung Y) — để kịch bản đo thật.
 - **Lưu**: khoá ở `localStorage` khoá riêng `tvn.ai.v1`, không vào file sao lưu; hỏi đáp chỉ trong bộ nhớ.
 - **Đo**: test không mạng (máy chủ giả trả dòng sự kiện, cắt giữa chừng; lỗi 401, 404, 413, 429 có số giây chờ, 503, mất mạng,
-  dừng) + Playwright chặn mạng. Đo thật `scripts/doi-chieu/do-ai.ts` (10 hồ sơ giả × 2 mô hình + 10 câu bẫy) **chờ khoá Groq và
-  mở mạng tới api.groq.com**.
+  dừng) + Playwright chặn mạng. Đo thật `scripts/doi-chieu/do-ai.ts` (10 hồ sơ giả × 2 mô hình + 10 câu bẫy) **chờ phiên có khoá**
+  (mạng mở 23/10; bí mật môi trường chỉ vào phiên mở sau khi thêm).
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
@@ -471,7 +477,10 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W54 (AI, tra 23/10 qua tóm tắt tìm kiếm — trang Groq bị máy ảo chặn) Groq không huấn luyện bằng dữ liệu API, nút Zero Data
   Retention: https://standardcompute.com/providers/groq · https://www.developersdigest.tech/models/free-api/groq ·
   https://aireiter.com/blog/best-free-ai-api · mô hình bị bỏ: https://console.groq.com/docs/deprecations ·
-  https://www.developersdigest.tech/deprecations/groq · hạn mức: https://console.groq.com/docs/rate-limits · Gemini miễn phí dùng
+  https://www.developersdigest.tech/deprecations/groq · hạn mức: https://console.groq.com/docs/rate-limits ·
+  https://localaimaster.com/blog/groq-api-free-guide · https://www.eesel.ai/blog/groq-pricing · giữ trước trần ra:
+  https://dev.to/build996/a-rate-limit-that-counts-the-tokens-you-asked-for-not-the-ones-you-got-1oda ·
+  https://github.com/WillianSiquieri/WillianSiquieri.github.io/pull/22 · Gemini miễn phí dùng
   dữ liệu: https://ai.google.dev/gemini-api/terms · bản Claude (bỏ): https://platform.claude.com/docs/en/about-claude/pricing
 - W53 (tarot, tra 22/10 qua tóm tắt tìm kiếm) ảnh, bản quyền: https://en.wikipedia.org/wiki/Rider%E2%80%93Waite_Tarot · https://download.osmand.net/wiki/File:TheLovers.jpg · https://download.osmand.net/wiki/File:Cups04.jpg · https://www.glorioustrainwrecks.com/node/10985 · https://luciellaes.itch.io/rider-waite-smith-tarot-cards-cc0 · tên Việt: https://soitarot.vn/tarot · https://liu.com.vn/tarot · https://fptshop.com.vn/tin-tuc/dien-may/y-nghia-78-la-bai-tarot-168493 · https://jobsgo.vn/blog/y-nghia-78-la-bai-tarot/ · https://www.elle.vn/cung-hoang-dao/bai-tarot-tuong-trung-cung-hoang-dao/ · https://www.tarothuyenbi.info/2014/08/bon-la-queen-la-hoang-hau-trong-tarot.html · https://yody.vn/post/y-nghia-bai-tarot · https://dich.kabala.vn/tarot/bai-cards · https://aitamsu.com/tarot · https://phogotarot.com/blog/bo-an-phu-tarot-4-nguyen-to · sách Waite (bản sacred-texts 1910 lưu trên archive.org): https://archive.org/details/a.-e.-waite-the-pictorial-key-to-the-tarot
 ## Anh đã quyết (15/10/2026)
