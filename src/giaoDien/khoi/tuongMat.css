@@ -1,0 +1,5 @@
+.tuong-mat table { width: 100%; border-collapse: collapse; font-size: 15px; margin: 8px 0; }
+.tuong-mat th, .tuong-mat td { border-top: 1px solid var(--vien); padding: 5px 4px; text-align: left; vertical-align: top; }
+.tuong-mat th { font-weight: 400; }
+.tuong-mat th small { display: block; color: var(--mo); font-size: 15px; }
+.tuong-mat td { width: 3.5em; text-align: right; font-variant-numeric: tabular-nums; }

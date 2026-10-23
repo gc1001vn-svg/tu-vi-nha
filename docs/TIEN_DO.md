@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 23/10/2026 — **đợt 7 phần 1 (AI Groq miễn phí) đo thật xong, chọn `gpt-oss-120b`, đã gộp `main`; anh thử iPhone ổn**.
+Cập nhật: 23/10/2026 — **đợt 7 phần 2: khối tướng mặt tối thiểu (chỉ số đo) đã gộp `main`, chờ anh thử iPhone**.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -17,16 +17,18 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   theo việc" (mục 17–19), "Chiêm tinh hôm nay".
 - Thẻ "Phong thủy" (đợt 5, `QUY_UOC` mục 20–22): la bàn + lưu hướng nhà · thước Lỗ Ban (chỉ cung lớn; dán số từ app Đo) ·
   phi tinh năm/tháng, hướng kỵ năm (la bàn báo khi trùng).
-- AI Groq (`QUY_UOC` mục 25): "AI tổng hợp" + hỏi đáp dưới mỗi người, quẻ, tarot.
+- AI Groq (`QUY_UOC` mục 25): "AI tổng hợp" + hỏi đáp dưới mỗi người, quẻ, tarot · tướng mặt đo trong máy (mục 26, chưa lời giải).
 
 ## 2. Việc kế
 
-- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`): phần 1 xong, anh thử iPhone 23/10 ổn. **Kế: phần 2 (tướng mặt)** — phiên mới gõ "làm phần 2".
+- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`): phần 1 xong. Phần 2: khối tối thiểu gộp 23/10; iPhone ổn thì làm lời giải
+  (≥2 nguồn), đưa số đo vào AI, đo lại `do-mat.mjs`; hỏng thì lùi về chạm tay 6 điểm.
 - Sau đợt 7: 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- So cung Mọc (chiêm tinh) với astro-seek.
+- Thử tướng mặt trên iPhone ("Của tôi" → "Tướng mặt", chụp nhìn thẳng, không cười): ra số không, mấy giây, có văng app không ·
+  so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Chờ xoá (đã nằm trong `main`; tên đủ có `claude/` phía
   trước): `determined-galileo-xz2mc5` (lịch sử còn ngày sinh thật — nên xoá), `nifty-johnson-b0rxcq`, `luu-han-loi-giai`,
   `loi-giai-de-hieu`, `nguon-phat-dao`, `kinh-goc-cuu-dieu`, `ngoc-hap-ky`, `dot-4-kinh-dich`, `blissful-sagan-ur507y`,
@@ -34,16 +36,15 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 4. Nợ, chỗ chưa chắc
 
-- La bàn: `webkitCompassHeading` bắc từ hay bắc thật chưa thấy tài liệu Apple (VN lệch <2°, anh so app La bàn không lệch).
-- Hạn tháng chưa so Altuvi (phải trả tiền); tháng nhuận khi xem tính như tháng trước (sách Trung Hoa, hocvienlyso chia ở ngày 15).
+- La bàn: bắc từ hay bắc thật chưa thấy tài liệu Apple (VN lệch <2°, anh so không lệch; mục 20).
+- Hạn tháng chưa so Altuvi (phải trả tiền); tháng nhuận tính như tháng trước (bảng tuỳ chọn).
 - Mệnh chủ/Thân chủ theo *Toàn Thư* (`QUY_UOC` mục 15), chưa so Altuvi; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
-- Lời giải (tử vi Tân Biên Claude viết lại, sao hạn trang dân gian, bát tự nghĩa phổ biến, 450 đoạn Kinh Dịch agent soát một lượt,
-  chiêm tinh, tarot, lời AI) chưa ai rành đọc lại; bát tự chỉ đếm thô, chưa xét vượng suy. Phụ tinh tốt/xấu theo `ansaotuvi`,
-  có sao lệch sách (vd Mộ).
-- AI (`QUY_UOC` mục 25): gán sai cung ~1/10 hồ sơ, thêm lời khuyên ngoài dữ liệu — app chỉ nhắc; siết lời dặn thì đo lại.
-- Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng, sao ngày theo hoàng lịch Trung Hoa (lịch Việt có hệ sao khác);
-  mục kiêng trùng `cnlunar` chỉ 61 % → chọn ngày chỉ hạ Được. Ca kiểm chọn ngày lấy qua tóm tắt tìm kiếm, chưa mở trang gốc.
+- Lời giải (tử vi Tân Biên Claude viết lại, sao hạn, bát tự, Kinh Dịch, chiêm tinh, tarot, AI) chưa ai rành đọc lại; bát tự
+  đếm thô, chưa xét vượng suy. Phụ tinh tốt/xấu theo `ansaotuvi`, lệch sách vài sao (vd Mộ).
+- Tướng mặt (mục 26): khoé mắt lưới lọt vào trong (khoảng mắt lệch sách), chưa tự phát hiện cười.
+- AI (mục 25): gán sai cung ~1/10 hồ sơ, thêm lời khuyên ngoài dữ liệu — app chỉ nhắc; siết lời dặn thì đo lại.
+- Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng theo hoàng lịch Trung Hoa, kiêng trùng `cnlunar` 61 % → chọn ngày
+  chỉ hạ Được (mục 17–19).
 - Hướng sát chưa có nguồn Việt. Chiêm tinh: toạ độ tỉnh lỵ (cung Mọc lệch tới ~1°). Tarot: tên Việt vênh (lấy tên Anh làm chính).
   Tuỳ chọn `QUY_UOC` chưa có màn chỉnh.
-- Máy ảo chỉ thử Chromium. `lunar-typescript` 1.8.6 lộ mã `sn.*` (bảng Hán–Việt đỡ); bảng cần người rành lịch
-  đọc lại vài mục (Bành Tổ, lộc, 28 tú).
+- Máy ảo chỉ thử Chromium. Bảng Hán–Việt cần người rành lịch đọc lại vài mục (Bành Tổ, lộc, 28 tú).
