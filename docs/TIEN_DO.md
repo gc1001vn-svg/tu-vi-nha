@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 23/10/2026 — **đợt 7 phần 1 (AI Groq miễn phí) đo thật xong, chọn `gpt-oss-120b`, đã gộp `main`; chờ anh thử iPhone**.
+Cập nhật: 23/10/2026 — **đợt 7 phần 1 (AI Groq miễn phí) đo thật xong, chọn `gpt-oss-120b`, đã gộp `main`; anh thử iPhone ổn**.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -21,12 +21,12 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`): phần 1 xong. **Kế: phần 2 (tướng mặt)** sau khi anh thử AI trên iPhone.
+- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`): phần 1 xong, anh thử iPhone 23/10 ổn. **Kế: phần 2 (tướng mặt)** — phiên mới gõ "làm phần 2".
 - Sau đợt 7: 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- Thử AI trên iPhone (dán khoá Groq ở "Của tôi"; nên tạo khoá riêng: https://console.groq.com/keys) · so cung Mọc.
+- So cung Mọc (chiêm tinh) với astro-seek.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Chờ xoá (đã nằm trong `main`; tên đủ có `claude/` phía
   trước): `determined-galileo-xz2mc5` (lịch sử còn ngày sinh thật — nên xoá), `nifty-johnson-b0rxcq`, `luu-han-loi-giai`,
   `loi-giai-de-hieu`, `nguon-phat-dao`, `kinh-goc-cuu-dieu`, `ngoc-hap-ky`, `dot-4-kinh-dich`, `blissful-sagan-ur507y`,
