@@ -363,6 +363,48 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   bình phương), 10.000 lần trải 10 lá không trùng, lá ngược 50 % ± 1 %.
 - Nghĩa xuôi, ngược: Claude soạn lại theo Waite (1910) và cách đọc phổ biến; chưa người rành đọc lại.
 
+## 25. AI (đợt 7 phần 1: `src/loi/ai/`, `src/giaoDien/ai/`, làm và đo thật 23/10)
+- **Hãng, cách gọi**: Groq miễn phí (anh chọn 23/10: "không tốn tiền, ưu tiên ngay trong app"; bản đầu dùng Claude trả phí, bỏ
+  cùng ngày). API kiểu OpenAI, gọi thẳng từ trình duyệt bằng `fetch` (không thêm thư viện), khoá Groq anh dán; tài khoản không
+  gắn thẻ nên không bao giờ mất tiền, hết lượt thì chờ. **Groq cho trình duyệt gọi thẳng** (thử 23/10, khoá giả: hỏi trước ra
+  204, `access-control-allow-origin: *`, cho đầu `authorization`; Chromium thật đọc được lỗi 401; khoá thật 23/10: 200, chữ chảy
+  dần đủ tới `[DONE]`) → không cần trạm trung gian.
+  Groq không mở đầu `retry-after` cho trình duyệt → số giây chờ lấy từ lời lỗi ("try again in 1m2.5s"). Mô hình
+  `openai/gpt-oss-120b`, chọn sau đo (mục **Đo**; Groq bỏ Llama 3.3 70B 16/08, Qwen3 32B 17/07; 23/10 có `qwen/qwen3.8-27b`, chưa
+  đo), suy nghĩ ít (`reasoning_effort: low`).
+- **Hạn mức** gói miễn phí gpt-oss-120b, 20b: 30 lượt/phút, 1.000 lượt/ngày, 8.000 token/phút, 200.000 token/ngày, tính theo tài
+  khoản chứ không theo khoá; Groq giữ trước cả trần đầu ra xin (người dùng báo: 20 token vào + trần 8.192 → 413 "Requested
+  8,271"; chưa thấy lời Groq) [W54]. Đếm 23/10 (bộ tách chữ o200k_harmony của gpt-oss, 10 hồ sơ giả): lời dặn + dữ liệu + yêu cầu
+  3,7–4,0 nghìn token khi có giờ sinh, 2,1–2,3 nghìn khi không → `vuaHanMuc` (`goi.ts`): lượt đầu xin 3.000 token ra, hỏi thêm
+  1.500, ước 2,2 ký tự/token; vượt 8.000 thì bỏ cặp hỏi đáp cũ nhất (AI không thấy lời đó nữa). Một lời tổng hợp xin ~7 nghìn
+  token → khoảng 1 lượt/phút, ~30 lượt/ngày cho cả nhà chung một khoá (ước).
+- **Gửi đi** (`duLieu.ts`): giới tính, ngày giờ sinh, tỉnh (hay múi giờ nước ngoài) và số app đã tính của 9 mục — người xem, tử vi
+  (12 cung, sao, độ sáng, hạn năm/tháng/ngày, sao lưu), năm nay, bát tự, hướng, tuổi hợp, thần số, nhịp sinh học, chiêm tinh; quẻ:
+  quẻ chủ, hào động, biến, hỗ, Mai Hoa, đoạn nên đọc kèm nguyên văn và lời app; tarot: vị trí, lá, xuôi/ngược, lời app. **Không gửi
+  tên.** Hồ sơ giả 10/05/1990 06:14 Hà Nội: 8.055 ký tự (10.242 byte). Groq ghi không huấn luyện bằng dữ liệu API, có nút tắt lưu log
+  (Zero Data Retention) — đọc qua trang thứ ba [W54]. Ảnh Console Groq anh chụp 23/10 (Data Controls) xác nhận: chưa bật ZDR thì
+  Groq "may store inputs and outputs for up to 30 days" (giữ ổn định, tuân thủ); bật Global ZDR thì không lưu, tắt luôn Batch,
+  Fine-tuning (app không dùng).
+- **Lời dặn** (`loiDan.ts`, Claude soạn): chỉ dùng DỮ LIỆU, không tự tính; không nêu tên ngoài DỮ LIỆU; thiếu thì nói "Dữ liệu app
+  tính chưa có …"; không phán chắc bệnh tật, tai nạn, kiện tụng, đầu tư; mục "## ", ý "- ".
+- **Dò bịa** (`kiemBia.ts`): từ điển tên riêng — sao tử vi, 9 sao hạn, 8 hạn, 60 can chi, 30 nạp âm, thập thần, 12 cung hoàng đạo,
+  8 sao Bát trạch (quẻ: thêm 64 tên quẻ; tarot: 78 lá tên Anh, Việt), chỉ tên ≥2 chữ, đúng chữ hoa, tròn chữ. Tên AI nêu mà DỮ LIỆU
+  không có → gạch chân. Không bắt được tên có thật mà gán sai chỗ (sao X ở cung Y) — đo thật 23/10 thấy có (mục **Đo**) → khối AI
+  ghi "AI có thể chép nhầm chỗ (sao, cung), đối chiếu với số app bên trên".
+- **Lưu**: khoá ở `localStorage` khoá riêng `tvn.ai.v1`, không vào file sao lưu; hỏi đáp chỉ trong bộ nhớ.
+- **Đo**: test không mạng (máy chủ giả trả dòng sự kiện, cắt giữa chừng; lỗi 401, 404, 413, 429 có số giây chờ, 503, mất mạng,
+  dừng) + Playwright chặn mạng. Đo thật 23/10 `scripts/doi-chieu/do-ai.ts` (10 hồ sơ giả × 2 mô hình + 10 câu bẫy; 40 lượt không
+  lỗi, ~20 phút vì hạn mức token/phút):
+  - `gpt-oss-120b`: lời có tên bịa 0/10, bẫy nói "chưa có" 10/10, 2,8 giây/lời. `gpt-oss-20b`: bịa 0/10, bẫy 8/10 theo thước
+    (đọc tay 9/10: thước chỉ nhận "chưa có|không có", câu đúng "không được tính" bị chấm hỏng; câu hỏng thật: lấy số chủ đạo làm
+    "số may mắn"), 1,5 giây. Ngưỡng gộp (bịa ≤1/10 hồ sơ, app gạch đủ tên bịa) → **chọn 120b**.
+  - Soát thêm một lần, ngoài repo, đọc tay: so không phân biệt hoa thường thì app không gạch sót tên bịa nào (không có tên bịa
+    thật nên "gạch đủ 100 %" chưa được thử bằng lời thật — test giả đỡ). Gán sai chỗ, đếm tối thiểu (câu "sao S ở cung X", câu
+    nêu một cung): 120b 1 chỗ/10 hồ sơ (Lưu Đà La sang Tài Bạch, cùng câu gọi Kình Dương, Đà La là "hỗ trợ tài chính"); 20b 2 chỗ
+    (sao Phu Thê đặt sang Phụ Mẫu, gọi Đại Hao là sao tốt) + "Mệnh chính là Văn Khúc" (là Mệnh chủ); chi của cung 36/36 đúng.
+  - Cả hai còn thêm lời khuyên ngoài DỮ LIỆU (ăn uống, màu sơn, vitamin; "Kế Đô… tiêu hoá, xương khớp") dù lời dặn bảo chỉ
+    dùng DỮ LIỆU.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -444,6 +486,14 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 - W50 (chiêm tinh, tra 22/10 qua tóm tắt tìm kiếm) hệ nhà: https://theastrologypodcast.com/transcripts/ep-244-transcript-how-did-placidus-become-the-most-popular-house-system/ · https://help.optuma.com/kb/faq.php?id=1218 · https://kerykeion.net/content/learn-astrology/foundation-house-systems · orb: https://www.skyscript.co.uk/glossary/orbs · https://www.astrotheme.com/astrology_aspects.php · https://my-zodiac-ai.com/vi/glossary/sextile · https://my-zodiac-ai.com/vi/glossary/conjunction · nút: https://kerykeion.net/content/learn-astrology/foundation-mean-true-node · https://www.astromitra.com/western-astrology/north-node-calculator.php · https://glama.ai/mcp/servers/cwkgwfkaw1 · tên: https://glints.com/vn/blog/cung-moc-la-gi/ · https://shopee.vn/blog/cung-moc-la-gi/ · https://viettelstore.vn/tin-tuc/cung-moc-la-gi-kham-pha-y-nghia-va-anh-huong-den-tinh-cach · https://jobsgo.vn/blog/cung-moc/ · https://www.careerlink.vn/cam-nang-viec-lam/goc-ky-nang/ban-do-sao-la-gi-cach-doc-ban-do-sao-cung-hoang-dao · https://fptshop.com.vn/tin-tuc/danh-gia/cach-xem-ban-do-sao-173466 · https://tianqi.masterseanchan.com/vi/learn/western · https://www.vietnamworks.com/hrinsider/ban-do-sao-la-gi-giai-ma-cach-doc-ban-do-sao-hoang-dao.html
 - W51 (phân điểm, chí điểm 2026, tra 22/10): https://icalendars.net/tools/equinoxes-solstices · https://starwalk.space/news/what-is-an-equinox · https://www.universaltimedate.com/articles/equinoxes-and-solstices-2026 · https://www.farmersalmanac.com/equinox-solstice — 20/03 14:46, 21/06 08:24, 23/09 00:05, 21/12 20:50 UTC (khớp máy); hai trang sau ghi tháng 6, tháng 9 lệch đúng vài giờ, nghi nhầm múi giờ, không theo.
 - W52 (chiêm tinh hôm nay, tra 22/10 qua tóm tắt tìm kiếm) Sao Thủy nghịch hành 2026: https://chani.com/this-year/key-dates/2026-astrological-key-dates-mercury-retrogrades · https://cafeastrology.com/events/mercury-turns-direct-in-cancer-2026/ · https://cafeastrology.com/events/mercury-turns-direct-in-scorpio-2026/ · https://www.almanac.com/content/mercury-retrograde-dates · https://miniwebtool.com/vi/l%E1%BB%8Bch-sao-th%E1%BB%A7y-ngh%E1%BB%8Bch-h%C3%A0nh/?year=2026 · https://my-zodiac-ai.com/vi/blog/mercury-retrograde-2026-complete-calendar-survival-guide · tuần trăng: https://viettelstore.vn/tin-tuc/cach-xem-chu-ky-trang-cuc-don-gian-va-chinh-xac · https://hoanghamobile.com/tin-tuc/bat-trend-the-moon-on-ngay-thang-nam-sinh/ · https://hoatieu.vn/tai-lieu/moon-phase-la-gi-212830 · https://vjol.info.vn/index.php/NNDS/article/download/15768/14176 (thượng huyền ngày 7–9, hạ huyền 22–23 âm)
+- W54 (AI, tra 23/10 qua tóm tắt tìm kiếm — trang Groq bị máy ảo chặn) Groq không huấn luyện bằng dữ liệu API, nút Zero Data
+  Retention: https://standardcompute.com/providers/groq · https://www.developersdigest.tech/models/free-api/groq ·
+  https://aireiter.com/blog/best-free-ai-api · mô hình bị bỏ: https://console.groq.com/docs/deprecations ·
+  https://www.developersdigest.tech/deprecations/groq · hạn mức: https://console.groq.com/docs/rate-limits ·
+  https://localaimaster.com/blog/groq-api-free-guide · https://www.eesel.ai/blog/groq-pricing · giữ trước trần ra:
+  https://dev.to/build996/a-rate-limit-that-counts-the-tokens-you-asked-for-not-the-ones-you-got-1oda ·
+  https://github.com/WillianSiquieri/WillianSiquieri.github.io/pull/22 · Gemini miễn phí dùng
+  dữ liệu: https://ai.google.dev/gemini-api/terms · bản Claude (bỏ): https://platform.claude.com/docs/en/about-claude/pricing
 - W53 (tarot, tra 22/10 qua tóm tắt tìm kiếm) ảnh, bản quyền: https://en.wikipedia.org/wiki/Rider%E2%80%93Waite_Tarot · https://download.osmand.net/wiki/File:TheLovers.jpg · https://download.osmand.net/wiki/File:Cups04.jpg · https://www.glorioustrainwrecks.com/node/10985 · https://luciellaes.itch.io/rider-waite-smith-tarot-cards-cc0 · tên Việt: https://soitarot.vn/tarot · https://liu.com.vn/tarot · https://fptshop.com.vn/tin-tuc/dien-may/y-nghia-78-la-bai-tarot-168493 · https://jobsgo.vn/blog/y-nghia-78-la-bai-tarot/ · https://www.elle.vn/cung-hoang-dao/bai-tarot-tuong-trung-cung-hoang-dao/ · https://www.tarothuyenbi.info/2014/08/bon-la-queen-la-hoang-hau-trong-tarot.html · https://yody.vn/post/y-nghia-bai-tarot · https://dich.kabala.vn/tarot/bai-cards · https://aitamsu.com/tarot · https://phogotarot.com/blog/bo-an-phu-tarot-4-nguyen-to · sách Waite (bản sacred-texts 1910 lưu trên archive.org): https://archive.org/details/a.-e.-waite-the-pictorial-key-to-the-tarot
 ## Anh đã quyết (15/10/2026)
 
@@ -455,3 +505,4 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
 6. (20/10) Tốt/xấu 9 sao Cửu Diệu: **giữ như dân gian** (3 tốt: Thái Dương, Thái Âm, Mộc Đức · 3 xấu: La Hầu, Kế Đô, Thái Bạch · 3 trung tính: Thổ Tú, Thủy Diệu, Vân Hớn), không theo kinh gốc (Thổ Tú, Vân Hớn xấu; Thủy Diệu tốt — mục 14), không làm tuỳ chọn.
 7. (21/10) Không có trang lịch "anh tin": xemlicham chỉ là trang anh tìm trên mạng. Chỗ các nguồn vênh: **theo bên được nhiều nguồn uy tín công nhận nhất**; bên chỉ có một trang thì không theo, không làm tuỳ chọn.
 8. (22/10) Chiêm tinh: Bắc Giao Điểm tính kiểu **trung bình** như astro-seek (mục 23).
+9. (23/10) AI: đợt 7 đủ 3 phần (chỉ tay làm sau cùng, bỏ được). Hãng: chọn Claude rồi cùng ngày đổi sang **Groq miễn phí** — "không tốn tiền, ưu tiên ngay trong app" (mục 25).

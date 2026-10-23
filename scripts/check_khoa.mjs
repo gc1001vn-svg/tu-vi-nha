@@ -29,6 +29,8 @@ const MAU = [
   ['khoa Google kieu moi (AQ.…)', new RegExp(`${'AQ'}\\.[0-9A-Za-z_-]{30,}`)],
   ['khoa Anthropic (sk-ant-…)', new RegExp(`${'sk'}-ant-[0-9A-Za-z_-]{20,}`)],
   ['khoa OpenAI (sk-…)', new RegExp(`${'sk'}-[A-Za-z0-9]{32,}`)],
+  // App dung Groq mien phi tu dot 7 (23/10): khoa Groq la `gsk_` + chuoi dai.
+  ['khoa Groq (gsk_…)', new RegExp(`${'gsk'}_[0-9A-Za-z]{40,}`)],
   ['token GitHub (ghp_/gho_/ghs_…)', new RegExp(`${'gh'}[pousr]_[0-9A-Za-z]{36}`)],
   ['khoa AWS (AKIA…)', new RegExp(`${'AKIA'}[0-9A-Z]{16}`)],
   // Bat kieu `api_key: "…"` chung chung. Doi >= 24 ky tu de khong bao nham duong dan,

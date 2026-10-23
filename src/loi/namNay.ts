@@ -81,7 +81,7 @@ export const NGUON_SAO_HAN = 'Về nguồn: bảng sao theo tuổi có từ hai 
   + 'việc dâng sao giải hạn biến tướng thành dịch vụ trục lợi.';
 
 // Phan tu thu i = tuoi mu chia 9 du i.
-const SAO_NAM = ['Mộc Đức', 'La Hầu', 'Thổ Tú', 'Thủy Diệu', 'Thái Bạch', 'Thái Dương', 'Vân Hớn', 'Kế Đô', 'Thái Âm'];
+export const SAO_NAM = ['Mộc Đức', 'La Hầu', 'Thổ Tú', 'Thủy Diệu', 'Thái Bạch', 'Thái Dương', 'Vân Hớn', 'Kế Đô', 'Thái Âm'];
 const SAO_NU = ['Thủy Diệu', 'Kế Đô', 'Vân Hớn', 'Mộc Đức', 'Thái Âm', 'Thổ Tú', 'La Hầu', 'Thái Dương', 'Thái Bạch'];
 
 // 8 han: dem tren ban tay, 10 tuoi nam o Huynh Tuyen, nu o Tan Tan (nu di nguoc); moi chuc sang mot cung, tuoi le dem tiep
@@ -107,7 +107,7 @@ const HAN: Bang = {
     'Hạn xấu về chuyện buồn: dễ có tin buồn, người nhà đau ốm, xa nhà gặp chuyện. Nên thăm hỏi người thân, đi lại cẩn thận.'],
 };
 // Phan tu thu i = (so chuc + so don vi) chia 8 du i.
-const HAN_NAM = ['Diêm Vương', 'Huỳnh Tuyền', 'Tam Kheo', 'Ngũ Mộ', 'Thiên Tinh', 'Tán Tận', 'Thiên La', 'Địa Võng'];
+export const HAN_NAM = ['Diêm Vương', 'Huỳnh Tuyền', 'Tam Kheo', 'Ngũ Mộ', 'Thiên Tinh', 'Tán Tận', 'Thiên La', 'Địa Võng'];
 const HAN_NU = ['Thiên La', 'Tán Tận', 'Thiên Tinh', 'Ngũ Mộ', 'Tam Kheo', 'Huỳnh Tuyền', 'Diêm Vương', 'Địa Võng'];
 
 // Kim Lau: tuoi mu chia 9 du 1, 3, 6, 8 (dienmayxanh, hoatieu, fptshop). Cach "cong chu so toi mot chu so" ra cung so du

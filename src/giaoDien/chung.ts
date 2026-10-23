@@ -1,8 +1,8 @@
 /**
  * Do nghe chung cua giao dien: tao the DOM, ngay "hom nay" theo gio VN, phut lech mui gio nuoc ngoai (Intl — loi cam locale).
  */
-import { dinhDangAm, type NgayDuong } from '../loi/amLich.ts';
-import { tinhHoSo, type HoSo, type KetQuaHoSo, type TinhRa } from '../loi/hoSo.ts';
+import type { NgayDuong } from '../loi/amLich.ts';
+import { tinhHoSo, type HoSo, type TinhRa } from '../loi/hoSo.ts';
 import { NUOC_NGOAI } from '../loi/tinh.ts';
 
 type Con = Node | string | null | false;
@@ -26,6 +26,20 @@ export const THU: readonly string[] = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 
 /** Khoi gap/mo: the `<details>` san cua trinh duyet — khong can JS, may doc man hinh doc duoc. */
 export function khoi(tieuDe: string, moSan: boolean, ...con: Con[]): HTMLElement {
   return el('details', { class: 'khoi', ...(moSan ? { open: '' } : {}) }, el('summary', {}, tieuDe), ...con);
+}
+
+/** Khoi gap/mo nap luoi: `nap` (thuong `import()` mot file rieng) chay lan dau mo khoi — goi mo app khong keo theo ma nang. */
+export function khoiNap(tieuDe: string, lop: string, nap: () => Promise<Node[]>): HTMLElement {
+  const than = el('div', { class: lop }, el('p', { class: 'ghi-chu' }, 'Đang tính…'));
+  const k = khoi(tieuDe, false, than);
+  let daNap = false;
+  k.addEventListener('toggle', () => {
+    if (daNap || !k.hasAttribute('open')) return;
+    daNap = true;
+    nap().then((con) => { than.replaceChildren(...con); },
+      (e: unknown) => { than.replaceChildren(el('p', { class: 'loi' }, `Không tính được: ${e instanceof Error ? e.message : String(e)}`)); });
+  });
+  return k;
 }
 
 /** "Hom nay" luon theo gio Viet Nam (+7), du may dang dat mui khac. */
@@ -57,12 +71,3 @@ export function lechNuocNgoai(hs: HoSo): number | undefined {
 }
 
 export const tinh = (hs: HoSo): TinhRa => tinhHoSo(hs, lechNuocNgoai(hs));
-
-const GIA_TRI: Readonly<Record<string, (k: KetQuaHoSo) => string>> = {
-  'ngày âm': (k) => dinhDangAm(k.am), 'năm': (k) => k.canChiNam, 'tháng': (k) => k.canChiThang,
-  'ngày': (k) => k.canChiNgay, 'giờ': (k) => k.chiGio ?? '?', 'mệnh': (k) => k.napAm, 'cung phi': (k) => k.cungPhi,
-};
-
-/** "ngày âm 6/9/2026, ngày Nhâm Tuất" — gia tri cua cac truong khac ban chinh. */
-export const moTaKhac = (truong: readonly string[], k: KetQuaHoSo): string =>
-  truong.map((t) => `${t} ${GIA_TRI[t]?.(k) ?? ''}`.trim()).join(', ');

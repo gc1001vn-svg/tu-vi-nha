@@ -4,12 +4,13 @@
  *   - "Tra cuu": nhap bat ky ai, ra ket qua ngay, KHONG luu (anh chot 19/10; luu them nguoi khac de dot 9).
  */
 import { amSangDuong, dinhDangAm, dinhDangNgay, soNgay, thu, type NgayAm, type NgayDuong } from '../loi/amLich.ts';
-import { kiemHoSo, tuoiMu, type GioiTinh, type HoSo } from '../loi/hoSo.ts';
+import { kiemHoSo, moTaKhac, tuoiMu, type GioiTinh, type HoSo } from '../loi/hoSo.ts';
 import { xemNgay } from '../loi/homNay.ts';
 import { docGioGo, docNgayGo, khungGio, noiSinhChac, timNoiSinh } from '../loi/nhap.ts';
 import { NUOC_NGOAI } from '../loi/tinh.ts';
 import { docFile, type Kho } from '../luuTru.ts';
-import { el, homNay7, isoNgay, moTaKhac, THU, tinh } from './chung.ts';
+import { khoiCaiDatAI } from './ai/index.ts';
+import { el, homNay7, isoNgay, THU, tinh } from './chung.ts';
 import { dongTheoTuoi } from './homNay.ts';
 import { CAC_KHOI } from './khoi/index.ts';
 
@@ -282,7 +283,7 @@ export function veCuaToi(ctx: CuaToi): HTMLElement {
       return loi;
     };
     const huy = toi === undefined ? null : (): void => { dangSuaToi = false; ctx.ve(); };
-    return el('div', {}, form('Hồ sơ của tôi', 'Lưu', 'Tôi', toi ?? null, luu, huy), khoiSaoLuu(ctx));
+    return el('div', {}, form('Hồ sơ của tôi', 'Lưu', 'Tôi', toi ?? null, luu, huy), khoiSaoLuu(ctx), khoiCaiDatAI());
   }
   const sua = el('button', { type: 'button' }, 'Sửa');
   sua.addEventListener('click', () => { dangSuaToi = true; ctx.ve(); });
@@ -293,7 +294,7 @@ export function veCuaToi(ctx: CuaToi): HTMLElement {
     if (loi !== null) ctx.bao(loi);
     ctx.ve();
   });
-  return el('div', {}, theHoSo(toi, sua, xoa), khoiSaoLuu(ctx));
+  return el('div', {}, theHoSo(toi, sua, xoa), khoiSaoLuu(ctx), khoiCaiDatAI());
 }
 
 export function veTraCuu(ve: () => void): HTMLElement {
