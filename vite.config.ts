@@ -20,6 +20,13 @@ export default defineConfig({
       workbox: {
         // webp: 78 anh tarot (~2,5 MB) cai san cung app de tat mang van rut duoc bai (ke hoach dot 6).
         globPatterns: ['**/*.{js,css,html,png,svg,json,webp}'],
+        // Tuong mat (dot 7 phan 2): MediaPipe ~17 MB khong cai san — chi tai khi bam chon anh, luu lai de lan sau khong can mang.
+        globIgnores: ['**/vision_wasm_*', '**/tuongMatMp-*'],
+        runtimeCaching: [{
+          urlPattern: /\/(assets\/(vision_wasm_|tuongMatMp-)|mediapipe\/)/,
+          handler: 'CacheFirst',
+          options: { cacheName: 'tuong-mat', expiration: { maxEntries: 10 } },
+        }],
         // Ban moi chiem quyen ngay, khong doi dong het tab — iOS giu service worker cu rat lau
         // (quoc-chien mat mot buoi sang 08/09 vi thieu hai dong nay).
         skipWaiting: true,

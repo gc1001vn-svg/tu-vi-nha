@@ -35,6 +35,7 @@
     "vitest": "^5.0.0"
   },
   "dependencies": {
+    "@mediapipe/tasks-vision": "1.1.1",
     "@tuquet/lunar": "0.1.0",
     "astronomy-engine": "2.1.19",
     "lunar-typescript": "1.8.6"

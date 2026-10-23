@@ -405,6 +405,33 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   - Cả hai còn thêm lời khuyên ngoài DỮ LIỆU (ăn uống, màu sơn, vitamin; "Kế Đô… tiêu hoá, xương khớp") dù lời dặn bảo chỉ
     dùng DỮ LIỆU.
 
+## 26. Tướng mặt — đo (đợt 7 phần 2: `src/loi/tuongMat.ts`, `src/giaoDien/khoi/tuongMat*.ts`; khối tối thiểu 23/10, chưa lời giải)
+- **Thư viện**: MediaPipe Face Landmarker (`@mediapipe/tasks-vision` 1.1.1, Apache-2.0), chạy CPU. Mô hình `face_landmarker`
+  float16 bản 1 (3,76 MB; thẻ mô hình ghi Apache 2.0) để trong `public/mediapipe/` — gọi cùng địa chỉ app, không sang máy chủ
+  Google; đổi mô hình thì đổi tên file. WASM 13,5 MB (bản không SIMD 12,6 MB cho máy cũ) Vite chép từ gói npm. Không cài sẵn cùng
+  app: service worker lưu khi dùng lần đầu (`tuong-mat`, CacheFirst). Gói mở app +0,2 KB, gói cài sẵn +3 KB (23/10).
+- **Ảnh**: thu nhỏ ≤1024 px rồi đo; không lưu, không gửi; đo xong đóng thư viện, xoá canvas (Safari iPhone ít bộ nhớ).
+- **Điểm** (lưới 478 điểm, kiểm bằng mắt trên ảnh 23/10; mắt phải người trong ảnh = bên trái ảnh): khoé mắt 33/133, 362/263 ·
+  mép mặt ngang tầm mắt 234/454 · cánh mũi 129/358 (cặp rộng nhất quanh mũi) · khoé miệng 61/291 · ấn đường 9 · chân mũi 2 ·
+  đáy cằm 152 · lông mày đầu ngoài giữa (70, 46)/(300, 276), đầu trong giữa (107, 55)/(336, 285) · mày cách mắt 52–159, 282–386.
+  Lưới không tới chân tóc → **không đo thượng đình**.
+- **Số đo**, đều là tỉ lệ hai khoảng cách thẳng (xoay ảnh, phóng to không đổi; mắt = trung bình hai mắt): trung đình (ấn đường →
+  chân mũi) : hạ đình (chân mũi → đáy cằm) · ngũ nhãn (mặt ngang / mắt) · khoảng giữa hai mắt / mắt · cánh mũi / khoảng giữa hai
+  mắt · miệng / cánh mũi · dài (ấn đường → cằm) / ngang mặt · lông mày / mắt · ấn đường / mắt · mày cách mắt / mắt.
+- **Cách đo**: tìm mặt → cắt khung vuông lấy mặt làm tâm, 5 cỡ (1,7–2,3 lần chiều lớn của mặt) × ảnh và ảnh lật gương = 10 lần →
+  trung bình. Vì mô hình lệch trái phải tới ~6 % và khung lệch vài điểm ảnh đổi số tới ~5 % (ảnh lật gương lệch tối đa: 2 khung
+  5,3 % · 3 khung 2,2 % · 5 khung 1,05 %). Sai số hiện ra = 2 sai số chuẩn của trung bình, lấy số lớn nhất trong 9 tỉ lệ.
+- **Chặn**: không thấy mặt · từ 2 mặt · mặt nhỏ hơn 12 % cạnh dài ảnh (bộ tìm mặt thu ảnh về 128 px, mặt nhỏ lúc thấy lúc không:
+  ảnh ghép hai người, mỗi mặt 10 %, từng đo nhầm một người; ảnh chân dung thật 15–33 %) · đầu quay ngang quá 10° hay ngẩng/cúi
+  quá 15° (kế hoạch ghi 10°; ảnh chân dung chính diện đo ra ngẩng −2–14°, quay ±5° nên nới ngẩng). Góc lấy từ ma trận MediaPipe đo
+  trên khung đã cắt: đo cả ảnh thì mặt lệch tâm bị tính thành ngẩng (ảnh chính diện ra 22°). Nghiêng đầu sang bên không chặn.
+- **Đo 23/10** (`scripts/doi-chieu/do-mat.mjs`, Chromium, 7 ảnh chân dung chính thức chính phủ Mỹ, NASA — phạm vi công cộng, tải
+  ngoài repo): 7/7 ra đúng 1 mặt, chạy 2 lần cùng số, ảnh lật gương lệch ≤1,05 % (ngưỡng 2 %), sai số ±1,2–2,9 %; ảnh trơn, hai
+  người nhỏ, hai người to báo đúng. 10 lần đo 0,45–0,83 giây (máy ảo). **iPhone: chưa thử.**
+- **Chưa chắc, xử ở bước lời giải**: (1) khoé mắt của lưới nằm lọt vào trong → khoảng giữa hai mắt ra 1,1–1,45 mắt, số nhân trắc
+  người thật ~1,0–1,2 → "đúng máy, sai sách": không so thẳng với chuẩn sách. (2) Cười làm miệng rộng, mắt híp: app chỉ dặn mặt
+  tự nhiên, chưa tự phát hiện. (3) 7 ảnh, đa số cười — chưa đủ đặt ngưỡng lời giải.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|

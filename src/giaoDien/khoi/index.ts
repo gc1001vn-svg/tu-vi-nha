@@ -10,8 +10,10 @@ import { veKhoiNamNay } from './namNay.ts';
 import { veKhoiHuong, veKhoiTuoiHop } from './phongThuy.ts';
 import { veKhoiChiemTinh } from './chiemTinh.ts';
 import { veKhoiNhipSinhHoc, veKhoiThanSo } from './soHoc.ts';
+import { veKhoiTuongMat } from './tuongMat.ts';
 import { veKhoiTuVi } from './tuVi.ts';
 
 export const CAC_KHOI: readonly VeKhoi[] = [
-  veKhoiTuVi, veKhoiNamNay, veKhoiBatTu, veKhoiHuong, veKhoiTuoiHop, veKhoiThanSo, veKhoiChiemTinh, veKhoiNhipSinhHoc, veKhoiAI,
+  veKhoiTuVi, veKhoiNamNay, veKhoiBatTu, veKhoiHuong, veKhoiTuoiHop, veKhoiThanSo, veKhoiChiemTinh, veKhoiNhipSinhHoc,
+  veKhoiTuongMat, veKhoiAI,
 ];
