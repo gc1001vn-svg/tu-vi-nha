@@ -1,62 +1,88 @@
 /**
- * Goi Claude thang tu trinh duyet (dot 7 phan 1) bang thu vien chinh thuc `@anthropic-ai/sdk`, khoa nguoi dung dan (chi nam
- * trong may). Chu chay dan qua `khiChu`; xong tra tien theo usage. Loi doi ra cau tieng Viet, khong bao gio kem khoa.
+ * Goi AI mien phi qua Groq (anh chon 23/10, dot 7): API kieu OpenAI, goi thang tu trinh duyet bang khoa Groq mien phi anh dan
+ * (tai khoan khong gan the → khong bao gio ton tien). Chu chay dan qua `khiChu`. Loi doi ra cau tieng Viet, khong kem khoa.
+ * `diaChi` doi duoc: neu Groq chan goi tu trinh duyet thi tro sang tram trung gian, ma con lai giu nguyen.
  */
-import Anthropic from '@anthropic-ai/sdk';
-import { tienGoi } from '../../loi/ai/chiPhi.ts';
 import { LOI_DAN } from '../../loi/ai/loiDan.ts';
 
-/** Mo hinh tam dung tu khi do 3 mo hinh xong va anh chon (ke hoach dot 7: tam Opus 5.5, mac dinh cua Anthropic). */
-export const MO_HINH = 'claude-opus-5-5';
+export const DIA_CHI = 'https://api.groq.com/openai/v1/chat/completions';
+/** Mo hinh tam: Groq hay bo mo hinh, gpt-oss-120b la mo hinh chinh con lai (tra 23/10) — do roi chon (ke hoach dot 7). */
+export const MO_HINH = 'openai/gpt-oss-120b';
+
+export interface TinNhan { readonly role: 'user' | 'assistant'; readonly content: string }
 
 export interface KetQuaGoi {
   readonly chu: string;
-  readonly tien: number;
-  /** Mo hinh that da tra loi (khac `MO_HINH` khi mo hinh du phong tra loi thay). */
   readonly moHinh: string;
-  /** 'tuChoi': AI tu choi theo luat an toan; 'quaDai': het tran token, chu bi cat. */
-  readonly ket: 'xong' | 'tuChoi' | 'quaDai';
+  /** 'quaDai': het tran token, chu bi cat; 'tuChoi': bo loc noi dung cua Groq chan. */
+  readonly ket: 'xong' | 'quaDai' | 'tuChoi';
 }
 
-/** `fetch`, `maxRetries` de test thay mang; `moHinh`, `effort` de kich ban do so cac mo hinh. */
-export interface TuyChonGoi {
-  readonly fetch?: typeof fetch;
-  readonly maxRetries?: number;
-  readonly moHinh?: string;
-  readonly effort?: 'low' | 'medium' | 'high';
-}
+/** `fetch` de test thay mang; `moHinh`, `diaChi` de kich ban do so cac mo hinh, tram trung gian. */
+export interface TuyChonGoi { readonly fetch?: typeof fetch; readonly moHinh?: string; readonly diaChi?: string }
 
-export async function goiClaude(khoa: string, duLieu: string, tin: readonly Anthropic.Beta.BetaMessageParam[],
-  khiChu: (them: string) => void, dung: AbortSignal, tc: TuyChonGoi = {}): Promise<KetQuaGoi> {
-  const moHinh = tc.moHinh ?? MO_HINH;
-  const client = new Anthropic({ apiKey: khoa, dangerouslyAllowBrowser: true, maxRetries: tc.maxRetries ?? 2, ...(tc.fetch === undefined ? {} : { fetch: tc.fetch }) });
-  // AI tu choi thi may chu Anthropic tu chuyen mo hinh du phong; Haiku 5.5 khong co mo hinh du phong (tai lieu Anthropic).
-  const duPhong = moHinh === 'claude-haiku-5-5' ? {} : { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' as const };
-  const luong = client.beta.messages.stream({
-    model: moHinh, max_tokens: 16_000, output_config: { effort: tc.effort ?? 'medium' },
-    // LOI_DAN + du lieu dung yen tu luot dau: bo nho dem tu dong cua API dung lai cho cac cau hoi tiep (re hon ~20 lan).
-    system: [{ type: 'text', text: LOI_DAN }, { type: 'text', text: `DỮ LIỆU:\n${duLieu}` }], messages: [...tin], cache_control: { type: 'ephemeral' },
-    ...duPhong,
-  }, { signal: dung });
-  luong.on('text', khiChu);
-  const m = await luong.finalMessage();
-  return {
-    chu: m.content.flatMap((b) => (b.type === 'text' ? [b.text] : [])).join(''), tien: tienGoi(m.model, m.usage), moHinh: m.model,
-    ket: m.stop_reason === 'refusal' ? 'tuChoi' : m.stop_reason === 'max_tokens' ? 'quaDai' : 'xong',
-  };
-}
-
-/** Loi thu vien → cau tieng Viet. Lop con truoc lop cha (trong thu vien TS, `APIConnectionError` la con cua `APIError`). */
-export function loiTiengViet(e: unknown): string {
-  if (e instanceof Anthropic.APIUserAbortError) return 'Đã dừng.';
-  if (e instanceof Anthropic.AuthenticationError) return 'Khoá API sai hoặc đã bị thu hồi: kiểm lại khoá ở mục AI cuối thẻ "Của tôi".';
-  if (e instanceof Anthropic.PermissionDeniedError) return 'Khoá không được phép gọi (tổ chức có thể chặn gọi từ trình duyệt): xem cài đặt tổ chức trong Console.';
-  if (e instanceof Anthropic.RateLimitError) return 'Gọi dồn quá nhanh hoặc chạm giới hạn của tài khoản: đợi một lát rồi thử lại.';
-  if (e instanceof Anthropic.APIConnectionError) return 'Không kết nối được tới Anthropic (mất mạng?): thử lại khi có mạng.';
-  if (e instanceof Anthropic.InternalServerError) return 'Máy chủ Anthropic đang quá tải hoặc lỗi: thử lại sau ít phút.';
-  if (e instanceof Anthropic.APIError) {
-    if (e.status === 402 || e.type === 'billing_error') return 'Tài khoản Anthropic hết tiền: nạp thêm ở platform.claude.com, mục Billing.';
-    return `Anthropic báo lỗi ${String(e.status ?? '')}: ${e.message}`;
+/** Loi HTTP tu Groq: `ma` la ma HTTP, `choGiay` lay tu dau `retry-after` (429). */
+export class LoiGroq extends Error {
+  // Khong dung "thuoc tinh trong tham so": kich ban do chay bang node --experimental-strip-types, che do do khong ho tro.
+  readonly ma: number;
+  readonly choGiay: number | null;
+  constructor(ma: number, message: string, choGiay: number | null) {
+    super(message);
+    this.ma = ma;
+    this.choGiay = choGiay;
   }
+}
+
+interface Manh { readonly choices?: readonly { readonly delta?: { readonly content?: string | null }; readonly finish_reason?: string | null }[] }
+
+export async function goiAI(khoa: string, duLieu: string, tin: readonly TinNhan[], khiChu: (them: string) => void, dung: AbortSignal,
+  tc: TuyChonGoi = {}): Promise<KetQuaGoi> {
+  const moHinh = tc.moHinh ?? MO_HINH;
+  const res = await (tc.fetch ?? fetch)(tc.diaChi ?? DIA_CHI, {
+    method: 'POST', signal: dung,
+    headers: { authorization: `Bearer ${khoa}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      // Han muc token moi phut cua goi mien phi tinh ca tran dau ra xin truoc: xin vua du (~1.500 chu) de khong bi tu choi.
+      model: moHinh, stream: true, max_completion_tokens: 3000,
+      messages: [{ role: 'system', content: `${LOI_DAN}\n\nDỮ LIỆU:\n${duLieu}` }, ...tin],
+      ...(moHinh.startsWith('openai/gpt-oss') ? { reasoning_effort: 'low' } : {}),
+    }),
+  });
+  if (!res.ok || res.body === null) {
+    const o = await res.json().catch(() => null) as { error?: { message?: string } } | null;
+    const cho = Number(res.headers.get('retry-after'));
+    throw new LoiGroq(res.status, o?.error?.message ?? res.statusText, cho > 0 ? cho : null);
+  }
+  // Dong su kien: moi dong "data: {…}", het bang "data: [DONE]"; dong chua tron thi doi manh sau.
+  let chu = '', du = '';
+  let ket: KetQuaGoi['ket'] = 'xong';
+  const doc = res.body.pipeThrough(new TextDecoderStream()).getReader();
+  for (let r = await doc.read(); !r.done; r = await doc.read()) {
+    const dong = (du + r.value).split('\n');
+    du = dong.pop() ?? '';
+    for (const d of dong) {
+      if (!d.startsWith('data: ') || d === 'data: [DONE]') continue;
+      const c = (JSON.parse(d.slice(6)) as Manh).choices?.[0];
+      const t = c?.delta?.content ?? '';
+      if (t !== '') { chu += t; khiChu(t); }
+      if (c?.finish_reason === 'length') ket = 'quaDai';
+      if (c?.finish_reason === 'content_filter') ket = 'tuChoi';
+    }
+  }
+  return { chu, moHinh, ket };
+}
+
+/** Loi → cau tieng Viet. Mat mang va trinh duyet chan goi thang (CORS) deu ra TypeError, khong tach duoc. */
+export function loiTiengViet(e: unknown): string {
+  if (e instanceof DOMException && e.name === 'AbortError') return 'Đã dừng.';
+  if (e instanceof LoiGroq) {
+    if (e.ma === 401) return 'Khoá Groq sai hoặc đã bị xoá: kiểm lại khoá ở khối "AI (Groq)" cuối thẻ "Của tôi".';
+    if (e.ma === 404) return `Groq không còn mô hình này (Groq hay bỏ mô hình): cần cập nhật app. (${e.message})`;
+    if (e.ma === 413) return 'Câu hỏi và dữ liệu dài quá hạn mức mỗi phút của gói miễn phí: hỏi ngắn lại, hoặc đóng mở lại khối để bắt đầu phiên mới.';
+    if (e.ma === 429) return `Hết lượt miễn phí tạm thời (Groq giới hạn theo phút, theo ngày): ${e.choGiay === null ? 'thử lại sau ít phút' : `thử lại sau ${String(e.choGiay)} giây`}.`;
+    if (e.ma >= 500) return 'Groq đang quá tải hoặc bảo trì: thử lại sau ít phút.';
+    return `Groq báo lỗi ${String(e.ma)}: ${e.message}`;
+  }
+  if (e instanceof TypeError) return 'Không kết nối được tới Groq (mất mạng, hoặc trình duyệt chặn gọi thẳng): thử lại khi có mạng.';
   return `Lỗi: ${e instanceof Error ? e.message : String(e)}`;
 }

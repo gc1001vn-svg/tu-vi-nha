@@ -1,8 +1,6 @@
 /**
- * AI dot 7 phan 1 — phan khong can mang: goi du lieu gui di (du cac mon, khong ten), tinh tien theo bang gia, han muc thang,
- * do chu bia. Ngay sinh GIA. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`.
+ * AI dot 7 phan 1 — phan khong can mang: goi du lieu gui di (du cac mon, khong ten), do chu bia. Ngay sinh GIA. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`.
  */
-import { GIA, congTien, conHanMuc, daTieuThang, tienGoi } from '../src/loi/ai/chiPhi.ts';
 import { duLieuNguoi, duLieuQue, duLieuTarot } from '../src/loi/ai/duLieu.ts';
 import { TU_NGUOI, timBia } from '../src/loi/ai/kiemBia.ts';
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
@@ -41,23 +39,6 @@ describe('goi du lieu gui AI', () => {
     expect([q.includes('Quẻ chủ: quẻ 1 Thuần Càn'), q.includes('Hào động: 6'), q.includes('nguyên văn "')]).toEqual([true, true, true]);
     const t = duLieuTarot(tarot, 'baLa', [{ so: 0, nguoc: false }, { so: 77, nguoc: true }, { so: 22, nguoc: false }]);
     expect([t.includes('Quá khứ'), t.includes('The Fool'), t.includes('King of Pentacles — Vua Tiền, lá ngược')]).toEqual([true, true, true]);
-  });
-});
-
-describe('tien, han muc', () => {
-  test('tien = token × gia; ghi, doc bo nho dem; Haiku tren 100.000 token gap 5; mo hinh la tinh gia dat', () => {
-    expect(tienGoi('claude-opus-5-5', { input_tokens: 8000, output_tokens: 3000 })).toBeCloseTo(0.092, 10);
-    expect(tienGoi('claude-sonnet-5-5', { input_tokens: 100, output_tokens: 1000, cache_creation_input_tokens: 8000, cache_read_input_tokens: 20_000 }))
-      .toBeCloseTo((100 * 2 + 8000 * 2.5 + 20_000 * 0.1 + 1000 * 10) / 1e6, 10);
-    expect(tienGoi('claude-haiku-5-5', { input_tokens: 100_001, output_tokens: 0 })).toBeCloseTo(5 * 100_001 * 0.1 / 1e6, 10);
-    expect(tienGoi('claude-opus-4-8', { input_tokens: 1e6, output_tokens: 0 })).toBe(5);
-    expect(Object.keys(GIA)).toEqual(['claude-opus-5-5', 'claude-sonnet-5-5', 'claude-haiku-5-5']);
-  });
-
-  test('cong don trong thang, sang thang moi tinh lai; het han muc thi chan', () => {
-    const s = congTien(congTien({ thang: '2026-09', daTieu: 4.9 }, '2026-10', 1), '2026-10', 2.5);
-    expect([s, daTieuThang(s, '2026-11'), conHanMuc(s, '2026-10', 5), conHanMuc(s, '2026-10', 3.5), conHanMuc(s, '2026-11', 3.5)])
-      .toEqual([{ thang: '2026-10', daTieu: 3.5 }, 0, true, false, true]);
   });
 });
 

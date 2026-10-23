@@ -22,7 +22,7 @@ thư viện + số đo `docs/NGUON_MO.md` — đọc khi làm tới đúng môn,
 | `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/sinh_am_doi_chieu.mjs` | khi nâng `lunar-typescript` — sinh lại âm Hán–Việt độc lập cho thước đối chiếu |
 | `python3 scripts/ve_icon.py` | vẽ lại icon (Thái cực + Bát quái, anh chọn 14/10) |
 | `python3 scripts/ky_hieu_sao.py` | vẽ lại ký hiệu chiêm tinh từ phông DejaVu (cần `pip install fonttools`) |
-| `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-ai.ts <thư_mục_tạm> [20] [mô_hình,…]` | đo AI thật (tốn tiền, ~4 USD với 20 hồ sơ × 3 mô hình, ước): cần `ANTHROPIC_API_KEY` trong bí mật môi trường |
+| `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-ai.ts <thư_mục_tạm> [10] [mô_hình,…]` | đo AI thật qua Groq miễn phí (chờ theo hạn mức phút, có thể lâu): cần `GROQ_API_KEY` trong bí mật môi trường và mạng tới `api.groq.com` |
 
 `npm run do` chạy ra file rồi `grep`, đừng `| tail` (không in gì tới lúc xong):
 `npm run do > <scratchpad>/do.txt 2>&1`.

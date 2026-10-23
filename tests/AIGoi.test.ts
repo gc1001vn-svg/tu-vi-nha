@@ -1,9 +1,9 @@
 /**
- * Goi Claude (dot 7 phan 1) voi mang GIA: may chu Anthropic gia tra dong su kien (SSE) hay ma loi, chay qua dung thu vien
- * `@anthropic-ai/sdk`. Kiem: chu chay dan, tien theo usage, dau goi tu trinh duyet, mo hinh du phong, cau bao loi tieng Viet,
- * khoa API khong vao file sao luu. Khong goi mang that.
+ * Goi AI qua Groq (dot 7 phan 1) voi mang GIA: may chu gia tra dong su kien kieu OpenAI (SSE) hay ma loi. Kiem: chu chay dan
+ * (ca khi dong bi cat giua chung), dau goi, than yeu cau (mo hinh, loi dan + du lieu, tran token), het tran / bi chan, cau bao
+ * loi tieng Viet khong kem khoa, khoa khong vao file sao luu. Khong goi mang that.
  */
-import { goiClaude, loiTiengViet, type TuyChonGoi } from '../src/giaoDien/ai/goi.ts';
+import { DIA_CHI, MO_HINH, goiAI, loiTiengViet, type TuyChonGoi } from '../src/giaoDien/ai/goi.ts';
 import { docAI, ghiAI } from '../src/giaoDien/ai/luu.ts';
 import { docKho } from '../src/luuTru.ts';
 import { taoSaoLuu } from '../src/loi/hoSo.ts';
@@ -16,65 +16,67 @@ function mang(tra: () => Response, nem = false): { tc: TuyChonGoi; yc: YeuCau[] 
   const f: typeof fetch = (url, init) => {
     const than = typeof init?.body === 'string' ? init.body : '{}';
     yc.push({ url: url instanceof Request ? url.url : url.toString(), dau: new Headers(init?.headers), than: JSON.parse(than) as Record<string, unknown> });
-    return nem ? Promise.reject(new TypeError('fetch failed')) : Promise.resolve(tra());
+    // Nhu fetch that: tin hieu da huy thi tu choi ngay bang AbortError.
+    if (init?.signal?.aborted === true) return Promise.reject(new DOMException('Aborted', 'AbortError'));
+    return nem ? Promise.reject(new TypeError('Load failed')) : Promise.resolve(tra());
   };
-  return { tc: { fetch: f, maxRetries: 0 }, yc };
+  return { tc: { fetch: f }, yc };
 }
 
-const suKien = (moHinh: string, chu: readonly string[], dung = 'end_turn'): Response => new Response(([
-  ['message_start', { type: 'message_start', message: { id: 'msg_1', type: 'message', role: 'assistant', model: moHinh, content: [], stop_reason: null,
-    stop_sequence: null, usage: { input_tokens: 100, output_tokens: 1, cache_creation_input_tokens: 8000, cache_read_input_tokens: 0 } } }],
-  ['content_block_start', { type: 'content_block_start', index: 0, content_block: { type: 'text', text: '' } }],
-  ...chu.map((t) => ['content_block_delta', { type: 'content_block_delta', index: 0, delta: { type: 'text_delta', text: t } }] as const),
-  ['content_block_stop', { type: 'content_block_stop', index: 0 }],
-  ['message_delta', { type: 'message_delta', delta: { stop_reason: dung, stop_sequence: null }, usage: { output_tokens: 3000 } }],
-  ['message_stop', { type: 'message_stop' }],
-] as (readonly [string, unknown])[]).map(([e, d]) => `event: ${e}\ndata: ${JSON.stringify(d)}\n\n`).join(''), { headers: { 'content-type': 'text/event-stream' } });
+/** Dong su kien kieu OpenAI, cat thanh manh `buoc` byte (de thu dong bi cat giua chung). */
+function suKien(chu: readonly string[], ket = 'stop', buoc = 7): Response {
+  const tho = [...chu.map((t) => ({ choices: [{ delta: { content: t }, finish_reason: null }] })),
+    { choices: [{ delta: { reasoning: 'nghĩ thầm' }, finish_reason: null }] }, { choices: [{ delta: {}, finish_reason: ket }] }]
+    .map((o) => `data: ${JSON.stringify(o)}\n\n`).join('') + 'data: [DONE]\n\n';
+  const b = new TextEncoder().encode(tho);
+  return new Response(new ReadableStream({
+    start(c) { for (let i = 0; i < b.length; i += buoc) c.enqueue(b.slice(i, i + buoc)); c.close(); },
+  }), { headers: { 'content-type': 'text/event-stream' } });
+}
 
-const loi = (trangThai: number, kieu: string): Response =>
-  new Response(JSON.stringify({ type: 'error', error: { type: kieu, message: `thu ${kieu}` } }), { status: trangThai, headers: { 'content-type': 'application/json' } });
+const loi = (trangThai: number, dau: Record<string, string> = {}): Response =>
+  new Response(JSON.stringify({ error: { message: `thu ${String(trangThai)}`, type: 'x' } }), { status: trangThai, headers: { 'content-type': 'application/json', ...dau } });
 
-// Khoa gia khong co dang sk-ant- (thuoc check:khoa chan moi chuoi dang khoa that trong repo).
+// Khoa gia khong co dang khoa that (thuoc check:khoa chan chuoi dang khoa trong repo).
 const KHOA = 'khoa-gia-cho-test-0000';
 const tin = [{ role: 'user' as const, content: 'Viết lời tổng hợp' }];
 
-describe('goi Claude qua mang gia', () => {
-  test('chu chay dan tung doan, ghep du; tien = usage × gia Opus 5.5; goi tu trinh duyet, co mo hinh du phong', async () => {
-    const { tc, yc } = mang(() => suKien('claude-opus-5-5', ['## Tính ', 'cách\n', '- Ý một']));
+describe('goi AI qua mang gia', () => {
+  test('chu chay dan, ghep du ca khi dong bi cat giua chung; bo phan nghi tham; yeu cau dung dia chi, dau, than', async () => {
+    const { tc, yc } = mang(() => suKien(['## Tính ', 'cách\n', '- Ý một — đủ dấu']));
     const doan: string[] = [];
-    const kq = await goiClaude(KHOA, 'Giới tính: nam.', tin, (t) => { doan.push(t); }, new AbortController().signal, tc);
-    expect(doan).toEqual(['## Tính ', 'cách\n', '- Ý một']);
-    expect(kq).toEqual({ chu: '## Tính cách\n- Ý một', tien: (100 * 4 + 8000 * 5 + 3000 * 20) / 1e6, moHinh: 'claude-opus-5-5', ket: 'xong' });
+    const kq = await goiAI(KHOA, 'Giới tính: nam.', tin, (t) => { doan.push(t); }, new AbortController().signal, tc);
+    expect([doan.join(''), kq]).toEqual(['## Tính cách\n- Ý một — đủ dấu', { chu: '## Tính cách\n- Ý một — đủ dấu', moHinh: MO_HINH, ket: 'xong' }]);
     const [y] = yc;
-    expect([y?.url, y?.dau.get('anthropic-dangerous-direct-browser-access'), y?.dau.get('authorization'), y?.dau.get('anthropic-beta')])
-      .toEqual(['https://api.anthropic.com/v1/messages?beta=true', 'true', `Bearer ${KHOA}`, 'server-side-fallback-2026-07-01']);
-    expect([y?.than['model'], y?.than['fallbacks'], y?.than['stream'], JSON.stringify(y?.than['system']).includes('DỮ LIỆU:\\nGiới tính: nam.')])
-      .toEqual(['claude-opus-5-5', 'default', true, true]);
+    expect([y?.url, y?.dau.get('authorization'), y?.than['model'], y?.than['stream'], y?.than['max_completion_tokens'], y?.than['reasoning_effort']])
+      .toEqual([DIA_CHI, `Bearer ${KHOA}`, 'openai/gpt-oss-120b', true, 3000, 'low']);
+    const tinGui = y?.than['messages'] as { role: string; content: string }[];
+    expect([tinGui.map((m) => m.role), tinGui[0]?.content.includes('DỮ LIỆU:\nGiới tính: nam.')]).toEqual([['system', 'user'], true]);
   });
 
-  test('Haiku 5.5 khong gui mo hinh du phong; AI tu choi, het tran token thi bao rieng', async () => {
-    const h = mang(() => suKien('claude-haiku-5-5', ['x']));
-    await goiClaude(KHOA, '', tin, () => undefined, new AbortController().signal, { ...h.tc, moHinh: 'claude-haiku-5-5' });
-    expect([h.yc[0]?.than['fallbacks'], h.yc[0]?.dau.get('anthropic-beta')]).toEqual([undefined, null]);
-    const tu = mang(() => suKien('claude-opus-5-5', [], 'refusal'));
-    const dai = mang(() => suKien('claude-opus-5-5', ['a'], 'max_tokens'));
-    const ket = await Promise.all([tu, dai].map(async (m) => (await goiClaude(KHOA, '', tin, () => undefined, new AbortController().signal, m.tc)).ket));
-    expect(ket).toEqual(['tuChoi', 'quaDai']);
+  test('mo hinh khac gpt-oss khong gui reasoning_effort; het tran, bi chan thi bao rieng', async () => {
+    const m = mang(() => suKien(['x']));
+    await goiAI(KHOA, '', tin, () => undefined, new AbortController().signal, { ...m.tc, moHinh: 'qwen/qwen3.6-27b' });
+    expect(m.yc[0]?.than['reasoning_effort']).toBeUndefined();
+    const ket = await Promise.all(['length', 'content_filter'].map(async (k) =>
+      (await goiAI(KHOA, '', tin, () => undefined, new AbortController().signal, mang(() => suKien(['a'], k)).tc)).ket));
+    expect(ket).toEqual(['quaDai', 'tuChoi']);
   });
 
-  test('loi → cau tieng Viet, khong kem khoa', async () => {
+  test('loi → cau tieng Viet, khong kem khoa; 429 doc so giay cho', async () => {
     const thu = async (m: ReturnType<typeof mang>, dung = new AbortController()): Promise<string> =>
-      goiClaude(KHOA, '', tin, () => undefined, dung.signal, m.tc).then(() => 'khong loi', loiTiengViet);
+      goiAI(KHOA, '', tin, () => undefined, dung.signal, m.tc).then(() => 'khong loi', loiTiengViet);
     const huy = new AbortController();
     huy.abort();
     const cau = await Promise.all([
-      thu(mang(() => loi(401, 'authentication_error'))), thu(mang(() => loi(403, 'permission_error'))), thu(mang(() => loi(429, 'rate_limit_error'))),
-      thu(mang(() => loi(529, 'overloaded_error'))), thu(mang(() => loi(402, 'billing_error'))), thu(mang(() => loi(400, 'invalid_request_error'))),
-      thu(mang(() => loi(500, 'api_error'), true)), thu(mang(() => suKien('claude-opus-5-5', ['a'])), huy),
+      thu(mang(() => loi(401))), thu(mang(() => loi(404))), thu(mang(() => loi(413))), thu(mang(() => loi(429, { 'retry-after': '37' }))),
+      thu(mang(() => loi(429))), thu(mang(() => loi(503))), thu(mang(() => loi(400))), thu(mang(() => loi(500), true)),
+      thu(mang(() => suKien(['a'])), huy),
     ]);
-    expect(cau.map((c) => c.split(/[:(]/)[0])).toEqual(['Khoá API sai hoặc đã bị thu hồi', 'Khoá không được phép gọi ', 'Gọi dồn quá nhanh hoặc chạm giới hạn của tài khoản',
-      'Máy chủ Anthropic đang quá tải hoặc lỗi', 'Tài khoản Anthropic hết tiền', 'Anthropic báo lỗi 400', 'Không kết nối được tới Anthropic ', 'Đã dừng.']);
-    expect(cau.filter((c) => c.includes(KHOA))).toEqual([]);
+    expect(cau.map((c) => c.split(/[:(]/)[0])).toEqual(['Khoá Groq sai hoặc đã bị xoá', 'Groq không còn mô hình này ',
+      'Câu hỏi và dữ liệu dài quá hạn mức mỗi phút của gói miễn phí', 'Hết lượt miễn phí tạm thời ', 'Hết lượt miễn phí tạm thời ',
+      'Groq đang quá tải hoặc bảo trì', 'Groq báo lỗi 400', 'Không kết nối được tới Groq ', 'Đã dừng.']);
+    expect([cau[3]?.includes('37 giây'), cau[4]?.includes('ít phút'), cau.some((c) => c.includes(KHOA))]).toEqual([true, true, false]);
   });
 });
 
@@ -87,13 +89,13 @@ describe('cai dat AI trong may', () => {
   });
   afterAll(() => { vi.unstubAllGlobals(); });
 
-  test('khoa luu rieng, doc lai duoc; file sao luu ho so khong chua khoa; du lieu hong thi ve mac dinh', () => {
+  test('khoa luu rieng, doc lai duoc; file sao luu ho so khong chua khoa; du lieu hong thi coi nhu chua co khoa', () => {
     kho.set('tvn.v1', JSON.stringify({ hoSo: [{ id: 'a', ten: 'Thử', gioiTinh: 'nam', ngaySinh: '1990-05-10', gioSinh: null, noiSinh: 'Hà Nội' }], saoLuuLuc: null }));
-    expect(ghiAI({ khoa: KHOA, hanMuc: 3, tien: { thang: '2026-10', daTieu: 0.5 } })).toBeNull();
-    expect(docAI()).toEqual({ khoa: KHOA, hanMuc: 3, tien: { thang: '2026-10', daTieu: 0.5 } });
+    expect(ghiAI({ khoa: KHOA })).toBeNull();
+    expect(docAI()).toEqual({ khoa: KHOA });
     const saoLuu = JSON.stringify(taoSaoLuu(docKho().kho.hoSo, '2026-10-23T00:00:00Z'));
-    expect([saoLuu.includes('Thử'), saoLuu.includes(KHOA), saoLuu.includes('hanMuc')]).toEqual([true, false, false]);
+    expect([saoLuu.includes('Thử'), saoLuu.includes(KHOA)]).toEqual([true, false]);
     kho.set('tvn.ai.v1', '{hong');
-    expect(docAI()).toEqual({ khoa: null, hanMuc: 5, tien: { thang: '', daTieu: 0 } });
+    expect(docAI()).toEqual({ khoa: null });
   });
 });

@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 23/10/2026 — **đợt 7 phần 1 (AI) ở nhánh `claude/sleepy-davinci-hezr5a`, CHƯA gộp `main`, chờ khoá đo**.
+Cập nhật: 23/10/2026 — **đợt 7 phần 1 (AI Groq miễn phí) ở nhánh `claude/sleepy-davinci-hezr5a`, CHƯA gộp `main`, chờ đo**.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -20,13 +20,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`, `QUY_UOC` mục 25): phần 1 xong ở nhánh trên. Có khoá → `do-ai.ts`
-  (`DAU_PHIEN`), anh chọn mô hình, gộp `main`; rồi phần 2 tướng mặt.
+- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`, `QUY_UOC` mục 25): phần 1 (anh đổi sang Groq miễn phí 23/10) xong ở
+  nhánh trên. Có khoá + mạng → `do-ai.ts` (`DAU_PHIEN`), xem Groq có cho trình duyệt gọi không, chọn mô hình, gộp; rồi phần 2.
 - Sau đợt 7: 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- Đợt 7: tạo khoá đo `ANTHROPIC_API_KEY` (mục "Cần anh" kế hoạch), phiên mới gõ "đo AI phần 1" · so cung Mọc với astro-seek.
+- Đợt 7: mục "Cần anh" kế hoạch (khoá Groq `GROQ_API_KEY`, mở mạng `api.groq.com`), phiên mới gõ "đo AI phần 1" · so cung Mọc.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Đang chờ xoá: `claude/determined-galileo-xz2mc5` (lịch sử
   còn ngày sinh thật — nên xoá), `claude/nifty-johnson-b0rxcq`, `claude/luu-han-loi-giai`, `claude/loi-giai-de-hieu`, `claude/nguon-phat-dao`, `claude/kinh-goc-cuu-dieu`, `claude/ngoc-hap-ky`, `claude/dot-4-kinh-dich`, `claude/blissful-sagan-ur507y` (đều đã
   nằm trong `main`). Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches — bấm thùng rác.

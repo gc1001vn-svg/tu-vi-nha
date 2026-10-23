@@ -1,25 +1,28 @@
-// Đo AI thật (đợt 7 phần 1, kế hoạch docs/ke-hoach/2026-10-23-dot-7.md): N hồ sơ GIẢ × các mô hình viết lời tổng hợp — đếm
-// tên AI nêu mà dữ liệu không có (src/loi/ai/kiemBia.ts) + tiền thật theo usage + giây; 10 câu hỏi bẫy (dữ liệu không có)
-// phải trả "chưa có". Khoá đọc từ biến môi trường ANTHROPIC_API_KEY (bí mật môi trường cloud) — không in, không ghi file.
-// Chạy (hết ~4 USD với 20 hồ sơ × 3 mô hình, ước):
-//   node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-ai.ts <thư_mục_tạm> [số_hồ_sơ=20] [mô_hình,…]
+// Đo AI thật qua Groq miễn phí (đợt 7 phần 1, kế hoạch docs/ke-hoach/2026-10-23-dot-7.md): N hồ sơ GIẢ × các mô hình viết lời
+// tổng hợp — đếm tên AI nêu mà dữ liệu không có (src/loi/ai/kiemBia.ts) + giây; 10 câu hỏi bẫy (dữ liệu không có) phải trả
+// "chưa có". In trước danh sách mô hình Groq đang có. Khoá đọc từ GROQ_API_KEY (bí mật môi trường cloud) — không in, không
+// ghi file. Máy ảo phải được mở mạng tới api.groq.com. Gói miễn phí giới hạn token mỗi phút: hết lượt thì chờ theo retry-after.
+//   node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-ai.ts <thư_mục_tạm> [số_hồ_sơ=10] [mô_hình,…]
 // Ghi <thư_mục_tạm>/do-ai.json (lời AI từng lần, để đọc lại) — ngoài repo. In bảng số ra màn hình.
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { goiClaude } from '../../src/giaoDien/ai/goi.ts';
+import { LoiGroq, goiAI, loiTiengViet, type TinNhan } from '../../src/giaoDien/ai/goi.ts';
 import { duLieuNguoi } from '../../src/loi/ai/duLieu.ts';
 import { TU_NGUOI, timBia } from '../../src/loi/ai/kiemBia.ts';
 import { YEU_CAU } from '../../src/loi/ai/loiDan.ts';
 import { tinhHoSo, type HoSo } from '../../src/loi/hoSo.ts';
 import { TINH } from '../../src/loi/tinh.ts';
 
-const khoa = process.env['ANTHROPIC_API_KEY'];
+const khoa = process.env['GROQ_API_KEY'];
 if (khoa === undefined || khoa === '') {
-  console.error('Thiếu ANTHROPIC_API_KEY: thêm khoá đo vào bí mật môi trường cloud rồi mở phiên mới.');
+  console.error('Thiếu GROQ_API_KEY: thêm khoá Groq vào bí mật môi trường cloud rồi mở phiên mới.');
   process.exit(1);
 }
-const [ra = '', soHs = '20', dsMoHinh = 'claude-haiku-5-5,claude-sonnet-5-5,claude-opus-5-5'] = process.argv.slice(2);
+const [ra = '', soHs = '10', dsMoHinh = 'openai/gpt-oss-120b,openai/gpt-oss-20b'] = process.argv.slice(2);
 if (ra === '') throw new Error('Thiếu thư mục tạm để ghi kết quả');
 mkdirSync(ra, { recursive: true });
+
+const ds = await fetch('https://api.groq.com/openai/v1/models', { headers: { authorization: `Bearer ${khoa}` } });
+console.log(`Mô hình Groq đang có (${String(ds.status)}):`, ((await ds.json()) as { data?: { id: string }[] }).data?.map((m) => m.id).sort().join(', '));
 
 /** mulberry32: hồ sơ giả như nhau mọi lần chạy. */
 function gia(hat: number): () => number {
@@ -47,21 +50,27 @@ const BAY = ['Năm 2031 tôi gặp sao hạn gì?', 'Nhịp sinh học ngày mai
   'Lá bài tarot chủ mệnh của tôi là lá nào?', 'Vợ tôi tuổi Dần thì hợp không, theo lá số của vợ?', 'Ngày mai nhật hạn ở cung nào?',
   'Sao Chiron trong lá số chiêm tinh của tôi ở cung nào?'];
 const coNoiChuaCo = (s: string): boolean => /chưa có|không có/i.test(s);
+const ngu = (giay: number): Promise<void> => new Promise((x) => setTimeout(x, giay * 1000));
 
-interface Lan { moHinh: string; hs: string; loai: 'tongHop' | 'bay'; hoi: string; chu: string; bia: string[]; tien: number; giay: number; ket: string; loi?: string }
+interface Lan { moHinh: string; hs: string; loai: 'tongHop' | 'bay'; hoi: string; chu: string; bia: string[]; giay: number; ket: string; loi?: string }
 const lan: Lan[] = [];
-const goi = async (moHinh: string, h: HoSo, loai: Lan['loai'], tin: { role: 'user' | 'assistant'; content: string }[], hoi: string): Promise<void> => {
+const goi = async (moHinh: string, h: HoSo, loai: Lan['loai'], tin: TinNhan[], hoi: string): Promise<void> => {
   const duLieu = duLieuNguoi(h, tinhHoSo(h), XEM, undefined);
-  const bd = Date.now();
-  try {
-    const kq = await goiClaude(khoa, duLieu, tin, () => undefined, new AbortController().signal, { moHinh });
-    lan.push({ moHinh, hs: h.id, loai, hoi, chu: kq.chu, bia: [...new Set(timBia(kq.chu, duLieu, TU_NGUOI).map((b) => b.tu))], tien: kq.tien,
-      giay: (Date.now() - bd) / 1000, ket: kq.ket });
-  } catch (e) {
-    lan.push({ moHinh, hs: h.id, loai, hoi, chu: '', bia: [], tien: 0, giay: (Date.now() - bd) / 1000, ket: 'loi', loi: e instanceof Error ? e.message : String(e) });
+  for (let thu = 1; ; thu++) {
+    const bd = Date.now();
+    try {
+      const kq = await goiAI(khoa, duLieu, tin, () => undefined, new AbortController().signal, { moHinh });
+      lan.push({ moHinh, hs: h.id, loai, hoi, chu: kq.chu, bia: [...new Set(timBia(kq.chu, duLieu, TU_NGUOI).map((b) => b.tu))],
+        giay: (Date.now() - bd) / 1000, ket: kq.ket });
+    } catch (e) {
+      // Het luot mien phi theo phut: cho dung so giay Groq bao roi thu lai (toi da 4 lan).
+      if (e instanceof LoiGroq && e.ma === 429 && thu < 4) { await ngu((e.choGiay ?? 30) + 1); continue; }
+      lan.push({ moHinh, hs: h.id, loai, hoi, chu: '', bia: [], giay: (Date.now() - bd) / 1000, ket: 'loi', loi: loiTiengViet(e) });
+    }
+    break;
   }
   const x = lan.at(-1);
-  console.error(`${moHinh} ${h.id} ${loai}: ${x?.ket ?? ''} ${String(x?.bia.length ?? 0)} từ bịa, ${(x?.tien ?? 0).toFixed(4)} USD ${x?.loi ?? ''}`);
+  console.error(`${moHinh} ${h.id} ${loai}: ${x?.ket ?? ''} ${String(x?.bia.length ?? 0)} từ bịa, ${(x?.giay ?? 0).toFixed(1)} giây ${x?.loi ?? ''}`);
 };
 
 for (const moHinh of dsMoHinh.split(',')) {
@@ -80,7 +89,7 @@ for (const moHinh of dsMoHinh.split(',')) {
   const bay = lan.filter((x) => x.moHinh === moHinh && x.loai === 'bay');
   const tb = (a: number[]): number => (a.length === 0 ? 0 : a.reduce((s, x) => s + x, 0) / a.length);
   console.log(`${moHinh}: tổng hợp ${String(th.filter((x) => x.ket === 'xong').length)}/${String(th.length)} xong · có bịa ${String(th.filter((x) => x.bia.length > 0).length)}`
-    + `/${String(th.length)} (${[...new Set(th.flatMap((x) => x.bia))].join(', ') || 'không'}) · ~${tb(th.map((x) => x.tien)).toFixed(4)} USD/lần · `
-    + `${tb(th.map((x) => x.giay)).toFixed(1)} giây/lần · bẫy nói "chưa có" ${String(bay.filter((x) => coNoiChuaCo(x.chu) && x.bia.length === 0).length)}/${String(bay.length)}`
-    + ` · tổng ${lan.filter((x) => x.moHinh === moHinh).reduce((s, x) => s + x.tien, 0).toFixed(3)} USD`);
+    + `/${String(th.length)} (${[...new Set(th.flatMap((x) => x.bia))].join(', ') || 'không'}) · ${tb(th.map((x) => x.giay)).toFixed(1)} giây/lần · `
+    + `bẫy nói "chưa có" ${String(bay.filter((x) => coNoiChuaCo(x.chu) && x.bia.length === 0).length)}/${String(bay.length)} · lỗi: `
+    + `${[...new Set(lan.filter((x) => x.moHinh === moHinh && x.loi !== undefined).map((x) => x.loi))].join(' | ') || 'không'}`);
 }

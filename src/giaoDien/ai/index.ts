@@ -1,5 +1,5 @@
 /**
- * Cua vao AI (dot 7 phan 1) trong goi mo app: chi cac khoi gap/mo. Ma AI va thu vien Claude nap luc mo khoi lan dau
+ * Cua vao AI (dot 7 phan 1) trong goi mo app: chi cac khoi gap/mo. Ma AI nap luc mo khoi lan dau
  * (`phien.ts`, `caiDat.ts`) nen goi mo app khong keo theo. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`.
  */
 import type { NgayDuong } from '../../loi/amLich.ts';
@@ -22,8 +22,8 @@ export type ChuDe =
 export const khoiAI = (tieuDe: string, ma: string, cd: ChuDe): HTMLElement =>
   khoiNap(tieuDe, 'ai', () => import('./phien.ts').then((m) => m.vePhien(ma, cd)));
 
-export const khoiCaiDatAI = (): HTMLElement => khoiNap('AI (Claude): khoá, hạn mức chi', 'ai', () => import('./caiDat.ts').then((m) => m.veCaiDat()));
+export const khoiCaiDatAI = (): HTMLElement => khoiNap('AI (Groq, miễn phí): khoá', 'ai', () => import('./caiDat.ts').then((m) => m.veCaiDat()));
 
 /** Khoi cuoi moi nguoi ("Tra cuu", "Cua toi"): ho so doi thi phien moi. */
-export const veKhoiAI: VeKhoi = (hs, tr, ngayXem) => khoiAI('AI tổng hợp mọi môn (Claude)',
+export const veKhoiAI: VeKhoi = (hs, tr, ngayXem) => khoiAI('AI tổng hợp mọi môn',
   `nguoi:${isoNgay(ngayXem)}:${JSON.stringify({ ...hs, ten: '' })}`, { loai: 'nguoi', hs, tr, ngayXem, lechNuoc: lechNuocNgoai(hs) });

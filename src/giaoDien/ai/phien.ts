@@ -1,17 +1,15 @@
 /**
  * Phien AI mot chu de (dot 7 phan 1): nut mo dau (tong hop, giai que, doc bai) → chu chay dan → o hoi dap. Hoi thoai chi song
  * trong bo nho khi app dang mo (khong ghi may — ke hoach), dong mo lai khoi van con. Ten rieng AI neu ma du lieu khong co thi
- * gach chan (`kiemBia.ts`). Tien moi lan goi cong vao so thang (`chiPhi.ts`); het han muc thi khong goi.
+ * gach chan (`kiemBia.ts`). AI mien phi qua Groq (`goi.ts`).
  */
-import type Anthropic from '@anthropic-ai/sdk';
-import { conHanMuc, congTien, daTieuThang } from '../../loi/ai/chiPhi.ts';
 import { duLieuNguoi, duLieuQue, duLieuTarot } from '../../loi/ai/duLieu.ts';
 import { TU_NGUOI, timBia } from '../../loi/ai/kiemBia.ts';
 import { YEU_CAU } from '../../loi/ai/loiDan.ts';
-import { el, homNay7, isoNgay } from '../chung.ts';
-import { goiClaude, loiTiengViet } from './goi.ts';
+import { el } from '../chung.ts';
+import { goiAI, loiTiengViet, type TinNhan } from './goi.ts';
 import type { ChuDe } from './index.ts';
-import { docAI, ghiAI } from './luu.ts';
+import { docAI } from './luu.ts';
 import './ai.css';
 
 interface Luot {
@@ -36,8 +34,6 @@ interface Phien {
 
 const PHIEN = new Map<string, Phien>();
 
-const usd = (x: number): string => `${x.toFixed(x < 0.1 ? 3 : 2).replace('.', ',')} USD`;
-const thangNay = (): string => isoNgay(homNay7()).slice(0, 7);
 const lamMoi = (p: Phien): void => { for (const f of p.nghe) f(); };
 
 function taoPhien(cd: ChuDe): Phien {
@@ -48,37 +44,33 @@ function taoPhien(cd: ChuDe): Phien {
 }
 
 async function goi(p: Phien, gui: string, hoi: string | null): Promise<void> {
-  const cai = docAI();
+  const { khoa } = docAI();
   const l: Luot = { gui, hoi, dap: '', bia: [], ghiChu: null, xong: false };
   p.luot.push(l);
-  if (cai.khoa === null) {
-    l.ghiChu = 'Chưa có khoá API: dán khoá ở khối "AI (Claude)" cuối thẻ "Của tôi".';
-  } else if (!conHanMuc(cai.tien, thangNay(), cai.hanMuc)) {
-    l.ghiChu = `Tháng này đã tiêu ${usd(daTieuThang(cai.tien, thangNay()))}, chạm hạn mức ${usd(cai.hanMuc)}: tăng hạn mức ở khối "AI (Claude)" nếu muốn.`;
+  if (khoa === null) {
+    l.ghiChu = 'Chưa có khoá Groq: dán khoá (miễn phí) ở khối "AI (Groq)" cuối thẻ "Của tôi".';
+    l.xong = true;
+    lamMoi(p);
+    return;
   }
-  if (l.ghiChu !== null || cai.khoa === null) { l.xong = true; lamMoi(p); return; }
   // Luot truoc loi (khong co chu) khong gui lai: API doi luot nguoi – AI xen ke.
-  const tin: Anthropic.Beta.BetaMessageParam[] = p.luot.filter((x) => x !== l && x.dap !== '')
+  const tin: TinNhan[] = p.luot.filter((x) => x !== l && x.dap !== '')
     .flatMap((x) => [{ role: 'user' as const, content: x.gui }, { role: 'assistant' as const, content: x.dap }]);
   tin.push({ role: 'user', content: gui });
   p.dung = new AbortController();
   let cho = 0;
   lamMoi(p);
   try {
-    const kq = await goiClaude(cai.khoa, p.duLieu, tin, (them) => {
+    const kq = await goiAI(khoa, p.duLieu, tin, (them) => {
       l.dap += them;
       // Ve lai toi da moi khung hinh mot lan, chu chay nhanh van muot.
       if (cho === 0) cho = requestAnimationFrame(() => { cho = 0; lamMoi(p); });
     }, p.dung.signal);
     l.dap = kq.chu;
     l.bia = [...new Set(timBia(kq.chu, p.duLieu, p.tuDien).map((b) => b.tu))];
-    const moi = docAI();
-    const loi = ghiAI({ ...moi, tien: congTien(moi.tien, thangNay(), kq.tien) });
-    l.ghiChu = [kq.ket === 'tuChoi' ? 'AI từ chối trả lời câu này.' : kq.ket === 'quaDai' ? 'Câu trả lời quá dài nên bị cắt.' : null,
-      `Lần này ~${usd(kq.tien)} (${kq.moHinh}); tháng này ~${usd(daTieuThang(docAI().tien, thangNay()))}/${usd(moi.hanMuc)}.`, loi]
-      .filter((x) => x !== null).join(' ');
+    l.ghiChu = (kq.ket === 'tuChoi' ? 'Groq chặn câu trả lời này. ' : kq.ket === 'quaDai' ? 'Câu trả lời quá dài nên bị cắt. ' : '')
+      + `Mô hình ${kq.moHinh} qua Groq, miễn phí.`;
   } catch (e) {
-    // shortcut: dung giua chung hay loi mang thi phan da chay chua cong tien (khong co usage) — so that xem o Console.
     l.ghiChu = loiTiengViet(e);
   } finally {
     cancelAnimationFrame(cho);

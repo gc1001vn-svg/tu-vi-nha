@@ -64,7 +64,7 @@ function veQueDich(k: KinhDich, g: Gieo, mh: MaiHoaGio | null): HTMLElement {
     el('p', { class: 'ghi-chu' }, 'Đoạn nên đọc theo số hào động (luật Chu Hy):'),
     ...doan.map(veDoan),
     el('p', { class: 'ghi-chu' }, `Nguyên văn theo bản Kanripo (bỏ dấu câu). Lời giải: ${LOI_SOAN}`),
-    khoiAI('AI giải quẻ (Claude)', `que:${String(++soLanGieo)}`, { loai: 'que', k, g, mh }));
+    khoiAI('AI giải quẻ', `que:${String(++soLanGieo)}`, { loai: 'que', k, g, mh }));
 }
 
 function veKinhDich(): HTMLElement {
@@ -155,7 +155,7 @@ function veTarot(): HTMLElement {
         const viTri = t.TRAI[kieu].viTri;
         const rut = t.rutBai([...crypto.getRandomValues(new Uint32Array(2 * viTri.length))], viTri.length, oNguoc.checked);
         ketQua.replaceChildren(el('div', { class: 'cac-la' }, ...rut.map((r, i) => veLa(t, r.so, r.nguoc, viTri[i] ?? ['', '']))),
-          khoiAI('AI đọc trải bài (Claude)', `tarot:${String(++soLanGieo)}`, { loai: 'tarot', t, kieu, rut }));
+          khoiAI('AI đọc trải bài', `tarot:${String(++soLanGieo)}`, { loai: 'tarot', t, kieu, rut }));
       }, (e: unknown) => { ketQua.replaceChildren(loi(e)); });
     });
     return n;
