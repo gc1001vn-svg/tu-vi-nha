@@ -3,6 +3,7 @@
  * gop anh + anh lat guong, goc dau tu ma tran. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`, quy uoc `QUY_UOC` muc 26.
  */
 import { GIOI_HAN_GOC, doMat, gocDau, khungCat, quaGoc, soDo, type DiemMoc, type LanDo } from '../src/loi/tuongMat.ts';
+import { CAC_KHOA, GIAI, mucMat } from '../src/loi/tuongMatGiai.ts';
 
 const RONG = 800, CAO = 1000;
 /** Diem dat theo px tren mat doi xung qua x = 420; con lai de giua anh. */
@@ -99,4 +100,28 @@ test('khung cat: vuong, tam mat, canh = he so × chieu lon cua mat', () => {
   const d = [{ x: 0.25, y: 0.3 }, { x: 0.75, y: 0.5 }]; // 200..600 px ngang, 300..500 px doc
   expect(khungCat(d, RONG, CAO)).toEqual({ x: 0, y: 0, canh: 800 });
   expect(khungCat(d, RONG, CAO, 1)).toEqual({ x: 200, y: 200, canh: 400 });
+});
+
+describe('loi giai tuong mat', () => {
+  test('du 9 ti le cua so do, moi ti le du ba muc chu, nguong tang dan, co nguon', () => {
+    expect(CAC_KHOA).toEqual(Object.keys(soDo(luoi(), RONG, CAO)));
+    for (const k of CAC_KHOA) {
+      const g = GIAI[k];
+      expect([g.nguong[0] < g.nguong[1], g.nguon.length > 20, ...(['thap', 'vua', 'cao'] as const).map((m) => g.loi[m].length > 10)])
+        .toEqual([true, true, true, true, true]);
+    }
+  });
+
+  test('xep muc: duoi nguong duoi la thap, tren nguong tren la cao, dung nguong la vua; may duoi 1 la ngan hon mat', () => {
+    const [a, b] = GIAI.anDuong.nguong;
+    expect([mucMat('anDuong', a - 0.001), mucMat('anDuong', a), mucMat('anDuong', b), mucMat('anDuong', b + 0.001)])
+      .toEqual(['thap', 'vua', 'vua', 'cao']);
+    expect([mucMat('may', 0.95), mucMat('may', 1.6)]).toEqual(['thap', 'vua']);
+    expect(GIAI.may.loi.thap.startsWith('Lông mày ngắn hơn mắt')).toBe(true);
+  });
+
+  test('diem cuoi: trung binh cac lan do, thieu thi tinh 0', () => {
+    expect(doMat([{ ...lan(luoi()), cuoi: 0.3 }, { ...lan(luoi()), cuoi: 0.5 }]).cuoi).toBeCloseTo(0.4, 9);
+    expect(doMat([lan(luoi())]).cuoi).toBe(0);
+  });
 });

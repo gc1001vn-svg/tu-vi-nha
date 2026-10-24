@@ -1,37 +1,37 @@
 /**
- * Noi dung khoi "Tuong mat" (nap luoi tu `tuongMat.ts`): nut chon/chup anh, trang thai, bang so do. Anh khong luu, khong gui
- * di — doc vao bo nho, do xong bo. Loi do `src/loi/tuongMat.ts`; MediaPipe nap khi bam (`tuongMatMp.ts`).
+ * Noi dung khoi "Tuong mat" (nap luoi tu `tuongMat.ts`): nut chon/chup anh, trang thai, bang so do, loi giai. Anh khong luu, khong
+ * gui di — doc vao bo nho, do xong bo. Loi do `src/loi/tuongMat.ts`, loi giai `src/loi/tuongMatGiai.ts`; MediaPipe nap khi bam
+ * (`tuongMatMp.ts`).
  */
-import type { SoDoMat } from '../../loi/tuongMat.ts';
+import { CAC_KHOA, GIAI, NGUONG_CUOI, SO_ANH_MAU, mucMat } from '../../loi/tuongMatGiai.ts';
 import { el } from '../chung.ts';
+import { MAT_DA_DO } from './tuongMat.ts';
 import type { KetQuaMat } from './tuongMatMp.ts';
 import './tuongMat.css';
 
-const DONG: readonly (readonly [keyof SoDoMat, string, string])[] = [
-  ['trungHa', 'Trung đình : hạ đình', 'ấn đường → chân mũi, so với chân mũi → đáy cằm'],
-  ['nguNhan', 'Ngũ nhãn', 'bề ngang mặt bằng bấy nhiêu mắt'],
-  ['khoangMat', 'Khoảng giữa hai mắt', 'bằng bấy nhiêu mắt'],
-  ['mui', 'Cánh mũi', 'rộng bằng bấy nhiêu khoảng giữa hai mắt'],
-  ['mieng', 'Miệng', 'rộng bằng bấy nhiêu cánh mũi'],
-  ['daiRong', 'Dài : rộng mặt', 'ấn đường → đáy cằm, so với bề ngang mặt'],
-  ['may', 'Lông mày', 'dài bằng bấy nhiêu mắt'],
-  ['anDuong', 'Ấn đường', 'khoảng giữa hai đầu mày, bằng bấy nhiêu mắt'],
-  ['mayCach', 'Mày cách mắt', 'bằng bấy nhiêu mắt'],
-];
 const so = (x: number, le = 2): string => x.toFixed(le).replace('.', ',');
 
 function veKetQua(k: KetQuaMat): Node[] {
   return [
-    el('table', {}, el('tbody', {}, ...DONG.map(([khoa, ten, y]) => el('tr', {},
-      el('th', { scope: 'row' }, ten, el('small', {}, y)), el('td', {}, so(k.so[khoa])))))),
+    el('table', {}, el('tbody', {}, ...CAC_KHOA.map((khoa) => el('tr', {},
+      el('th', { scope: 'row' }, GIAI[khoa].ten, el('small', {}, GIAI[khoa].y)), el('td', {}, so(k.so[khoa])))))),
     el('p', { class: 'ghi-chu' }, `Sai số ước ±${so(k.lech, 1)} % (trung bình 10 lần đo: 5 cỡ khung, ảnh và ảnh lật gương). `
       + `Đầu quay ngang ${so(k.goc.quay, 0)}°, ngẩng/cúi ${so(k.goc.ngua, 0)}°. Tải thư viện ${so(k.taiMs / 1000, 1)} giây, `
       + `đo ${so(k.doMs / 1000, 1)} giây.`),
-    el('p', { class: 'ghi-chu' }, 'Bản thử: mới có số đo, lời giải theo sách tướng sẽ có ở bản sau.'),
+    ...(k.cuoi >= NGUONG_CUOI
+      ? [el('p', { class: 'canh-bao' }, `Ảnh có vẻ đang cười (điểm cười ${so(k.cuoi)}): cười làm miệng rộng ra, mắt híp lại nên số `
+        + 'lệch — app không giải. Chụp lại mặt tự nhiên, ngậm miệng.')]
+      : [el('h3', {}, 'Lời giải (Claude soạn lại theo sách tướng, tham khảo)'),
+        el('p', { class: 'ghi-chu' }, `"Phần đông" là so với ${String(SO_ANH_MAU)} ảnh chân dung mặt tự nhiên đo bằng cùng máy, không `
+          + 'so thẳng với số trong sách: lưới máy lệch vài chỗ (khoé mắt, lông mày). Số sát ngưỡng thì đọc cả hai bên.'),
+        el('ul', {}, ...CAC_KHOA.map((khoa) => el('li', {}, el('b', {}, `${GIAI[khoa].ten} ${so(k.so[khoa])}: `),
+          GIAI[khoa].loi[mucMat(khoa, k.so[khoa])], el('small', {}, ` Nguồn: ${GIAI[khoa].nguon}.`))))]),
+    el('p', { class: 'ghi-chu' }, 'Nhân tướng là quan niệm dân gian, không có cơ sở khoa học — đọc cho vui, đừng dựa vào để đánh '
+      + 'giá người. Số đo này (không có ảnh) được gửi kèm cho "AI tổng hợp mọi môn" nếu đo xong trước khi AI trả lời lần đầu.'),
   ];
 }
 
-export function veTuongMat(): Node[] {
+export function veTuongMat(khoa: string): Node[] {
   const chon = el('input', { type: 'file', accept: 'image/*', hidden: '' });
   const nut = el('button', { type: 'button', class: 'chinh' }, 'Chọn hoặc chụp ảnh');
   const ket = el('div', { 'aria-live': 'polite' });
@@ -45,7 +45,8 @@ export function veTuongMat(): Node[] {
     bao('ghi-chu', 'Đang tải thư viện đo mặt (lần đầu khoảng 17 MB)…');
     import('./tuongMatMp.ts')
       .then((m) => m.doAnh(f, () => { bao('ghi-chu', 'Đang đo…'); }))
-      .then((k) => { ket.replaceChildren(...veKetQua(k)); }, (e: unknown) => { bao('loi', e instanceof Error ? e.message : String(e)); })
+      .then((k) => { MAT_DA_DO.set(khoa, k); ket.replaceChildren(...veKetQua(k)); },
+        (e: unknown) => { bao('loi', e instanceof Error ? e.message : String(e)); })
       .finally(() => { nut.disabled = false; });
   });
   return [

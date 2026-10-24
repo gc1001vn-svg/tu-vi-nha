@@ -18,6 +18,8 @@ import { nhipSinhHoc, tenSo, thanSo } from '../soHoc.ts';
 import type * as TarotMod from '../tarot.ts';
 import { NUOC_NGOAI } from '../tinh.ts';
 import { tuoiHop } from '../tuoiHop.ts';
+import type { SoDoMat } from '../tuongMat.ts';
+import { CAC_KHOA, GIAI, NGUONG_CUOI, SO_ANH_MAU, mucMat } from '../tuongMatGiai.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
 
@@ -163,12 +165,24 @@ function chiemTinh(hs: HoSo, lechNuoc: number | undefined): string {
   ]);
 }
 
+/** So do mat vua do trong may (khoi "Tuong mat"): chi so, khong anh. */
+export interface MatDo { readonly so: SoDoMat; readonly cuoi: number }
+
+function tuongMat(m: MatDo): string {
+  const cuoi = m.cuoi >= NGUONG_CUOI;
+  return muc(`Tướng mặt (đo từ ảnh trong máy, xếp so với ${String(SO_ANH_MAU)} ảnh mẫu mặt tự nhiên; lời app soạn theo sách tướng)`, [
+    cuoi ? 'Ảnh đang cười nên số lệch, app không giải.' : null,
+    ...CAC_KHOA.map((k) => `- ${GIAI[k].ten} ${m.so[k].toFixed(2).replace('.', ',')}${cuoi ? '' : `: ${GIAI[k].loi[mucMat(k, m.so[k])]}`}`),
+  ]);
+}
+
 /** Du lieu mot nguoi gui AI: moi mon da tinh, theo thu tu khoi tren man hinh. Mon nao loi thi ghi loi, cac mon khac van gui. */
-export function duLieuNguoi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong, lechNuoc: number | undefined): string {
+export function duLieuNguoi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong, lechNuoc: number | undefined, mat?: MatDo): string {
   const phan: (() => string)[] = [
     (): string => nguoiXem(hs, tr, ngayXem), (): string => tuVi(hs, tr, ngayXem), (): string => nam(hs, tr, ngayXem),
     (): string => batTu(hs, tr, ngayXem),
     (): string => huong(hs, tr), (): string => tuoi(tr), (): string => soHoc(hs, ngayXem), (): string => chiemTinh(hs, lechNuoc),
+    ...(mat === undefined ? [] : [(): string => tuongMat(mat)]),
   ];
   return phan.map((f) => {
     try {

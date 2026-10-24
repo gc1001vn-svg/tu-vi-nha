@@ -405,7 +405,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   - Cả hai còn thêm lời khuyên ngoài DỮ LIỆU (ăn uống, màu sơn, vitamin; "Kế Đô… tiêu hoá, xương khớp") dù lời dặn bảo chỉ
     dùng DỮ LIỆU.
 
-## 26. Tướng mặt — đo (đợt 7 phần 2: `src/loi/tuongMat.ts`, `src/giaoDien/khoi/tuongMat*.ts`; khối tối thiểu 23/10, chưa lời giải)
+## 26. Tướng mặt — đo, lời giải (đợt 7 phần 2: `src/loi/tuongMat*.ts`, `src/giaoDien/khoi/tuongMat*.ts`; đo 23/10, lời giải 24/10)
 - **Thư viện**: MediaPipe Face Landmarker (`@mediapipe/tasks-vision` 1.1.1, Apache-2.0), chạy CPU. Mô hình `face_landmarker`
   float16 bản 1 (3,76 MB; thẻ mô hình ghi Apache 2.0) để trong `public/mediapipe/` — gọi cùng địa chỉ app, không sang máy chủ
   Google; đổi mô hình thì đổi tên file. WASM 13,5 MB (bản không SIMD 12,6 MB cho máy cũ) Vite chép từ gói npm. Không cài sẵn cùng
@@ -429,9 +429,40 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Đo 23/10** (`scripts/doi-chieu/do-mat.mjs`, Chromium, 7 ảnh chân dung chính thức chính phủ Mỹ, NASA — phạm vi công cộng, tải
   ngoài repo): 7/7 ra đúng 1 mặt, chạy 2 lần cùng số, ảnh lật gương lệch ≤1,05 % (ngưỡng 2 %), sai số ±1,2–2,9 %; ảnh trơn, hai
   người nhỏ, hai người to báo đúng. 10 lần đo 0,45–0,83 giây (máy ảo). iPhone thật 24/10 (anh): ra đủ 9 số, tải thư viện 2,5 giây, đo 0,2 giây.
-- **Chưa chắc, xử ở bước lời giải**: (1) khoé mắt của lưới nằm lọt vào trong → khoảng giữa hai mắt ra 1,1–1,45 mắt, số nhân trắc
-  người thật ~1,0–1,2 → "đúng máy, sai sách": không so thẳng với chuẩn sách. (2) Cười làm miệng rộng, mắt híp: app chỉ dặn mặt
-  tự nhiên, chưa tự phát hiện. (3) 7 ảnh, đa số cười — chưa đủ đặt ngưỡng lời giải.
+- **Điểm cười** (24/10): MediaPipe trả 52 blendshape; điểm cười = trung bình `mouthSmileLeft`, `mouthSmileRight`, trung bình 10
+  lần đo. Xem mắt: 0,22 đã hơi cười, 0,38 cười hở răng, 0,54 cười mím; ảnh mặt nghiêm 0,01–0,12 → **từ 0,2 coi là cười, app hiện
+  số nhưng không giải**. Trung vị 39 ảnh cười so 14 ảnh không cười: miệng +14 %, trung:hạ −8 %, mũi +4 %, dài:rộng +4 %, ấn đường
+  −3 %, các tỉ lệ khác ±1 % (hai nhóm khác người nên chỉ là ước).
+- **Đo 24/10** (`do-mat.mjs` thêm 50 ảnh chính thức chính phủ Mỹ — Quốc hội, Toà tối cao, nội các, quân đội, NASA; 19 người gốc Đông
+  Á, có tướng Lương Xuân Việt; một lượt mỗi ảnh): 53 ảnh ra số, 4 ảnh quay đầu 12–17° bị chặn đúng, 1 ảnh không thấy mặt; 14 ảnh
+  điểm cười <0,2 (6 người gốc Đông Á). 7 ảnh cũ: số y như 23/10 (thêm blendshape không đổi lưới).
+  Phân vị 25 / 50 / 75 của 14 ảnh không cười: trung:hạ 0,96 / 1,03 / 1,06 · ngũ nhãn 5,37 / 5,47 / 5,66 · khoảng mắt 1,24 / 1,31 /
+  1,33 · mũi 1,19 / 1,26 / 1,29 · miệng 1,21 / 1,25 / 1,29 · dài:rộng 0,88 / 0,91 / 0,95 · mày 1,59 / 1,61 / 1,66 · ấn đường 1,02 /
+  1,05 / 1,08 · mày cách mắt 0,47 / 0,54 / 0,69. Trung vị nhóm Đông Á (cả cười): khoảng mắt 1,38 (cả nhóm 1,32), mũi 1,25 (1,29),
+  mày cách mắt 0,66 (0,54).
+- **Lời giải** (`tuongMatGiai.ts`, Claude soạn lại, không chép): mỗi tỉ lệ xếp thấp / vừa / cao theo **phân vị 25 và 75 của 14 ảnh
+  không cười** ("phần đông"), không so thẳng chuẩn sách vì lưới lệch ("đúng máy, sai sách": khoé mắt lọt vào trong → khoảng mắt
+  1,1–1,5 mắt; lưới dựng lông mày theo cung mày → 53/53 ảnh ra 1,4–1,8 mắt). Riêng lông mày giữ luật sách: dưới 1 là "ngắn hơn mắt".
+  Mỗi lời ≥2 nguồn [W55]; tỉ lệ không có nguồn thì chỉ tả, ghi không giải:
+  - Trung : hạ đình — *Thái Thanh Thần Giám* q.5 "Luận diện bộ", q.6 "Tam đình"; *Thần Tướng Toàn Biên* "Tướng thuyết", "Tam tài
+    tam đình luận": ba đình đều thì cơm áo không thiếu; trung đình dài "gần vua" (trung niên hanh thông). **Vênh**: hạ đình dài —
+    *Toàn Biên* "下停長老吉祥", *Thái Thanh* q.6 "下停長者皆庸俗逺走他方" → app nêu cả hai; hai sách cùng khen cằm vuông, đầy.
+  - Ngũ nhãn (mắt dài so với mặt) — *Thái Thanh* q.5 "Luận nhãn bộ" (mắt nên dài, thanh tú; ngắn nhỏ mà sáng vẫn quý, thọ);
+    *Toàn Biên* phượng tướng mắt dài.
+  - Mũi (bề ngang cánh mũi) — *Toàn Biên* "Tướng tị" (Lan Đài, Đình Úy hai bên cân, đầy); bài VN: cánh mũi đầy, nở → giữ của.
+  - Miệng — *Toàn Biên* "Tướng khẩu" (rộng, vuông, có góc → thọ, phúc; nhỏ chúm → bạc); *Thiết Quan Đao* "Tướng khẩu bí quyết"
+    (miệng nên lớn; nhỏ thì về già kém).
+  - Lông mày — *Thái Thanh* q.5 "Luận mi" (dài quá mắt thì giàu, ngắn không phủ mắt thì thiếu tiền, đè mắt thì túng);
+    *Toàn Biên* "Luận mi" (dài quá mắt: ngay thẳng có lộc; ngắn hơn mắt: tính cô độc), cung Huynh Đệ; *Thiết Quan Đao*.
+  - Ấn đường — *Toàn Biên* "Tướng ấn đường" (nên rộng, đầy, phẳng; hẹp, đầu mày giao thì vất vả), "mày cách lọt hai ngón tay";
+    *Thiết Quan Đao* (nên rộng, vuông); bài VN: rộng → rộng rãi, dễ tin người; hẹp → chi li, hay lo.
+  - Mày cách mắt — *Thái Thanh* q.5 (mày đè mắt → túng bức); *Toàn Biên* cung Huynh Đệ (mày vây sát mắt → anh em thưa); bài VN
+    gọi khoảng này là cung Điền Trạch (*Toàn Biên* lại đặt Điền Trạch ở mắt). Rộng: sách không khen riêng → chỉ ghi "không phạm".
+  - Khoảng giữa hai mắt, dài : rộng mặt — không tìm được sách bàn theo số (dáng mặt sách xếp theo ngũ hành) → chỉ tả.
+- **AI**: số đo (không ảnh) chỉ nằm trong bộ nhớ theo người; khối AI tổng hợp lấy lại dữ liệu mỗi lần gửi khi chưa có câu trả lời
+  nào, nên đo mặt sau khi mở khối AI vẫn kịp. Mục "Tướng mặt" ~1.000 ký tự (hồ sơ giả: 8.036 → 9.016): 9 dòng số + lời app; ảnh cười chỉ gửi số.
+- **Còn chưa chắc**: 14 ảnh không cười, đa số đàn ông lớn tuổi — ngưỡng tạm, có ảnh mặt nghiêm phạm vi công cộng thì đo thêm. Chưa
+  so với người Việt thật. Thượng đình (trán), dáng cằm, môi, thần mắt — máy không đo.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
@@ -523,6 +554,13 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
   https://github.com/WillianSiquieri/WillianSiquieri.github.io/pull/22 · Gemini miễn phí dùng
   dữ liệu: https://ai.google.dev/gemini-api/terms · bản Claude (bỏ): https://platform.claude.com/docs/en/about-claude/pricing
 - W53 (tarot, tra 22/10 qua tóm tắt tìm kiếm) ảnh, bản quyền: https://en.wikipedia.org/wiki/Rider%E2%80%93Waite_Tarot · https://download.osmand.net/wiki/File:TheLovers.jpg · https://download.osmand.net/wiki/File:Cups04.jpg · https://www.glorioustrainwrecks.com/node/10985 · https://luciellaes.itch.io/rider-waite-smith-tarot-cards-cc0 · tên Việt: https://soitarot.vn/tarot · https://liu.com.vn/tarot · https://fptshop.com.vn/tin-tuc/dien-may/y-nghia-78-la-bai-tarot-168493 · https://jobsgo.vn/blog/y-nghia-78-la-bai-tarot/ · https://www.elle.vn/cung-hoang-dao/bai-tarot-tuong-trung-cung-hoang-dao/ · https://www.tarothuyenbi.info/2014/08/bon-la-queen-la-hoang-hau-trong-tarot.html · https://yody.vn/post/y-nghia-bai-tarot · https://dich.kabala.vn/tarot/bai-cards · https://aitamsu.com/tarot · https://phogotarot.com/blog/bo-an-phu-tarot-4-nguyen-to · sách Waite (bản sacred-texts 1910 lưu trên archive.org): https://archive.org/details/a.-e.-waite-the-pictorial-key-to-the-tarot
+- W55 (tướng mặt, đọc nguyên văn 24/10 trên zh.wikisource, sách phạm vi công cộng) *Thái Thanh Thần Giám* 太清神鑑 (bản Tứ khố,
+  đời Tống): https://zh.wikisource.org/wiki/太清神鑑_(四庫全書本) · *Thần Tướng Toàn Biên* 神相全編 (đời Minh) chép trong *Cổ Kim Đồ
+  Thư Tập Thành* quyển 631–644: https://zh.wikisource.org/wiki/欽定古今圖書集成/博物彙編/藝術典/相術部 · *Thần Tướng Thiết Quan Đao*
+  神相鐵關刀 (đời Thanh): https://zh.wikisource.org/wiki/神相鐵關刀 · bài VN (tóm tắt tìm kiếm): ấn đường
+  https://jobsgo.vn/blog/an-duong-la-gi/ · cánh mũi https://www.vietnamworks.com/hrinsider/nhan-tuong-hoc-mui.html ·
+  https://jobsgo.vn/blog/mui-lan/ · cung Điền Trạch https://hellobacsi.com/community/suc-khoe-tinh-than/not-ruoi-giua-long-may-va-mat-co-y-nghia-gi/
+  · khoảng hai mắt: tìm tiếng Việt, tiếng Trung không ra sách nào bàn.
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.

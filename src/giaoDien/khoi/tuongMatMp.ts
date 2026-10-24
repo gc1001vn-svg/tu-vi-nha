@@ -53,7 +53,7 @@ export async function doAnh(f: File, khiDo: () => void): Promise<KetQuaMat> {
     const simd = await FilesetResolver.isSimdSupported();
     fl = await FaceLandmarker.createFromOptions(simd ? { wasmLoaderPath: napSimd, wasmBinaryPath: wasmSimd } : { wasmLoaderPath: napCu, wasmBinaryPath: wasmCu },
       // Khong khai backend: mac dinh CPU (doc ma thu vien 1.1.1) — chay 2 lan cung so; nang thu vien thi do lai `do-mat.mjs`.
-      { baseOptions: { modelAssetPath: MO_HINH }, numFaces: 2, outputFacialTransformationMatrixes: true });
+      { baseOptions: { modelAssetPath: MO_HINH }, numFaces: 2, outputFacialTransformationMatrixes: true, outputFaceBlendshapes: true });
     const taiMs = performance.now() - bd;
     khiDo();
     const may = fl;
@@ -69,7 +69,10 @@ export async function doAnh(f: File, khiDo: () => void): Promise<KetQuaMat> {
       const r = may.detect(cv);
       const diem = r.faceLandmarks[0], maTran = r.facialTransformationMatrixes[0]?.data;
       if (r.faceLandmarks.length !== 1 || diem === undefined || maTran === undefined) throw new Error('Cắt khung quanh mặt rồi không đo lại được — chụp gần hơn, nhìn thẳng.');
-      return { diem, rong: c, cao: c, maTran, lat };
+      // Diem cuoi: trung binh hai khoe mieng trong 52 blendshape cua MediaPipe (QUY_UOC muc 26).
+      const bs = r.faceBlendshapes[0]?.categories ?? [];
+      const diemBs = (ten: string): number => bs.find((x) => x.categoryName === ten)?.score ?? 0;
+      return { diem, rong: c, cao: c, maTran, lat, cuoi: (diemBs('mouthSmileLeft') + diemBs('mouthSmileRight')) / 2 };
     };
     const kq = doMat(HE_SO_KHUNG.flatMap((k) => [lan(k, false), lan(k, true)]));
     if (quaGoc(kq.goc)) {

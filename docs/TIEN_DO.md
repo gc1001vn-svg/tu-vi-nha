@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 24/10/2026 — **đợt 7 phần 2: khối tướng mặt tối thiểu (chỉ số đo) đã gộp `main`, anh thử iPhone ổn**.
+Cập nhật: 24/10/2026 — **đợt 7 phần 2 (tướng mặt: lời giải, báo ảnh cười, số đo vào AI) đã gộp `main`, chờ anh thử iPhone**.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -17,16 +17,16 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   theo việc" (mục 17–19), "Chiêm tinh hôm nay".
 - Thẻ "Phong thủy" (đợt 5, `QUY_UOC` mục 20–22): la bàn + lưu hướng nhà · thước Lỗ Ban (chỉ cung lớn; dán số từ app Đo) ·
   phi tinh năm/tháng, hướng kỵ năm (la bàn báo khi trùng).
-- AI Groq (`QUY_UOC` mục 25): "AI tổng hợp" + hỏi đáp dưới mỗi người, quẻ, tarot · tướng mặt đo trong máy (mục 26, chưa lời giải).
+- AI Groq (`QUY_UOC` mục 25): "AI tổng hợp" + hỏi đáp dưới mỗi người, quẻ, tarot · tướng mặt đo trong máy + lời giải (mục 26).
 
 ## 2. Việc kế
 
-- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`): phần 1 xong. Phần 2: khối tối thiểu chạy trên iPhone (24/10: tải 2,5 giây,
-  đo 0,2 giây). Kế: lời giải (≥2 nguồn), đưa số đo vào AI, đo lại `do-mat.mjs` — phiên mới gõ "làm tiếp phần 2".
+- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`): phần 1, 2 xong. Kế: phần 3 chỉ tay qua AI — phiên mới gõ "làm phần 3".
 - Sau đợt 7: 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
+- **Thử tướng mặt trên iPhone**: mặt nghiêm → có "Lời giải"; cười → báo "đang cười"; đo xong bấm "AI tổng hợp" → AI nhắc tướng mặt.
 - So cung Mọc (chiêm tinh) với astro-seek.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Chờ xoá (đã nằm trong `main`; tên đủ có `claude/` phía
   trước): `determined-galileo-xz2mc5` (lịch sử còn ngày sinh thật — nên xoá), `nifty-johnson-b0rxcq`, `luu-han-loi-giai`,
@@ -40,7 +40,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Mệnh chủ/Thân chủ theo *Toàn Thư* (`QUY_UOC` mục 15), chưa so Altuvi; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
 - Lời giải (tử vi Tân Biên Claude viết lại, sao hạn, bát tự, Kinh Dịch, chiêm tinh, tarot, AI) chưa ai rành đọc lại; bát tự
   đếm thô, chưa xét vượng suy. Phụ tinh tốt/xấu theo `ansaotuvi`, lệch sách vài sao (vd Mộ).
-- Tướng mặt (mục 26): khoé mắt lưới lọt vào trong (khoảng mắt lệch sách), chưa tự phát hiện cười.
+- Tướng mặt (mục 26): ngưỡng tạm theo 14 ảnh mặt nghiêm (so ảnh mẫu, không so chuẩn sách vì lưới lệch).
 - AI (mục 25): gán sai cung ~1/10 hồ sơ, thêm lời khuyên ngoài dữ liệu — app chỉ nhắc; siết lời dặn thì đo lại.
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng theo hoàng lịch Trung Hoa, kiêng trùng `cnlunar` 61 % → chọn ngày
   chỉ hạ Được (mục 17–19).

@@ -3,3 +3,7 @@
 .tuong-mat th { font-weight: 400; }
 .tuong-mat th small { display: block; color: var(--mo); font-size: 15px; }
 .tuong-mat td { width: 3.5em; text-align: right; font-variant-numeric: tabular-nums; }
+.tuong-mat h3 { font-size: 16px; margin: 12px 0 4px; }
+.tuong-mat ul { padding-left: 18px; margin: 6px 0; }
+.tuong-mat li { margin: 6px 0; }
+.tuong-mat li small { color: var(--mo); }
