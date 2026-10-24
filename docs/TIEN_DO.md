@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 23/10/2026 — **đợt 7 phần 2: khối tướng mặt tối thiểu (chỉ số đo) đã gộp `main`, chờ anh thử iPhone**.
+Cập nhật: 24/10/2026 — **đợt 7 phần 2: khối tướng mặt tối thiểu (chỉ số đo) đã gộp `main`, anh thử iPhone ổn**.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -21,14 +21,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`): phần 1 xong. Phần 2: khối tối thiểu gộp 23/10; iPhone ổn thì làm lời giải
-  (≥2 nguồn), đưa số đo vào AI, đo lại `do-mat.mjs`; hỏng thì lùi về chạm tay 6 điểm.
+- **Đợt 7** (`docs/ke-hoach/2026-10-23-dot-7.md`): phần 1 xong. Phần 2: khối tối thiểu chạy trên iPhone (24/10: tải 2,5 giây,
+  đo 0,2 giây). Kế: lời giải (≥2 nguồn), đưa số đo vào AI, đo lại `do-mat.mjs` — phiên mới gõ "làm tiếp phần 2".
 - Sau đợt 7: 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
 
 ## 3. Cần anh
 
-- Thử tướng mặt trên iPhone ("Của tôi" → "Tướng mặt", chụp nhìn thẳng, không cười): ra số không, mấy giây, có văng app không ·
-  so cung Mọc với astro-seek.
+- So cung Mọc (chiêm tinh) với astro-seek.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Chờ xoá (đã nằm trong `main`; tên đủ có `claude/` phía
   trước): `determined-galileo-xz2mc5` (lịch sử còn ngày sinh thật — nên xoá), `nifty-johnson-b0rxcq`, `luu-han-loi-giai`,
   `loi-giai-de-hieu`, `nguon-phat-dao`, `kinh-goc-cuu-dieu`, `ngoc-hap-ky`, `dot-4-kinh-dich`, `blissful-sagan-ur507y`,

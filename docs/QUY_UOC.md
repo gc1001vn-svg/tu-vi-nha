@@ -409,7 +409,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Thư viện**: MediaPipe Face Landmarker (`@mediapipe/tasks-vision` 1.1.1, Apache-2.0), chạy CPU. Mô hình `face_landmarker`
   float16 bản 1 (3,76 MB; thẻ mô hình ghi Apache 2.0) để trong `public/mediapipe/` — gọi cùng địa chỉ app, không sang máy chủ
   Google; đổi mô hình thì đổi tên file. WASM 13,5 MB (bản không SIMD 12,6 MB cho máy cũ) Vite chép từ gói npm. Không cài sẵn cùng
-  app: service worker lưu khi dùng lần đầu (`tuong-mat`, CacheFirst). Gói mở app +0,2 KB, gói cài sẵn +3 KB (23/10).
+  app: service worker lưu khi dùng lần đầu (`tuong-mat`, CacheFirst). Gói mở app +0,2 KB, gói cài sẵn +3 KB (23/10). Anh luôn có
+  mạng (24/10) → không đòi chạy không mạng như kế hoạch ghi; lưu vẫn giữ cho lần sau nạp nhanh.
 - **Ảnh**: thu nhỏ ≤1024 px rồi đo; không lưu, không gửi; đo xong đóng thư viện, xoá canvas (Safari iPhone ít bộ nhớ).
 - **Điểm** (lưới 478 điểm, kiểm bằng mắt trên ảnh 23/10; mắt phải người trong ảnh = bên trái ảnh): khoé mắt 33/133, 362/263 ·
   mép mặt ngang tầm mắt 234/454 · cánh mũi 129/358 (cặp rộng nhất quanh mũi) · khoé miệng 61/291 · ấn đường 9 · chân mũi 2 ·
@@ -427,7 +428,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   trên khung đã cắt: đo cả ảnh thì mặt lệch tâm bị tính thành ngẩng (ảnh chính diện ra 22°). Nghiêng đầu sang bên không chặn.
 - **Đo 23/10** (`scripts/doi-chieu/do-mat.mjs`, Chromium, 7 ảnh chân dung chính thức chính phủ Mỹ, NASA — phạm vi công cộng, tải
   ngoài repo): 7/7 ra đúng 1 mặt, chạy 2 lần cùng số, ảnh lật gương lệch ≤1,05 % (ngưỡng 2 %), sai số ±1,2–2,9 %; ảnh trơn, hai
-  người nhỏ, hai người to báo đúng. 10 lần đo 0,45–0,83 giây (máy ảo). **iPhone: chưa thử.**
+  người nhỏ, hai người to báo đúng. 10 lần đo 0,45–0,83 giây (máy ảo). iPhone thật 24/10 (anh): ra đủ 9 số, tải thư viện 2,5 giây, đo 0,2 giây.
 - **Chưa chắc, xử ở bước lời giải**: (1) khoé mắt của lưới nằm lọt vào trong → khoảng giữa hai mắt ra 1,1–1,45 mắt, số nhân trắc
   người thật ~1,0–1,2 → "đúng máy, sai sách": không so thẳng với chuẩn sách. (2) Cười làm miệng rộng, mắt híp: app chỉ dặn mặt
   tự nhiên, chưa tự phát hiện. (3) 7 ảnh, đa số cười — chưa đủ đặt ngưỡng lời giải.
