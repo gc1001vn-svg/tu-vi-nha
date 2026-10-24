@@ -8,9 +8,10 @@
 /** Diem moc MediaPipe: x, y chuan hoa theo rong, cao anh. */
 export interface DiemMoc { readonly x: number; readonly y: number }
 
-/** Mot lan do: luoi diem, co anh (px), ma tran bien doi 4x4 luu theo cot, anh co lat guong khong. */
+/** Mot lan do: luoi diem, co anh (px), ma tran bien doi 4x4 luu theo cot, anh co lat guong khong, diem cuoi MediaPipe (0–1). */
 export interface LanDo {
   readonly diem: readonly DiemMoc[]; readonly rong: number; readonly cao: number; readonly maTran: readonly number[]; readonly lat: boolean;
+  readonly cuoi?: number;
 }
 
 export interface SoDoMat {
@@ -93,7 +94,7 @@ export const quaGoc = (g: GocDau): boolean => Math.abs(g.quay) > GIOI_HAN_GOC.qu
  * (23/10) nen lay trung binh. `lech`: 2 sai so chuan cua trung binh (% — khoang tin ~95 %), lon nhat trong cac ti le.
  * Lan lat guong doi dau goc quay, nghieng.
  */
-export function doMat(cac: readonly LanDo[]): { readonly so: SoDoMat; readonly lech: number; readonly goc: GocDau } {
+export function doMat(cac: readonly LanDo[]): { readonly so: SoDoMat; readonly lech: number; readonly goc: GocDau; readonly cuoi: number } {
   const s = cac.map((l) => soDo(l.diem, l.rong, l.cao));
   const dau = s[0];
   if (dau === undefined) throw new Error('Không có lần đo nào');
@@ -106,7 +107,8 @@ export function doMat(cac: readonly LanDo[]): { readonly so: SoDoMat; readonly l
     return ((2 * doLech) / Math.sqrt(xs.length) / m) * 100;
   }));
   const g = cac.map((l) => ({ ...gocDau(l.maTran), d: l.lat ? -1 : 1 }));
-  return { so, lech, goc: { quay: tb(g.map((x) => x.quay * x.d)), ngua: tb(g.map((x) => x.ngua)), nghieng: tb(g.map((x) => x.nghieng * x.d)) } };
+  return { so, lech, goc: { quay: tb(g.map((x) => x.quay * x.d)), ngua: tb(g.map((x) => x.ngua)), nghieng: tb(g.map((x) => x.nghieng * x.d)) },
+    cuoi: tb(cac.map((l) => l.cuoi ?? 0)) };
 }
 
 /**

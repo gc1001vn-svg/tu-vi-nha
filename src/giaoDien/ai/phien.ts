@@ -24,7 +24,8 @@ interface Luot {
 
 interface Phien {
   readonly cd: ChuDe;
-  readonly duLieu: string;
+  /** Lay lai moi lan goi khi chua co cau tra loi nao: so do mat do sau khi mo khoi AI van kip vao. */
+  duLieu: string;
   readonly tuDien: readonly string[];
   readonly luot: Luot[];
   dung: AbortController | null;
@@ -36,11 +37,13 @@ const PHIEN = new Map<string, Phien>();
 
 const lamMoi = (p: Phien): void => { for (const f of p.nghe) f(); };
 
+const duLieuCua = (cd: ChuDe): string => (cd.loai === 'nguoi' ? duLieuNguoi(cd.hs, cd.tr, cd.ngayXem, cd.lechNuoc, cd.mat())
+  : cd.loai === 'que' ? duLieuQue(cd.k, cd.g, cd.mh) : duLieuTarot(cd.t, cd.kieu, cd.rut));
+
 function taoPhien(cd: ChuDe): Phien {
-  const [duLieu, tuDien] = cd.loai === 'nguoi' ? [duLieuNguoi(cd.hs, cd.tr, cd.ngayXem, cd.lechNuoc), TU_NGUOI]
-    : cd.loai === 'que' ? [duLieuQue(cd.k, cd.g, cd.mh), [...TU_NGUOI, ...cd.k.QUE.map((q) => q.tenDu)]]
-      : [duLieuTarot(cd.t, cd.kieu, cd.rut), cd.t.LA.flatMap((l) => [l.anh, l.ten, ...(l.khac === null ? [] : [l.khac])])];
-  return { cd, duLieu, tuDien, luot: [], dung: null, nghe: new Set() };
+  const tuDien = cd.loai === 'nguoi' ? TU_NGUOI : cd.loai === 'que' ? [...TU_NGUOI, ...cd.k.QUE.map((q) => q.tenDu)]
+    : cd.t.LA.flatMap((l) => [l.anh, l.ten, ...(l.khac === null ? [] : [l.khac])]);
+  return { cd, duLieu: '', tuDien, luot: [], dung: null, nghe: new Set() };
 }
 
 async function goi(p: Phien, gui: string, hoi: string | null): Promise<void> {
@@ -61,6 +64,7 @@ async function goi(p: Phien, gui: string, hoi: string | null): Promise<void> {
   let cho = 0;
   lamMoi(p);
   try {
+    if (!p.luot.some((x) => x.dap !== '')) p.duLieu = duLieuCua(p.cd);
     const kq = await goiAI(khoa, p.duLieu, tin, (them) => {
       l.dap += them;
       // Ve lai toi da moi khung hinh mot lan, chu chay nhanh van muot.
