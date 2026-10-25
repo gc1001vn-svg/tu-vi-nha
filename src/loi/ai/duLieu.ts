@@ -19,7 +19,7 @@ import type * as TarotMod from '../tarot.ts';
 import { NUOC_NGOAI } from '../tinh.ts';
 import { tuoiHop } from '../tuoiHop.ts';
 import type { SoDoMat } from '../tuongMat.ts';
-import { CAC_KHOA, GIAI, NGUONG_CUOI, SO_ANH_MAU, mucMat } from '../tuongMatGiai.ts';
+import { CAC_KHOA, GIAI, SO_ANH_MAU, giaiMat } from '../tuongMatGiai.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
 
@@ -169,10 +169,10 @@ function chiemTinh(hs: HoSo, lechNuoc: number | undefined): string {
 export interface MatDo { readonly so: SoDoMat; readonly cuoi: number }
 
 function tuongMat(m: MatDo): string {
-  const cuoi = m.cuoi >= NGUONG_CUOI;
+  const g = giaiMat(m);
   return muc(`Tướng mặt (đo từ ảnh trong máy, xếp so với ${String(SO_ANH_MAU)} ảnh mẫu mặt tự nhiên; lời app soạn theo sách tướng)`, [
-    cuoi ? 'Ảnh đang cười nên số lệch, app không giải.' : null,
-    ...CAC_KHOA.map((k) => `- ${GIAI[k].ten} ${m.so[k].toFixed(2).replace('.', ',')}${cuoi ? '' : `: ${GIAI[k].loi[mucMat(k, m.so[k])]}`}`),
+    ...g.canhBao,
+    ...CAC_KHOA.map((k) => `- ${GIAI[k].ten} ${m.so[k].toFixed(2).replace('.', ',')}${g.loi[k] === null ? '' : `: ${g.loi[k]}`}`),
   ]);
 }
 

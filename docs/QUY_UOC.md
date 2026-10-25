@@ -440,29 +440,67 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   1,33 · mũi 1,19 / 1,26 / 1,29 · miệng 1,21 / 1,25 / 1,29 · dài:rộng 0,88 / 0,91 / 0,95 · mày 1,59 / 1,61 / 1,66 · ấn đường 1,02 /
   1,05 / 1,08 · mày cách mắt 0,47 / 0,54 / 0,69. Trung vị nhóm Đông Á (cả cười): khoảng mắt 1,38 (cả nhóm 1,32), mũi 1,25 (1,29),
   mày cách mắt 0,66 (0,54).
+- **Chụp gần** (25/10): anh thử iPhone 24/10 ra dài:rộng, ngũ nhãn ngoài mọi ảnh mẫu, đúng hướng méo phối cảnh của ảnh tự chụp
+  cầm tay (số đo của anh không ghi vào repo). Đo: lấy lưới 3D MediaPipe (x, y, z; z cùng thang với x) của 14 ảnh mặt nghiêm, coi bề ngang mặt 234–454 = 13,5 cm
+  (mép mặt ra sau đầu mũi 9,2 cm, 8,8–9,7), chiếu phối cảnh với máy đặt trước đầu mũi ở D mét, so với chiếu thẳng. Lệch trung bình ở
+  0,3 m / 0,5 m / 1 m / 1,5 m / 3 m: dài:rộng +19,7 / +12,2 / +6,2 / +4,2 / +2,1 % · ngũ nhãn −12,4 / −8,2 / −4,5 / −3,1 / −1,6 · mày
+  cách mắt +16,7 / +10,2 / +5,2 / +3,5 / +1,7 · ấn đường +7,9 / +4,9 / +2,5 / +1,7 / +0,8 · trung:hạ +7,5 / +4,6 / +2,3 / +1,5 / +0,8 ·
+  khoảng mắt, mũi, miệng, mày ≤3 % ở 0,3 m. Độ tản giữa 14 mặt ở 0,3 m nhỏ (dài:rộng ±0,8 điểm %; mày cách mắt ±7, trung:hạ ±4).
+  Khớp cỡ với Ward et al. 2018 (JAMA Facial Plast Surg 20(4): mũi so gò má rộng thêm ~30 % ở 30 cm so 1,5 m — đọc qua trích đoạn).
+  → Dặn "người khác chụp, cách 1,5–2 m, zoom 2–3×"; **dài:rộng > 1,03** (53 ảnh mẫu chụp xa ra 0,87–1,02) thì báo "có thể tự chụp
+  gần", bỏ lời 5 tỉ lệ nhạy khoảng cách (`NHAY_GAN`), giữ 4 tỉ lệ còn lại. Không đoán khoảng cách từ EXIF (chưa chắc Safari giữ EXIF).
 - **Lời giải** (`tuongMatGiai.ts`, Claude soạn lại, không chép): mỗi tỉ lệ xếp thấp / vừa / cao theo **phân vị 25 và 75 của 14 ảnh
   không cười** ("phần đông"), không so thẳng chuẩn sách vì lưới lệch ("đúng máy, sai sách": khoé mắt lọt vào trong → khoảng mắt
-  1,1–1,5 mắt; lưới dựng lông mày theo cung mày → 53/53 ảnh ra 1,4–1,8 mắt). Riêng lông mày giữ luật sách: dưới 1 là "ngắn hơn mắt".
-  Mỗi lời ≥2 nguồn [W55]; tỉ lệ không có nguồn thì chỉ tả, ghi không giải:
-  - Trung : hạ đình — *Thái Thanh Thần Giám* q.5 "Luận diện bộ", q.6 "Tam đình"; *Thần Tướng Toàn Biên* "Tướng thuyết", "Tam tài
-    tam đình luận": ba đình đều thì cơm áo không thiếu; trung đình dài "gần vua" (trung niên hanh thông). **Vênh**: hạ đình dài —
-    *Toàn Biên* "下停長老吉祥", *Thái Thanh* q.6 "下停長者皆庸俗逺走他方" → app nêu cả hai; hai sách cùng khen cằm vuông, đầy.
-  - Ngũ nhãn (mắt dài so với mặt) — *Thái Thanh* q.5 "Luận nhãn bộ" (mắt nên dài, thanh tú; ngắn nhỏ mà sáng vẫn quý, thọ);
-    *Toàn Biên* phượng tướng mắt dài.
-  - Mũi (bề ngang cánh mũi) — *Toàn Biên* "Tướng tị" (Lan Đài, Đình Úy hai bên cân, đầy); bài VN: cánh mũi đầy, nở → giữ của.
-  - Miệng — *Toàn Biên* "Tướng khẩu" (rộng, vuông, có góc → thọ, phúc; nhỏ chúm → bạc); *Thiết Quan Đao* "Tướng khẩu bí quyết"
-    (miệng nên lớn; nhỏ thì về già kém).
-  - Lông mày — *Thái Thanh* q.5 "Luận mi" (dài quá mắt thì giàu, ngắn không phủ mắt thì thiếu tiền, đè mắt thì túng);
-    *Toàn Biên* "Luận mi" (dài quá mắt: ngay thẳng có lộc; ngắn hơn mắt: tính cô độc), cung Huynh Đệ; *Thiết Quan Đao*.
-  - Ấn đường — *Toàn Biên* "Tướng ấn đường" (nên rộng, đầy, phẳng; hẹp, đầu mày giao thì vất vả), "mày cách lọt hai ngón tay";
-    *Thiết Quan Đao* (nên rộng, vuông); bài VN: rộng → rộng rãi, dễ tin người; hẹp → chi li, hay lo.
-  - Mày cách mắt — *Thái Thanh* q.5 (mày đè mắt → túng bức); *Toàn Biên* cung Huynh Đệ (mày vây sát mắt → anh em thưa); bài VN
-    gọi khoảng này là cung Điền Trạch (*Toàn Biên* lại đặt Điền Trạch ở mắt). Rộng: sách không khen riêng → chỉ ghi "không phạm".
-  - Khoảng giữa hai mắt, dài : rộng mặt — không tìm được sách bàn theo số (dáng mặt sách xếp theo ngũ hành) → chỉ tả.
+  1,1–1,6 mắt; lưới dựng lông mày theo cung mày → 53/53 ảnh ra 1,4–1,8 mắt). Riêng lông mày giữ luật sách: dưới 1 là "ngắn hơn mắt".
+  Mỗi mức có `loi` (lời chính, theo sách Trung Hoa — gốc của tướng học Việt; gửi kèm AI) và `them` (các nền khác, chỗ vênh, lưu ý — chỉ
+  hiện trên màn hình, để mục AI không quá ~2 nghìn ký tự). Anh muốn mục nào cũng có lời (25/10) → **6 hướng tìm** 24–25/10 [W55, W56]:
+  Trung Hoa cổ (đọc nguyên văn: *Thái Thanh Thần Giám*, *Thần Tướng Toàn Biên* trong *Cổ Kim Đồ Thư Tập Thành*, *Thiết Quan Đao*,
+  *Băng Giám*, *Nhân Luân Đại Thống Phú*, *Nguyệt Ba Động Trung Ký*, *Tân Ngũ Đại Sử*, *Tuân Tử*) · Ấn Độ – kinh Phật (đọc nguyên
+  văn: *Bṛhat Saṃhitā* ch.57, 67–69 kèm chú Bhaṭṭotpala, *Garuḍa Purāṇa*, *Agni Purāṇa*, *Trường A Hàm* DN 30, *Đại Bát Nhã* q.381,
+  *Đại Trí Độ Luận* q.88–89, *Phương Quảng Đại Trang Nghiêm Kinh*) · Tây Tạng – Mông Cổ – Hồi giáo (đọc: Fakhr al-Dīn al-Rāzī
+  *Kitāb al-firāsa*, Rhazes *al-Manṣūrī*, *Sirr al-asrār*, Polemon bản Ả Rập in Aleppo 1929 — bản chữ do máy nhận dạng; *Mahāvyutpatti*,
+  *Lalitavistara* bản Tạng, sách tỉ lệ tượng Toh 4315; Mông Cổ, Ba Tư, Ottoman, Tạng y: không tìm được) · Hy Lạp – La Mã (đọc:
+  Aristotle giả danh *Physiognomonica*, *Historia animalium*, Polemon, Anonymus Latinus trong Foerster 1893) · tướng học hiện đại Nhật,
+  Hàn, Trung, Hồng Kông (**chỉ đọc qua trích đoạn tìm kiếm** — trang gốc bị chặn; sách còn bản quyền, chỉ tóm ý) · Việt Nam (đọc: Vũ
+  Tài Lục *Tướng mệnh khảo luận*, Trương Vĩnh Ký 1883, Vũ Ngọc Phan, Bùi Văn Vượng 2015, Hoàng Phê). Chính:
+  - Trung : hạ đình — *Toàn Biên* tự vênh (Tướng thuyết "下停長老吉祥" ↔ Tướng ngũ trường "下停長者人多賤"; Tam tài tam đình
+    luận "中停長近君王" ↔ Tướng diện "中停長者無中主"); *Thái Thanh* q.6 "下停長者皆庸俗". Sách đo tượng Ấn Độ chia mặt 3 phần
+    bằng nhau (*Bṛhat Saṃhitā* 57.5).
+  - Ngũ nhãn — *Thiết Quan Đao* "眼小面大是為有殺難削，面小眼大亦主有財多劫" (khớp cả hai chiều); mắt dài: *Toàn Biên* Đạt Ma
+    tướng nhãn "目長一寸，必佐明王", kinh Phật "眼相脩廣，譬如青蓮華葉"; mắt nhỏ mà sáng vẫn quý (Hứa Phụ, *Thái Thanh*). **Vênh**:
+    Rhazes, *Sirr al-asrār* chê mắt dài; Aristotle giả danh, Polemon bản Ả Rập khen mắt vừa.
+  - Khoảng mắt — **sách cổ mọi nền không có câu nói thẳng**; lời chính lấy tướng học Nhật, Hàn, Hồng Kông hiện đại (chuẩn "lọt một
+    con mắt"; xa: rộng lượng, lạc quan, dễ tin người; gần: nhạy bén, tập trung, hay lo) — mức trích đoạn; một bài Nhật nói ngược.
+    Gần nhất trong sách cổ: sơn căn hẹp nhọn → của nhà sớm hao (*Toàn Biên* Ngũ tinh lục diệu), sơn căn cao rộng → giảm nửa tai hoạ
+    (*Quảng Giám Tập*), ngũ quan dồn vào giữa → chi li (*Thiết Quan Đao*). Sách giáo khoa Sinh học VN ghi "hai mắt xa nhau" là dấu
+    hội chứng Down → app ghi "không dùng để chẩn đoán bệnh".
+  - Mũi — rộng tốt: *Toàn Biên* Tướng phú "蘭臺闊更長…其奈蓄金囊"; hẹp xấu: *Nhân Luân Đại Thống Phú* "慳吝小縮", *Thông Nguyên
+    Phú* "準小鼻狹，而最慳最吝"; ngoại lệ: mũi huyền đởm, nữ mũi thon là quý. **Vênh**: *Bṛhat Saṃhitā* 67.62 và kinh Phật khen lỗ
+    mũi nhỏ; Hy Lạp, Ả Rập: lỗ mũi phồng rộng là nóng nảy (Anonymus Latinus: gan dạ).
+  - Miệng — rộng tốt: *Băng Giám* "口闊而方祿千鍾", *Nhân Luân* "大容乎一拳", Polemon, Fakhr al-Dīn al-Rāzī (miệng sư tử); hẹp
+    xấu: Hứa Phụ, *Thiết Quan Đao*. **Vênh**: *Bṛhat Saṃhitā* 67.54 "mahāmukhaṃ durbhagāṇām" (miệng quá rộng bạc phận; bản dịch
+    Iyer 1884 dịch sai câu này). Tục ngữ "đàn ông rộng miệng thì sang, đàn bà rộng miệng tan hoang cửa nhà" — sớm nhất Trương Vĩnh
+    Ký 1883, đặt cạnh câu chê đàn bà nói dai → ghi là câu trọng nam khinh nữ.
+  - Dài : rộng mặt — dài tốt nếu vuông: *Toàn Biên* Tướng diện "面欲長而方，若上下尖如棗核者，貧賤", Quý tướng khẩu quyết "身短而面長
+    者貴", Tang Duy Hàn (*Tân Ngũ Đại Sử* q.29); rộng tốt: *Thái Thanh* q.1 "額方面廣有田有莊"; "面短貧賤" (chú *Nhân Luân*); kinh
+    Phật "面不大長…面淨滿如月" (*Đại Trí Độ Luận* q.89). **Vênh**: Fakhr al-Dīn al-Rāzī, Rhazes, *Sirr al-asrār* "mặt dài → trơ
+    tráo"; *Bṛhat Saṃhitā* 67.55 "dīrghaṃ nirdravyāṇāṃ" (mặt dài → nghèo). *Tuân Tử, Phi Tướng*: "長短、小大…非吉凶也".
+  - Lông mày — dài tốt: *Vạn Kim Tướng* (trong *Toàn Biên*) "眉長於目，兄弟五六…短不及目…非是同腹", *Nhân Luân*, *Nguyệt Ba*;
+    *Bṛhat Saṃhitā*, kinh Phật cũng khen. **Vênh**: Rhazes, Fakhr al-Dīn al-Rāzī, *Sirr al-asrār* "mày dài tới thái dương → kiêu".
+  - Ấn đường — rộng tốt: *Nhân Luân* "眉宇寬廣，心田坦平", *Thiết Quan Đao* "兩眉退避命宮…富貴遂", *Nguyệt Ba* "印堂闊而平…子孫
+    顯達"; hẹp: *Thần Dị Phú* "印堂太窄，子晚妻遲"; Aristotle giả danh "συνόφρυες δυσάνιοι" (mày giao → u sầu). **Sửa nguồn**: câu
+    "若是眉間容二指" nằm trong **Ngân Thi Ca** (*Toàn Biên* q.7), không phải mục Tướng ấn đường như ghi 24/10. Chuẩn 2 ngón còn ở
+    sách đo tượng Ấn Độ (*Bṛhat Saṃhitā* 57.12) và một bài kệ Tạng chưa rõ xuất xứ (cách hiểu chưa chắc, app không dẫn). **Vênh**: kinh Phật tả đầu mày Phật hơi liền (T187), Polemon bản
+    Ả Rập: mày giao xuống sống mũi → kiêu hãnh.
+  - Mày cách mắt — cao tốt: *Toàn Biên* Thập quan "眉…亦宜高目一寸…若散亂低壓，乃刑傷破敗", *Thiết Quan Đao* "兩眉高居額中，胸懷
+    軒爽"; thấp xấu: *Thái Thanh* "壓眼者窮逼", *Băng Giám* "壓眼不利", *Nguyệt Ba* "男子眉眼相近，顏色黑者，嫉妒奸猾"; Hy Lạp
+    (*Historia animalium*, Anonymus Latinus): mày sà → đố kỵ. **Vênh**: *Nhân Luân* "偃月高揭而好爭", tướng tinh tinh. Sách cổ đặt
+    **Điền Trạch ở mắt** ("田宅者，位居兩眼"); gọi khoảng mày–mắt là Điền Trạch là cách gọi hiện đại.
 - **AI**: số đo (không ảnh) chỉ nằm trong bộ nhớ theo người; khối AI tổng hợp lấy lại dữ liệu mỗi lần gửi khi chưa có câu trả lời
   nào, nên đo mặt sau khi mở khối AI vẫn kịp. Mục "Tướng mặt" ~1.000 ký tự (hồ sơ giả: 8.036 → 9.016): 9 dòng số + lời app; ảnh cười chỉ gửi số.
 - **Còn chưa chắc**: 14 ảnh không cười, đa số đàn ông lớn tuổi — ngưỡng tạm, có ảnh mặt nghiêm phạm vi công cộng thì đo thêm. Chưa
-  so với người Việt thật. Thượng đình (trán), dáng cằm, môi, thần mắt — máy không đo.
+  so với người Việt thật. Thượng đình (trán), dáng cằm, môi, thần mắt — máy không đo. Tướng học hiện đại Nhật, Hàn, Trung và phần khoa
+  học mới đọc qua trích đoạn (chưa mở được trang gốc). Câu Ả Rập đọc từ bản chữ máy nhận dạng, có thể sai vài chữ.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
@@ -560,7 +598,26 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
   神相鐵關刀 (đời Thanh): https://zh.wikisource.org/wiki/神相鐵關刀 · bài VN (tóm tắt tìm kiếm): ấn đường
   https://jobsgo.vn/blog/an-duong-la-gi/ · cánh mũi https://www.vietnamworks.com/hrinsider/nhan-tuong-hoc-mui.html ·
   https://jobsgo.vn/blog/mui-lan/ · cung Điền Trạch https://hellobacsi.com/community/suc-khoe-tinh-than/not-ruoi-giua-long-may-va-mat-co-y-nghia-gi/
-  · khoảng hai mắt: tìm tiếng Việt, tiếng Trung không ra sách nào bàn.
+  · khoảng hai mắt: tìm tiếng Việt, tiếng Trung không ra sách nào bàn. Thêm 25/10 (đọc nguyên văn): *Nhân Luân Đại Thống Phú*
+  https://zh.wikisource.org/wiki/人倫大統賦/卷上 · *Nguyệt Ba Động Trung Ký* https://zh.wikisource.org/wiki/月波洞中記/卷上 ·
+  *Băng Giám* https://zh.wikisource.org/wiki/冰鑑 · *Tân Ngũ Đại Sử* q.29 https://zh.wikisource.org/wiki/新五代史/卷29 ·
+  *Tuân Tử, Phi Tướng* https://zh.wikisource.org/wiki/荀子/非相篇.
+- W56 (tướng mặt các nền khác, 6 hướng tìm 24–25/10; chi tiết, câu nguyên văn, mức kiểm chứng ở ghi chép ngoài repo) Ấn Độ – Phật:
+  *Bṛhat Saṃhitā* bản GRETIL https://raw.githubusercontent.com/tylergneill/gretil-mirror/main/gretil/corpustei/transformations/plaintext/sa_varAhamihira-bRhatsaMhitA.txt
+  · chú Bhaṭṭotpala https://archive.org/details/SHeW_brihat-samhita-of-varah-mihir-with-bhattotpala-vivritti-saraswati-bhavan-grantha
+  · Iyer 1884 https://archive.org/details/cu31924023202819 · Kern (JRAS) https://archive.org/details/journalroyalasi43irelgoog ·
+  CBETA https://raw.githubusercontent.com/cbeta-org/xml-p5/master/T/T06/T06n0220.xml · DN 30
+  https://raw.githubusercontent.com/suttacentral/bilara-data/published/root/pli/ms/sutta/dn/dn30_root-pli-ms.json · Hồi giáo – Tạng:
+  Rhazes https://archive.org/details/al-mansuri_fi_at-tib · Polemon Aleppo 1929, Fakhr al-Dīn al-Rāzī (các bản in trên archive.org,
+  danh sách trong ghi chép) · Derge Kangyur/Tengyur https://github.com/Esukhia/derge-kangyur · https://github.com/Esukhia/derge-tengyur
+  · Hy Lạp – La Mã: First1KGreek https://raw.githubusercontent.com/OpenGreekAndLatin/First1KGreek/master/data/tlg0086/tlg032/tlg0086.tlg032.1st1K-grc1.xml
+  · Foerster, Scriptores physiognomonici https://archive.org/details/bub_gb_lVVFAAAAYAAJ · Loveday & Forster 1913
+  https://archive.org/details/worksaristotle00arisuoft · Việt Nam: Vũ Tài Lục https://archive.org/details/TuongMenhKhaoLuan-VuTaiLuc-dv
+  · Trương Vĩnh Ký 1883 https://archive.org/details/truong-vinh-ky-grammaire-de-la-langue-annamite-1883 · Vũ Ngọc Phan
+  https://archive.org/details/tuc-ngu-ca-dao-dan-ca-viet-nam-vu-ngoc-phan · Bùi Văn Vượng https://archive.org/details/tuc-ngu-ca-dao-viet-nam-tuyen-chon-bui-van-vuong
+  · tướng học hiện đại (trích đoạn): jomon.ne.jp/~eosk/z-ninsou/013.htm · madamefigaro.jp/beauty/260517-beauty-physiognomy-vol3/ ·
+  masterso.com (Tô Dân Phong) · namu.wiki "관상" · 한국미용학회지 30(4) 2024 · health.tvbs.com.tw · 開治中 2017 (心理科學進展) ·
+  khoa học: Ward et al. 2018 JAMA Facial Plast Surg 20(4):333–335 · Jayaratne 2012 PLoS ONE · Geniole 2015 · Todorov 2015.
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.

@@ -6,4 +6,5 @@
 .tuong-mat h3 { font-size: 16px; margin: 12px 0 4px; }
 .tuong-mat ul { padding-left: 18px; margin: 6px 0; }
 .tuong-mat li { margin: 6px 0; }
-.tuong-mat li small { color: var(--mo); }
+.tuong-mat .nguon { color: var(--mo); font-size: 14px; }
+.tuong-mat .nguon > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }

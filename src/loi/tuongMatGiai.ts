@@ -1,7 +1,8 @@
 /**
- * Loi giai tuong mat (dot 7 phan 2): moi ti le xep thap / vua / cao so voi anh mau mat tu nhien roi lay loi Claude soan lai theo
- * sach tuong co va sach dan gian Viet (luat 6 `CLAUDE.md`: soan moi, khong chep). Moi loi co >=2 nguon; ti le khong tim duoc nguon
- * thi chi tu, khong phan. Nguong, nguon, vi sao so voi anh mau chu khong so thang chuan sach: `docs/QUY_UOC.md` muc 26.
+ * Loi giai tuong mat (dot 7 phan 2): moi ti le xep thap / vua / cao so voi anh mau mat tu nhien roi lay loi Claude soan lai (luat 6
+ * `CLAUDE.md`: soan moi, khong chep) theo nhieu nen: sach tuong Trung Hoa (goc cua tuong hoc Viet), An Do, kinh Phat, A Rap – Ba Tu,
+ * Hy Lap – La Ma, tuong hoc hien dai Nhat – Han, tuc ngu Viet. Cac nen noi nguoc nhau thi neu ca. Nguong, nguon, muc kiem chung:
+ * `docs/QUY_UOC.md` muc 26.
  */
 import type { SoDoMat } from './tuongMat.ts';
 
@@ -13,7 +14,10 @@ interface DongGiai {
   readonly y: string;
   /** Duoi `nguong[0]` la thap, tren `nguong[1]` la cao. */
   readonly nguong: readonly [number, number];
+  /** Loi chinh, ngan — hien tren man hinh va gui AI. */
   readonly loi: Readonly<Record<MucMat, string>>;
+  /** Cac nen khac, cho venh, luu y — chi hien tren man hinh (AI chi nhan `loi` cho vua han muc token). */
+  readonly them: Readonly<Record<MucMat, string>>;
   readonly nguon: string;
 }
 
@@ -26,111 +30,229 @@ export const NGUONG_CUOI = 0.2;
 /** So anh mau mat tu nhien lam nguong (do 24/10, `scripts/doi-chieu/do-mat.mjs`). */
 export const SO_ANH_MAU = 14;
 
-const SACH = {
-  thaiThanh: 'Thái Thanh Thần Giám (đời Tống)',
-  toanBien: 'Thần Tướng Toàn Biên (đời Minh)',
-  thietQuan: 'Thần Tướng Thiết Quan Đao (đời Thanh)',
+/**
+ * Chup gan meo phoi canh: chieu lai luoi 3D 14 anh mat nghiem o 30 cm (may -> dau mui) thi dai:rong +20 %, ngu nhan −12 %, may
+ * cach mat +17 %, an duong +8 %, trung:ha +7,5 %; bon ti le con lai lech <=3 % (24/10, QUY_UOC muc 26). 53 anh mau chup xa ra
+ * dai:rong 0,87–1,02 -> vuot `NGUONG_GAN` thi nghi tu chup cam tay, bo loi 5 ti le nhay khoang cach.
+ */
+export const NHAY_GAN: readonly (keyof SoDoMat)[] = ['trungHa', 'nguNhan', 'daiRong', 'anDuong', 'mayCach'];
+export const NGUONG_GAN = 1.03;
+
+const S = {
+  thaiThanh: 'Thái Thanh Thần Giám (Tống)',
+  toanBien: 'Thần Tướng Toàn Biên (Minh)',
+  thietQuan: 'Thần Tướng Thiết Quan Đao (Thanh)',
+  nhanLuan: 'Nhân Luân Đại Thống Phú (Kim)',
+  nguyetBa: 'Nguyệt Ba Động Trung Ký',
+  bangGiam: 'Băng Giám (Thanh)',
+  brhat: 'Bṛhat Saṃhitā (Ấn Độ, thế kỷ 6)',
+  fakhr: 'Fakhr al-Dīn al-Rāzī, Kitāb al-firāsa (Ba Tư, thế kỷ 12)',
+  rhazes: 'Rhazes, al-Manṣūrī (Ba Tư, thế kỷ 10)',
+  sirr: 'Sirr al-asrār (Ả Rập)',
+  aristotle: 'Aristotle giả danh, Physiognomonica (Hy Lạp)',
+  polemon: 'Polemon (Hy Lạp, thế kỷ 2)',
+  latinus: 'Anonymus Latinus (La Mã, thế kỷ 4)',
+  vuTaiLuc: 'Vũ Tài Lục, Tướng mệnh khảo luận',
+  hienDai: 'tướng học hiện đại Nhật, Hàn, Trung, Hồng Kông (đọc qua trích đoạn)',
 } as const;
 
 /**
  * Nguong = phan vi 25 va 75 cua 14 anh mat tu nhien (diem cuoi < 0,2; 6 nguoi goc Dong A), tru may: duoi 1 la "may ngan hon mat"
- * dung luat sach (luoi may dung theo cung may nen 53/53 anh ra 1,5–1,8).
+ * dung luat sach (luoi may dung theo cung may nen 53/53 anh ra 1,4–1,8). `loi`: loi chinh (gui ca AI); `them`: cac nen khac, cho
+ * venh, luu y — chi hien tren man hinh. Nguon doc tan noi (6 huong tim 24–25/10): `docs/QUY_UOC.md` muc 26, [W55], [W56].
  */
 export const GIAI: Readonly<Record<keyof SoDoMat, DongGiai>> = {
   trungHa: {
     ten: 'Trung đình : hạ đình', y: 'ấn đường → chân mũi, so với chân mũi → đáy cằm', nguong: [0.96, 1.06],
     loi: {
-      thap: 'Hạ đình (chân mũi → cằm) dài hơn phần đông. Sách chia mặt ba đình ứng ba quãng đời và nói khác nhau ở đây: Thần Tướng '
-        + 'Toàn Biên cho hạ đình dài là về già yên ổn, Thái Thanh Thần Giám lại chê; hai sách cùng khen cằm vuông, đầy, dày '
-        + '(máy không xét dáng cằm).',
-      vua: 'Trung đình và hạ đình gần cân nhau như phần đông. Sách coi ba đình đều nhau là đời sống đều đặn, cơm áo không thiếu '
-        + '(máy không đo được thượng đình là trán).',
-      cao: 'Trung đình (ấn đường → chân mũi) dài hơn phần đông. Sách cho trung đình dài là quãng trung niên hanh thông, dễ có '
-        + 'địa vị.',
+      thap: 'Hạ đình (chân mũi → cằm) dài hơn phần đông. Sách tướng Trung Hoa nói khác nhau, ngay trong Thần Tướng Toàn Biên: '
+        + 'chỗ cho là về già yên ổn, chỗ chê là tầm thường (Thái Thanh Thần Giám cũng chê); sách nào cũng khen cằm vuông, đầy, dày.',
+      vua: 'Trung đình và hạ đình gần bằng nhau như phần đông. Sách Trung Hoa coi ba đình đều nhau là cơm áo không thiếu (Toàn '
+        + 'Biên); sách đo tượng Ấn Độ cũng chia mặt ba phần bằng nhau.',
+      cao: 'Trung đình (ấn đường → chân mũi) dài hơn phần đông. Sách Trung Hoa phần nhiều cho là trung niên hanh thông, gần quyền '
+        + 'quý (Thái Thanh Thần Giám, Toàn Biên).',
     },
-    nguon: `${SACH.thaiThanh} quyển 5 "Luận diện bộ", quyển 6 "Tam đình" · ${SACH.toanBien} "Tam tài tam đình luận", "Tướng thuyết"`,
+    them: {
+      thap: 'Tướng học Trung Hoa hiện đại lại cho hạ đình hơi dài là tốt. Hạ đình dài mà hẹp, nhọn, mỏng thì sách chê rõ nhất (về '
+        + 'già vất vả). Sách Tây cổ (Anonymus Latinus): cằm dài là người điềm tĩnh, ít nóng giận; Bṛhat Saṃhitā (Ấn Độ): cằm quá '
+        + 'dài mà gầy là nghèo. Máy không xét dáng cằm.',
+      vua: 'Tướng học Trung, Hàn hiện đại vẫn lấy ba đình đều làm chuẩn. Khoa học: đo người thật thì hiếm ai có ba đình đúng bằng '
+        + 'nhau. Máy không đo được thượng đình (trán).',
+      cao: 'Nhưng một chỗ khác trong Toàn Biên lại chê trung đình dài — sách cổ vênh nhau. Sách khen trung đình thẳng, đầy (thọ), '
+        + 'chê trung đình ngắn, xẹp (thiếu trí, trung niên hao). Sách phương Tây, Ấn Độ không so hai đình.',
+    },
+    nguon: `${S.thaiThanh} q.5–6 · ${S.toanBien}: Tướng thuyết, Tam tài tam đình luận, Diện tam đình, Tướng ngũ trường · `
+      + `${S.brhat} ch.57, 67 · ${S.latinus} · ${S.hienDai}`,
   },
   nguNhan: {
     ten: 'Ngũ nhãn', y: 'bề ngang mặt bằng bấy nhiêu mắt (số nhỏ = mắt dài so với mặt)', nguong: [5.37, 5.66],
     loi: {
-      thap: 'Mắt dài so với bề ngang mặt hơn phần đông. Sách khen mắt dài, thanh tú, đen trắng phân minh (như mắt phượng) là '
-        + 'tướng quý.',
-      vua: 'Mắt dài vừa so với mặt, như phần đông. Sách xem mắt chủ yếu ở thần (ánh mắt) — máy không đo được.',
-      cao: 'Mắt ngắn so với bề ngang mặt hơn phần đông. Sách không chê mắt nhỏ: mắt nhỏ mà sáng, có thần vẫn được coi là quý '
-        + 'và thọ — phần thần mắt phải nhìn người thật.',
+      thap: 'Mắt dài so với bề ngang mặt hơn phần đông. Sách Trung Hoa khen mắt dài, thanh tú: "mắt dài một tấc ắt giúp minh '
+        + 'vương" (Toàn Biên); kinh Phật, sách Ấn Độ cũng tả mắt dài như cánh sen là tướng quý.',
+      vua: 'Mắt dài vừa so với mặt, như phần đông. Sách Trung Hoa ("không to không nhỏ là quý"), Aristotle giả danh và Polemon bản '
+        + 'Ả Rập đều khen mắt vừa phải.',
+      cao: 'Mắt ngắn so với bề ngang mặt hơn phần đông. Thiết Quan Đao chê "mặt to mắt nhỏ" là mang sát khí; nhưng Hứa Phụ, Thái '
+        + 'Thanh Thần Giám nói mắt nhỏ mà sáng, có thần vẫn thông minh, quý, thọ.',
     },
-    nguon: `${SACH.thaiThanh} quyển 5 "Luận nhãn bộ" · ${SACH.toanBien} (phượng tướng mắt dài)`,
+    them: {
+      thap: 'Thiết Quan Đao thêm: mặt nhỏ mắt to thì có của nhưng hay hao. Sách Tây và Ả Rập ngược hẳn: mắt dài là người khó lường '
+        + '(Rhazes, Sirr al-asrār), mắt to là chậm chạp (Aristotle giả danh, Fakhr al-Dīn al-Rāzī). Tự chụp gần làm số này nhỏ '
+        + 'đi tới 12 %.',
+      vua: 'Phần còn lại sách xem ở thần mắt (sáng, có thần hay không) — máy không đo được.',
+      cao: 'Tướng học Hàn hiện đại: mắt nhỏ là người cẩn thận, bền bỉ, chặt chẽ chuyện tiền. Polemon chê mắt nhỏ là gian; tục ngữ '
+        + 'Việt "ti hí mắt lươn" là câu chê nặng nề, không nên tin. Thần mắt phải nhìn người thật.',
+    },
+    nguon: `${S.thietQuan} · ${S.toanBien}: Đạt Ma tướng nhãn, Tứ độc, Hứa Phụ · ${S.thaiThanh} q.5 · ${S.brhat} ch.67 · Đại Bát `
+      + `Nhã Kinh q.381 · ${S.aristotle} · ${S.polemon} · ${S.fakhr} · ${S.rhazes} · ${S.sirr}`,
   },
   khoangMat: {
     ten: 'Khoảng giữa hai mắt', y: 'bằng bấy nhiêu mắt', nguong: [1.24, 1.33],
     loi: {
-      thap: 'Hai mắt gần nhau hơn phần đông.',
-      vua: 'Khoảng giữa hai mắt như phần đông.',
-      cao: 'Hai mắt xa nhau hơn phần đông.',
+      thap: 'Hai mắt gần nhau hơn phần đông. Tướng học Nhật, Hàn hiện đại cho là người nhạy bén, tập trung, nắm chi tiết nhanh, '
+        + 'nhưng dễ lo nghĩ, hay để bụng.',
+      vua: 'Khoảng giữa hai mắt như phần đông — gần chuẩn "giữa hai mắt lọt một con mắt" của tướng học Nhật, Hàn, Hồng Kông hiện đại.',
+      cao: 'Hai mắt xa nhau hơn phần đông. Tướng học Nhật, Hàn, Hồng Kông hiện đại cho là người rộng lượng, lạc quan, nhìn xa, '
+        + 'nhưng dễ dãi nên đôi khi cẩu thả, dễ tin người.',
     },
-    nguon: 'Không tìm được sách tướng bàn khoảng này nên app không giải; chuẩn vẽ "tam đình ngũ nhãn" coi giữa hai mắt bằng một '
-      + 'mắt, lưới máy đặt khoé mắt lọt vào trong nên ra số lớn hơn',
+    them: {
+      thap: 'Sách tướng cổ không bàn thẳng khoảng này; gần nhất là: sơn căn (gốc mũi giữa hai mắt) hẹp mà nhọn thì của nhà sớm '
+        + 'hao (Toàn Biên), ngũ quan dồn vào giữa là tính chi li (Thiết Quan Đao). Polemon tả người u sầu có khoảng giữa mắt "khép '
+        + 'lại". Sách Ấn Độ, Ả Rập không nói.',
+      vua: 'Sách đo tượng Ấn Độ, Tây Tạng cũng định sẵn khoảng giữa hai mắt — đó là phép tạc tượng, không phải lời đoán vận. Lưới '
+        + 'máy đặt khoé mắt lọt vào trong nên số ra lớn hơn số đo bằng thước.',
+      cao: 'Sách cổ Trung Hoa không chê mắt xa: chỉ khen sơn căn cao, rộng là giảm nửa tai hoạ (Quảng Giám Tập, chép trong Toàn '
+        + 'Biên), và Tuân Tử kể Công Tôn Lữ ngũ quan cách nhau thưa mà danh vang thiên hạ. Một bài Nhật hiện đại lại nói ngược '
+        + '(mắt xa là người tập trung). Số này không dùng để chẩn đoán bệnh.',
+    },
+    nguon: `${S.hienDai} · ${S.toanBien}: Ngũ tinh lục diệu, Quảng Giám Tập · ${S.thietQuan} · Tuân Tử, Phi Tướng · ${S.polemon} · `
+      + `${S.brhat} ch.57. Sách tướng cổ (Trung Hoa, Ấn Độ, Ả Rập, Hy Lạp) không có câu nói thẳng về khoảng này`,
   },
   mui: {
     ten: 'Cánh mũi', y: 'rộng bằng bấy nhiêu khoảng giữa hai mắt', nguong: [1.19, 1.29],
     loi: {
-      thap: 'Cánh mũi hẹp hơn phần đông. Dân gian cho cánh mũi mỏng, hẹp là tiền vào ra nhanh, nên chú ý tích luỹ.',
-      vua: 'Cánh mũi rộng vừa, như phần đông. Sách còn xét độ đầy, hai bên cân nhau và đầu mũi — máy chỉ đo bề ngang.',
-      cao: 'Cánh mũi rộng hơn phần đông. Dân gian coi cánh mũi nở, đầy (hai bộ vị Lan Đài, Đình Úy) là tướng biết giữ của.',
+      thap: 'Cánh mũi hẹp hơn phần đông. Sách Trung Hoa chê cánh mũi nhỏ, hẹp là tính dè sẻn, khó tích của (Nhân Luân Đại Thống '
+        + 'Phú, Thông Nguyên Phú).',
+      vua: 'Cánh mũi rộng vừa, như phần đông — gần chuẩn "mũi rộng bằng khoảng hai khoé mắt" của tướng học Nhật hiện đại.',
+      cao: 'Cánh mũi rộng hơn phần đông. Sách Trung Hoa gọi hai cánh mũi (Lan Đài, Đình Úy) là kho tiền: "Lan Đài rộng mà dài thì '
+        + 'tích được vàng" (Toàn Biên); tướng học Nhật, Hàn, Việt hiện đại cũng coi cánh mũi nở là giữ được của.',
     },
-    nguon: `${SACH.toanBien} "Tướng tị" (Lan Đài, Đình Úy) · bài nhân tướng học phổ thông tiếng Việt về cánh mũi (QUY_UOC mục 26)`,
+    them: {
+      thap: 'Sách có ngoại lệ: mũi "huyền đởm" (thẳng như túi mật treo) cánh nhỏ vẫn giàu; riêng phụ nữ, Toàn Biên lại khen mũi '
+        + 'thon thẳng là quý. Sách Ấn Độ và kinh Phật khen mũi cao thẳng, lỗ mũi nhỏ kín — khác hẳn sách Trung Hoa.',
+      vua: 'Sách cổ còn xét độ đầy, hai bên cân nhau, đầu mũi tròn, lỗ mũi không lộ — máy chỉ đo bề ngang.',
+      cao: 'Điều kiện: rộng mà lỗ mũi hếch lộ thì của vẫn hao (Toàn Biên); Vũ Tài Lục: mũi to phải có gò má đỡ. Sách Tây và Ả Rập '
+        + 'chia hai: lỗ mũi phồng rộng là nóng nảy (Aristotle giả danh, Fakhr al-Dīn al-Rāzī) hoặc gan dạ (Anonymus Latinus).',
+    },
+    nguon: `${S.toanBien}: Tướng phú, Tướng tị · ${S.nhanLuan} · Thông Nguyên Phú · ${S.thietQuan} · ${S.vuTaiLuc} · ${S.hienDai}, `
+      + `bài phổ thông tiếng Việt · ${S.brhat} ch.67 · Đại Bát Nhã Kinh q.381 · ${S.aristotle} · ${S.fakhr} · ${S.latinus}`,
   },
   mieng: {
     ten: 'Miệng', y: 'rộng bằng bấy nhiêu cánh mũi', nguong: [1.21, 1.29],
     loi: {
-      thap: 'Miệng hẹp hơn phần đông. Sách cũ chê miệng nhỏ, chúm là kém lộc, về già vất vả — nên đọc cùng các nét khác, đừng '
-        + 'xét riêng.',
-      vua: 'Miệng rộng vừa, như phần đông. Sách còn xét môi dày mỏng, khoé miệng hướng lên hay xuống — máy không đo.',
-      cao: 'Miệng rộng hơn phần đông. Sách khen miệng rộng, vuông, có góc cạnh là có lộc ăn, phúc thọ.',
+      thap: 'Miệng hẹp hơn phần đông. Sách Trung Hoa chê miệng nhỏ, chúm là kém lộc, về già vất vả (Hứa Phụ, Thiết Quan Đao); '
+        + 'sách Tây cổ cho miệng nhỏ là người rụt rè.',
+      vua: 'Miệng rộng vừa, như phần đông. Sách Ấn Độ (Bṛhat Saṃhitā) khen miệng gọn, chê miệng quá rộng.',
+      cao: 'Miệng rộng hơn phần đông. Sách Trung Hoa khen miệng rộng mà vuông: "miệng rộng vuông lộc ngàn chung" (Băng Giám); sách '
+        + 'Tây, Ả Rập gọi miệng rộng là miệng sư tử — gan dạ, hào phóng.',
     },
-    nguon: `${SACH.toanBien} "Tướng khẩu" · ${SACH.thietQuan} "Tướng khẩu bí quyết"`,
+    them: {
+      thap: 'Hứa Phụ cũng nói miệng nhỏ mà ăn nói khéo vẫn được; Fakhr al-Dīn al-Rāzī: miệng hẹp hay ốm vặt. Lưu ý: app so miệng '
+        + 'với cánh mũi, sách cổ so với cả mặt.',
+      vua: 'Sách Trung Hoa còn xét môi dày mỏng, khoé miệng hướng lên hay xuống — máy không đo.',
+      cao: 'Sách Trung Hoa và Tây cổ đều chê miệng rộng quá mà khép không kín, môi dày (nói nhiều ít tin, ham ăn). Sách Ấn Độ ngược '
+        + 'lại: miệng quá rộng là bạc phận. Tục ngữ Việt xưa "đàn ông rộng miệng thì sang, đàn bà rộng miệng tan hoang cửa nhà" (Trương Vĩnh Ký chép năm 1883) '
+        + 'là câu trọng nam khinh nữ, thật ra chê đàn bà nói nhiều.',
+    },
+    nguon: `${S.bangGiam} · ${S.nhanLuan} · ${S.thietQuan} · ${S.toanBien}: Hứa Phụ, Tướng khẩu · ${S.brhat} 67.54 · ${S.polemon} · `
+      + `${S.latinus} · ${S.fakhr} · ${S.sirr} · tục ngữ (Trương Vĩnh Ký 1883)`,
   },
   daiRong: {
     ten: 'Dài : rộng mặt', y: 'ấn đường → đáy cằm, so với bề ngang mặt', nguong: [0.88, 0.95],
     loi: {
-      thap: 'Mặt (từ ấn đường xuống) ngắn và rộng hơn phần đông.',
-      vua: 'Mặt dài, rộng như phần đông.',
-      cao: 'Mặt (từ ấn đường xuống) dài hơn phần đông.',
+      thap: 'Mặt (từ ấn đường xuống) ngắn và rộng hơn phần đông. Sách Trung Hoa khen mặt rộng, vuông là có ruộng vườn, đứng trên '
+        + 'người (Thái Thanh Thần Giám, Toàn Biên); kinh Phật tả mặt Phật đầy, rộng như trăng rằm.',
+      vua: 'Mặt dài, rộng như phần đông. Sách Ả Rập (Fakhr al-Dīn al-Rāzī) nói mặt to hay nhỏ đều bị chê, vừa phải là tốt nhất; '
+        + 'kinh Phật cũng khen mặt "không quá dài".',
+      cao: 'Mặt (từ ấn đường xuống) dài hơn phần đông. Sách Trung Hoa khen mặt dài mà vuông: "mặt nên dài mà vuông", thân ngắn mặt '
+        + 'dài là quý (Toàn Biên); mặt dài thuộc hình Mộc: tính hoà hoãn, thương người.',
     },
-    nguon: 'Sách xếp dáng mặt theo ngũ hành (dài là Mộc, vuông là Kim, tròn là Thủy…) nhưng không theo một tỉ lệ số nên app '
-      + 'không giải',
+    them: {
+      thap: 'Nhưng "mặt ngắn" bị chê nghèo hèn, trừ khi mắt dài; Bṛhat Saṃhitā (Ấn Độ): mặt quá ngắn là keo kiệt, mặt đầy đặn là '
+        + 'hưởng phúc. Tục ngữ Việt: "mặt vuông chữ điền" là người phúc hậu. Tướng học Hàn hiện đại: mặt rộng là người khéo xoay '
+        + 'xở, chân thành. Sách Ả Rập, Polemon chê mặt quá tròn, quá bè là kém hiểu. Khoa học: mặt rộng làm người khác thấy mạnh '
+        + 'mẽ, áp đảo, nhưng liên hệ với tính cách thật rất yếu.',
+      vua: 'Sách Trung Hoa xét dáng mặt theo ngũ hành và theo thân người, không theo một con số; Tuân Tử (thiên Phi Tướng) còn '
+        + 'nhắc: dài ngắn to nhỏ không phải điềm lành dữ.',
+      cao: 'Như Tang Duy Hàn đời Hậu Tấn tự hào "thân bảy thước không bằng mặt một thước" rồi làm tể tướng (Tân Ngũ Đại Sử). Sách '
+        + 'chê mặt dài mà nhọn hai đầu, hay "mặt ngựa". Sách Ả Rập (Fakhr al-Dīn al-Rāzī, Rhazes, Sirr al-asrār) và Ấn Độ (Bṛhat '
+        + 'Saṃhitā) ngược hẳn: mặt dài là trơ tráo hoặc nghèo. Tướng học Hàn hiện đại: người lý trí, bền chí. Tự chụp gần làm mặt '
+        + 'trông dài thêm tới 20 %.',
+    },
+    nguon: `${S.toanBien}: Tướng diện, Quý tướng khẩu quyết, Ngũ hành ca · ${S.thaiThanh} q.1, q.4 · Tân Ngũ Đại Sử q.29 · Tuân `
+      + `Tử, Phi Tướng · Đại Trí Độ Luận q.89 · ${S.brhat} 67.55–56 · ${S.fakhr} · ${S.rhazes} · ${S.sirr} · ${S.polemon} · `
+      + `${S.hienDai} · tục ngữ Việt`,
   },
   may: {
     ten: 'Lông mày', y: 'dài bằng bấy nhiêu mắt', nguong: [1, 1.66],
     loi: {
-      thap: 'Lông mày ngắn hơn mắt. Sách chê mày không phủ hết mắt (kém tiền, tính hay một mình). Lưới máy dựng theo cung mày '
-        + 'nên hiếm khi ra số này — soi gương lại cho chắc.',
-      vua: 'Lông mày dài quá mắt (phần đông ra vậy). Sách khen mày dài quá mắt là người ngay thẳng, có lộc, anh em hoà thuận.',
-      cao: 'Lông mày dài hơn phần đông, dài quá mắt rõ. Sách khen mày dài quá mắt là người ngay thẳng, có lộc, anh em hoà thuận.',
+      thap: 'Lông mày ngắn hơn mắt. Sách Trung Hoa chê mày không phủ hết mắt: thiếu tiền, ít nhờ anh em, tính hay một mình (Nguyệt '
+        + 'Ba Động Trung Ký, Toàn Biên).',
+      vua: 'Lông mày dài quá mắt, như phần đông. Sách Trung Hoa khen mày dài hơn mắt: ngay thẳng, có lộc, anh em hoà thuận (Toàn '
+        + 'Biên, Nhân Luân Đại Thống Phú).',
+      cao: 'Lông mày dài hơn phần đông, dài quá mắt rõ. Sách Trung Hoa khen: ngay thẳng, có lộc, anh em đông ("mày dài hơn mắt, anh '
+        + 'em năm sáu" — Vạn Kim Tướng); sách Ấn Độ, kinh Phật cũng khen mày dài cong như trăng non.',
     },
-    nguon: `${SACH.thaiThanh} quyển 5 "Luận mi" · ${SACH.toanBien} "Luận mi", cung Huynh Đệ · ${SACH.thietQuan}. Máy không thấy `
-      + 'lông mày thưa, đứt hay đã tỉa',
+    them: {
+      thap: 'Lưới máy dựng theo cung mày nên hiếm khi ra số này — soi gương lại cho chắc; máy không thấy lông mày thưa, đứt hay '
+        + 'đã tỉa.',
+      vua: 'Sách Ả Rập (Sirr al-asrār) khen mày dài vừa phải là người thận trọng. Máy không thấy lông mày thưa, đứt hay đã tỉa.',
+      cao: 'Sách Tây và Ả Rập ngược lại: mày dài tới thái dương là người kiêu (Rhazes, Fakhr al-Dīn al-Rāzī, Sirr al-asrār). Máy '
+        + 'không thấy lông mày thưa, đứt hay đã tỉa.',
+    },
+    nguon: `${S.toanBien}: Luận mi, cung Huynh Đệ, Vạn Kim Tướng · ${S.nhanLuan} · ${S.nguyetBa} · ${S.thaiThanh} q.5 · `
+      + `${S.thietQuan} · ${S.brhat} 67.68–69 · Đại Bát Nhã Kinh q.381 · ${S.rhazes} · ${S.fakhr} · ${S.sirr}`,
   },
   anDuong: {
     ten: 'Ấn đường', y: 'khoảng giữa hai đầu mày, bằng bấy nhiêu mắt', nguong: [1.02, 1.08],
     loi: {
-      thap: 'Ấn đường hẹp hơn phần đông. Sách cho ấn đường hẹp, hai đầu mày sát nhau là việc dễ vất vả, bôn ba; dân gian thêm: '
-        + 'tính chi li, hay lo nghĩ.',
-      vua: 'Ấn đường rộng vừa, như phần đông.',
-      cao: 'Ấn đường rộng hơn phần đông. Sách khen ấn đường rộng, phẳng là đời yên ổn, việc hanh thông; dân gian thêm: tính rộng '
-        + 'rãi nhưng dễ tin người.',
+      thap: 'Ấn đường hẹp hơn phần đông. Sách Trung Hoa cho ấn đường hẹp, hai đầu mày gần giao là đường đời vất vả, con muộn vợ '
+        + 'muộn (Thần Dị Phú, Nguyệt Ba Động Trung Ký); sách Tây cổ cũng nói mày giao là người hay buồn.',
+      vua: 'Ấn đường rộng vừa, như phần đông — gần chuẩn "giữa mày lọt hai ngón tay" của tướng học Trung, Nhật, Hàn; sách đo tượng '
+        + 'Ấn Độ (Bṛhat Saṃhitā) cũng đặt giữa hai mày 2 ngón.',
+      cao: 'Ấn đường rộng hơn phần đông. Sách Trung Hoa khen: "khoảng mày rộng thì lòng phẳng lặng" (Nhân Luân Đại Thống Phú), hai '
+        + 'mày lùi xa cung mệnh là vận sớm, giàu sang (Thiết Quan Đao).',
     },
-    nguon: `${SACH.toanBien} "Tướng ấn đường" · ${SACH.thietQuan} · bài phổ thông tiếng Việt về ấn đường (QUY_UOC mục 26)`,
+    them: {
+      thap: 'Tướng học hiện đại: tỉ mỉ nhưng hay lo, dễ để bụng. Sách cổ có ngoại lệ ("người thần khí mạnh không tính"); kinh Phật '
+        + 'lại tả đầu mày Phật hơi liền nhau (Phương Quảng Đại Trang Nghiêm Kinh), Polemon bản Ả Rập cho mày giao xuống sống mũi '
+        + 'là kiêu hãnh, hiếu động.',
+      vua: 'Bài Ngân Thi Ca trong Toàn Biên cũng nhắc "giữa mày lọt hai ngón tay". Vũ Tài Lục: ấn đường nên rộng rãi, đầy đặn.',
+      cao: 'Tướng học hiện đại: rộng quá (ba ngón) thì bị cho là lơ đãng, dễ dãi. Sách cổ cũng dặn: rộng mà gồ ghề, không phẳng thì '
+        + 'vẫn không giàu (Nguyệt Ba Động Trung Ký). Polemon bản Ả Rập xếp mày tách xa vào chân dung người cứng cỏi, can đảm.',
+    },
+    nguon: `${S.nhanLuan} · ${S.thietQuan} · ${S.nguyetBa} · ${S.toanBien}: Thần Dị Phú, Ngân Thi Ca, Tướng ấn đường · ${S.vuTaiLuc} `
+      + `· ${S.hienDai} · ${S.brhat} ch.57, 67 · Phương Quảng Đại Trang Nghiêm Kinh · `
+      + `${S.aristotle} · ${S.latinus} · ${S.polemon}`,
   },
   mayCach: {
     ten: 'Mày cách mắt', y: 'bằng bấy nhiêu mắt', nguong: [0.47, 0.69],
     loi: {
-      thap: 'Lông mày gần mắt hơn phần đông. Sách chê mày đè sát mắt là đời dễ chật vật, ít nhờ anh em. Khoảng này dân gian '
-        + 'ngày nay gọi là cung Điền Trạch.',
-      vua: 'Mày cách mắt vừa, như phần đông.',
-      cao: 'Lông mày cách mắt xa hơn phần đông — không phạm điều sách chê (mày đè sát mắt).',
+      thap: 'Lông mày gần mắt hơn phần đông. Sách Trung Hoa chê mày đè sát mắt: túng bức, bất lợi (Thái Thanh Thần Giám, Băng '
+        + 'Giám); sách Tây cổ (Aristotle, Anonymus Latinus) cũng nói mày sà xuống mắt là tính đố kỵ.',
+      vua: 'Mày cách mắt vừa, như phần đông. Tướng học hiện đại lấy khoảng một ngón tay làm chuẩn; nam thường hẹp hơn nữ.',
+      cao: 'Lông mày cách mắt xa hơn phần đông. Sách Trung Hoa khen mày cao hơn mắt: "mày nên cao hơn mắt một tấc" — thông minh, '
+        + 'phú quý (Toàn Biên); "hai mày cao giữa trán thì lòng khoáng đạt" (Thiết Quan Đao).',
     },
-    nguon: `${SACH.thaiThanh} quyển 5 "Luận mi" · ${SACH.toanBien} cung Huynh Đệ ("mày vây sát mắt")`,
+    them: {
+      thap: 'Nguyệt Ba Động Trung Ký: mày gần mắt mà sắc mặt tối là hay ganh; Vũ Tài Lục: mày sụp xuống là phá cung Điền Trạch. '
+        + 'Tướng học hiện đại nhẹ hơn: tự lập, chăm chỉ nhưng nóng tính. Ngoại lệ: tướng "tinh tinh" mày gần mắt lại là cao tăng, '
+        + 'vợ hiền (Toàn Biên).',
+      vua: 'Khoảng này dân gian Việt, Trung ngày nay gọi là cung Điền Trạch (sách cổ lại đặt Điền Trạch ở mắt).',
+      cao: 'Tướng học Hồng Kông hiện đại (Tô Dân Phong): người trọng gia đình. Lưu ý: Nhân Luân Đại Thống Phú nói mày cong vén cao '
+        + 'là hay tranh; Vũ Tài Lục: đầu mày cao quá là tự cao. Tự chụp gần làm khoảng này rộng ra tới 17 %.',
+    },
+    nguon: `${S.toanBien}: Thập quan, Luận mi, Ngân Thi Ca · ${S.thaiThanh} q.5 · ${S.thietQuan} · ${S.bangGiam} · ${S.nguyetBa} · `
+      + `${S.nhanLuan} · ${S.vuTaiLuc} · ${S.hienDai} · Aristotle, Historia animalium · ${S.latinus}`,
   },
 };
 
@@ -140,3 +262,20 @@ export const mucMat = (khoa: keyof SoDoMat, x: number): MucMat => {
 };
 
 export const CAC_KHOA = Object.keys(GIAI) as (keyof SoDoMat)[];
+
+const so2 = (x: number): string => x.toFixed(2).replace('.', ',');
+
+/** Loi tung ti le (null = khong giai) kem canh bao: anh cuoi thi khong giai ca 9; nghi chup gan thi bo 5 ti le nhay khoang cach. */
+export function giaiMat(m: { readonly so: SoDoMat; readonly cuoi: number }):
+  { readonly canhBao: readonly string[]; readonly loi: Readonly<Record<keyof SoDoMat, string | null>> } {
+  const cuoi = m.cuoi >= NGUONG_CUOI, gan = m.so.daiRong > NGUONG_GAN;
+  const canhBao = [
+    ...(cuoi ? [`Ảnh có vẻ đang cười (điểm cười ${so2(m.cuoi)}): cười làm miệng rộng ra, mắt híp lại nên số lệch — app không `
+      + 'giải. Chụp lại mặt tự nhiên, ngậm miệng.'] : []),
+    ...(gan ? [`Dài : rộng mặt ${so2(m.so.daiRong)} vượt mọi ảnh mẫu chụp xa (0,87–1,02) — thường do tự chụp cầm tay: máy gần `
+      + `làm mặt dài ra tới ~20 %. App bỏ lời giải ${String(NHAY_GAN.length)} số nhạy khoảng cách (`
+      + `${NHAY_GAN.map((k) => GIAI[k].ten.toLowerCase()).join(', ')}). Nhờ người khác chụp cách 1,5–2 m, zoom 2–3× rồi đo lại.`] : []),
+  ];
+  const loi = Object.fromEntries(CAC_KHOA.map((k) => [k, cuoi || (gan && NHAY_GAN.includes(k)) ? null : GIAI[k].loi[mucMat(k, m.so[k])]]));
+  return { canhBao, loi: loi as Record<keyof SoDoMat, string | null> };
+}

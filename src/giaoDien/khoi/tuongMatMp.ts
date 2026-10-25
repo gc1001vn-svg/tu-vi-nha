@@ -61,7 +61,7 @@ export async function doAnh(f: File, khiDo: () => void): Promise<KetQuaMat> {
     const d0 = r0.faceLandmarks[0];
     if (r0.faceLandmarks.length > 1) throw new Error(`Ảnh có ${String(r0.faceLandmarks.length)} khuôn mặt — chọn ảnh chỉ một người.`);
     if (d0 === undefined) throw new Error('Không thấy mặt trong ảnh — chụp lại rõ mặt, đủ sáng.');
-    if (khungCat(d0, w, h, 1).canh / Math.max(w, h) < MAT_NHO_NHAT) throw new Error('Mặt quá nhỏ trong ảnh — chụp gần hơn, hoặc cắt ảnh chỉ còn một khuôn mặt.');
+    if (khungCat(d0, w, h, 1).canh / Math.max(w, h) < MAT_NHO_NHAT) throw new Error('Mặt quá nhỏ trong ảnh — zoom khi chụp hoặc cắt ảnh chỉ còn khuôn mặt (đừng lại gần dưới 1 m: mặt bị méo).');
     const lan = (heSo: number, lat: boolean): LanDo => {
       const kh = khungCat(d0, w, h, heSo), c = Math.min(CANH_MAX, Math.round(kh.canh));
       const cv = veVao(nho, kh.x, kh.y, kh.canh, kh.canh, c, c, lat);

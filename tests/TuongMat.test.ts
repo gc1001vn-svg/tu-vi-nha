@@ -3,7 +3,7 @@
  * gop anh + anh lat guong, goc dau tu ma tran. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`, quy uoc `QUY_UOC` muc 26.
  */
 import { GIOI_HAN_GOC, doMat, gocDau, khungCat, quaGoc, soDo, type DiemMoc, type LanDo } from '../src/loi/tuongMat.ts';
-import { CAC_KHOA, GIAI, mucMat } from '../src/loi/tuongMatGiai.ts';
+import { CAC_KHOA, GIAI, NHAY_GAN, giaiMat, mucMat } from '../src/loi/tuongMatGiai.ts';
 
 const RONG = 800, CAO = 1000;
 /** Diem dat theo px tren mat doi xung qua x = 420; con lai de giua anh. */
@@ -107,8 +107,8 @@ describe('loi giai tuong mat', () => {
     expect(CAC_KHOA).toEqual(Object.keys(soDo(luoi(), RONG, CAO)));
     for (const k of CAC_KHOA) {
       const g = GIAI[k];
-      expect([g.nguong[0] < g.nguong[1], g.nguon.length > 20, ...(['thap', 'vua', 'cao'] as const).map((m) => g.loi[m].length > 10)])
-        .toEqual([true, true, true, true, true]);
+      expect([g.nguong[0] < g.nguong[1], g.nguon.length > 20,
+        ...(['thap', 'vua', 'cao'] as const).flatMap((m) => [g.loi[m].length > 10, g.them[m].length > 10])]).toEqual(Array(8).fill(true));
     }
   });
 
@@ -118,6 +118,17 @@ describe('loi giai tuong mat', () => {
       .toEqual(['thap', 'vua', 'vua', 'cao']);
     expect([mucMat('may', 0.95), mucMat('may', 1.6)]).toEqual(['thap', 'vua']);
     expect(GIAI.may.loi.thap.startsWith('Lông mày ngắn hơn mắt')).toBe(true);
+  });
+
+  test('giai: anh cuoi bo ca 9; dai:rong vuot moi anh mau (nghi chup gan) bo 5 ti le nhay khoang cach, giu 4 ti le con lai', () => {
+    const so = soDo(luoi(), RONG, CAO); // dai:rong 1,2 > 1,03
+    const gan = giaiMat({ so, cuoi: 0 });
+    expect([gan.canhBao.length, gan.canhBao[0]?.includes('tự chụp cầm tay')]).toEqual([1, true]);
+    expect(CAC_KHOA.filter((k) => gan.loi[k] === null)).toEqual([...NHAY_GAN]);
+    const cuoi = giaiMat({ so: { ...so, daiRong: 0.9 }, cuoi: 0.5 });
+    expect([cuoi.canhBao.length, CAC_KHOA.every((k) => cuoi.loi[k] === null)]).toEqual([1, true]);
+    const tot = giaiMat({ so: { ...so, daiRong: 0.9 }, cuoi: 0.1 });
+    expect([tot.canhBao.length, tot.loi.mui]).toEqual([0, GIAI.mui.loi[mucMat('mui', so.mui)]]);
   });
 
   test('diem cuoi: trung binh cac lan do, thieu thi tinh 0', () => {
