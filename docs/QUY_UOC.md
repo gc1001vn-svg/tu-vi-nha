@@ -417,8 +417,9 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   đáy cằm 152 · lông mày đầu ngoài giữa (70, 46)/(300, 276), đầu trong giữa (107, 55)/(336, 285) · mày cách mắt 52–159, 282–386.
   Lưới không tới chân tóc → **không đo thượng đình**.
 - **Số đo**, đều là tỉ lệ hai khoảng cách thẳng (xoay ảnh, phóng to không đổi; mắt = trung bình hai mắt): trung đình (ấn đường →
-  chân mũi) : hạ đình (chân mũi → đáy cằm) · ngũ nhãn (mặt ngang / mắt) · khoảng giữa hai mắt / mắt · cánh mũi / khoảng giữa hai
-  mắt · miệng / cánh mũi · dài (ấn đường → cằm) / ngang mặt · lông mày / mắt · ấn đường / mắt · mày cách mắt / mắt.
+  chân mũi) : hạ đình (chân mũi → đáy cằm) · ngũ nhãn (mặt ngang / mắt) · khoảng giữa hai mắt / mắt · cánh mũi / ngang
+  mặt · miệng / ngang mặt (hai số này hiện bằng %; trước 26/10 là cánh mũi / khoảng giữa hai mắt, miệng / cánh mũi — xem **Sửa
+  26/10**) · dài (ấn đường → cằm) / ngang mặt · lông mày / mắt · ấn đường / mắt · mày cách mắt / mắt.
 - **Cách đo**: tìm mặt → cắt khung vuông lấy mặt làm tâm, 5 cỡ (1,7–2,3 lần chiều lớn của mặt) × ảnh và ảnh lật gương = 10 lần →
   trung bình. Vì mô hình lệch trái phải tới ~6 % và khung lệch vài điểm ảnh đổi số tới ~5 % (ảnh lật gương lệch tối đa: 2 khung
   5,3 % · 3 khung 2,2 % · 5 khung 1,05 %). Sai số hiện ra = 2 sai số chuẩn của trung bình, lấy số lớn nhất trong 9 tỉ lệ.
@@ -447,10 +448,23 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   cách mắt +16,7 / +10,2 / +5,2 / +3,5 / +1,7 · ấn đường +7,9 / +4,9 / +2,5 / +1,7 / +0,8 · trung:hạ +7,5 / +4,6 / +2,3 / +1,5 / +0,8 ·
   khoảng mắt, mũi, miệng, mày ≤3 % ở 0,3 m. Độ tản giữa 14 mặt ở 0,3 m nhỏ (dài:rộng ±0,8 điểm %; mày cách mắt ±7, trung:hạ ±4).
   Khớp cỡ với Ward et al. 2018 (JAMA Facial Plast Surg 20(4): mũi so gò má rộng thêm ~30 % ở 30 cm so 1,5 m — đọc qua trích đoạn).
-  → Dặn "người khác chụp, cách 1,5–2 m, zoom 2–3×"; **dài:rộng > 1,03** (53 ảnh mẫu chụp xa ra 0,87–1,02) thì báo "có thể tự chụp
-  gần", bỏ lời 5 tỉ lệ nhạy khoảng cách (`NHAY_GAN`), giữ 4 tỉ lệ còn lại. Không đoán khoảng cách từ EXIF (chưa chắc Safari giữ EXIF).
-- **Lời giải** (`tuongMatGiai.ts`, Claude soạn lại, không chép): mỗi tỉ lệ xếp thấp / vừa / cao theo **phân vị 25 và 75 của 14 ảnh
-  không cười** ("phần đông"), không so thẳng chuẩn sách vì lưới lệch ("đúng máy, sai sách": khoé mắt lọt vào trong → khoảng mắt
+  → Dặn "người khác chụp, cách 1,5–2 m, zoom 2–3×" (ở một mình: kê máy xa, camera sau, hẹn giờ, chọn ảnh từ Thư viện);
+  **dài:rộng > 1,05** (26/10: 72 ảnh mẫu chụp xa ra 0,87–1,05; trước đó 1,03 theo 53 ảnh) thì báo "có thể tự chụp gần", bỏ lời 7 tỉ lệ
+  nhạy khoảng cách (`NHAY_GAN`; mũi +20 %, miệng +17 % ở 30 cm theo cách tính 26/10), chỉ giữ khoảng mắt, lông mày. Không đoán khoảng
+  cách từ EXIF (chưa chắc Safari giữ EXIF).
+- **Sửa 26/10** (anh thử selfie lần hai: "phiên giải không hợp lý, đổi ngược lại"): app báo chụp gần đúng, nhưng 4 số còn giải ra
+  "cánh mũi hẹp, miệng hẹp" trong khi ảnh mũi rộng rõ. Vẽ điểm lưới lên ảnh anh (ngoài repo): điểm đặt đúng chỗ. Lỗi ở cách tính:
+  (1) mũi so với khoảng giữa hai khoé mắt, miệng so với mũi — dây chuyền: mắt xa → mũi "hẹp", mũi rộng → miệng "hẹp"; sách cổ so mũi,
+  miệng với mặt ("面大鼻小為四惡", "面大口小為四殺", "口大面方" — *Thiết Quan Đao*) → đổi sang so với bề ngang mặt. (2) Ngưỡng lấy
+  từ 14 ảnh trộn 8 Tây – 6 Đông Á, mà trung vị mặt nghiêm khác hẳn: mày cách mắt 0,73 / 0,47, trung:hạ 1,06 / 0,96, khoảng mắt 1,33 /
+  1,24, ấn đường 1,10 / 1,04 (Đông Á / Tây; mũi, miệng so mặt thì gần bằng nhau) → người Việt luôn bị xếp "mắt xa, mày cao, ấn đường
+  rộng". Thêm 22 ảnh chính thức nội các Nhật (2021, 2024), Đài Loan, Hàn (giấy phép chính phủ, gần CC BY — chỉ đo trong máy, không phát
+  tán): 72 ảnh ra số, 38 Đông Á, **15 Đông Á mặt nghiêm** làm "phần đông". Phân vị 25 / 50 / 75 (15 ảnh): trung:hạ 1,03 / 1,07 /
+  1,09 · ngũ nhãn 5,48 / 5,68 / 5,99 · khoảng mắt 1,32 / 1,44 / 1,53 · mũi 29,1 / 29,3 / 30,1 % · miệng 35,6 / 36,4 / 37,4 % · dài:rộng
+  0,89 / 0,94 / 0,97 · mày 1,63 / 1,68 / 1,77 · ấn đường 1,08 / 1,11 / 1,17 · mày cách mắt 0,65 / 0,71 / 0,78. Ảnh anh chạy lại (số không
+  ghi vào repo): báo chụp gần, khoảng mắt thành "như phần đông", mũi ra rộng (hiện số, không giải vì chụp gần).
+- **Lời giải** (`tuongMatGiai.ts`, Claude soạn lại, không chép): mỗi tỉ lệ xếp thấp / vừa / cao theo **phân vị 25 và 75 của 15 ảnh
+  người Đông Á không cười** (26/10; "phần đông"), không so thẳng chuẩn sách vì lưới lệch ("đúng máy, sai sách": khoé mắt lọt vào trong → khoảng mắt
   1,1–1,6 mắt; lưới dựng lông mày theo cung mày → 53/53 ảnh ra 1,4–1,8 mắt). Riêng lông mày giữ luật sách: dưới 1 là "ngắn hơn mắt".
   Mỗi mức có `loi` (lời chính, theo sách Trung Hoa — gốc của tướng học Việt; gửi kèm AI) và `them` (các nền khác, chỗ vênh, lưu ý — chỉ
   hiện trên màn hình, để mục AI không quá ~2 nghìn ký tự). Anh muốn mục nào cũng có lời (25/10) → **6 hướng tìm** 24–25/10 [W55, W56]:
@@ -498,8 +512,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
     **Điền Trạch ở mắt** ("田宅者，位居兩眼"); gọi khoảng mày–mắt là Điền Trạch là cách gọi hiện đại.
 - **AI**: số đo (không ảnh) chỉ nằm trong bộ nhớ theo người; khối AI tổng hợp lấy lại dữ liệu mỗi lần gửi khi chưa có câu trả lời
   nào, nên đo mặt sau khi mở khối AI vẫn kịp. Mục "Tướng mặt" ~1.000 ký tự (hồ sơ giả: 8.036 → 9.016): 9 dòng số + lời app; ảnh cười chỉ gửi số.
-- **Còn chưa chắc**: 14 ảnh không cười, đa số đàn ông lớn tuổi — ngưỡng tạm, có ảnh mặt nghiêm phạm vi công cộng thì đo thêm. Chưa
-  so với người Việt thật. Thượng đình (trán), dáng cằm, môi, thần mắt — máy không đo. Tướng học hiện đại Nhật, Hàn, Trung và phần khoa
+- **Còn chưa chắc**: 15 ảnh Đông Á mặt nghiêm, đa số đàn ông Nhật lớn tuổi, chỉ 1 người gốc Việt — ngưỡng tạm; mũi so mặt chênh
+  nhau rất ít (phân vị 25–75 chỉ 29,1–30,1 %) nên số sát ngưỡng dễ đổi mức. Chưa so với người Việt thật, chưa tách nam nữ. Thượng đình (trán), dáng cằm, môi, thần mắt — máy không đo. Tướng học hiện đại Nhật, Hàn, Trung và phần khoa
   học mới đọc qua trích đoạn (chưa mở được trang gốc). Câu Ả Rập đọc từ bản chữ máy nhận dạng, có thể sai vài chữ.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)

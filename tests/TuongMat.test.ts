@@ -40,7 +40,7 @@ describe('so do tuong mat', () => {
   test('luoi dung tay ra dung ti le da dat', () => {
     const s = soDo(luoi(), RONG, CAO);
     expect(Object.fromEntries(Object.entries(s).map(([k, v]) => [k, Math.round(v * 1000) / 1000]))).toEqual({
-      trungHa: 1, nguNhan: 5, khoangMat: 1, mui: 1, mieng: 1.5, daiRong: 1.2, may: 1.25, anDuong: 0.75, mayCach: 0.375,
+      trungHa: 1, nguNhan: 5, khoangMat: 1, mui: 0.2, mieng: 0.3, daiRong: 1.2, may: 1.25, anDuong: 0.75, mayCach: 0.375,
     });
   });
 

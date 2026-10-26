@@ -21,9 +21,12 @@ export interface SoDoMat {
   readonly nguNhan: number;
   /** Khoang giua hai khoe mat trong / be ngang mot mat. */
   readonly khoangMat: number;
-  /** Be ngang canh mui / khoang giua hai khoe mat trong. */
+  /**
+   * Be ngang canh mui / be ngang mat. 26/10 doi tu "/ khoang giua hai khoe mat": mat Dong A khoang mat rong nen mui rong bi xep
+   * "hep" (anh thay nguoc); sach co cung so mui, mieng voi mat ("面大鼻小", "面大口小").
+   */
   readonly mui: number;
-  /** Be ngang mieng (hai khoe) / be ngang canh mui. */
+  /** Be ngang mieng (hai khoe) / be ngang mat (truoc 26/10: / be ngang canh mui — so day chuyen theo mui). */
   readonly mieng: number;
   /** Dai mat (an duong → day cam) / be ngang mat. */
   readonly daiRong: number;
@@ -67,8 +70,8 @@ export function soDo(d: readonly DiemMoc[], rong: number, cao: number): SoDoMat 
     trungHa: kc(p(9), p(2)) / kc(p(2), p(152)),
     nguNhan: ngang / mat,
     khoangMat: trong / mat,
-    mui: mui / trong,
-    mieng: kc(p(61), p(291)) / mui,
+    mui: mui / ngang,
+    mieng: kc(p(61), p(291)) / ngang,
     daiRong: kc(p(9), p(152)) / ngang,
     may: (kc(giua(p(70), p(46)), dauMayP) + kc(giua(p(300), p(276)), dauMayT)) / 2 / mat,
     anDuong: kc(dauMayP, dauMayT) / mat,

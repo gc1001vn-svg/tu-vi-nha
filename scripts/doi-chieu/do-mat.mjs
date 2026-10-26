@@ -23,7 +23,17 @@ const DONG_A = ['Rep._Derek_Tran_Official_Portrait.jpg', 'Rep._Dave_Min_Official
   'Judy_Chu_official_portrait.jpg', 'Tammy_Duckworth,_official_portrait,_115th_Congress.jpg', 'Mazie_Hirono,_official_portrait,_113th_Congress.jpg',
   'Elaine_Chao_official_portrait.jpg', 'Steven_Chu_official_DOE_portrait.jpg', 'Gary_Locke_official_portrait.jpg', 'Jonny_Kim_official_portrait.jpg',
   'Ellison_Onizuka.jpg', 'Daniel_Inouye,_official_Senate_photo_portrait,_2008.jpg', 'Colleen_Hanabusa_official_photo.jpg',
-  'General_Paul_M._Nakasone_(NSA).jpg', 'Mark_Takai_official_portrait.jpg', 'MG_Viet_X._Luong.jpg'];
+  'General_Paul_M._Nakasone_(NSA).jpg', 'Mark_Takai_official_portrait.jpg', 'MG_Viet_X._Luong.jpg',
+  // Them 26/10: anh chinh thuc noi cac Nhat, Dai Loan, Han (giay phep chinh phu, gan CC BY — chi do trong may, khong phat tan),
+  // vi 14 anh mat nghiem truoc chi co 6 nguoi Dong A ma Dong A khac han phuong Tay o khoang mat, may cach mat, an duong, trung:ha.
+  'Fumio_Kishida_20211005_(cropped).jpg', 'Hirokazu_Matsuno_20211004.jpg', 'Shunichi_Suzuki_20211004.jpg',
+  'Yasushi_Kaneko_20211004.jpg', 'Kōichi_Hagiuda_20211004.jpg', 'Yoshihisa_Furukawa_20211004.jpg',
+  'Shigeyuki_Gotō_20160328.jpg', 'Tsuyoshi_Yamaguchi_20190303.jpg', 'Nobuo_Kishi_20141116.jpg',
+  'Shinsuke_Suematsu_20211004.jpg', 'Seiko_Noda_20171209.jpg', 'Daishirō_Yamagiwa_20211004.jpg',
+  'Kenji_Wakamiya_20080315.jpg', '行政院長卓榮泰.jpg', '行政院長蘇貞昌.jpg',
+  '吳茂昆部長.jpg', '彭啟明部長.jpg', 'Kim_Myeong-soo_official_portrait.jpg',
+  'Lee_Bok-hyeon_portrait.jpg', 'Shigeru_Ishiba_20241001.jpg', 'Katsunobu_Katō_20241001.jpg',
+  'Minoru_Kiuchi_20241001.jpg'];
 const THEM = [...DONG_A, 'Raja_Chari_portrait.jpg', 'Ami_Bera,_Official_Portrait,_115th_Congress_(cropped).jpg',
   'Pramila_Jayapal,_official_portrait,_116th_Congress.jpg', 'Ro_Khanna,_official_portrait,_115th_Congress.jpg', 'Chuck_Grassley_official_photo_2017.jpg',
   'Bernie_Sanders.jpg', 'Mitch_McConnell_2016_official_photo.jpg', 'Elizabeth_Warren,_official_portrait,_114th_Congress.jpg', 'Official_roberts_CJ.jpg',
@@ -121,12 +131,14 @@ try {
   });
   const pv = (xs, q) => { const t = [...xs].sort((x, y) => x - y), i = (t.length - 1) * q, d = Math.floor(i); return t[d] + (t[Math.min(d + 1, t.length - 1)] - t[d]) * (i - d); };
   const nhom = { 'tat ca': tat, 'Dong A': tat.filter(({ f }) => DONG_A.includes(f)), 'cuoi<0.2': tat.filter(({ a }) => a.cuoi < 0.2) };
+  nhom['Dong A cuoi<0.2'] = nhom['Dong A'].filter(({ a }) => a.cuoi < 0.2);
   console.log(`Cuoi (0-1): ${tat.map(({ f, a }) => `${f.slice(0, 12)} ${a.cuoi.toFixed(2)}`).join(' · ')}`);
-  console.log(`${'ti le'.padEnd(10)} ${'p10 p25 p50 p75 p90 (tat ca, n='.padEnd(30)}${String(tat.length)})  p50 Dong A (n=${String(nhom['Dong A'].length)})  p25 p50 p75 khong cuoi (n=${String(nhom['cuoi<0.2'].length)})`);
+  console.log(`${'ti le'.padEnd(10)} ${'p10 p25 p50 p75 p90 (tat ca, n='.padEnd(30)}${String(tat.length)})  p50 Dong A (n=${String(nhom['Dong A'].length)})  p25 p50 p75 khong cuoi (n=${String(nhom['cuoi<0.2'].length)})  p25 p50 p75 Dong A khong cuoi (n=${String(nhom['Dong A cuoi<0.2'].length)})`);
   for (const k of Object.keys(tat[0].a.so)) {
     const xs = (g) => g.map(({ a }) => a.so[k]);
     console.log(`${k.padEnd(10)} ${[0.1, 0.25, 0.5, 0.75, 0.9].map((q) => pv(xs(tat), q).toFixed(3)).join(' ').padEnd(36)}`
-      + `${pv(xs(nhom['Dong A']), 0.5).toFixed(3).padEnd(22)}${[0.25, 0.5, 0.75].map((q) => pv(xs(nhom['cuoi<0.2']), q).toFixed(3)).join(' ')}`);
+      + `${pv(xs(nhom['Dong A']), 0.5).toFixed(3).padEnd(22)}${[0.25, 0.5, 0.75].map((q) => pv(xs(nhom['cuoi<0.2']), q).toFixed(3)).join(' ')}   `
+      + `${[0.25, 0.5, 0.75].map((q) => pv(xs(nhom['Dong A cuoi<0.2']), q).toFixed(3)).join(' ')}`);
   }
   console.log('Anh tron:', loi.tron.loi ?? 'RA SO (sai)', '| hai nguoi nho:', loi.haiNho.loi ?? 'RA SO (sai)', '| hai nguoi to:', loi.haiTo.loi ?? 'RA SO (sai)');
 } finally {
