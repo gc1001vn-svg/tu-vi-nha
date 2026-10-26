@@ -27,14 +27,16 @@ describe('goi du lieu gui AI', () => {
   });
 
   test('tuong mat (neu da do): muc cuoi, so + loi app xep; anh cuoi chi gui so', () => {
-    const so = { trungHa: 1.1, nguNhan: 5.5, khoangMat: 1.3, mui: 0.3, mieng: 0.3, daiRong: 0.9, may: 1.6, anDuong: 1.05, mayCach: 0.6 };
+    const so = { tran: 0.8, trungHa: 1.1, nguNhan: 5.5, khoangMat: 1.3, mui: 0.3, mieng: 0.3, daiRong: 0.9, ham: 0.8, cam: 0.4, may: 1.6,
+      anDuong: 1.05, mayCach: 0.6 };
     const tinh = tinhHoSo(hs());
     const d = duLieuNguoi(hs(), tinh, XEM, undefined, { so, cuoi: 0.05 });
     const m = d.slice(d.indexOf('## Tướng mặt'));
-    expect([d.endsWith(m), (m.match(/^- /gm) ?? []).length, m.includes('- Trung đình : hạ đình 1,10: Trung đình (ấn đường')]).toEqual([true, 9, true]);
-    expect(m.includes('- Miệng 30,0 %: Miệng hẹp so với mặt hơn phần đông')).toBe(true);
+    expect([d.endsWith(m), (m.match(/^- /gm) ?? []).length, m.includes('- Trung đình : hạ đình 1,10: trung đình dài — trung niên hanh thông (tốt)')]).toEqual([true, 12, true]);
+    // loi day du chi o man hinh: muc gui AI ngan de luot dau con du token ra (vuaHanMuc)
+    expect([m.includes('- Miệng 30,0 %: miệng hẹp — lộc ăn kém, về già vất vả (cần lưu ý)'), m.length < 2000]).toEqual([true, true]);
     const c = duLieuNguoi(hs(), tinh, XEM, undefined, { so, cuoi: 0.6 });
-    expect([c.includes('app không giải'), c.includes('- Miệng 30,0 %\n'), c.includes('hẹp so với mặt hơn phần đông')]).toEqual([true, true, false]);
+    expect([c.includes('app không giải'), c.includes('- Miệng 30,0 %\n'), c.includes('miệng hẹp —')]).toEqual([true, true, false]);
     expect(du(hs()).includes('Tướng mặt')).toBe(false);
   });
 

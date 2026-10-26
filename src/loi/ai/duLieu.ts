@@ -19,7 +19,7 @@ import type * as TarotMod from '../tarot.ts';
 import { NUOC_NGOAI } from '../tinh.ts';
 import { tuoiHop } from '../tuoiHop.ts';
 import type { SoDoMat } from '../tuongMat.ts';
-import { CAC_KHOA, GIAI, SO_ANH_MAU, dangSo, giaiMat, ketLuan } from '../tuongMatGiai.ts';
+import { CAC_KHOA, GIAI, KET, SO_ANH_MAU, dangSo, giaiMat, ketLuan, mucMat } from '../tuongMatGiai.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
 
@@ -168,12 +168,17 @@ function chiemTinh(hs: HoSo, lechNuoc: number | undefined): string {
 /** So do mat vua do trong may (khoi "Tuong mat"): chi so, khong anh. */
 export interface MatDo { readonly so: SoDoMat; readonly cuoi: number }
 
+/** Moi net chi gui cau tom `KET` kem nhan: gui ca loi day du (2–4 nghin ky tu) thi luot dau AI chi con ~1.300–1.600 token ra, de bi cat. */
 function tuongMat(m: MatDo): string {
   const g = giaiMat(m), kl = ketLuan(m);
+  const tom = (k: keyof SoDoMat): string => {
+    const { d, y } = KET[k][mucMat(k, m.so[k])];
+    return `${y.replace('(*)', '(tướng học hiện đại)')} (${d > 0 ? 'tốt' : d < 0 ? 'cần lưu ý' : 'trung tính'})`;
+  };
   return muc(`Tướng mặt (đo từ ảnh trong máy, xếp so với ${String(SO_ANH_MAU)} ảnh mẫu người Đông Á mặt tự nhiên; lời app soạn theo sách tướng)`, [
     ...g.canhBao,
     ...(kl === null ? [] : [`Kết luận chung của app: ${kl.join(' ')}`]),
-    ...CAC_KHOA.map((k) => `- ${GIAI[k].ten} ${dangSo(k, m.so[k])}${g.loi[k] === null ? '' : `: ${g.loi[k]}`}`),
+    ...CAC_KHOA.map((k) => `- ${GIAI[k].ten} ${dangSo(k, m.so[k])}${g.loi[k] === null ? '' : `: ${tom(k)}`}`),
   ]);
 }
 

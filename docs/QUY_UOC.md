@@ -475,10 +475,43 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   được +1 vì sách khen đúng mức đó (ba đình cân "一生衣祿無虧"; mày dài quá mắt — lưới gần như ai cũng ra) → kết luận hơi nghiêng tốt.
   Khoảng mắt luôn 0 (không sách cổ nào nói thẳng). Mỗi nét ghi hạng trong 15 người mẫu theo nét mặt ("Cánh mũi rộng hơn 13/15
   người mẫu"; ngũ nhãn đếm ngược vì số nhỏ = mắt dài); "các nền khác" và nguồn gập lại. AI nhận dòng "Kết luận app".
+- **Trán, hàm, cằm, dáng mặt** (26/10, anh: "làm tiếp cho chuẩn"): thêm 3 tỉ lệ (hiện %): trán = mép trán gần chân tóc 54/284 / ngang
+  mặt · hàm = hai góc hàm 172/397 / ngang mặt · cằm = 176/400 / hàm (số nhỏ = cằm nhọn); điểm chọn bằng cách vẽ số điểm lên ảnh. Lưới
+  vẽ mép mặt theo khuôn chung nên ba số này chênh giữa người rất ít (72 ảnh, phân vị 10–90: trán 81–87 %, hàm 79–83 %, cằm 38–41 %),
+  nhưng lặp lại tốt (lật gương ≤0,4 %) và xếp hạng đúng mắt nhìn (3 ảnh hàm hẹp nhất mặt thon, 3 ảnh rộng nhất hàm vuông bạnh).
+  15 ảnh Đông Á: trán 84,0 / 85,2 / 85,7 % · hàm 80,6 / 81,0 / 81,7 % · cằm 38,5 / 38,8 / 39,8 %. Chụp gần 30 cm: trán +11,5 %, cằm +9,5 %,
+  hàm +4,2 % → vào `NHAY_GAN` (10 tỉ lệ; selfie chỉ còn khoảng mắt, lông mày). Lời: trán "có trời thì quý" (*Toàn Biên* Tam tài luận
+  "額為天，欲闊而圓，名曰有天者貴"), "額尖窄狹，一生貧寒", "額窄眉枯，破財迍邅"; hàm, cằm "頦為地，欲方而闊，名曰有地者富", Bắc
+  Nhạc "喜在方員隆滿，不可尖削歪斜", *Thái Thanh* q.5 "下停方而滿端而厚者主富" — đã soát nguyên văn. Lưu niên thêm 15–27 (trán, chỉ
+  xét bề ngang) và 61 trở đi (cằm, hàm). **Dáng mặt ngũ hành** (`hinhMat`): mô tả *Thái Thanh* q.4 "木形長瘦，金形方正，水形肥而圓，
+  土形重而厚，火形赤而上尖", lời luận *Ngũ hành ca* (*Toàn Biên* q.5); sách không cho số nên Claude ghép theo mức so với người mẫu:
+  trán hẹp và hàm không hẹp → Hỏa · mặt dài, hàm không rộng → Mộc · hàm rộng, mặt ngắn → Thổ · hàm rộng, cằm không nhọn → Kim · mặt
+  ngắn, hàm không rộng → Thủy · còn lại "cân, không nghiêng hình nào" (app ghi rõ là Claude xếp).
 - **Soát lại nguồn** (26/10): 31/31 câu trích chính trong lời giải tìm lại được trong văn bản gốc đã tải (Trung Hoa, CBETA, Bṛhat
   Saṃhitā GRETIL, Fakhr al-Dīn al-Rāzī, Rhazes, First1KGreek, Trương Vĩnh Ký 1883 tr.66, Vũ Tài Lục). Trang tướng học hiện đại
   (namu.wiki, jomon.ne.jp…) và Wayback Machine bị chặn cả từ máy ảo lẫn WebFetch → câu từ đó ghi "(*)" trong app, không làm căn cứ
   nhãn tốt / xấu; bỏ câu mơ hồ "một bài Nhật nói ngược".
+- **Đọc bù nguồn** (26/10, anh: "xem luôn những tài liệu chưa xem được") [W57]: *Thủy Kính Tập* 神相水鏡集全編 (Phạm Lai 范騋,
+  Khang Hy 1680; chữ máy nhận dạng hỏng nên đọc ảnh 24 tờ bằng mắt): trán "南岳要廣平高潤，少年有成", "天闊早發，地闊晚成，天貴乎圓，
+  地貴乎方", "天削者刑傷，地削者貧夭"; cằm "北岳豐潤，富主老榮；尖削缺陷，末主無成"; "三停平等，富貴榮顯；三停不均，孤夭貧賤";
+  "眉長過眼者富貴；短不覆眼者乏財。壓眼者窮逼", "眉高居額中者大貴"; "印堂寬廣，兩目秀長，定應功名顯達"; "口欲厚而寬…大者取其有收，
+  小者取其紅方", "口能容拳，出將入相"; "鼻相廣長必多伎倆"; năm hình (q.2: 金形取端方, 木形取瘦直, 水形取肥圓, 火形人上尖下闊, 土形取
+  厚重) — khớp cách `hinhMat` xếp; sách dặn "今之談五行者但求之於短長肥瘦黑白，淺之乎言五行矣" → câu dáng mặt ghi rõ máy chỉ xét dài
+  ngắn. Khoảng hai mắt: sách này cũng không bàn. *Liễu Trang tướng pháp* (bản số hoá giản thể, chưa đối chiếu bản khắc): "额窄眉枯，
+  一世贫穷之相", "耳小腮尖，一世为人奸吝", mắt "细长藏秀为妙". Lavater (bản Anh 1875): quy tắc 66 — mắt cách nhau hơn một con mắt
+  là đần (chuẩn mặt châu Âu, người Đông Á phần đông vượt → chỉ ghi ở "các nền khác"), trán vuông là thận trọng, trán quá hẹp là cố
+  chấp, cằm thụt là nhút nhát. Phan Kế Bính *Việt Nam phong tục* (1915) ch. Tướng thuật (bản chữ máy nhận dạng): ấn đường "sáng sủa
+  nở nang", cánh mũi phồng là giàu, Điền Trạch ở mắt, ngũ trường – ngũ đoản (dài ngắn đều quý nếu cân cả người), câu "tướng mạo bất
+  như tướng tâm" (in "bất thư tướng. tâm") dùng làm lời cuối khối. *Citralakṣaṇa* (GRETIL; bản Phạn có lẽ dịch ngược từ Tạng):
+  3.11 ba phần mặt bằng nhau, 3.12 trán, hàm rộng 12/14 mặt, 3.21 giữa hai mắt bằng một mắt, 3.42–46 mặt vuông đầy là mặt thần;
+  dài, ngắn, tròn, tam giác là mặt người thường. *Bṛhat Saṃhitā* đọc thêm: 67.51 cằm gầy dài nghèo, đầy giàu · 67.68 mày "abhyunnata"
+  (cao quá) đoản thọ · 67.69 mày dài không dính nhau giàu · 67.72 trán hẹp keo kiệt · 67.85 ngực, trán, mặt rộng là tốt.
+  *Bhaviṣya Purāṇa* (bản Hindi tóm lược, còn bản quyền — chỉ tóm ý; Brāhma-parva, Brahmā nói với Kārttikeya): như *Bṛhat Saṃhitā*
+  (mặt dài nghèo, mặt vuông gian, mày cao đoản thọ, mày giao nghèo) và trán lớn giàu, trán nhỏ "sống theo đạo", cằm nhô hưởng thụ.
+  **Không đọc được**: *Tướng lý hành chân* 相理衡真 (Phan Kế Bính kể là một trong bốn sách tướng người Việt dùng; Wikisource, archive.org,
+  kho 殆知閣 đều không có), *Ma y tướng pháp* bản riêng, *rGyud bzhi* (chỉ có ảnh quét BDRC), sách tướng Mông Cổ (không tìm thấy),
+  *Skanda Purāṇa*, Nguyễn Văn Ngọc *Tục ngữ phong dao* 1928, tóm tắt bài khoa học (máy ảo bị chặn) — các số Ward 2018, Jayaratne
+  2012, Geniole 2015 vẫn ở mức trích đoạn.
 - **Lời giải** (`tuongMatGiai.ts`, Claude soạn lại, không chép): mỗi tỉ lệ xếp thấp / vừa / cao theo **phân vị 25 và 75 của 15 ảnh
   người Đông Á không cười** (26/10; "phần đông"), không so thẳng chuẩn sách vì lưới lệch ("đúng máy, sai sách": khoé mắt lọt vào trong → khoảng mắt
   1,1–1,6 mắt; lưới dựng lông mày theo cung mày → 53/53 ảnh ra 1,4–1,8 mắt). Riêng lông mày giữ luật sách: dưới 1 là "ngắn hơn mắt".
@@ -527,9 +560,12 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
     (*Historia animalium*, Anonymus Latinus): mày sà → đố kỵ. **Vênh**: *Nhân Luân* "偃月高揭而好爭", tướng tinh tinh. Sách cổ đặt
     **Điền Trạch ở mắt** ("田宅者，位居兩眼"); gọi khoảng mày–mắt là Điền Trạch là cách gọi hiện đại.
 - **AI**: số đo (không ảnh) chỉ nằm trong bộ nhớ theo người; khối AI tổng hợp lấy lại dữ liệu mỗi lần gửi khi chưa có câu trả lời
-  nào, nên đo mặt sau khi mở khối AI vẫn kịp. Mục "Tướng mặt" ~1.000 ký tự (hồ sơ giả: 8.036 → 9.016): 9 dòng số + lời app; ảnh cười chỉ gửi số.
+  nào, nên đo mặt sau khi mở khối AI vẫn kịp. Mục "Tướng mặt" 1,4–1,9 nghìn ký tự (hồ sơ giả 8.055 → 9.420–9.938): cảnh báo, kết
+  luận chung, 12 dòng số kèm câu tóm `KET` và nhãn tốt / cần lưu ý; ảnh cười chỉ gửi số. Bản 26/10 đầu gửi cả lời đầy đủ (2,3–3,7
+  nghìn ký tự) làm lượt đầu AI chỉ còn ~1.300–1.600 token ra (`vuaHanMuc`, dễ bị cắt) → rút lại; nay ~2.200 (chưa đo mặt: 3.000).
 - **Còn chưa chắc**: 15 ảnh Đông Á mặt nghiêm, đa số đàn ông Nhật lớn tuổi, chỉ 1 người gốc Việt — ngưỡng tạm; mũi so mặt chênh
-  nhau rất ít (phân vị 25–75 chỉ 29,1–30,1 %) nên số sát ngưỡng dễ đổi mức. Chưa so với người Việt thật, chưa tách nam nữ. Thượng đình (trán), dáng cằm, môi, thần mắt — máy không đo. Tướng học hiện đại Nhật, Hàn, Trung và phần khoa
+  nhau rất ít (phân vị 25–75 chỉ 29,1–30,1 %) nên số sát ngưỡng dễ đổi mức. Chưa so với người Việt thật, chưa tách nam nữ. Chiều cao trán (thượng đình), độ đầy trán – cằm, gò má, tai, môi, thần mắt
+  — máy không đo; dáng mặt ngũ hành chỉ xét dài ngắn rộng hẹp (sách xét cả màu da, xương thịt, thần khí). Tướng học hiện đại Nhật, Hàn, Trung và phần khoa
   học mới đọc qua trích đoạn (chưa mở được trang gốc). Câu Ả Rập đọc từ bản chữ máy nhận dạng, có thể sai vài chữ.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
@@ -648,6 +684,15 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
   · tướng học hiện đại (trích đoạn): jomon.ne.jp/~eosk/z-ninsou/013.htm · madamefigaro.jp/beauty/260517-beauty-physiognomy-vol3/ ·
   masterso.com (Tô Dân Phong) · namu.wiki "관상" · 한국미용학회지 30(4) 2024 · health.tvbs.com.tw · 開治中 2017 (心理科學進展) ·
   khoa học: Ward et al. 2018 JAMA Facial Plast Surg 20(4):333–335 · Jayaratne 2012 PLoS ONE · Geniole 2015 · Todorov 2015.
+- W57 (tướng mặt, đọc bù 26/10; chi tiết ở ghi chép ngoài repo) *Thủy Kính Tập* bản quét Tảo Diệp Sơn Phòng, Thư viện Thiên Tân
+  (đọc lời tựa, mục lục, quyển 1 tờ 4–5, 26, 29–31, 33–37, quyển 2 tờ 44–51 — ngũ hành): https://archive.org/details/20260503_20260503_1427 · *Liễu Trang
+  tướng pháp*: https://github.com/garychowcmu/daizhigev20/blob/master/易藏/术数/柳庄相法.txt · Lavater, *Essays on Physiognomy…
+  One Hundred Physiognomical Rules*: https://archive.org/details/b21782465 · Lavater 1800:
+  https://archive.org/details/bim_eighteenth-century_physiognomische-fragmen_lavater-johann-caspar_1800_3 · Phan Kế Bính, *Việt Nam
+  phong tục* (Khai Trí in lại 1973): https://archive.org/details/vietnamphongtuc · *Citralakṣaṇa*:
+  https://tylergneill.github.io/gretil-mirror/gretil/corpustei/transformations/plaintext/sa_nagnajit-citralakSaNam.txt · sách tỉ lệ
+  tượng Phật (đọc, chưa dùng): https://tylergneill.github.io/gretil-mirror/gretil/corpustei/transformations/plaintext/sa_samyaksaMbuddhabhASitaM-pratimAlakSaNam.txt
+  · *Bhaviṣya Purāṇa* bản Hindi tóm lược: https://archive.org/details/001-bhavishya-puran · *Bṛhat Saṃhitā*: bản GRETIL ở W56.
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.

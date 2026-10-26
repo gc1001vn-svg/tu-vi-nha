@@ -36,7 +36,8 @@ function veKetQua(k: KetQuaMat): Node[] {
           el('details', { class: 'nguon' }, el('summary', {}, 'Các nền khác, nguồn'), el('p', {}, GIAI[khoa].them[muc]),
             el('p', {}, `Nguồn: ${GIAI[khoa].nguon}.`)));
       }))]),
-    el('p', { class: 'ghi-chu' }, 'Nhân tướng là quan niệm dân gian, không có cơ sở khoa học — đọc cho vui, đừng dựa vào để đánh '
+    el('p', { class: 'ghi-chu' }, '"Tướng mạo bất như tướng tâm" — tướng mặt không bằng tướng lòng (Phan Kế Bính, Việt Nam phong tục). '
+      + 'Nhân tướng là quan niệm dân gian, không có cơ sở khoa học — đọc cho vui, đừng dựa vào để đánh '
       + 'giá người. Số đo này (không có ảnh) được gửi kèm cho "AI tổng hợp mọi môn" nếu đo xong trước khi AI trả lời lần đầu.'),
   ];
 }

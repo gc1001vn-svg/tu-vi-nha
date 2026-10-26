@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 26/10/2026 — **đợt 7 phần 2: tướng mặt có kết luận chung cả khuôn mặt (ngũ quan, lưu niên), nhãn từng nét — đã gộp `main`, chờ anh thử**.
+Cập nhật: 26/10/2026 — **đợt 7 phần 2: tướng mặt 12 nét, dáng mặt ngũ hành, kết luận chung — đã gộp `main`, chờ anh thử**.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -26,7 +26,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 3. Cần anh
 
-- **Thử tướng mặt trên iPhone**: chụp cách 1,5–2 m (kê máy, hẹn giờ), mặt nghiêm → có "Kết luận" + 9 nét; tự chụp cầm tay → báo "chụp gần".
+- **Thử tướng mặt trên iPhone**: chụp cách 1,5–2 m (kê máy, hẹn giờ), mặt nghiêm → có "Kết luận" + 12 nét; tự chụp cầm tay → báo "chụp gần".
 - So cung Mọc (chiêm tinh) với astro-seek.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Chờ xoá (đã nằm trong `main`; tên đủ có `claude/` phía
   trước): `determined-galileo-xz2mc5` (lịch sử còn ngày sinh thật — nên xoá), `nifty-johnson-b0rxcq`, `luu-han-loi-giai`,
@@ -40,7 +40,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Mệnh chủ/Thân chủ theo *Toàn Thư* (`QUY_UOC` mục 15), chưa so Altuvi; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
 - Lời giải (tử vi Tân Biên Claude viết lại, sao hạn, bát tự, Kinh Dịch, chiêm tinh, tarot, AI) chưa ai rành đọc lại; bát tự
   đếm thô, chưa xét vượng suy. Phụ tinh tốt/xấu theo `ansaotuvi`, lệch sách vài sao (vd Mộ).
-- Tướng mặt (mục 26): ngưỡng tạm theo 15 ảnh Đông Á mặt nghiêm (1 người Việt); hiện đại Nhật–Hàn mới đọc qua trích đoạn.
+- Tướng mặt (mục 26): ngưỡng tạm theo 15 ảnh Đông Á mặt nghiêm (1 người Việt); hiện đại Nhật–Hàn đọc qua trích đoạn.
 - AI (mục 25): gán sai cung ~1/10 hồ sơ, thêm lời khuyên ngoài dữ liệu — app chỉ nhắc; siết lời dặn thì đo lại.
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Nên/kiêng theo hoàng lịch Trung Hoa, kiêng trùng `cnlunar` 61 % → chọn ngày
   chỉ hạ Được (mục 17–19).

@@ -15,6 +15,8 @@ export interface LanDo {
 }
 
 export interface SoDoMat {
+  /** Be ngang tran (diem 54/284, mep tran gan chan toc) / be ngang mat — 27/10, xep dang mat ngu hanh. */
+  readonly tran: number;
   /** Trung dinh (an duong → chan mui) : ha dinh (chan mui → day cam). Luoi khong toi chan toc nen khong do thuong dinh. */
   readonly trungHa: number;
   /** Ngu nhan: be ngang mat (hai mep ma ngang tam mat) bang bao nhieu mat. */
@@ -30,6 +32,10 @@ export interface SoDoMat {
   readonly mieng: number;
   /** Dai mat (an duong → day cam) / be ngang mat. */
   readonly daiRong: number;
+  /** Be ngang hai goc ham (172/397) / be ngang mat — 27/10. */
+  readonly ham: number;
+  /** Be ngang cam (176/400) / be ngang hai goc ham: so nho = cam nhon — 27/10. */
+  readonly cam: number;
   /** Dai long may / be ngang mot mat. */
   readonly may: number;
   /** An duong (khoang giua hai dau may) / be ngang mot mat. */
@@ -66,13 +72,17 @@ export function soDo(d: readonly DiemMoc[], rong: number, cao: number): SoDoMat 
   const mui = kc(p(129), p(358));
   const ngang = kc(p(234), p(454));
   const dauMayP = giua(p(107), p(55)), dauMayT = giua(p(336), p(285));
+  const ham = kc(p(172), p(397));
   return {
+    tran: kc(p(54), p(284)) / ngang,
     trungHa: kc(p(9), p(2)) / kc(p(2), p(152)),
     nguNhan: ngang / mat,
     khoangMat: trong / mat,
     mui: mui / ngang,
     mieng: kc(p(61), p(291)) / ngang,
     daiRong: kc(p(9), p(152)) / ngang,
+    ham: ham / ngang,
+    cam: kc(p(176), p(400)) / ham,
     may: (kc(giua(p(70), p(46)), dauMayP) + kc(giua(p(300), p(276)), dauMayT)) / 2 / mat,
     anDuong: kc(dauMayP, dauMayT) / mat,
     mayCach: (kc(p(52), p(159)) + kc(p(282), p(386))) / 2 / mat,
