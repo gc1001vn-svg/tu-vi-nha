@@ -8,3 +8,8 @@
 .tuong-mat li { margin: 6px 0; }
 .tuong-mat .nguon { color: var(--mo); font-size: 14px; }
 .tuong-mat .nguon > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+.tuong-mat .nhan { font-size: 13px; font-weight: 600; padding: 1px 6px; border-radius: 4px; border: 1px solid currentColor; }
+.tuong-mat .nhan-1 { color: var(--vang); }
+.tuong-mat .nhan--1 { color: var(--do); }
+.tuong-mat .nhan-0 { color: var(--mo); }
+.tuong-mat .nguon p { margin: 4px 0; }

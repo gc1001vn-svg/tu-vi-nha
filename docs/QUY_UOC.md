@@ -463,6 +463,17 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   1,09 · ngũ nhãn 5,48 / 5,68 / 5,99 · khoảng mắt 1,32 / 1,44 / 1,53 · mũi 29,1 / 29,3 / 30,1 % · miệng 35,6 / 36,4 / 37,4 % · dài:rộng
   0,89 / 0,94 / 0,97 · mày 1,63 / 1,68 / 1,77 · ấn đường 1,08 / 1,11 / 1,17 · mày cách mắt 0,65 / 0,71 / 0,78. Ảnh anh chạy lại (số không
   ghi vào repo): báo chụp gần, khoảng mắt thành "như phần đông", mũi ra rộng (hiện số, không giải vì chụp gần).
+- **Kết luận** (26/10, anh: "đủ thông tin nhưng không có kết luận, nói chung chung"): `KET` gán mỗi mức một nhãn theo lời chính (sách
+  Trung Hoa): +1 tốt, −1 cần lưu ý, 0 trung tính / sách khen chê lẫn lộn, kèm lĩnh vực (tính cách – trí tuệ · tiền bạc – lộc ăn · gia
+  đình – nhà cửa – địa vị · vận theo tuổi). `ketLuan`: mỗi lĩnh vực một dòng (bỏ nét "vừa" trung tính), rồi "Tổng: a nét tốt, b nét
+  cần lưu ý trên n nét xét được" — hơn kém ≥2 thì "nghiêng về tốt" / "nhiều điểm cần lưu ý", còn lại "gần ngang nhau". Hai mức "vừa"
+  được +1 vì sách khen đúng mức đó (ba đình cân "一生衣祿無虧"; mày dài quá mắt — lưới gần như ai cũng ra) → kết luận hơi nghiêng tốt.
+  Khoảng mắt luôn 0 (không sách cổ nào nói thẳng). Mỗi nét ghi hạng trong 15 người mẫu theo nét mặt ("Cánh mũi rộng hơn 13/15
+  người mẫu"; ngũ nhãn đếm ngược vì số nhỏ = mắt dài); "các nền khác" và nguồn gập lại. AI nhận dòng "Kết luận app".
+- **Soát lại nguồn** (26/10): 31/31 câu trích chính trong lời giải tìm lại được trong văn bản gốc đã tải (Trung Hoa, CBETA, Bṛhat
+  Saṃhitā GRETIL, Fakhr al-Dīn al-Rāzī, Rhazes, First1KGreek, Trương Vĩnh Ký 1883 tr.66, Vũ Tài Lục). Trang tướng học hiện đại
+  (namu.wiki, jomon.ne.jp…) và Wayback Machine bị chặn cả từ máy ảo lẫn WebFetch → câu từ đó ghi "(*)" trong app, không làm căn cứ
+  nhãn tốt / xấu; bỏ câu mơ hồ "một bài Nhật nói ngược".
 - **Lời giải** (`tuongMatGiai.ts`, Claude soạn lại, không chép): mỗi tỉ lệ xếp thấp / vừa / cao theo **phân vị 25 và 75 của 15 ảnh
   người Đông Á không cười** (26/10; "phần đông"), không so thẳng chuẩn sách vì lưới lệch ("đúng máy, sai sách": khoé mắt lọt vào trong → khoảng mắt
   1,1–1,6 mắt; lưới dựng lông mày theo cung mày → 53/53 ảnh ra 1,4–1,8 mắt). Riêng lông mày giữ luật sách: dưới 1 là "ngắn hơn mắt".

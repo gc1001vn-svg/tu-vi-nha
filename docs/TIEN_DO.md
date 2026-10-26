@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 26/10/2026 — **đợt 7 phần 2: tướng mặt sửa mũi/miệng ngược, ngưỡng theo người Đông Á — đã gộp `main`, chờ anh thử iPhone**.
+Cập nhật: 26/10/2026 — **đợt 7 phần 2: tướng mặt có kết luận, nhãn tốt/lưu ý, hạng trong 15 người mẫu Đông Á — đã gộp `main`, chờ anh thử**.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -26,7 +26,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 3. Cần anh
 
-- **Thử tướng mặt trên iPhone**: nhờ người chụp cách 1,5–2 m, mặt nghiêm → lời giải đủ 9 mục; tự chụp cầm tay → báo "chụp gần".
+- **Thử tướng mặt trên iPhone**: chụp cách 1,5–2 m (kê máy, hẹn giờ), mặt nghiêm → có "Kết luận" + 9 nét; tự chụp cầm tay → báo "chụp gần".
 - So cung Mọc (chiêm tinh) với astro-seek.
 - **Xoá nhánh GitHub: anh dặn 20/10 để dồn, xoá một lần sau cùng.** Chờ xoá (đã nằm trong `main`; tên đủ có `claude/` phía
   trước): `determined-galileo-xz2mc5` (lịch sử còn ngày sinh thật — nên xoá), `nifty-johnson-b0rxcq`, `luu-han-loi-giai`,
