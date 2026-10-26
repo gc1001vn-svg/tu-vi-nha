@@ -172,7 +172,7 @@ function tuongMat(m: MatDo): string {
   const g = giaiMat(m), kl = ketLuan(m);
   return muc(`Tướng mặt (đo từ ảnh trong máy, xếp so với ${String(SO_ANH_MAU)} ảnh mẫu người Đông Á mặt tự nhiên; lời app soạn theo sách tướng)`, [
     ...g.canhBao,
-    ...(kl === null ? [] : [`Kết luận app: ${kl.tong} ${kl.dong.join(' ')}`]),
+    ...(kl === null ? [] : [`Kết luận chung của app: ${kl.join(' ')}`]),
     ...CAC_KHOA.map((k) => `- ${GIAI[k].ten} ${dangSo(k, m.so[k])}${g.loi[k] === null ? '' : `: ${g.loi[k]}`}`),
   ]);
 }

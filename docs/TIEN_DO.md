@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 26/10/2026 — **đợt 7 phần 2: tướng mặt có kết luận, nhãn tốt/lưu ý, hạng trong 15 người mẫu Đông Á — đã gộp `main`, chờ anh thử**.
+Cập nhật: 26/10/2026 — **đợt 7 phần 2: tướng mặt có kết luận chung cả khuôn mặt (ngũ quan, lưu niên), nhãn từng nét — đã gộp `main`, chờ anh thử**.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu

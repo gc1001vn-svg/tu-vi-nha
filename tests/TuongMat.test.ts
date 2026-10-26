@@ -144,17 +144,19 @@ describe('loi giai tuong mat', () => {
       .toEqual(['Cánh mũi rộng hơn 13/15 người mẫu.', 'Cánh mũi rộng hơn 0/15 người mẫu.', 'Mắt dài hơn 13/15 người mẫu.']);
   });
 
-  test('ket luan: gom theo linh vuc, bo net vua trung tinh, dem tot / can luu y; chup gan ghi so net bo; anh cuoi thi khong co', () => {
+  test('ket luan chung ca khuon mat: ngu quan, tam dinh, luu nien theo tuoi, tong the; chup gan thi chua du; anh cuoi thi khong co', () => {
     const vua = Object.fromEntries(CAC_KHOA.map((k) => [k, MAU[k][7] ?? 0])) as Record<(typeof CAC_KHOA)[number], number>;
-    const k1 = ketLuan({ so: { ...vua, mui: 0.31, mieng: 0.34, mayCach: 0.85 }, cuoi: 0 });
-    expect(k1?.dong).toEqual([
-      'Tiền bạc, lộc ăn: cánh mũi rộng — giữ được của; miệng hẹp — lộc ăn kém, về già vất vả.',
-      'Gia đình, nhà cửa, địa vị: mày dài quá mắt — anh em hoà thuận; mày cao — thông minh, phú quý.',
-      'Vận theo tuổi: trung, hạ đình cân — đời đều đặn, cơm áo không thiếu.',
+    expect(ketLuan({ so: { ...vua, mui: 0.31, mieng: 0.34, mayCach: 0.85 }, cuoi: 0 })).toEqual([
+      'Ngũ quan (máy đo được mày, mắt, mũi, miệng; tai không đo): mày, mũi thành; miệng kém. Theo Thần Tướng Toàn Biên "một quan '
+        + 'thành hưởng mười năm quý hiển", tức khoảng 20 năm hanh thông.',
+      'Trung đình, hạ đình cân nhau: các quãng đời đều đặn.',
+      'Vận theo tuổi (phép lưu niên, Toàn Biên): 28 tuổi (ấn đường) bình thường; 31–34 (mày) thuận; 35–40 (mắt) bình thường; 41–50 '
+        + '(mũi) thuận; 51–60 (miệng) cần giữ gìn.',
+      'Tổng thể: tướng tốt (4 nét tốt, 1 nét cần lưu ý trên 9 nét xét được); mạnh về gia đình, nhà cửa, địa vị, vận theo tuổi; cần '
+        + 'lưu ý về tiền bạc, lộc ăn.',
     ]);
-    expect(k1?.tong).toBe('Tổng: 4 nét tốt, 1 nét cần lưu ý trên 9 nét xét được — nghiêng về tốt.');
     const gan = ketLuan({ so: soDo(luoi(), RONG, CAO), cuoi: 0 });
-    expect(gan?.tong.endsWith('(7 nét không xét vì ảnh chụp gần).')).toBe(true);
+    expect([gan?.length, gan?.[0]?.startsWith('Chưa đủ nét để luận cả khuôn mặt: 7/9 nét không xét vì ảnh chụp gần.')]).toEqual([1, true]);
     expect(ketLuan({ so: vua, cuoi: 0.5 })).toBeNull();
   });
 

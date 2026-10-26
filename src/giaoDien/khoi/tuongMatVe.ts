@@ -21,9 +21,8 @@ function veKetQua(k: KetQuaMat): Node[] {
       + `đo ${so(k.doMs / 1000, 1)} giây.`),
     ...g.canhBao.map((c) => el('p', { class: 'canh-bao' }, c)),
     ...(kl === null ? [] : [
-      el('h3', {}, 'Kết luận (Claude tổng hợp theo sách tướng Trung Hoa, tham khảo)'),
-      el('ul', {}, ...kl.dong.map((d) => el('li', {}, d))),
-      el('p', {}, el('b', {}, kl.tong)),
+      el('h3', {}, 'Kết luận chung cả khuôn mặt (Claude tổng hợp theo sách tướng Trung Hoa, tham khảo)'),
+      ...kl.map((c, i) => el('p', {}, i === kl.length - 1 ? el('b', {}, c) : c)),
       el('h3', {}, 'Từng nét'),
       el('p', { class: 'ghi-chu' }, `So với ${String(SO_ANH_MAU)} ảnh chân dung người Đông Á (Nhật, Hàn, Hoa, Việt) mặt tự nhiên đo cùng máy `
         + '— không so thẳng số trong sách vì lưới máy lệch vài chỗ. Nhãn tốt / cần lưu ý theo sách tướng Trung Hoa (gốc của tướng học '

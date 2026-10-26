@@ -336,21 +336,47 @@ export function giaiMat(m: { readonly so: SoDoMat; readonly cuoi: number }):
   return { canhBao, loi: loi as Record<keyof SoDoMat, string | null> };
 }
 
+const QUAN: readonly (readonly [string, readonly (keyof SoDoMat)[]])[] = [
+  ['mày', ['may', 'mayCach', 'anDuong']], ['mắt', ['nguNhan', 'khoangMat']], ['mũi', ['mui']], ['miệng', ['mieng']],
+];
+/** Phep luu nien (bai "Luu nien van khi bo vi ca", Toan Bien q.1): 28 an duong, 31–34 may, 35–40 mat, 41–50 mui, 51–60 nhan trung → mieng. */
+const TUOI: readonly (readonly [string, readonly (keyof SoDoMat)[]])[] = [
+  ['28 tuổi (ấn đường)', ['anDuong']], ['31–34 (mày)', ['may', 'mayCach']], ['35–40 (mắt)', ['nguNhan', 'khoangMat']],
+  ['41–50 (mũi)', ['mui']], ['51–60 (miệng)', ['mieng']],
+];
+
 /**
- * Ket luan chung tu cac net duoc giai: moi linh vuc mot dong (bo net "vua" trung tinh), roi dem net tot / can luu y. Null khi khong
- * net nao duoc giai (anh cuoi).
+ * Ket luan chung ca khuon mat theo hai phep tong the cua sach tuong (doc nguyen van Toan Bien): ngu quan ("一官成十年之貴顯") va luu
+ * nien, cong tam dinh va dem net tot / can luu y. Moi bo phan cong diem `KET` cac net cua no. Duoi 5 net xet duoc (anh chup gan) thi
+ * chi bao chua du de luan; null khi khong net nao duoc giai (anh cuoi).
  */
-export function ketLuan(m: { readonly so: SoDoMat; readonly cuoi: number }): { readonly dong: readonly string[]; readonly tong: string } | null {
+export function ketLuan(m: { readonly so: SoDoMat; readonly cuoi: number }): readonly string[] | null {
   const g = giaiMat(m);
-  const co = CAC_KHOA.filter((k) => g.loi[k] !== null).map((k) => ({ k, ...KET[k][mucMat(k, m.so[k])] }));
+  const co = CAC_KHOA.filter((k) => g.loi[k] !== null);
   if (co.length === 0) return null;
-  const dong = (Object.keys(TEN_LV) as LinhVuc[]).flatMap((lv) => {
-    const y = co.filter((x) => KET[x.k].lv === lv && (x.d !== 0 || mucMat(x.k, m.so[x.k]) !== 'vua')).map((x) => x.y);
-    return y.length === 0 ? [] : [`${TEN_LV[lv]}: ${y.join('; ')}.`];
-  });
-  const tot = co.filter((x) => x.d > 0).length, xau = co.filter((x) => x.d < 0).length;
-  const nghieng = tot - xau >= 2 ? 'nghiêng về tốt' : xau - tot >= 2 ? 'nhiều điểm cần lưu ý' : 'tốt xấu gần ngang nhau';
   const bo = CAC_KHOA.length - co.length;
-  return { dong, tong: `Tổng: ${String(tot)} nét tốt, ${String(xau)} nét cần lưu ý trên ${String(co.length)} nét xét được — ${nghieng}`
-    + `${bo > 0 ? ` (${String(bo)} nét không xét vì ảnh chụp gần)` : ''}.` };
+  if (co.length < 5) return [`Chưa đủ nét để luận cả khuôn mặt: ${String(bo)}/${String(CAC_KHOA.length)} nét không xét vì ảnh chụp gần. `
+    + 'Chụp lại cách 1,5–2 m (kê máy, hẹn giờ) để có kết luận chung.'];
+  const d = (k: keyof SoDoMat): number => (g.loi[k] === null ? 0 : KET[k][mucMat(k, m.so[k])].d);
+  const nhom = (ks: readonly (keyof SoDoMat)[]): number | null => (ks.some((k) => g.loi[k] !== null) ? ks.reduce((t, k) => t + d(k), 0) : null);
+  const quan = QUAN.map(([ten, ks]) => [ten, nhom(ks)] as const);
+  const thanh = quan.filter(([, x]) => x !== null && x > 0).map(([t]) => t), kem = quan.filter(([, x]) => x !== null && x < 0).map(([t]) => t);
+  const cau1 = `Ngũ quan (máy đo được mày, mắt, mũi, miệng; tai không đo): ${thanh.length === 0 ? 'chưa quan nào thành' : `${thanh.join(', ')} thành`}`
+    + `${kem.length === 0 ? '' : `; ${kem.join(', ')} kém`}. ${thanh.length === 0 ? 'Theo Thần Tướng Toàn Biên, mỗi quan thành mới được mười năm quý hiển.'
+      : `Theo Thần Tướng Toàn Biên "một quan thành hưởng mười năm quý hiển", tức khoảng ${String(thanh.length * 10)} năm hanh thông.`}`;
+  const th = g.loi.trungHa === null ? null : mucMat('trungHa', m.so.trungHa);
+  const cau2 = th === null ? null : th === 'cao' ? 'Trung đình dài hơn hạ đình: vận mạnh nhất ở trung niên.'
+    : th === 'vua' ? 'Trung đình, hạ đình cân nhau: các quãng đời đều đặn.' : 'Hạ đình dài hơn: về già, sách khen chê lẫn lộn.';
+  const chu = (x: number | null): string => (x === null ? 'chưa xét' : x > 0 ? 'thuận' : x < 0 ? 'cần giữ gìn' : 'bình thường');
+  const cau3 = `Vận theo tuổi (phép lưu niên, Toàn Biên): ${TUOI.map(([t, ks]) => `${t} ${chu(nhom(ks))}`).join('; ')}.`;
+  const diemLv = (Object.keys(TEN_LV) as LinhVuc[]).map((lv) => [lv, co.filter((k) => KET[k].lv === lv).map(d)] as const);
+  const manh = diemLv.filter(([, xs]) => xs.some((x) => x > 0) && !xs.some((x) => x < 0)).map(([lv]) => TEN_LV[lv].toLowerCase());
+  const yeu = diemLv.filter(([, xs]) => xs.some((x) => x < 0)).map(([lv]) => TEN_LV[lv].toLowerCase());
+  const tot = co.filter((k) => d(k) > 0).length, xau = co.filter((k) => d(k) < 0).length, hieu = tot - xau;
+  const nhan = hieu >= 3 ? 'tướng tốt' : hieu >= 1 ? 'tướng khá' : hieu === 0 ? 'tướng trung bình' : 'tướng có nhiều điểm cần lưu ý';
+  const cau4 = `Tổng thể: ${nhan} (${String(tot)} nét tốt, ${String(xau)} nét cần lưu ý trên ${String(co.length)} nét xét được)`
+    + `${manh.length === 0 ? '' : `; mạnh về ${manh.join(', ')}`}${yeu.length === 0 ? '' : `; cần lưu ý về ${yeu.join(', ')}`}`
+    + `${bo > 0 ? `; ${String(bo)} nét không xét vì ảnh chụp gần` : ''}.`;
+  return [cau1, ...(cau2 === null ? [] : [cau2]), cau3, cau4];
 }
+

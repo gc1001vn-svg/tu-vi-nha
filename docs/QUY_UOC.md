@@ -463,10 +463,15 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   1,09 · ngũ nhãn 5,48 / 5,68 / 5,99 · khoảng mắt 1,32 / 1,44 / 1,53 · mũi 29,1 / 29,3 / 30,1 % · miệng 35,6 / 36,4 / 37,4 % · dài:rộng
   0,89 / 0,94 / 0,97 · mày 1,63 / 1,68 / 1,77 · ấn đường 1,08 / 1,11 / 1,17 · mày cách mắt 0,65 / 0,71 / 0,78. Ảnh anh chạy lại (số không
   ghi vào repo): báo chụp gần, khoảng mắt thành "như phần đông", mũi ra rộng (hiện số, không giải vì chụp gần).
-- **Kết luận** (26/10, anh: "đủ thông tin nhưng không có kết luận, nói chung chung"): `KET` gán mỗi mức một nhãn theo lời chính (sách
-  Trung Hoa): +1 tốt, −1 cần lưu ý, 0 trung tính / sách khen chê lẫn lộn, kèm lĩnh vực (tính cách – trí tuệ · tiền bạc – lộc ăn · gia
-  đình – nhà cửa – địa vị · vận theo tuổi). `ketLuan`: mỗi lĩnh vực một dòng (bỏ nét "vừa" trung tính), rồi "Tổng: a nét tốt, b nét
-  cần lưu ý trên n nét xét được" — hơn kém ≥2 thì "nghiêng về tốt" / "nhiều điểm cần lưu ý", còn lại "gần ngang nhau". Hai mức "vừa"
+- **Kết luận** (26/10, anh: "đủ thông tin nhưng không có kết luận" → "kết luận chung cho cả khuôn mặt"): `KET` gán mỗi mức một nhãn
+  theo lời chính (sách Trung Hoa): +1 tốt, −1 cần lưu ý, 0 trung tính / sách khen chê lẫn lộn, kèm lĩnh vực (tính cách – trí tuệ ·
+  tiền bạc – lộc ăn · gia đình – nhà cửa – địa vị · vận theo tuổi). `ketLuan` luận cả khuôn mặt bằng hai phép tổng thể đọc nguyên văn
+  trong *Toàn Biên*: **ngũ quan** ("一官成十年之貴顯，一府就十載之富豐", q.2 Ngũ quan tổng luận; q.1 "但一官成者，掌十年之貴祿") —
+  mày (lông mày + mày cách mắt + ấn đường), mắt (ngũ nhãn + khoảng mắt), mũi, miệng; tổng điểm >0 là "thành", <0 "kém"; tai không đo
+  · **lưu niên** (bài "Lưu niên vận khí bộ vị ca", q.1: 28 ấn đường, 31–34 mày, 35–40 mắt, 41 sơn căn … 48 chuẩn đầu, 49–50 Lan Đài
+  Đình Úy, 51 nhân trung … 60 thủy tinh = miệng) → "thuận / bình thường / cần giữ gìn" từng quãng · tam đình · tổng: (tốt − cần lưu ý)
+  ≥3 "tướng tốt", ≥1 "khá", 0 "trung bình", <0 "nhiều điểm cần lưu ý", kèm lĩnh vực mạnh (chỉ có nét tốt) và lĩnh vực cần lưu ý.
+  Dưới 5 nét xét được (chụp gần) thì chỉ báo "chưa đủ nét để luận cả khuôn mặt". Hai mức "vừa"
   được +1 vì sách khen đúng mức đó (ba đình cân "一生衣祿無虧"; mày dài quá mắt — lưới gần như ai cũng ra) → kết luận hơi nghiêng tốt.
   Khoảng mắt luôn 0 (không sách cổ nào nói thẳng). Mỗi nét ghi hạng trong 15 người mẫu theo nét mặt ("Cánh mũi rộng hơn 13/15
   người mẫu"; ngũ nhãn đếm ngược vì số nhỏ = mắt dài); "các nền khác" và nguồn gập lại. AI nhận dòng "Kết luận app".
