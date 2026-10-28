@@ -3,9 +3,10 @@
  * trong bo nho khi app dang mo (khong ghi may — ke hoach), dong mo lai khoi van con. Ten rieng AI neu ma du lieu khong co thi
  * gach chan (`kiemBia.ts`). AI mien phi qua Groq (`goi.ts`).
  */
-import { duLieuNguoi, duLieuQue, duLieuTarot } from '../../loi/ai/duLieu.ts';
+import { duLieuChiTay, duLieuNguoi, duLieuQue, duLieuTarot } from '../../loi/ai/duLieu.ts';
 import { TU_NGUOI, timBia } from '../../loi/ai/kiemBia.ts';
 import { YEU_CAU } from '../../loi/ai/loiDan.ts';
+import { TU_CHI_TAY } from '../../loi/chiTay.ts';
 import { el } from '../chung.ts';
 import { goiAI, loiTiengViet, type TinNhan } from './goi.ts';
 import type { ChuDe } from './index.ts';
@@ -38,11 +39,11 @@ const PHIEN = new Map<string, Phien>();
 const lamMoi = (p: Phien): void => { for (const f of p.nghe) f(); };
 
 const duLieuCua = (cd: ChuDe): string => (cd.loai === 'nguoi' ? duLieuNguoi(cd.hs, cd.tr, cd.ngayXem, cd.lechNuoc, cd.mat())
-  : cd.loai === 'que' ? duLieuQue(cd.k, cd.g, cd.mh) : duLieuTarot(cd.t, cd.kieu, cd.rut));
+  : cd.loai === 'que' ? duLieuQue(cd.k, cd.g, cd.mh) : cd.loai === 'tarot' ? duLieuTarot(cd.t, cd.kieu, cd.rut) : duLieuChiTay(cd.k, cd.gioiTinh));
 
 function taoPhien(cd: ChuDe): Phien {
   const tuDien = cd.loai === 'nguoi' ? TU_NGUOI : cd.loai === 'que' ? [...TU_NGUOI, ...cd.k.QUE.map((q) => q.tenDu)]
-    : cd.t.LA.flatMap((l) => [l.anh, l.ten, ...(l.khac === null ? [] : [l.khac])]);
+    : cd.loai === 'tarot' ? cd.t.LA.flatMap((l) => [l.anh, l.ten, ...(l.khac === null ? [] : [l.khac])]) : [...TU_NGUOI, ...TU_CHI_TAY];
   return { cd, duLieu: '', tuDien, luot: [], dung: null, nghe: new Set() };
 }
 
@@ -111,7 +112,7 @@ function veChu(chu: string, bia: readonly string[]): HTMLElement[] {
   return ra;
 }
 
-const NUT_DAU = { nguoi: 'AI viết lời tổng hợp', que: 'AI giải quẻ', tarot: 'AI đọc trải bài' } as const;
+const NUT_DAU = { nguoi: 'AI viết lời tổng hợp', que: 'AI giải quẻ', tarot: 'AI đọc trải bài', chiTay: 'AI diễn giải và dự đoán' } as const;
 
 export function vePhien(ma: string, cd: ChuDe): Node[] {
   const p = PHIEN.get(ma) ?? taoPhien(cd);

@@ -3,7 +3,8 @@
  * (`phien.ts`, `caiDat.ts`) nen goi mo app khong keo theo. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`.
  */
 import type { NgayDuong } from '../../loi/amLich.ts';
-import type { HoSo, TinhRa } from '../../loi/hoSo.ts';
+import type { KhungChiTay } from '../../loi/chiTay.ts';
+import type { GioiTinh, HoSo, TinhRa } from '../../loi/hoSo.ts';
 import type * as KinhDichTinh from '../../loi/kinhDich.ts';
 import type * as KinhDichChu from '../../loi/kinhDichChu.ts';
 import type * as KinhDichGiai from '../../loi/kinhDichGiai.ts';
@@ -14,13 +15,14 @@ import { MAT_DA_DO, khoaNguoi } from '../khoi/tuongMat.ts';
 
 type Tarot = typeof TarotMod;
 
-/** Dieu dua cho AI doc: mot nguoi (moi mon da tinh), que Kinh Dich hay trai tarot vua gieo. */
+/** Dieu dua cho AI doc: mot nguoi (moi mon da tinh), que Kinh Dich, trai tarot vua gieo, chi tay nguoi xem tu chon. */
 export type ChuDe =
   | { readonly loai: 'nguoi'; readonly hs: HoSo; readonly tr: TinhRa; readonly ngayXem: NgayDuong; readonly lechNuoc: number | undefined;
     /** So do mat da do (neu co) luc gui luot dau — khoi tuong mat co the do sau khi khoi AI da mo. */
     readonly mat: () => MatDo | undefined }
   | { readonly loai: 'que'; readonly k: typeof KinhDichTinh & typeof KinhDichChu & typeof KinhDichGiai; readonly g: KinhDichTinh.Gieo; readonly mh: KinhDichTinh.MaiHoaGio | null }
-  | { readonly loai: 'tarot'; readonly t: Tarot; readonly kieu: keyof Tarot['TRAI']; readonly rut: readonly TarotMod.LaRut[] };
+  | { readonly loai: 'tarot'; readonly t: Tarot; readonly kieu: keyof Tarot['TRAI']; readonly rut: readonly TarotMod.LaRut[] }
+  | { readonly loai: 'chiTay'; readonly k: KhungChiTay; readonly gioiTinh: GioiTinh };
 
 /** `ma`: cung ma thi dung lai phien dang co (hoi thoai con nguyen khi app ve lai). */
 export const khoiAI = (tieuDe: string, ma: string, cd: ChuDe): HTMLElement =>

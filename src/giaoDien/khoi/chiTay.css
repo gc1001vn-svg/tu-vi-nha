@@ -1,0 +1,17 @@
+/* Khoi chi tay (dot 7 phan 3): hinh mau, bang chon tung o, luat kem muc tin. */
+.chi-tay .hinh { display: block; width: 180px; max-width: 60%; margin: 8px auto 0; }
+.chi-tay .chu-thich { text-align: center; font-size: 0.85rem; margin: 4px 0 8px; }
+.chi-tay fieldset { border: 1px solid var(--vien); border-radius: 8px; margin: 10px 0; padding: 6px 10px 10px; }
+.chi-tay legend { font-weight: 600; color: var(--vang); padding: 0 4px; }
+.chi-tay .chon { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+.chi-tay .chon select { width: 100%; min-height: 44px; font-size: 16px; }
+.chi-tay h3 { font-size: 16px; margin: 12px 0 4px; }
+.chi-tay ul { padding-left: 18px; margin: 6px 0; }
+.chi-tay li { margin: 6px 0; }
+.chi-tay .tin { font-size: 13px; padding: 1px 6px; border-radius: 4px; border: 1px solid currentColor; white-space: nowrap; }
+.chi-tay .tin-dong { color: var(--vang); }
+.chi-tay .tin-mot, .chi-tay .tin-khong { color: var(--mo); }
+.chi-tay .tin-venh { color: var(--do); }
+.chi-tay .nguon { color: var(--mo); font-size: 14px; }
+.chi-tay .nguon > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+.chi-tay .nguon p { margin: 4px 0; }
