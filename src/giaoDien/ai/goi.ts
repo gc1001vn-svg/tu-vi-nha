@@ -8,6 +8,8 @@ import { LOI_DAN } from '../../loi/ai/loiDan.ts';
 export const DIA_CHI = 'https://api.groq.com/openai/v1/chat/completions';
 /** Chon sau do that 23/10 (QUY_UOC muc 25): bay 10/10, khong bia ten; gpt-oss-20b nhanh hon nhung bia bay, gan sai cung nhieu hon. */
 export const MO_HINH = 'openai/gpt-oss-120b';
+/** Mo hinh doc anh mien phi duy nhat Groq con (tra /models 28/10, ban Preview — Groq bo luc nao thi khoi chi tay bao 404). */
+export const MO_HINH_ANH = 'qwen/qwen3.8-27b';
 
 export interface TinNhan { readonly role: 'user' | 'assistant'; readonly content: string }
 
@@ -56,6 +58,13 @@ function giayTrongLoi(s: string): number | null {
   return giay > 0 ? Math.ceil(giay) : null;
 }
 
+async function loiTu(res: Response): Promise<LoiGroq> {
+  const o = await res.json().catch(() => null) as { error?: { message?: string } } | null;
+  const loi = o?.error?.message ?? res.statusText;
+  const cho = Number(res.headers.get('retry-after'));
+  return new LoiGroq(res.status, loi, cho > 0 ? cho : giayTrongLoi(loi));
+}
+
 interface Manh { readonly choices?: readonly { readonly delta?: { readonly content?: string | null }; readonly finish_reason?: string | null }[] }
 
 export async function goiAI(khoa: string, duLieu: string, tin: readonly TinNhan[], khiChu: (them: string) => void, dung: AbortSignal,
@@ -72,12 +81,7 @@ export async function goiAI(khoa: string, duLieu: string, tin: readonly TinNhan[
       ...(moHinh.startsWith('openai/gpt-oss') ? { reasoning_effort: 'low' } : {}),
     }),
   });
-  if (!res.ok || res.body === null) {
-    const o = await res.json().catch(() => null) as { error?: { message?: string } } | null;
-    const loi = o?.error?.message ?? res.statusText;
-    const cho = Number(res.headers.get('retry-after'));
-    throw new LoiGroq(res.status, loi, cho > 0 ? cho : giayTrongLoi(loi));
-  }
+  if (!res.ok || res.body === null) throw await loiTu(res);
   // Dong su kien: moi dong "data: {…}", het bang "data: [DONE]"; dong chua tron thi doi manh sau.
   let chu = '', du = '';
   let ket: KetQuaGoi['ket'] = 'xong';
@@ -95,6 +99,24 @@ export async function goiAI(khoa: string, duLieu: string, tin: readonly TinNhan[
     }
   }
   return { chu, moHinh, ket };
+}
+
+/**
+ * Gui mot anh (data URL) kem loi dan, doi JSON (chi tay, dot 7 phan 3). Khong chay dan: tra loi ngan (~180 token). Nhiet 0: cung
+ * anh ra cung khung (thu 28/10). Tran ra 400 vi Groq giu truoc ca tran nay trong han muc 7.000 token vao/phut cua mo hinh doc anh.
+ */
+export async function docAnh(khoa: string, loiDan: string, anh: string, tc: TuyChonGoi = {}): Promise<string> {
+  const res = await (tc.fetch ?? fetch)(tc.diaChi ?? DIA_CHI, {
+    method: 'POST',
+    headers: { authorization: `Bearer ${khoa}`, 'content-type': 'application/json' },
+    body: JSON.stringify({
+      model: tc.moHinh ?? MO_HINH_ANH, temperature: 0, max_completion_tokens: 400, response_format: { type: 'json_object' },
+      messages: [{ role: 'user', content: [{ type: 'text', text: loiDan }, { type: 'image_url', image_url: { url: anh } }] }],
+    }),
+  });
+  if (!res.ok) throw await loiTu(res);
+  const o = await res.json() as { choices?: readonly { message?: { content?: string | null } }[] };
+  return o.choices?.[0]?.message?.content ?? '';
 }
 
 /** Loi → cau tieng Viet. Mat mang va trinh duyet chan goi thang (CORS) deu ra TypeError, khong tach duoc. */

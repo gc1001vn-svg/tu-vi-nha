@@ -586,6 +586,67 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   — máy không đo; dáng mặt ngũ hành chỉ xét dài ngắn rộng hẹp (sách xét cả màu da, xương thịt, thần khí). Tướng học hiện đại Nhật, Hàn, Trung và phần khoa
   học mới đọc qua trích đoạn (chưa mở được trang gốc). Câu Ả Rập đọc từ bản chữ máy nhận dạng, có thể sai vài chữ.
 
+## 27. Chỉ tay (đợt 7 phần 3: `src/loi/chiTay.ts`, `src/giaoDien/khoi/chiTay*.ts`; làm và đo thật 28/10)
+- **Mô hình**: Groq chỉ còn một mô hình đọc ảnh — `qwen/qwen3.8-27b` (tra `/models` 28/10: nhận chữ + ảnh; trang mô hình ghi bản
+  Preview, tóm tắt tìm kiếm [W60]); gpt-oss chỉ đọc chữ. Gói miễn phí: 1.000 lượt/ngày, **7.000 token vào/phút** (lời lỗi 429:
+  "input tokens per minute (ITPM): Limit 7000"); một ảnh ~1.000 px + lời dặn ≈ 1,8–2,3 nghìn token vào, Groq giữ trước ~2,6 nghìn
+  → khoảng 2 ảnh/phút. Gọi không chạy dần, ra JSON (`response_format: json_object`), nhiệt 0, trần ra 400 (một khung ~180 token),
+  ~1 giây. Thử (1–2 ảnh) bật suy nghĩ (`reasoning_*`: không ra lời nghĩ), bảo tả bằng lời trước rồi mới ra JSON: không thấy đọc
+  đúng hơn, tả kiểu sách giáo khoa → bỏ. Nhiệt mặc định: 2 lần cùng ảnh lệch 2/16 ô → đặt nhiệt 0. Groq bỏ mô hình → 404 → app báo "cần cập nhật app" (kế hoạch: hết mô hình đọc ảnh miễn phí thì bỏ phần này).
+- **Ảnh**: một nút `<input type=file accept=image/*>` (iPhone tự hỏi chụp hay chọn) → canvas thu nhỏ ≤1024 px, mã hoá lại JPEG
+  0,85 — canvas chỉ giữ điểm ảnh nên EXIF ảnh gốc (vị trí GPS, máy, giờ) mất hết. Thử Chromium 28/10 trên bản dựng: ảnh gốc có
+  EXIF → ảnh gửi không còn đoạn APP1 nào, 768×1024, 99 KB; khoá chỉ ở đầu gọi, thân yêu cầu không có tên. Hiện ảnh sẽ gửi + "Gửi
+  ảnh cho Groq" / "Thôi"; không lưu ảnh. Safari chưa thử (máy ảo không có). Gói mở app +0,2 KB (496,91 → 497,13 KB), gói cài sẵn
+  +18 KB: phần chỉ tay 17,8 KB nạp khi mở khối.
+- **Khung** (`KHUNG`; lời dặn tiếng Anh sinh từ khung nên không lệch): `palm` (thấy đúng một lòng bàn tay, đủ gốc ngón) · `simian`
+  (đường trí – tình nhập một) · đường đời: rõ/mờ/không thấy, dài/vừa/ngắn, vòng rộng/ôm sát ngón cái, đứt · đường trí: rõ, dài,
+  thẳng/cong xuống, đầu dính đường đời, đứt · đường tình: rõ, dài (tới dưới ngón trỏ / khe trỏ–giữa / dưới ngón giữa), đứt ·
+  đường sự nghiệp: rõ, mọc từ cổ tay / đường đời / giữa lòng tay, đứt. Mốc từng ô theo ngón (vd đường trí ngắn = dừng dưới ngón
+  giữa). `docKhung` kiểm từng ô ở biên: giá trị ngoài khung → "AI không đọc được ô này" (28/10 AI có lần trả `"arc": "medium"`);
+  đường "không thấy" thì bỏ các ô còn lại của đường đó. `palm` false → bảo chụp lại.
+- **Tay xem**: app dặn nam tay trái, nữ tay phải — "nam tả nữ hữu", cách xem phổ biến ở Việt Nam (bài VN, tóm tắt tìm kiếm
+  [W60]; sách Trung Hoa đã đọc không ghi luật này); Cheiro xem cả hai: tay trái bẩm sinh, tay phải phần tự rèn. Lời giải hai tay như
+  nhau nên chưa thành tuỳ chọn trong mã.
+- **Lời giải** (`GIAI`, `DOAN_CHUONG`; Claude soạn lại, không chép; kiểu dữ liệu bắt thiếu giá trị nào là lỗi biên dịch). Đọc
+  nguyên văn 28/10 [W59]:
+  - Trung Hoa — *Thần Tướng Toàn Biên* (phần 10 trong *Cổ Kim Đồ Thư Tập Thành* q.640) "Luận chưởng văn": "掌上三紋者，上畫應天，象君象父，
+    定其貴賤也；中畫應人，象賢象愚，辨其貧富也；下畫應地，象臣象母，主有壽夭也" · "紋細而深者吉，紋麤而淺者賤" · "三紋瑩淨，無紋破者，
+    福祿之相" · "豎理直貫上指者，百謀皆遂" · "紋雖好而久破者，皆為缺陷無成之相"; "Tướng tâm tính": "紋正心亦正…紋淺機亦淺…紋小見小，
+    紋大見大。紋生斷續，易勤易懶；紋生屈曲，多疑多慮"; "Tướng căn cơ": "紋自坎宮不斷直上，自手根而起，平地發福，白手成家", "自艮上生
+    一紋直上者，受祖考之福蔭"; Xung thiên văn "一斷一續，一成一敗"; Ngân hà văn "在天紋上，必主妨妻再娶"; "đoạn văn" (hình mất)
+    "左斷右不斷，骨肉損一半". **Tự vênh**: mục "Tướng tam tài" cùng quyển gọi nét 1 Thiên văn chủ căn cơ, nét 2 Địa văn chủ tài lộc,
+    nét 3 Nhân văn chủ phúc đức — app theo "Luận chưởng văn" (trên Thiên, giữa Nhân, dưới Địa). *Liễu Trang tướng pháp* mục 54:
+    "凡紋欲細深成形，不欲浅乱枯干偏削缺陷歪斜", "纹浅，志亦浅".
+  - Ấn Độ — *Bṛhat Saṃhitā* 67.43 "snigdhā nimnā rekhā dhanināṃ" (đường bóng, sâu: người giàu) · 69.12 đường từ cổ tay lên ngón giữa:
+    phú quý · 69.13 "kaniṣṭhikā-mūla-bhavā gatā yā pradeśinī-madhyamika-antarālam / karoti rekhā parama-āyuṣaḥ" — đường từ gốc ngón út
+    tới khe ngón trỏ – giữa (sách Tây gọi đường tình) là đường thọ, ngắn hơn thì thọ kém. Hy Lạp — Aristotle, *Historia Animalium*
+    I.15 (bản dịch Thompson 1910): người thọ có một hai đường chạy suốt lòng bàn tay.
+  - Tây — Cheiro, *Palmistry for All* (1916): đường trí thẳng thực tế, dốc giàu tưởng tượng; dính đường đời nhạy cảm, kém tự tin;
+    đường đời chuẩn dài, rõ, không đứt, mảnh sâu bền hơn to nông; đường tình theo chỗ khởi (ngón trỏ lý tưởng, khe trỏ–giữa điềm
+    tĩnh, ngón giữa nghĩ cho mình); một đường ngang suốt tay: ý chí dồn một hướng, hay cô đơn; đường số phận theo chỗ mọc, mờ là
+    không tin số phận, đứt là đổi cảnh. Benham, *The Laws of Scientific Hand Reading* (1900): đường đời ôm ngón cái lạnh, kém sinh
+    lực; đường trí dài trí lực dồi dào; một đường ngang ở chỗ đường trí = thiếu đường tình; **không có đường số phận: nhiều người
+    thành đạt tự lập** (bác sách cũ); một bàn tay mọc đường trí sau ~1 năm.
+  - **Vênh**: nét trên cùng — Trung Hoa: sang hèn, cha; Tây: tình cảm; Ấn Độ, Aristotle: tuổi thọ. Đường sự nghiệp mọc từ đường đời
+    — Cheiro: tuổi trẻ bị cha mẹ, họ hàng ràng buộc; Toàn Biên (từ cung Cấn): được phúc ấm ông cha. Bốn đường theo sách Tây (cách
+    gọi Việt Nam hiện nay: sinh đạo, trí đạo, tâm đạo, định mệnh); Toàn Biên có ba đường lớn và hơn 70 vân nhỏ (玉掌圖, hình mất).
+  - Không đưa vào lời: đoán chết, bệnh, tai nạn cụ thể (Benham: sao cuối đường trí ngắn là chết đột ngột; Cheiro: chữ thập trên
+    đường trí là tai nạn ở đầu).
+- **Chỉ tay ngang**: khoảng 1,5–3 % người, nhiều hơn ở người Đông Á; ~45 % người hội chứng Down (Wikipedia, tóm tắt tìm kiếm
+  [W60]) → app ghi "không dùng để chẩn đoán bệnh".
+- **Đo 28/10** (`scripts/doi-chieu/do-chi-tay.ts`; 8 ảnh Commons CC BY / CC BY-SA — không tìm được ảnh tay phạm vi công cộng; tải
+  ngoài repo, chỉ đo trong máy; mỗi ảnh: bản gốc 2 lần + bản "chụp lại" xoay 4°, thu 0,9; 24 lượt không lỗi, ~1 giây/lượt, cả
+  lượt ~12 phút vì hạn mức): **ngưỡng kế hoạch đạt** — 5 ảnh một bàn tay, cùng ảnh 2 lần trùng 80/80 ô (100 %), ảnh gốc với bản
+  chụp lại 64/80 (80 %, hai ảnh chỉ 8–9/16); ảnh cận da, ảnh hai lòng bàn tay bị từ chối 3/3 lần; ảnh hai bàn tay chồng nhau chỉ
+  bị từ chối 1/3. Nhiệt 0 vẫn chưa chắc ra y hệt: ảnh hai lòng bàn tay lệch 8/16 ô giữa hai lần.
+  **Nhưng AI gần như không đọc tay**: 5 bàn tay KHÁC nhau trùng nhau 122/160 ô (76 %) — 4/5 ảnh ra gần cùng một khung (không chỉ
+  tay ngang, đường trí vừa – cong – dính đường đời, đường tình vừa, đường sự nghiệp không có); ảnh chỉ tay ngang (tên ảnh ghi rõ)
+  AI báo không có cả 3 lần; ảnh vẽ sẵn bằng bút đường sự nghiệp, có chữ "FATE LINE", lần đầu AI báo không có; ảnh Human_Palm có
+  đường dọc rõ, AI báo không có. → Độ trùng cao vì AI trả rập khuôn, không phải vì đọc đúng. App ghi các số này ngay trên kết
+  quả; giữ hay bỏ phần này: chờ anh (28/10).
+- **Còn chưa chắc**: mô hình Preview; chưa thử Safari iPhone; ảnh đo ít, đa số người phương Tây; đúng sai chưa ai chấm (em chỉ
+  soát bằng mắt vài chỗ rõ ràng nêu trên).
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -611,6 +672,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `heNha` | `placidus` · `cungNguyen` (Whole Sign) | `placidus` (chưa có trong mã) | chiêm tinh: nhà (mục 23) |
 | `nutBac` | `trungBinh` · `that` | `trungBinh` (anh chốt 22/10, như astro-seek) | chiêm tinh: Bắc Giao Điểm (mục 23) |
 | `laNguoc` | có · không | có (ô chọn trên màn hình) | tarot (mục 24) |
+| `tayXem` | `namTaNuHuu` · `haiTay` (Cheiro: trái bẩm sinh, phải tự rèn) | `namTaNuHuu` (chỉ là lời dặn chụp tay nào) | chỉ tay (mục 27) |
+| `baDuong` | `luanChuongVan` (trên Thiên, giữa Nhân, dưới Địa) · `tuongTamTai` | `luanChuongVan` (chưa có trong mã) | chỉ tay: tên, nghĩa ba đường Trung Hoa (mục 27) |
 
 Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ansaotuvi`) ghi ở `docs/NGUON_MO.md`. Chưa tra (môn đó tự tra khi làm): Mai Hoa, Kỳ Môn, Lục Diệu.
 ## Nguồn
@@ -719,6 +782,19 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
   EXIF, mất GPS: https://developer.apple.com/forums/thread/678109 · EXIF selfie iPhone thật (30 mm 3088×2316, 23 mm 4032×3024):
   https://github.com/drewnoakes/digicam_corpus · khoảng cách tự chụp (trích đoạn): Ward et al. 2018 JAMA Facial Plast Surg 20(4) ·
   đầu 3D: https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb (CC BY 3.0).
+- W59 (chỉ tay, đọc nguyên văn 28/10) *Thần Tướng Toàn Biên* phần 10 trong *Cổ Kim Đồ Thư Tập Thành* q.640:
+  https://zh.wikisource.org/wiki/欽定古今圖書集成/博物彙編/藝術典/第640卷 · *Liễu Trang tướng pháp* (bản ở W57) · *Bṛhat Saṃhitā*
+  (bản GRETIL ở W56) · Aristotle, *Historia Animalium*, D'Arcy Thompson dịch 1910: https://archive.org/details/historiaanimaliu00aris_0 ·
+  Cheiro, *Palmistry for All* (bản Gutenberg 20480): https://archive.org/details/palmistryforall20480gut · Benham, *The Laws of Scientific
+  Hand Reading* (in 1912): https://archive.org/details/lawsscientifich00benhgoog
+- W60 (chỉ tay, tóm tắt tìm kiếm 28/10 — console.groq.com, Wikipedia tiếng Anh bị máy ảo chặn) mô hình đọc ảnh Groq:
+  https://console.groq.com/docs/model/qwen/qwen3.8-27b · https://console.groq.com/docs/deprecations (Llama 4 Scout bỏ 17/07/2026) ·
+  nam tả nữ hữu: https://fptshop.com.vn/tin-tuc/danh-gia/xem-chi-tay-nam-182314 · https://muaban.net/blog/xem-duong-chi-tay-532555/ ·
+  https://jobsgo.vn/blog/nhan-tuong-hoc-chi-tay/ · chỉ tay ngang: https://en.wikipedia.org/wiki/Single_transverse_palmar_crease ·
+  ảnh đo (Wikimedia Commons, tải ngoài repo): Human_Palm.jpg (CC BY 3.0, ESEMES) · Single_transverse_palmar_crease_adult.jpg (CC BY-SA
+  4.0, WurdBendur) · Right_Hand_Palm.png, Open_Palm_of_the_Left_Hand,_Fingers.jpg (CC BY-SA 4.0, Eyefive45) · La_palma_de_la_mano.jpg
+  (CC BY-SA 4.0, Nandole) · Palmistry.jpg (CC BY 2.0, Psychic 2Tarot) · Palm_hand.JPG (CC BY-SA 3.0, Cvmontuy) ·
+  Bilateral_single_transverse_palmar_crease.jpg (CC BY-SA 4.0, Ysh5640).
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.

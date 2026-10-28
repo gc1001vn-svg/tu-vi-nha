@@ -1,0 +1,5 @@
+/* Khoi chi tay (dot 7 phan 3): anh se gui, muc tung duong. */
+.chi-tay img { display: block; max-width: 100%; max-height: 320px; margin: 8px 0; border-radius: 6px; }
+.chi-tay h3 { font-size: 16px; margin: 12px 0 4px; }
+.chi-tay ul { padding-left: 18px; margin: 6px 0; }
+.chi-tay li { margin: 6px 0; }
