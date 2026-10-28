@@ -3,11 +3,11 @@
  * bam chon anh (`tuongMatMp.ts`), khong cai san cung app. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`, quy uoc `QUY_UOC` muc 26.
  */
 import type { HoSo } from '../../loi/hoSo.ts';
-import type { SoDoMat } from '../../loi/tuongMat.ts';
+import type { MatDoGiai } from '../../loi/tuongMatGiai.ts';
 import { khoiNap, type VeKhoi } from '../chung.ts';
 
 /** So do mat vua do cua tung nguoi — chi trong bo nho (anh, so deu khong luu may); khoi AI tong hop gui kem. */
-export const MAT_DA_DO = new Map<string, { readonly so: SoDoMat; readonly cuoi: number }>();
+export const MAT_DA_DO = new Map<string, MatDoGiai>();
 /** Doi ten khong doi nguoi (cung cach khoi AI dat ma phien). */
 export const khoaNguoi = (hs: HoSo): string => JSON.stringify({ ...hs, ten: '' });
 

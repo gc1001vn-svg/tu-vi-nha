@@ -19,7 +19,7 @@ import type * as TarotMod from '../tarot.ts';
 import { NUOC_NGOAI } from '../tinh.ts';
 import { tuoiHop } from '../tuoiHop.ts';
 import type { SoDoMat } from '../tuongMat.ts';
-import { CAC_KHOA, GIAI, KET, SO_ANH_MAU, dangSo, giaiMat, ketLuan, mucMat } from '../tuongMatGiai.ts';
+import { CAC_KHOA, GIAI, KET, SO_ANH_MAU, dangSo, giaiMat, ketLuan, mucMat, type MatDoGiai } from '../tuongMatGiai.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
 
@@ -165,8 +165,8 @@ function chiemTinh(hs: HoSo, lechNuoc: number | undefined): string {
   ]);
 }
 
-/** So do mat vua do trong may (khoi "Tuong mat"): chi so, khong anh. */
-export interface MatDo { readonly so: SoDoMat; readonly cuoi: number }
+/** So do mat vua do trong may (khoi "Tuong mat"): chi so, khong anh; `meo` khi anh tu chup da sua meo. */
+export type MatDo = MatDoGiai;
 
 /** Moi net chi gui cau tom `KET` kem nhan: gui ca loi day du (2–4 nghin ky tu) thi luot dau AI chi con ~1.300–1.600 token ra, de bi cat. */
 function tuongMat(m: MatDo): string {

@@ -43,30 +43,37 @@ function veKetQua(k: KetQuaMat): Node[] {
 }
 
 export function veTuongMat(khoa: string): Node[] {
-  const chon = el('input', { type: 'file', accept: 'image/*', hidden: '' });
-  const nut = el('button', { type: 'button', class: 'chinh' }, 'Chọn hoặc chụp ảnh');
   const ket = el('div', { 'aria-live': 'polite' });
   const bao = (lop: string, chu: string): void => { ket.replaceChildren(el('p', { class: lop }, chu)); };
-  nut.addEventListener('click', () => { chon.click(); });
-  chon.addEventListener('change', () => {
-    const f = chon.files?.[0];
-    chon.value = ''; // chon lai dung anh cu (iPhone hay dat trung ten) van do
-    if (f === undefined) return;
-    nut.disabled = true;
-    bao('ghi-chu', 'Đang tải thư viện đo mặt (lần đầu khoảng 17 MB)…');
-    import('./tuongMatMp.ts')
-      .then((m) => m.doAnh(f, () => { bao('ghi-chu', 'Đang đo…'); }))
-      .then((k) => { MAT_DA_DO.set(khoa, k); ket.replaceChildren(...veKetQua(k)); },
-        (e: unknown) => { bao('loi', e instanceof Error ? e.message : String(e)); })
-      .finally(() => { nut.disabled = false; });
-  });
+  const nut: HTMLButtonElement[] = [];
+  /** Nut + o chon file an. `truoc`: mo thang camera truoc (capture="user") — anh khong ghi tieu cu thi gia dinh goc rong camera truoc. */
+  const nutAnh = (chu: string, truoc: boolean): readonly [HTMLButtonElement, HTMLInputElement] => {
+    const chon = el('input', { type: 'file', accept: 'image/*', hidden: '', ...(truoc ? { capture: 'user' } : {}) });
+    const n = el('button', { type: 'button', ...(truoc ? { class: 'chinh' } : {}) }, chu);
+    nut.push(n);
+    n.addEventListener('click', () => { chon.click(); });
+    chon.addEventListener('change', () => {
+      const f = chon.files?.[0];
+      chon.value = ''; // chon lai dung anh cu (iPhone hay dat trung ten) van do
+      if (f === undefined) return;
+      for (const x of nut) x.disabled = true;
+      bao('ghi-chu', 'Đang tải thư viện đo mặt (lần đầu khoảng 17 MB)…');
+      import('./tuongMatMp.ts')
+        .then((m) => m.doAnh(f, () => { bao('ghi-chu', 'Đang đo…'); }, truoc))
+        .then((k) => { MAT_DA_DO.set(khoa, k); ket.replaceChildren(...veKetQua(k)); },
+          (e: unknown) => { bao('loi', e instanceof Error ? e.message : String(e)); })
+        .finally(() => { for (const x of nut) x.disabled = false; });
+    });
+    return [n, chon];
+  };
+  const [n1, o1] = nutAnh('Tự chụp (camera trước)', true), [n2, o2] = nutAnh('Chọn ảnh có sẵn', false);
   return [
-    el('p', { class: 'ghi-chu' }, 'Đừng tự chụp cầm tay: máy gần làm mặt dài ra, mũi to ra tới ~20 %. Nhờ người khác chụp, đứng '
-      + 'cách 1,5–2 m, zoom 2–3×; ở một mình thì kê điện thoại cách mặt 1,5–2 m ngang tầm mắt, mở app Camera, camera sau, zoom 2×, '
-      + 'hẹn giờ 10 giây, rồi vào đây chọn ảnh trong Thư viện. Nhìn thẳng, mặt tự nhiên, ngậm miệng, đủ sáng, bỏ kính, tóc không '
-      + 'che lông mày. '
+    el('p', { class: 'ghi-chu' }, 'Tự chụp: bấm "Tự chụp (camera trước)", duỗi thẳng tay cầm máy ngang tầm mắt, nhìn thẳng vào ống kính. '
+      + 'Máy gần làm mặt méo (dài ra, mũi to ra) — app tự sửa theo góc rộng camera. Chắc hơn nữa: chụp bằng app Camera (camera trước, '
+      + 'không cắt ảnh) rồi bấm "Chọn ảnh có sẵn" — ảnh trong Thư viện còn ghi tiêu cự; tốt nhất vẫn là nhờ người khác chụp cách 1,5–2 m, '
+      + 'zoom 2–3×. Mặt tự nhiên, ngậm miệng, đủ sáng, bỏ kính, tóc không che lông mày. '
       + 'Ảnh chỉ đo ngay trong máy: không gửi đi, không lưu. Lần đầu cần mạng để tải thư viện đo mặt (khoảng 17 MB), '
       + 'sau đó dùng không cần mạng.'),
-    el('div', { class: 'nut-hang' }, nut), chon, ket,
+    el('div', { class: 'nut-hang' }, n1, n2), o1, o2, ket,
   ];
 }

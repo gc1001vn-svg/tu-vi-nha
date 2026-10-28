@@ -90,7 +90,7 @@ try {
       }
       return tep(await new Promise((x) => { c.toBlob(x, 'image/jpeg', 0.95); }));
     };
-    window.doTep = async (f) => { try { return await m.doAnh(await f, () => undefined); } catch (e) { return { loi: e.message }; } };
+    window.doTep = async (f) => { try { return await m.doAnh(await f, () => undefined, false); } catch (e) { return { loi: e.message }; } };
     window.tuB64 = tuB64;
   }, `/tu-vi-nha/assets/${mp}`);
 

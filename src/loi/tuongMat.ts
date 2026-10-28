@@ -89,6 +89,39 @@ export function soDo(d: readonly DiemMoc[], rong: number, cao: number): SoDoMat 
   };
 }
 
+/**
+ * Anh chup bang nut "Tu chup (camera truoc)": Safari iPhone ghi lai JPEG khong EXIF (ma WebKit, tra 28/10) nen doan tieu cu quy doi
+ * 35 mm theo co anh camera truoc iPhone chua thu nho; co khac thi lay 30 mm — selfie doc mac dinh iPhone 11–16 (EXIF that). Anh chon
+ * tu Thu vien (iOS 16.4+) con EXIF tieu cu. QUY_UOC muc 26.
+ */
+export const F35_TRUOC = 30;
+const F35_THEO_CO: Readonly<Record<string, number>> = { '2316x3088': 30, '2320x3088': 32, '3024x4032': 23, '3672x4896': 20 };
+export const f35TheoCo = (rong: number, cao: number): number | null =>
+  F35_THEO_CO[`${String(Math.min(rong, cao))}x${String(Math.max(rong, cao))}`] ?? null;
+
+/** Tieu cu (px) cua anh rong × cao tu tieu cu quy doi 35 mm (theo duong cheo khung 36 × 24 mm). */
+export const tieuCuPx = (f35: number, rong: number, cao: number): number => (f35 / Math.hypot(36, 24)) * Math.hypot(rong, cao);
+
+/**
+ * Meo phoi canh tung ti le: ln(R / R chup cach ~2,5 m) = MEO × (u − U_MAU), u = ngang mat (px) / tieu cu (px) ≈ ngang mat / khoang
+ * cach. Khop 28/10 tren 28 nguoi that bo CMDP (Caltech, chup cach ~0,4 m va ~4,7 m, tieu cu EXIF; QUY_UOC muc 26) — dau 3D dung du
+ * doan meo khac han (mat dai, mui gap doi, an duong gap 4) nen khong dung. `MEO_LECH`: lech chuan phan du giua nguoi, moi don vi u.
+ */
+export const MEO: Readonly<Record<keyof SoDoMat, number>> = {
+  tran: 0.088, trungHa: 0.245, nguNhan: -0.226, khoangMat: 0.022, mui: 0.296, mieng: 0.226, daiRong: 0.231, ham: -0.017, cam: 0.086,
+  may: -0.112, anDuong: 0.091, mayCach: 0.109,
+};
+export const MEO_LECH: Readonly<Record<keyof SoDoMat, number>> = {
+  tran: 0.056, trungHa: 0.174, nguNhan: 0.088, khoangMat: 0.088, mui: 0.092, mieng: 0.106, daiRong: 0.092, ham: 0.03, cam: 0.068,
+  may: 0.056, anDuong: 0.087, mayCach: 0.158,
+};
+/** u cua anh mau (chan dung chinh thuc, ong 85–135 mm, cach ~2,5 m): sua anh gan ve dung khoang do de so voi nguong lay tu anh mau. */
+export const U_MAU = 0.05;
+
+/** Bo meo: dua cac ti le do o u ve nhu chup cach anh mau. */
+export const boMeo = (so: SoDoMat, u: number): SoDoMat =>
+  Object.fromEntries(Object.entries(so).map(([k, x]) => [k, x * Math.exp(-MEO[k as keyof SoDoMat] * (u - U_MAU))])) as unknown as SoDoMat;
+
 /** Euler ZYX tu ma tran luu theo cot (o 12–14 la tinh tien — kiem tren anh that 23/10). */
 export function gocDau(m: readonly number[]): GocDau {
   const R = (r: number, c: number): number => m[c * 4 + r] ?? 0;

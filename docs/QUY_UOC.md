@@ -463,6 +463,24 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   1,09 · ngũ nhãn 5,48 / 5,68 / 5,99 · khoảng mắt 1,32 / 1,44 / 1,53 · mũi 29,1 / 29,3 / 30,1 % · miệng 35,6 / 36,4 / 37,4 % · dài:rộng
   0,89 / 0,94 / 0,97 · mày 1,63 / 1,68 / 1,77 · ấn đường 1,08 / 1,11 / 1,17 · mày cách mắt 0,65 / 0,71 / 0,78. Ảnh anh chạy lại (số không
   ghi vào repo): báo chụp gần, khoảng mắt thành "như phần đông", mũi ra rộng (hiện số, không giải vì chụp gần).
+- **Tự chụp camera trước, sửa méo** (28/10, anh: "không thể lúc nào cũng nhờ người chụp — dùng camera trước") [W58]: nút "Tự chụp
+  (camera trước)" (`capture="user"`) + "Chọn ảnh có sẵn". **Sửa thẳng từng tỉ lệ**: ln(R / R chụp cách 2,5 m) = `MEO` × (u − 0,05),
+  u = ngang mặt (px) / tiêu cự (px) ≈ ngang mặt / khoảng cách. Hệ số khớp trên **28 người thật** bộ CMDP (Caltech, ECCV 2014; ảnh cắt
+  của trang DisCO + số đo MediaPipe, tiêu cự EXIF của bộ small-print — dùng ngoài repo): cùng người chụp cách ~0,4 m và ~4,7 m (nhãn sàn
+  2 ft, 16 ft; tính u từ mắt và tiêu cự, không dùng nhãn). MEO: mũi 0,30 · trung:hạ 0,25 · dài:rộng 0,23 · miệng 0,23 · ngũ nhãn −0,23
+  · mày −0,11 · mày cách mắt 0,11 · ấn đường 0,09 · trán 0,09 · cằm 0,09 · khoảng mắt 0,02 · hàm −0,02 (u 0,34, ~40 cm: mặt dài +7,6 %,
+  mũi +9,5 %, miệng +7,4 %, trung:hạ +7,7 %, ngũ nhãn −7,5 %). Lệch giữa người (`MEO_LECH`, phần dư mỗi đơn vị u) lớn nhất trung:hạ,
+  mày cách mắt (0,17, 0,16), nhỏ nhất hàm (0,03). **Đầu 3D dựng** (Lee Perry-Smith CC BY 3.0, ICT-FaceKit MIT; three.js trong
+  Chromium, 0,22–10 m) đoán méo khác hẳn người thật (mặt dài, mũi gấp đôi, ấn đường gấp 4, trung:hạ một nửa) → chỉ dùng thấy sửa
+  từng điểm theo độ sâu z MediaPipe là sai (trán, trung:hạ sai thêm 7–11 %), không dùng hệ số. `NHAY_GAN` (ảnh không sửa được mà
+  dài:rộng > 1,05) tính từ MEO: trán, trung:hạ, ngũ nhãn, mũi, miệng, dài:rộng, cằm. Sửa về như chụp cách 2,5 m (ảnh mẫu chân dung chính
+  thức), không về vô cực; ảnh Thư viện không EXIF thì không sửa. Tiêu cự: EXIF A405 (ảnh Thư viện iOS 16.4+ còn tiêu cự, mất GPS) →
+  ảnh chụp ngay trong trang **Safari không còn EXIF** (WebKit ghi lại JPEG 0,8, đọc mã nguồn) nên đoán theo cỡ ảnh camera trước iPhone
+  chưa thu nhỏ: 3088×2316 → 30 mm (iPhone 11–16 selfie dọc mặc định) · 2320×3088 → 32 · 3024×4032 → 23 · 3672×4896 → 20 (17, Air) ·
+  cỡ khác → 30 mm. Sai số tiêu cự 5 % (EXIF) / 8 % (theo cỡ) / 15 % (ước) gộp `MEO_LECH` × (u − 0,05): nét nào sai số còn lại > nửa
+  khoảng "vừa" thì không giải — selfie ~40 cm thường bỏ mũi, miệng, trung:hạ, hàm, trán (người khác nhau méo khác nhau hơn khoảng
+  giữa người với người). Khoảng cách hiện ra = 14 cm / u − 8 cm. Chưa thử iPhone thật: cỡ ảnh nút camera trước trả về, iPhone 17 khung
+  "solo" bao nhiêu mm; CMDP gần nhất ~0,4 m, selfie gần hơn thì ngoại suy.
 - **Kết luận** (26/10, anh: "đủ thông tin nhưng không có kết luận" → "kết luận chung cho cả khuôn mặt"): `KET` gán mỗi mức một nhãn
   theo lời chính (sách Trung Hoa): +1 tốt, −1 cần lưu ý, 0 trung tính / sách khen chê lẫn lộn, kèm lĩnh vực (tính cách – trí tuệ ·
   tiền bạc – lộc ăn · gia đình – nhà cửa – địa vị · vận theo tuổi). `ketLuan` luận cả khuôn mặt bằng hai phép tổng thể đọc nguyên văn
@@ -693,6 +711,14 @@ Tuỳ chọn riêng của một môn (vd tử vi năm Canh: theo Altuvi hay `ans
   https://tylergneill.github.io/gretil-mirror/gretil/corpustei/transformations/plaintext/sa_nagnajit-citralakSaNam.txt · sách tỉ lệ
   tượng Phật (đọc, chưa dùng): https://tylergneill.github.io/gretil-mirror/gretil/corpustei/transformations/plaintext/sa_samyaksaMbuddhabhASitaM-pratimAlakSaNam.txt
   · *Bhaviṣya Purāṇa* bản Hindi tóm lược: https://archive.org/details/001-bhavishya-puran · *Bṛhat Saṃhitā*: bản GRETIL ở W56.
+- W58 (tự chụp, 28/10; báo cáo đầy đủ ngoài repo) Safari ghi lại ảnh chụp trong trang không EXIF:
+  https://github.com/WebKit/WebKit/blob/main/Source/WebKit/UIProcess/ios/forms/WKFileUploadPanel.mm (cùng bản Apple
+  https://github.com/apple-oss-distributions/WebKit/blob/main/Source/WebKit/UIProcess/ios/forms/WKFileUploadPanel.mm) · `capture="user"`
+  mở camera trước: https://github.com/WebKit/WebKit/blob/main/Source/WebCore/html/HTMLInputElement.cpp · Chrome Android không phân trước/sau:
+  https://github.com/chromium/chromium/blob/main/ui/android/java/src/org/chromium/ui/base/SelectFileDialog.java · ảnh Thư viện còn
+  EXIF, mất GPS: https://developer.apple.com/forums/thread/678109 · EXIF selfie iPhone thật (30 mm 3088×2316, 23 mm 4032×3024):
+  https://github.com/drewnoakes/digicam_corpus · khoảng cách tự chụp (trích đoạn): Ward et al. 2018 JAMA Facial Plast Surg 20(4) ·
+  đầu 3D: https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/LeePerrySmith/LeePerrySmith.glb (CC BY 3.0).
 ## Anh đã quyết (15/10/2026)
 
 1. Sinh từ 23 giờ đến trước 12 giờ đêm: tính **ngày hôm sau** (phái A) — cho cả tử vi và bát tự.

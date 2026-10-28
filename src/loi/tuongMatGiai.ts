@@ -4,7 +4,7 @@
  * Hy Lap – La Ma, tuong hoc hien dai Nhat – Han, tuc ngu Viet. Cac nen noi nguoc nhau thi neu ca. Nguong, nguon, muc kiem chung:
  * `docs/QUY_UOC.md` muc 26.
  */
-import type { SoDoMat } from './tuongMat.ts';
+import { MEO, MEO_LECH, U_MAU, type SoDoMat } from './tuongMat.ts';
 
 export type MucMat = 'thap' | 'vua' | 'cao';
 
@@ -30,13 +30,7 @@ export const NGUONG_CUOI = 0.2;
 /** So anh mau lam nguong: nguoi Dong A, mat tu nhien (do 26/10, `scripts/doi-chieu/do-mat.mjs`). */
 export const SO_ANH_MAU = 15;
 
-/**
- * Chup gan meo phoi canh: chieu lai luoi 3D 14 anh mat nghiem o 30 cm (may -> dau mui) thi mui +20 %, dai:rong +20 %, mieng +17 %,
- * may cach mat +17 %, ngu nhan −12 %, tran +11,5 %, cam +9,5 %, an duong +8 %, trung:ha +7,5 %, ham +4 % (ham, tran, cam chenh giua
- * nguoi chi 1–2 % nen van la lon); khoang mat, may lech <=2,5 % (QUY_UOC muc 26). 72 anh mau chup xa ra dai:rong 0,87–1,05 -> vuot
- * `NGUONG_GAN` thi nghi tu chup cam tay, bo loi 10 ti le nhay khoang cach.
- */
-export const NHAY_GAN: readonly (keyof SoDoMat)[] = ['tran', 'trungHa', 'nguNhan', 'mui', 'mieng', 'daiRong', 'ham', 'cam', 'anDuong', 'mayCach'];
+/** 72 anh mau chup xa ra dai:rong 0,87–1,05: anh khong sua meo ma vuot muc nay thi nghi tu chup cam tay, bo loi `NHAY_GAN`. */
 export const NGUONG_GAN = 1.05;
 
 const S = {
@@ -412,23 +406,57 @@ export const mucMat = (khoa: keyof SoDoMat, x: number): MucMat => {
 
 export const CAC_KHOA = Object.keys(GIAI) as (keyof SoDoMat)[];
 
+/** Nua khoang "vua" cua ti le, ti le voi giua khoang. */
+const nuaKhoang = (k: keyof SoDoMat): number => (GIAI[k].nguong[1] - GIAI[k].nguong[0]) / (GIAI[k].nguong[1] + GIAI[k].nguong[0]);
+/**
+ * Ti le nhay khoang cach: tu chup cam tay chua sua (u = 0,4 ~ may cach mat 30 cm) lech qua nua khoang "vua" theo `MEO` (nguoi that
+ * CMDP, 28/10) — 7 ti le; khoang mat, ham, may, an duong, may cach mat lech it hon khoang cua chung.
+ */
+export const NHAY_GAN: readonly (keyof SoDoMat)[] = CAC_KHOA.filter((k) => Math.abs(Math.expm1(MEO[k] * (0.4 - U_MAU))) > nuaKhoang(k));
+
 /** Mui, mieng hien phan tram be ngang mat (de hieu hon "0,30 lan"), 1 so le cho thay ro nguong; con lai 2 so le. */
 export const dangSo = (k: keyof SoDoMat, x: number): string =>
   (['tran', 'mui', 'mieng', 'ham', 'cam'].includes(k) ? `${(x * 100).toFixed(1).replace('.', ',')} %` : x.toFixed(2).replace('.', ','));
 const so2 = (x: number): string => x.toFixed(2).replace('.', ',');
 
 /** Loi tung ti le (null = khong giai) kem canh bao: anh cuoi thi khong giai ca 9; nghi chup gan thi bo 5 ti le nhay khoang cach. */
-export function giaiMat(m: { readonly so: SoDoMat; readonly cuoi: number }):
-  { readonly canhBao: readonly string[]; readonly loi: Readonly<Record<keyof SoDoMat, string | null>> } {
-  const cuoi = m.cuoi >= NGUONG_CUOI, gan = m.so.daiRong > NGUONG_GAN;
+/**
+ * Anh da sua meo phoi canh (`boMeo`): tieu cu quy doi 35 mm va nguon (EXIF, co anh camera truoc iPhone, hay uoc), co anh (px),
+ * u = ngang mat / tieu cu, khoang cach uoc (m), so truoc khi sua.
+ */
+export interface MeoAnh {
+  readonly f35: number; readonly nguon: 'anh' | 'co' | 'uoc'; readonly co: string; readonly u: number; readonly cach: number; readonly goc: SoDoMat;
+}
+/** So do dua vao loi giai: `meo` = null/thieu khi anh khong sua meo (khong biet tieu cu). */
+export interface MatDoGiai { readonly so: SoDoMat; readonly cuoi: number; readonly meo?: MeoAnh | null }
+
+/**
+ * Sai so tuong doi cua tieu cu dung de sua meo: EXIF thi nho, doan theo co anh vua, gia dinh camera truoc thi lon (moi doi may goc
+ * rong khac). Gop voi meo khac nhau giua nguoi (`MEO_LECH`): net nao sai so con lai lon hon nua khoang "vua" thi khong giai.
+ */
+export const SAI_TIEU_CU = { anh: 0.05, co: 0.08, uoc: 0.15 } as const;
+
+/** Loi tung ti le (null = khong giai) kem canh bao: anh cuoi thi khong giai ca 12; nghi chup gan thi bo 10 ti le nhay khoang cach. */
+export function giaiMat(m: MatDoGiai): { readonly canhBao: readonly string[]; readonly loi: Readonly<Record<keyof SoDoMat, string | null>> } {
+  const cuoi = m.cuoi >= NGUONG_CUOI, gan = m.so.daiRong > NGUONG_GAN, meo = m.meo ?? null;
+  const ten = (ks: readonly (keyof SoDoMat)[]): string => ks.map((k) => GIAI[k].ten.toLowerCase()).join(', ');
+  const chuaChac = meo === null ? [] : CAC_KHOA.filter((k) =>
+    Math.abs(meo.u - U_MAU) * Math.hypot(MEO[k] * SAI_TIEU_CU[meo.nguon], MEO_LECH[k]) > nuaKhoang(k));
+  const daSua = meo !== null && CAC_KHOA.some((k) => Math.abs(m.so[k] / meo.goc[k] - 1) > 0.01);
   const canhBao = [
     ...(cuoi ? [`Ảnh có vẻ đang cười (điểm cười ${so2(m.cuoi)}): cười làm miệng rộng ra, mắt híp lại nên số lệch — app không `
       + 'giải. Chụp lại mặt tự nhiên, ngậm miệng.'] : []),
-    ...(gan ? [`Dài : rộng mặt ${so2(m.so.daiRong)} vượt mọi ảnh mẫu chụp xa (0,87–1,05) — thường do tự chụp cầm tay: máy gần `
-      + `làm mặt dài ra tới ~20 %. App bỏ lời giải ${String(NHAY_GAN.length)} số nhạy khoảng cách (`
-      + `${NHAY_GAN.map((k) => GIAI[k].ten.toLowerCase()).join(', ')}). Nhờ người khác chụp cách 1,5–2 m, zoom 2–3× rồi đo lại.`] : []),
+    ...(meo !== null && daSua ? [`Máy cách mặt ước ${String(Math.round(meo.cach * 100))} cm: app đã sửa méo do chụp gần theo tiêu cự `
+      + `${String(meo.f35)} mm ${meo.nguon === 'anh' ? '(ghi trong ảnh)' : meo.nguon === 'co' ? `(theo cỡ ảnh ${meo.co} của camera trước iPhone)`
+        : `(ảnh ${meo.co} không rõ đời máy: lấy góc rộng thường gặp của camera trước — ước, nên kém chắc hơn ảnh chụp xa)`}.`
+      + (chuaChac.length === 0 ? '' : ` ${String(chuaChac.length)} nét sửa xong vẫn có thể lệch sang mức khác nên không giải: ${ten(chuaChac)}.`)] : []),
+    ...(gan ? [`Dài : rộng mặt ${so2(m.so.daiRong)} vượt mọi ảnh mẫu chụp xa (0,87–1,05)${meo === null
+      ? ' — thường do tự chụp cầm tay: máy gần làm mặt dài ra tới ~20 %.' : ' dù đã sửa méo — góc rộng camera có thể khác ước.'} `
+      + `App bỏ lời giải ${String(NHAY_GAN.length)} số nhạy khoảng cách (${ten(NHAY_GAN)}). ${meo === null
+        ? 'Tự chụp thì dùng nút "Tự chụp (camera trước)" để app sửa méo, hoặc nhờ người chụp cách 1,5–2 m.' : 'Nhờ người chụp cách 1,5–2 m cho chắc.'}`] : []),
   ];
-  const loi = Object.fromEntries(CAC_KHOA.map((k) => [k, cuoi || (gan && NHAY_GAN.includes(k)) ? null : GIAI[k].loi[mucMat(k, m.so[k])]]));
+  const loi = Object.fromEntries(CAC_KHOA.map((k) => [k, cuoi || (gan && NHAY_GAN.includes(k)) || chuaChac.includes(k) ? null
+    : GIAI[k].loi[mucMat(k, m.so[k])]]));
   return { canhBao, loi: loi as Record<keyof SoDoMat, string | null> };
 }
 
@@ -472,7 +500,7 @@ export function hinhMat(so: SoDoMat): Hinh | null {
  * nien, cong tam dinh va dem net tot / can luu y. Moi bo phan cong diem `KET` cac net cua no. Duoi 5 net xet duoc (anh chup gan) thi
  * chi bao chua du de luan; null khi khong net nao duoc giai (anh cuoi).
  */
-export function ketLuan(m: { readonly so: SoDoMat; readonly cuoi: number }): readonly string[] | null {
+export function ketLuan(m: MatDoGiai): readonly string[] | null {
   const g = giaiMat(m);
   const co = CAC_KHOA.filter((k) => g.loi[k] !== null);
   if (co.length === 0) return null;
