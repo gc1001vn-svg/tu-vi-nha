@@ -1,99 +1,104 @@
 /**
- * Noi dung khoi "Chi tay" (nap luoi tu `chiTay.ts`): chon/chup anh → thu nho ≤1024 px va ma hoa lai JPEG tren canvas (canvas chi
- * co diem anh, khong mang EXIF: vi tri GPS, ten may trong anh goc bi bo) → hien anh se gui, hoi gui → AI dien khung
- * (`src/loi/chiTay.ts`) → ghep loi soan san. Anh chi gui khi bam, khong luu.
+ * Noi dung khoi "Chi tay" (nap luoi tu `chiTay.ts`): hinh mau 4 duong + bang chon tung o (nguoi xem nhin tay minh) → quy luat tung o
+ * kem muc tin (`src/loi/chiTay.ts`) → khoi AI dien giai, du doan (Groq; chi doc o da chon + luat). Khong chup anh: AI doc anh mien phi
+ * cua Groq khong dinh vi duoc duong (do 28/10, QUY_UOC muc 27).
  */
-import { LOI_DAN_CHI_TAY, docKhung, giaiChiTay, type KhungChiTay } from '../../loi/chiTay.ts';
+import { CAC_DUONG, DOAN_CHUONG, GIAI, KHUNG, QUY_LUAT_CHUNG, giaiChiTay, mucTin, type Duong, type KhungChiTay, type Luat } from '../../loi/chiTay.ts';
 import type { GioiTinh } from '../../loi/hoSo.ts';
-import { MO_HINH_ANH, docAnh, loiTiengViet } from '../ai/goi.ts';
-import { docAI } from '../ai/luu.ts';
-import { el } from '../chung.ts';
+import { el, khoiNap } from '../chung.ts';
 import './chiTay.css';
 
-const CANH_MAX = 1024;
+/** Hinh mau ban tay phai nhin long ban tay (ngon cai ben phai); tay trai thi lat guong bang CSS. Mau trung chu chu thich. */
+const HINH = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 250"><g fill="#f3d9c4" stroke="#8a6a55" stroke-width="2">
+<rect x="44" y="40" width="22" height="72" rx="11"/><rect x="70" y="18" width="24" height="92" rx="12"/>
+<rect x="98" y="8" width="24" height="102" rx="12"/><rect x="126" y="22" width="24" height="88" rx="12"/>
+<rect x="166" y="104" width="28" height="86" rx="14" transform="rotate(32 180 147)"/>
+<path d="M40 100 Q36 230 70 242 L140 242 Q168 222 166 150 L160 100 Z"/></g>
+<g fill="none" stroke-width="4" stroke-linecap="round"><path d="M42 128 Q95 140 140 112" stroke="#d33"/>
+<path d="M152 138 Q110 152 58 172" stroke="#27c"/><path d="M152 140 Q108 180 122 238" stroke="#2a2"/>
+<path d="M100 238 L108 112" stroke="#a3c"/></g></svg>`;
 
-async function thuNho(f: File): Promise<string> {
-  const url = URL.createObjectURL(f);
-  const anh = new Image();
-  anh.src = url;
-  try {
-    await anh.decode();
-  } catch {
-    throw new Error('Không đọc được ảnh này — chọn ảnh khác.');
-  } finally {
-    URL.revokeObjectURL(url);
-  }
-  const ty = Math.min(1, CANH_MAX / Math.max(anh.naturalWidth, anh.naturalHeight));
-  const c = document.createElement('canvas');
-  c.width = Math.round(anh.naturalWidth * ty);
-  c.height = Math.round(anh.naturalHeight * ty);
-  const g = c.getContext('2d');
-  if (g === null) throw new Error('Máy không vẽ được ảnh (canvas).');
-  g.drawImage(anh, 0, 0, c.width, c.height);
-  const s = c.toDataURL('image/jpeg', 0.85);
-  c.width = 0; c.height = 0; // Safari giu bo nho canvas toi luc don rac
-  return s;
+/** Cach tim tung duong tren tay (mau theo hinh mau). */
+const CHO: Readonly<Record<Duong, string>> = {
+  life: 'đường cong vòng quanh gốc ngón cái (xanh lá)',
+  head: 'đường ngang giữa lòng bàn tay, đầu phía ngón cái (xanh dương)',
+  heart: 'đường ngang trên cùng, ngay dưới gốc các ngón (đỏ)',
+  fate: 'đường dọc giữa lòng bàn tay chạy lên ngón giữa — nhiều người không có (tím)',
+};
+
+const MAU: readonly [string, string][] = [['#d33', 'đường tình'], ['#27c', 'đường trí'], ['#2a2', 'đường đời'], ['#a3c', 'đường sự nghiệp']];
+
+const loaiTin = (l: Pick<Luat, 'nen' | 'venh'>): string => (l.venh !== undefined ? 'venh' : l.nen.length >= 2 ? 'dong' : l.nen.length === 1 ? 'mot' : 'khong');
+
+/** Mot luat: cau chot, nhan muc tin, chi tiet tung sach gap lai. */
+function luat(l: Omit<Luat, 'nhan'>): (string | HTMLElement)[] {
+  return [l.chot, ' ', el('span', { class: `tin tin-${loaiTin(l)}` }, mucTin(l)),
+    el('details', { class: 'nguon' }, el('summary', {}, 'Từng sách nói gì'), el('p', {}, l.loi),
+      ...(l.venh === undefined ? [] : [el('p', {}, `Vênh: ${l.venh}`)]))];
 }
 
-function veKetQua(k: KhungChiTay): Node[] {
+function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh): Node[] {
   return [
-    el('p', { class: 'canh-bao' }, 'AI đọc ảnh, có thể sai — đo 28/10 thấy sai nhiều: 5 bàn tay khác nhau được AI tả giống nhau 76 % '
-      + 'ô (gần bằng một bàn tay chụp lại: 80 %), ảnh vẽ sẵn đường sự nghiệp mà AI báo không có, ảnh chỉ tay ngang AI không nhận ra. '
-      + 'Coi như lời chung; so bằng mắt với bàn tay mình.'),
+    el('h3', {}, 'Quy luật chung (xếp từ đồng thuận nhiều nền nhất)'),
+    el('ul', {}, ...QUY_LUAT_CHUNG.map((l) => el('li', {}, ...luat(l)))),
     ...giaiChiTay(k).flatMap((m) => [
       el('h3', {}, m.ten),
       el('p', { class: 'ghi-chu' }, m.y),
-      el('ul', {}, ...m.dong.map((d) => el('li', {}, el('b', {}, `${d.nhan}: `), d.loi))),
+      el('ul', {}, ...m.dong.map((d) => el('li', {}, el('b', {}, `${d.o}: `),
+        ...(d.luat === null ? ['chưa chọn.'] : [`${d.luat.nhan} — `, ...luat(d.luat)])))),
       el('p', { class: 'ghi-chu' }, `Nguồn: ${m.nguon}.`),
     ]),
-    el('p', { class: 'ghi-chu' }, `AI (${MO_HINH_ANH} qua Groq, miễn phí) chỉ tả các đường vào khung có sẵn; lời giải do Claude soạn `
-      + 'lại từ sách tướng tay phạm vi công cộng. Tên bốn đường theo cách gọi phổ biến ở Việt Nam (gốc sách Tây); sách Trung Hoa cổ '
-      + 'chia ba đường lớn Thiên – Nhân – Địa. Chỉ tay là quan niệm dân gian, không có cơ sở khoa học — đọc cho vui, đừng dựa vào '
-      + 'để quyết việc lớn.'),
+    // Nap thang phien.ts, khong qua `khoiAI`: file nap luoi nay nhap ai/index.ts thi Vite tach goi mo app thanh 4 file (do 28/10).
+    khoiNap('AI diễn giải và dự đoán (Groq, miễn phí)', 'ai',
+      () => import('../ai/phien.ts').then((m) => m.vePhien(`chiTay:${gioiTinh}:${JSON.stringify(k)}`, { loai: 'chiTay', k, gioiTinh }))),
+    el('p', { class: 'ghi-chu' }, 'Quy luật do Claude soạn lại từ sách tướng tay phạm vi công cộng; "đồng thuận N nền" = N trong 4 nền '
+      + '(Trung Hoa, Ấn Độ, Hy Lạp, Tây) cùng nói một ý — tin hơn, nhưng vẫn là quan niệm dân gian, không có cơ sở khoa học. AI chỉ '
+      + 'diễn giải các luật trên, không xem tay. Đừng dựa vào để quyết việc lớn.'),
   ];
 }
 
+/** Gia tri trong o chon (chuoi) → gia tri khung. */
+const docGia = (s: string): string | boolean | null => (s === '' ? null : s === 'true' ? true : s === 'false' ? false : s);
+
+function oChon(nhan: string, gia: readonly unknown[], ten: (g: unknown) => string, doi: (g: string | boolean | null) => void): HTMLLabelElement {
+  const o = el('select', {}, el('option', { value: '' }, '— chọn —'), ...gia.map((g) => el('option', { value: String(g) }, ten(g))));
+  o.addEventListener('change', () => { doi(docGia(o.value)); });
+  return el('label', { class: 'chon' }, el('span', {}, nhan), o);
+}
+
 export function veChiTay(gioiTinh: GioiTinh): Node[] {
-  const ket = el('div', { 'aria-live': 'polite' });
-  const bao = (lop: string, chu: string): void => { ket.replaceChildren(el('p', { class: lop }, chu)); };
-  const chon = el('input', { type: 'file', accept: 'image/*', hidden: '' });
-  const nut = el('button', { type: 'button', class: 'chinh' }, 'Chọn hoặc chụp ảnh lòng bàn tay');
-  nut.addEventListener('click', () => { chon.click(); });
-  const doc = async (anh: string): Promise<void> => {
-    const { khoa } = docAI();
-    if (khoa === null) { bao('loi', 'Chưa có khoá Groq: dán khoá (miễn phí) ở khối "AI (Groq)" cuối thẻ "Của tôi".'); return; }
-    nut.disabled = true;
-    bao('ghi-chu', 'Đang gửi ảnh cho AI đọc…');
-    try {
-      const k = docKhung(await docAnh(khoa, LOI_DAN_CHI_TAY, anh));
-      if (k === null) bao('loi', 'AI trả lời sai khuôn — bấm chọn lại ảnh để thử lần nữa.');
-      else if (!k.palm) bao('loi', 'AI không thấy rõ một lòng bàn tay — chụp lại: chỉ một bàn tay, xoè hết các ngón, chụp thẳng, đủ sáng.');
-      else ket.replaceChildren(...veKetQua(k));
-    } catch (e) {
-      bao('loi', loiTiengViet(e));
-    } finally {
-      nut.disabled = false;
-    }
+  const doc: { simian: boolean | null; duong: Record<string, Record<string, string | boolean | null>> } = {
+    simian: null, duong: Object.fromEntries(CAC_DUONG.map((d) => [d, Object.fromEntries(Object.keys(KHUNG[d]).map((o) => [o, null]))])),
   };
-  chon.addEventListener('change', () => {
-    const f = chon.files?.[0];
-    chon.value = ''; // chon lai dung anh cu van chay
-    if (f === undefined) return;
-    thuNho(f).then((anh) => {
-      const gui = el('button', { type: 'button', class: 'chinh' }, 'Gửi ảnh cho Groq');
-      const thoi = el('button', { type: 'button' }, 'Thôi');
-      gui.addEventListener('click', () => { void doc(anh); });
-      thoi.addEventListener('click', () => { ket.replaceChildren(); });
-      ket.replaceChildren(el('img', { src: anh, alt: 'Ảnh sẽ gửi' }),
-        el('p', {}, 'Gửi ảnh này cho Groq đọc chỉ tay? Ảnh đã thu nhỏ, đã xoá thông tin vị trí trong ảnh; không kèm tên.'),
-        el('div', { class: 'nut-hang' }, gui, thoi));
-    }, (e: unknown) => { bao('loi', e instanceof Error ? e.message : String(e)); });
+  const ket = el('div', { 'aria-live': 'polite' });
+  const ve = (): void => { ket.replaceChildren(...veKetQua(structuredClone(doc) as unknown as KhungChiTay, gioiTinh)); };
+  const nhom = CAC_DUONG.map((d) => {
+    const g = GIAI[d] as unknown as { ten: string; o: Record<string, { nhan: string; gia: Record<string, Luat> }> };
+    const dd = doc.duong[d] ?? {};
+    const oDuong = (Object.entries(KHUNG[d]) as [string, readonly unknown[]][]).map(([ten, gia]) => {
+      const x = g.o[ten];
+      return oChon(x?.nhan ?? ten, gia, (v) => x?.gia[String(v)]?.nhan ?? String(v), (v) => {
+        dd[ten] = v;
+        // Duong "khong thay / khong co" (o dau tien): cac o con lai khong dung
+        if (ten === 'seen') for (const o of oDuong.slice(1)) { const s = o.querySelector('select'); if (s !== null) s.disabled = v === 'none'; }
+        ve();
+      });
+    });
+    return el('fieldset', {}, el('legend', {}, g.ten), el('p', { class: 'ghi-chu' }, `Tìm: ${CHO[d]}.`), ...oDuong);
   });
+  const ngang = oChon('Đường trí và đường tình nhập làm một đường ngang suốt bàn tay?', [true, false],
+    (v) => DOAN_CHUONG[v === true ? 'true' : 'false'].nhan, (v) => { doc.simian = typeof v === 'boolean' ? v : null; ve(); });
+  const hinh = el('img', { class: 'hinh', alt: 'Hình mẫu: bốn đường chính trên lòng bàn tay',
+    src: `data:image/svg+xml,${encodeURIComponent(HINH)}`, ...(gioiTinh === 'nam' ? { style: 'transform: scaleX(-1)' } : {}) });
+  ve();
   return [
-    el('p', { class: 'ghi-chu' }, `Chụp tay ${gioiTinh === 'nam' ? 'trái' : 'phải'} (nam tả nữ hữu — cách xem phổ biến ở Việt Nam; `
-      + 'sách Tây xem cả hai tay: tay trái bẩm sinh, tay phải phần tự rèn). Xoè thẳng cả bàn tay, đủ năm ngón và gốc ngón cái trong '
-      + 'khung, chụp thẳng từ trên xuống, đủ sáng, không bóng loá. Ảnh gửi tới Groq để AI tả các đường (cần khoá Groq ở cuối thẻ '
-      + '"Của tôi"); app không lưu ảnh.'),
-    el('div', { class: 'nut-hang' }, nut), chon, ket,
+    el('p', { class: 'ghi-chu' }, `Nhìn lòng bàn tay ${gioiTinh === 'nam' ? 'trái' : 'phải'} của mình (nam tả nữ hữu — cách xem phổ biến `
+      + 'ở Việt Nam; sách Tây xem cả hai tay) rồi chọn từng ô theo hình mẫu. Gập nhẹ bàn tay, nhìn dưới đèn sáng cho nét hiện rõ; ô nào '
+      + 'không chắc thì để "— chọn —". App không chụp ảnh: AI đọc ảnh miễn phí của Groq đo 28/10 không định vị được đường chỉ tay.'),
+    hinh,
+    el('p', { class: 'chu-thich' }, ...MAU.flatMap(([m, t], i) => [...(i > 0 ? [' · '] : []), el('span', { style: `color: ${m}` }, `● ${t}`)])),
+    el('fieldset', {}, el('legend', {}, 'Chỉ tay ngang (đoạn chưởng)'), ngang),
+    ...nhom,
+    ket,
   ];
 }

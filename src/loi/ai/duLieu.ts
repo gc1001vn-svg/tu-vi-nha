@@ -8,7 +8,7 @@ import { batTrach } from '../batTrach.ts';
 import { tinhBatTu, type Tru } from '../batTu.ts';
 import { DIEM, GOC, dinhDang, gocChieu, laSoNguoi, nhaCua } from '../chiemTinh.ts';
 import { hv } from '../hanViet/index.ts';
-import { moTaKhac, tuoiMu, type HoSo, type TinhRa } from '../hoSo.ts';
+import { moTaKhac, tuoiMu, type GioiTinh, type HoSo, type TinhRa } from '../hoSo.ts';
 import type * as KinhDichTinh from '../kinhDich.ts';
 import type * as KinhDichChu from '../kinhDichChu.ts';
 import type * as KinhDichGiai from '../kinhDichGiai.ts';
@@ -19,6 +19,7 @@ import type * as TarotMod from '../tarot.ts';
 import { NUOC_NGOAI } from '../tinh.ts';
 import { tuoiHop } from '../tuoiHop.ts';
 import type { SoDoMat } from '../tuongMat.ts';
+import { QUY_LUAT_CHUNG, giaiChiTay, mucTin, type KhungChiTay, type Luat } from '../chiTay.ts';
 import { CAC_KHOA, GIAI, KET, SO_ANH_MAU, dangSo, giaiMat, ketLuan, mucMat, type MatDoGiai } from '../tuongMatGiai.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
@@ -234,4 +235,26 @@ export function duLieuTarot(t: Tarot, kieu: keyof Tarot['TRAI'], rut: readonly T
     return la === undefined ? null : `- ${vt} (${yNghia}): ${la.anh} — ${la.ten}${r.nguoc ? ', lá ngược' : ', lá xuôi'}. `
       + `App giải: ${r.nguoc ? la.nguoc : la.xuoi}`;
   }));
+}
+
+/**
+ * Chi tay (dot 7 phan 3): ban tay nguoi xem (o tu chon) tach rieng khoi luat app tra — tron chung thi AI doc nhu sach luat, viet
+ * "neu… thi…" (do 28/10). Luat kem muc tin (dong thuan may nen, venh). Khong gui chi tiet tung sach (`loi`): man hinh da co, va de
+ * luot dau con du token ra (`vuaHanMuc`).
+ */
+export function duLieuChiTay(k: KhungChiTay, gioiTinh: GioiTinh): string {
+  // Muc tin dat dau dong de AI chep nguyen vao dong du doan (dat cuoi dong thi 28/10 AI chi chep dung 2/72 dong).
+  const tin = (l: Omit<Luat, 'nhan'>): string => `[${mucTin(l)}]`;
+  const venh = (l: Omit<Luat, 'nhan'>): string => (l.venh === undefined ? '' : ` Vênh: ${l.venh}`);
+  const g = giaiChiTay(k);
+  return [
+    muc('Bàn tay người xem (người xem tự chọn từng ô theo hình mẫu)', [
+      `- Tay xem: ${gioiTinh === 'nam' ? 'tay trái (nam)' : 'tay phải (nữ)'}, theo "nam tả nữ hữu".`,
+      ...g.map((m) => `- ${m.ten}: ${m.dong.map((d) => `${d.o} = ${d.luat?.nhan ?? 'chưa chọn'}`).join('; ')}.`),
+    ]),
+    muc('Luật app tra cho từng ô đã chọn (mức tin ở đầu dòng)', g.flatMap((m) => m.dong.map((d) => (d.luat === null ? null
+      : `- ${tin(d.luat)} ${m.ten} · ${d.o} = ${d.luat.nhan}: ${d.luat.chot}${venh(d.luat)}`)))),
+    muc('Nghĩa từng đường theo các nền', g.map((m) => `- ${m.ten}: ${m.y}`)),
+    muc('Quy luật chung', QUY_LUAT_CHUNG.map((l) => `- ${tin(l)} ${l.chot}${venh(l)}`)),
+  ].join('\n\n');
 }

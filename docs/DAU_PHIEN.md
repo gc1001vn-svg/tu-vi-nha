@@ -24,7 +24,7 @@ thư viện + số đo `docs/NGUON_MO.md` — đọc khi làm tới đúng môn,
 | `python3 scripts/ky_hieu_sao.py` | vẽ lại ký hiệu chiêm tinh từ phông DejaVu (cần `pip install fonttools`) |
 | `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-ai.ts <thư_mục_tạm> [10] [mô_hình,…]` | đo AI thật qua Groq miễn phí (chờ theo hạn mức phút, có thể lâu): cần `GROQ_API_KEY` trong bí mật môi trường và mạng tới `api.groq.com` |
 | `npm run build && NODE_PATH=$(npm root -g) node scripts/doi-chieu/do-mat.mjs <thư_mục_tạm>` | đo tướng mặt trên bản dựng (Chromium, 57 ảnh phạm vi công cộng tải vào thư mục tạm, ~3 phút; in phân bố để đặt ngưỡng lời giải): cần mạng tới upload.wikimedia.org lần đầu (tải dồn bị 429 → chạy lại, ảnh đã tải được giữ) |
-| `NODE_PATH=$(npm root -g) node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-chi-tay.ts <thư_mục_tạm>` | đo chỉ tay thật qua Groq (Chromium thu nhỏ ảnh như app, 8 ảnh Commons tải vào thư mục tạm × 3 lượt, ~12 phút vì hạn mức 7.000 token vào/phút): cần `GROQ_API_KEY` và mạng tới `api.groq.com`, upload.wikimedia.org |
+| `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-chi-tay.ts <thư_mục_tạm> [5]` | đo AI diễn giải, dự đoán chỉ tay thật qua Groq (5 khung giả + 4 câu bẫy, ~10 phút vì hạn mức): cần `GROQ_API_KEY` và mạng tới `api.groq.com` |
 
 `npm run do` chạy ra file rồi `grep`, đừng `| tail` (không in gì tới lúc xong):
 `npm run do > <scratchpad>/do.txt 2>&1`.
