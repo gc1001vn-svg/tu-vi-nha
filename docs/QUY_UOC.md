@@ -406,11 +406,12 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
     dùng DỮ LIỆU.
 
 ## 26. Tướng mặt — đo, lời giải (đợt 7 phần 2: `src/loi/tuongMat*.ts`, `src/giaoDien/khoi/tuongMat*.ts`; đo 23/10, lời giải 24/10)
-- **Thư viện**: MediaPipe Face Landmarker (`@mediapipe/tasks-vision` 1.1.1, Apache-2.0), chạy CPU. Mô hình `face_landmarker`
-  float16 bản 1 (3,76 MB; thẻ mô hình ghi Apache 2.0) để trong `public/mediapipe/` — gọi cùng địa chỉ app, không sang máy chủ
-  Google; đổi mô hình thì đổi tên file. WASM 13,5 MB (bản không SIMD 12,6 MB cho máy cũ) Vite chép từ gói npm. Không cài sẵn cùng
-  app: service worker lưu khi dùng lần đầu (`tuong-mat`, CacheFirst). Gói mở app +0,2 KB, gói cài sẵn +3 KB (23/10). Anh luôn có
-  mạng (24/10) → không đòi chạy không mạng như kế hoạch ghi; lưu vẫn giữ cho lần sau nạp nhanh.
+- **Thư viện**: MediaPipe Face Landmarker (`@mediapipe/tasks-vision` 1.1.1, Apache-2.0), chạy CPU. Mô hình `face_landmarker` float16
+  bản 1 (3,76 MB; thẻ mô hình ghi Apache 2.0) để trong `public/mediapipe/` — gọi cùng địa chỉ app, không sang máy chủ Google (nhưng
+  thư viện tự gửi số liệu dùng lên Google, không kèm ảnh — thấy và chặn 01/11, mục 27); đổi mô hình thì đổi tên file. WASM 13,5 MB
+  (bản không SIMD 12,6 MB cho máy cũ) Vite chép từ gói npm. Không cài sẵn cùng app: service worker lưu khi dùng lần đầu
+  (`tuong-mat`, CacheFirst). Gói mở app +0,2 KB, gói cài sẵn +3 KB (23/10). Anh luôn có mạng (24/10) → không đòi chạy không mạng như
+  kế hoạch ghi; lưu vẫn giữ cho lần sau nạp nhanh.
 - **Ảnh**: thu nhỏ ≤1024 px rồi đo; không lưu, không gửi; đo xong đóng thư viện, xoá canvas (Safari iPhone ít bộ nhớ).
 - **Điểm** (lưới 478 điểm, kiểm bằng mắt trên ảnh 23/10; mắt phải người trong ảnh = bên trái ảnh): khoé mắt 33/133, 362/263 ·
   mép mặt ngang tầm mắt 234/454 · cánh mũi 129/358 (cặp rộng nhất quanh mũi) · khoé miệng 61/291 · ấn đường 9 · chân mũi 2 ·
@@ -586,10 +587,12 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   — máy không đo; dáng mặt ngũ hành chỉ xét dài ngắn rộng hẹp (sách xét cả màu da, xương thịt, thần khí). Tướng học hiện đại Nhật, Hàn, Trung và phần khoa
   học mới đọc qua trích đoạn (chưa mở được trang gốc). Câu Ả Rập đọc từ bản chữ máy nhận dạng, có thể sai vài chữ.
 
-## 27. Chỉ tay (đợt 7 phần 3: `src/loi/chiTay.ts`, `src/giaoDien/khoi/chiTay*.ts`, `duLieuChiTay`; làm và đo thật 28/10)
-- **Cách làm** (bản cuối 28/10, anh dặn: "nghiên cứu đưa ra quy luật đúng nhất xong dùng AI để diễn giải và dự đoán"): người xem
-  nhìn tay mình, chọn từng ô theo hình mẫu 4 đường (lật gương khi xem tay trái) → app tra quy luật từng ô kèm mức tin → nút "AI
-  diễn giải và dự đoán" (Groq `openai/gpt-oss-120b`, chung khối AI mục 25) chỉ đọc ô đã chọn + luật. Không chụp, không gửi ảnh.
+## 27. Chỉ tay (đợt 7 phần 3: `src/loi/chiTay*.ts`, `src/giaoDien/khoi/chiTay*.ts`, `duLieuChiTay`; làm và đo thật 28/10, máy tự dò 01/11)
+- **Cách làm** (28/10, anh dặn: "nghiên cứu đưa ra quy luật đúng nhất xong dùng AI để diễn giải và dự đoán"; 01/11 anh: "phải
+  chụp hình bàn tay rồi đưa vào phân tích", chọn cách máy tự dò): chụp / chọn ảnh lòng bàn tay → máy vẽ 4 đường lên ảnh, điền sẵn ô
+  (hoặc tự chọn từng ô theo hình mẫu 4 đường, lật gương khi xem tay trái) → người xem soát, sửa ô → app tra quy luật từng ô kèm mức
+  tin → nút "AI diễn giải và dự đoán" (Groq `openai/gpt-oss-120b`, chung khối AI mục 25) chỉ đọc ô đã chọn + luật. Ảnh không rời
+  máy, không lưu.
 - **Bỏ AI đọc ảnh** (kế hoạch ghi "AI tả 4 đường từ ảnh"): Groq chỉ còn một mô hình đọc ảnh, `qwen/qwen3.8-27b` (tra `/models`
   28/10; bản Preview; 1.000 lượt/ngày, 7.000 token vào/phút ≈ 2 ảnh/phút). Đo 28/10 trên 8 ảnh Commons (CC BY / CC BY-SA — không
   tìm được ảnh tay phạm vi công cộng; tải ngoài repo): cùng ảnh 2 lần trùng 100 % ô, bản "chụp lại" (xoay 4°, thu 0,9) 80 % — đạt
@@ -598,6 +601,29 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   4 ảnh × bản gốc / bản tăng tương phản: đường thẳng tắp, cách đều, sai chỗ, kể cả ảnh có đường vẽ sẵn; đảo thứ tự ngón, đặt đường
   đời bên mép ngón út. Thử (1–2 ảnh) bật suy nghĩ, bảo tả bằng lời trước: không khá hơn → AI không định vị được chỉ tay, bỏ. Mã đọc
   ảnh, kịch bản đo ảnh: commit bc12f33 trên nhánh `claude/phan-3-ezkdpm` (dùng lại khi Groq có mô hình đọc ảnh mới).
+- **Máy tự dò** (`src/loi/chiTayDo.ts` lõi thuần, `src/giaoDien/khoi/chiTayMp.ts`; 01/11): MediaPipe Hand Landmarker (mô hình
+  `hand_landmarker` float16 bản 1, 7,8 MB, Apache-2.0, trong `public/mediapipe/`; WASM dùng chung tướng mặt, không cài sẵn) tìm
+  21 mốc bàn tay, ngưỡng 0,3 (mặc định 0,5); từ chối ảnh hai bàn tay, không thấy tay, tay nhỏ (cổ tay – gốc ngón giữa = L < 0,2
+  cạnh dài ảnh). Xoay, lật ảnh về khung chuẩn: gốc ở cổ tay, trục dọc tới gốc ngón giữa, ngón cái bên phải (tay trái lật gương),
+  160 điểm ảnh / L. Bản đồ nếp: Hessian σ 1,5 và 2,5 trừ 1,2·σ·độ dốc (bỏ mép bàn tay, mép bóng). Mỗi đường một vùng, tìm bằng quy
+  hoạch động, phạt bước sai hướng: đường tình theo cột từ mép ngón út; đường đời theo góc quanh gò ngón cái; đường trí bắt đầu cạnh
+  đầu đường đời, không vào gò ngón cái; sự nghiệp theo hàng, tránh đường đời; giữ đoạn nếp đậm nhất. Rõ / mờ / không thấy: độ nếp
+  trung bình so phân vị 97 / 90 của lòng bàn tay, đoạn < 0,15 L (sự nghiệp 0,25 L) là không thấy; sự nghiệp "không có" khi yếu
+  hơn nửa trung vị ba đường kia; đứt: khe ≥ 0,05 L; chỉ tay ngang: đường tình vắt tới gốc ngón trỏ, cách gốc ngón ≥ 0,14 L, rõ,
+  đường trí yếu hơn 0,7 lần đường tình. Dài / ngắn, vòng, cong, dính: ngưỡng theo mốc ngón (ghi trong mã). Test (ảnh tổng hợp, nếp
+  vẽ sẵn): 95 % điểm vết cách nếp ≤ 0,03 L, đúng 6 ô; một nếp ngang suốt bàn tay → chỉ tay ngang, sự nghiệp không có.
+- **Đo máy dò 01/11** (`scripts/doi-chieu/do-chi-tay-anh.mjs`, bản dựng thật trong Chromium, cùng 8 ảnh đo AI 28/10): tìm được tay
+  4/5 ảnh một bàn tay (*Palmistry.jpg* không thấy tay), từ chối đúng 3/3 ảnh không hợp lệ (cận da, hai bàn tay, bản quét ngón).
+  Cùng ảnh 2 lần trùng 64/64 ô = 100 % (ngưỡng kế hoạch ≥ 80 %: đạt); bản "chụp lại" (xoay 4°, thu 0,9) 48/64 = 75 %; giữa 4 bàn
+  tay khác nhau 52/96 = 54 % (AI đọc ảnh 28/10: 76 %) → máy đọc theo từng tay, không rập khuôn. Tải thư viện 0,8–1,0 giây, dò
+  0,23–0,45 giây (máy ảo). Soát bằng mắt: ảnh rõ chụp thẳng — 4 đường đúng vùng nhưng răng cưa, đường đời chưa ôm sát gò ngón cái;
+  ảnh chỉ tay ngang báo đúng chỉ tay ngang; ảnh nghiêng, hai tay chồng nhau — đường trí, sự nghiệp lệch hẳn. Đúng sai từng ô chưa ai
+  chấm → app ghi "máy dò mới đúng phần nào", ô chỉ điền sẵn để người xem sửa. Chưa thử Safari iPhone.
+- **MediaPipe tự gửi số liệu lên Google** (thấy 01/11, có từ tướng mặt mục 26): thư viện gửi `odml.pa.googleapis.com/v1/log` mỗi 60
+  giây và lúc đóng — loại tác vụ, chế độ chạy, thời gian chạy, khoá API cài sẵn trong thư viện; không kèm ảnh, không điểm mốc. Chặn
+  bằng CSP trong `index.html` (`connect-src 'self' https://api.groq.com`: app chỉ gọi chính nó và Groq). Đo 01/11 trên bản dựng:
+  lượt gửi bị chặn, không lượt nào lọt; tướng mặt (1 ảnh chân dung), chỉ tay, AI vẫn chạy, không lỗi trang. Thêm dịch vụ mạng mới
+  thì phải thêm địa chỉ vào CSP.
 - **Khung** (`KHUNG`): chỉ tay ngang (đường trí – tình nhập một) · đường đời: rõ / mờ / không thấy, dài / vừa / ngắn, vòng rộng / ôm
   sát ngón cái, đứt · đường trí: rõ, dài (tới mép ngón út / dưới ngón áp út / dưới ngón giữa), thẳng / cong xuống, đầu dính / tách
   đường đời, đứt · đường tình: rõ, dài (tới dưới ngón trỏ / khe trỏ–giữa / dưới ngón giữa), đứt · đường sự nghiệp: rõ / mờ / không
@@ -651,8 +677,9 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   dòng, dòng dự đoán chép đúng mức tin 39/94 (41 %; 4 khung không chép dòng nào), 2,8–7,3 giây/lời. Câu bẫy (tuổi thọ, năm nào
   giàu, đường hôn nhân, gò Mộc Tinh) ba lượt đạt 4/4, 4/4, 3/4: không lượt nào phán số tuổi, số năm; lượt cuối AI trả lời "đường hôn
   nhân" bằng luật đường tình thay vì "chưa có" — app gạch chân chữ "Đường hôn nhân" (ngoài khung) kèm cảnh báo.
-- **Còn chưa chắc**: người xem tự chọn ô có thể nhầm đường (chưa thử người thật; hình mẫu sơ lược); sách Tây chỉ 2 cuốn cùng dòng, Ấn
-  Độ chỉ *Bṛhat Saṃhitā*, chưa có sách tướng tay Việt cổ; AI vẫn có thể thêm ý ngoài luật.
+- **Còn chưa chắc**: máy dò chưa ai chấm đúng sai, chụp lại đổi ~1/4 ô; người xem tự chọn ô có thể nhầm đường (chưa thử người thật;
+  hình mẫu sơ lược); sách Tây chỉ 2 cuốn cùng dòng, Ấn Độ chỉ *Bṛhat Saṃhitā*, chưa có sách tướng tay Việt cổ; AI vẫn có thể thêm ý
+  ngoài luật.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

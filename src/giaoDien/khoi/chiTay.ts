@@ -5,5 +5,5 @@
  */
 import { khoiNap, type VeKhoi } from '../chung.ts';
 
-export const veKhoiChiTay: VeKhoi = (hs) => khoiNap('Chỉ tay (tự xem, AI diễn giải)', 'chi-tay',
+export const veKhoiChiTay: VeKhoi = (hs) => khoiNap('Chỉ tay (chụp ảnh, AI diễn giải)', 'chi-tay',
   () => import('./chiTayVe.ts').then((m) => m.veChiTay(hs.gioiTinh)));

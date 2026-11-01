@@ -4,6 +4,9 @@
     <meta charset="utf-8" />
     <!-- `viewport-fit=cover` de dung duoc `env(safe-area-inset-*)` tren iPhone tai tho. -->
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- Chi cho ket noi toi chinh app va Groq (AI): MediaPipe (tuong mat, chi tay) tu gui so lieu dung thu vien len may chu Google
+         (odml.pa.googleapis.com, khong kem anh) — chan o day, giu loi "du lieu chi nam trong may" (thay 01/11). ws: cho may chu thu Vite. -->
+    <meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://api.groq.com ws://localhost:*" />
     <meta name="theme-color" content="#1b1210" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
