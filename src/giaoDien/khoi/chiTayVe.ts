@@ -3,7 +3,8 @@
  * kem muc tin (`src/loi/chiTay.ts`) → khoi AI dien giai, du doan (Groq; chi doc o da chon + luat). Khong chup anh: AI doc anh mien phi
  * cua Groq khong dinh vi duoc duong (do 28/10, QUY_UOC muc 27).
  */
-import { CAC_DUONG, DOAN_CHUONG, GIAI, KHUNG, QUY_LUAT_CHUNG, giaiChiTay, mucTin, type Duong, type KhungChiTay, type Luat } from '../../loi/chiTay.ts';
+import { CAC_DUONG, DOAN_CHUONG, GIAI, KHUNG, type Duong, type KhungChiTay, type Luat } from '../../loi/chiTay.ts';
+import { luanTay, tungO } from '../../loi/chiTayLuan.ts';
 import type { GioiTinh } from '../../loi/hoSo.ts';
 import { el, khoiNap } from '../chung.ts';
 import './chiTay.css';
@@ -28,32 +29,22 @@ const CHO: Readonly<Record<Duong, string>> = {
 
 const MAU: readonly [string, string][] = [['#d33', 'đường tình'], ['#27c', 'đường trí'], ['#2a2', 'đường đời'], ['#a3c', 'đường sự nghiệp']];
 
-const loaiTin = (l: Pick<Luat, 'nen' | 'venh'>): string => (l.venh !== undefined ? 'venh' : l.nen.length >= 2 ? 'dong' : l.nen.length === 1 ? 'mot' : 'khong');
-
-/** Mot luat: cau chot, nhan muc tin, chi tiet tung sach gap lai. */
-function luat(l: Omit<Luat, 'nhan'>): (string | HTMLElement)[] {
-  return [l.chot, ' ', el('span', { class: `tin tin-${loaiTin(l)}` }, mucTin(l)),
-    el('details', { class: 'nguon' }, el('summary', {}, 'Từng sách nói gì'), el('p', {}, l.loi),
-      ...(l.venh === undefined ? [] : [el('p', {}, `Vênh: ${l.venh}`)]))];
+/** Cau tom tung o da chon (nhan chot, khong ke sach). */
+function veTungO(k: KhungChiTay): HTMLElement[] {
+  const t = tungO(k);
+  return t.length === 0 ? [] : [el('h3', {}, 'Từng ô đã chọn'),
+    el('ul', {}, ...t.map((x) => el('li', {}, el('b', {}, `${x.ten}: `), x.o.map((o) => o.y).join('; '), '.')))];
 }
 
 function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh): Node[] {
   return [
-    el('h3', {}, 'Quy luật chung (xếp từ đồng thuận nhiều nền nhất)'),
-    el('ul', {}, ...QUY_LUAT_CHUNG.map((l) => el('li', {}, ...luat(l)))),
-    ...giaiChiTay(k).flatMap((m) => [
-      el('h3', {}, m.ten),
-      el('p', { class: 'ghi-chu' }, m.y),
-      el('ul', {}, ...m.dong.map((d) => el('li', {}, el('b', {}, `${d.o}: `),
-        ...(d.luat === null ? ['chưa chọn.'] : [`${d.luat.nhan} — `, ...luat(d.luat)])))),
-      el('p', { class: 'ghi-chu' }, `Nguồn: ${m.nguon}.`),
-    ]),
+    el('h3', {}, 'Lời giải (Claude tổng hợp từ nhiều sách, nhiều nước rồi chốt; tham khảo)'),
+    ...luanTay(k).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]),
+    ...veTungO(k),
     // Nap thang phien.ts, khong qua `khoiAI`: file nap luoi nay nhap ai/index.ts thi Vite tach goi mo app thanh 4 file (do 28/10).
     khoiNap('AI diễn giải và dự đoán (Groq, miễn phí)', 'ai',
       () => import('../ai/phien.ts').then((m) => m.vePhien(`chiTay:${gioiTinh}:${JSON.stringify(k)}`, { loai: 'chiTay', k, gioiTinh }))),
-    el('p', { class: 'ghi-chu' }, 'Quy luật do Claude soạn lại từ sách tướng tay phạm vi công cộng; "đồng thuận N nền" = N trong 4 nền '
-      + '(Trung Hoa, Ấn Độ, Hy Lạp, Tây) cùng nói một ý — tin hơn, nhưng vẫn là quan niệm dân gian, không có cơ sở khoa học. AI chỉ '
-      + 'diễn giải các luật trên, không xem tay. Đừng dựa vào để quyết việc lớn.'),
+    el('p', { class: 'ghi-chu' }, 'AI chỉ diễn giải các ô đã chọn và luật app tra, không xem tay.'),
   ];
 }
 

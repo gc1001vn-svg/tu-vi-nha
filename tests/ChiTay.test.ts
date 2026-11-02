@@ -57,7 +57,7 @@ describe('du lieu gui AI dien giai, du doan', () => {
   test('ban tay nguoi xem tach khoi luat; luat tung o da chon kem muc tin; o chua chon ghi "chưa chọn"; khong kem chi tiet sach', () => {
     const k = khungThu(0), d = duLieuChiTay(k, 'nam');
     expect(d.match(/^## .+/gm)?.map((m) => m.slice(3).split(' (')[0])).toEqual(['Bàn tay người xem', 'Luật app tra cho từng ô đã chọn',
-      'Nghĩa từng đường theo các nền', 'Quy luật chung']);
+      'Nghĩa từng đường theo các nền', 'Quy luật chung', 'Lời chốt của app']);
     expect([d.includes('tay trái (nam)'), duLieuChiTay(k, 'nu').includes('tay phải (nữ)')]).toEqual([true, true]);
     for (const l of QUY_LUAT_CHUNG) expect(d).toContain(`- [${mucTin(l)}] ${l.chot}`);
     for (const m of giaiChiTay(k)) {

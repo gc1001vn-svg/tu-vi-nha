@@ -22,6 +22,7 @@ import type { SoDoMat } from '../tuongMat.ts';
 import { QUY_LUAT_CHUNG, giaiChiTay, mucTin, type KhungChiTay, type Luat } from '../chiTay.ts';
 import { CAC_KHOA, GIAI, SO_ANH_MAU, dangSo, giaiMat, type MatDoGiai } from '../tuongMatGiai.ts';
 import { luanMat, mucXet, netChot } from '../tuongMatLuan.ts';
+import { luanTay } from '../chiTayLuan.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
 
@@ -257,5 +258,6 @@ export function duLieuChiTay(k: KhungChiTay, gioiTinh: GioiTinh): string {
       : `- ${tin(d.luat)} ${m.ten} · ${d.o} = ${d.luat.nhan}: ${d.luat.chot}${venh(d.luat)}`)))),
     muc('Nghĩa từng đường theo các nền', g.map((m) => `- ${m.ten}: ${m.y}`)),
     muc('Quy luật chung', QUY_LUAT_CHUNG.map((l) => `- ${tin(l)} ${l.chot}${venh(l)}`)),
+    muc('Lời chốt của app (Claude tổng hợp nhiều nước)', luanTay(k).slice(0, 1).flatMap((d) => d.loi.map((x) => `- ${x}`))),
   ].join('\n\n');
 }

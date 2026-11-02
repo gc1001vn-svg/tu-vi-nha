@@ -633,7 +633,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   đường đời, đứt · đường tình: rõ, dài (tới dưới ngón trỏ / khe trỏ–giữa / dưới ngón giữa), đứt · đường sự nghiệp: rõ / mờ / không
   có, mọc từ cổ tay / đường đời / giữa lòng tay, đứt. Ô nào không chắc để "— chọn —" (= chưa chọn). Đường "không thấy / không có"
   thì khoá các ô còn lại của đường đó.
-- **Quy luật** (`GIAI`, `DOAN_CHUONG`, `QUY_LUAT_CHUNG`, Claude soạn lại): mỗi giá trị = tên + câu chốt + **các nền cùng nói** + chỗ
+- **Quy luật** (`GIAI`, `DOAN_CHUONG`, `QUY_LUAT_CHUNG`, Claude soạn lại; 02/11 không hiện trên màn hình nữa — mục 34): mỗi giá trị = tên + câu chốt + **các nền cùng nói** + chỗ
   **vênh** + từng sách nói gì (gập lại). "Đúng nhất" = nhiều nền cùng nói nhất — **chưa có quy luật chỉ tay nào được khoa học chứng
   minh**. Đếm theo **nền** (Trung Hoa, Ấn Độ, Hy Lạp, Tây), không theo số sách: *Toàn Biên* chép lại nguyên đoạn "掌上三紋…" của
   *Thái Thanh Thần Giám* q.5 (Tống, đọc 28/10). Test bắt: luật khai nền nào thì phần nguồn phải có sách của nền đó.
@@ -714,6 +714,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_TUONG_MAT.md`** (đo, ngưỡng, nguyên văn: mục 26). Tóm: nhãn chốt từng nét; hạ đình dài,
   mặt dài xét theo hàm, cằm; mày dài quá mắt không cộng; khoảng mắt không tính; kết thuận ≥ 3, cần tự bồi đắp ≤ −1; 6 đoạn lời; bỏ "các
   nền khác" khỏi app (thay phần **Kết luận** 26/10 ở mục 26).
+
+## 34. Luận chỉ tay — tổng hợp nhiều nước, chốt một lời (kế hoạch 02/11; `src/loi/chiTayLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_CHI_TAY.md`** (khung, máy dò, AI, nguyên văn: mục 27). Tóm: thêm Tây cổ (Indagine),
+  Desbarrolles, Saint-Germain, Nhật – Hàn (chỉ tay ngang); chỉ tay ngang không chấm điểm; sự nghiệp từ đường đời "gắn gia đình"; kết
+  thuận ≥ 1,5, cần tự bồi đắp ≤ −2,5; 7 đoạn lời; màn hình bỏ mức tin, "từng sách nói gì" (AI vẫn nhận).
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
