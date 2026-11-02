@@ -706,6 +706,10 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   Minh Kính*), trục Đông – Tây, Đông Nam – Tây Bắc ghi thêm cách tính theo hướng; khác nhóm thì gỡ theo thứ tự đổi cửa, chọn phòng, xoay
   giường; bố trí cửa, giường, bàn, bếp (tọa hung hướng cát, kèm lời phản biện), bàn thờ, nhà vệ sinh.
 
+## 32. Luận năm nay — gộp các mục, chốt một lời (kế hoạch 02/11; `src/loi/namNayLuan*.ts`)
+- Cách chốt: **`docs/LUAN_NAM_NAY.md`** (nguồn ở mục 14). Tóm: kết chung = sao (chia ba như cũ, La Hầu – Kế Đô nặng hơn) + Thái Tuế (trị,
+  xung nặng nhất) + Tam Tai; hạn không tính điểm; Kim Lâu, Hoang Ốc chỉ vào phần làm nhà, cưới hỏi.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
