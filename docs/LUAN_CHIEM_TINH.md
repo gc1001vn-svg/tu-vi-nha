@@ -38,4 +38,22 @@ tinh ở các cung cùng một sao cai quản thì lá số đậm màu sao đó
 - Test `tests/ChiemTinhLuan.test.ts`: phẩm vị đúng bảng; 10 sao ở Bạch Dương ra Lửa trội, thiếu ba nguyên tố, khí chất dương; nhận
   thế chữ T trên lá dựng tay; 2.000 lá số giả (có / không giờ) không câu trống.
 
-Còn: tầng 2 (luận từng lĩnh vực theo nhà), tầng 3 (vận: hành tinh chậm đi qua, chu kỳ Sao Thổ…).
+## 3. Tầng 2 — luận từng nhà (02/11; `luanNha`, lời `chiemTinhNhaLoi.ts`)
+
+- **Nguồn**: Alan Leo, *How to Judge a Nativity* (bản 1928, archive.org `howtojudgenativi00leoa`) — đọc mẫu phần hành tinh trong nhà
+  7 (Sao Thổ: bạn đời chung thủy, lớn tuổi hơn, đến muộn; Sao Mộc: bạn đời tốt, lợi nhờ hôn nhân; Sao Hỏa: hay va chạm; Thiên Vương:
+  duyên bất ngờ; Hải Vương: hôn nhân khác thường, mơ hồ); ý nghĩa nhà, chủ nhà theo Lilly; sách hiện đại (Sasportas, Hand) — kiến thức
+  chung. Các nguồn khớp nhau về nghĩa nhà và hướng nghĩa hành tinh trong nhà.
+- **Một nhà gồm**: cung đầu nhà → kiểu của việc đó (12 câu) · thiên thể trong nhà (10 × 12 câu soạn mới) · nhà trống thì đọc qua cung
+  đầu nhà và chủ nhà · **chủ nhà đang ở nhà nào** ("việc nhà X gắn với việc nhà Y" — cách xét chủ nhà có từ phái Hy Lạp cổ tới hiện
+  đại) · chủ nhà ở nhà khuất 6, 8, 12 thì việc đó hay trở ngại (phái Hy Lạp cổ, Lilly) · Thiên Yết, Bảo Bình, Song Ngư nêu thêm chủ nhà
+  hiện đại · câu kết.
+- **Câu kết** (cách xét cổ điển; chiêm tinh tâm lý hiện đại không chia tốt xấu → nói "thuận hơn / bình thường / phải cố gắng hơn phần
+  đông"): điểm = thiên thể trong nhà theo phe ngày/đêm (cát tinh cùng phe +2, khác phe +1,5; hung tinh cùng phe −1, khác phe −2; Mặt
+  Trời, Mặt Trăng +0,5; ba sao xa −0,5) + phẩm vị chủ nhà (miếu +1,5, vượng +1, hãm/suy −1) + chủ nhà ở trục +1, ở nhà khuất −1. Điểm
+  rời rạc → ngưỡng chọn gần 1/4 nhất trên 12 nhà × 3.000 lá số giả: ≥ 1,5 (20 % nhà) và < −0,5 (30 %).
+- **Đổi lời cổ**: Leo viết Sao Hỏa nhà 7 lá nữ "chồng có thể chết dữ" → app chỉ nói "hôn nhân hay va chạm — cần nhường nhịn".
+- Test: đủ 120 câu; 1.000 lá số × 12 nhà ra đủ lời; câu kết mỗi đầu trong khoảng 10–40 %; không giờ sinh thì không luận nhà; chủ nhà
+  nằm ngay trong nhà mình ra đúng câu.
+
+Còn: tầng 3 (vận: hành tinh chậm đi qua điểm gốc, chu kỳ Sao Thổ…).

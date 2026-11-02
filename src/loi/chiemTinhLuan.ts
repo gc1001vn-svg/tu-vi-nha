@@ -9,6 +9,7 @@ import {
   BAN_CAU, BA_CUNG_THE, BA_KHAC_THE, GOC_CAP, KHI_CHAT, NGUYEN_TO, PHAM_VI, SECT, THE, THE_GOC, THE_TROI, TO_THIEU, TO_TROI, TROI_MOC,
   TROI_TRANG, TRUC,
 } from './chiemTinhLuanLoi.ts';
+import { HANH_TINH_NHA, KET_NHA, KIEU_CUNG, NHA_TEN } from './chiemTinhNhaLoi.ts';
 
 export interface DoanLuan { readonly tieuDe: string; readonly loi: readonly string[] }
 
@@ -145,5 +146,49 @@ export function tongLuanCT(ls: LaSo): DoanLuan[] {
     ...(nhom.length === 0 ? [] : [{ tieuDe: 'Chỗ hành tinh dồn lại', loi: nhom }]),
     ...(ngayDem.length === 0 ? [] : [{ tieuDe: 'Ngày – đêm, nửa lá số', loi: ngayDem }]),
     ...(goc.length === 0 ? [] : [{ tieuDe: 'Góc chiếu chính', loi: [...goc, ...theGoc(ls)] }]),
+  ];
+}
+
+// ---- Tang 2: luan tung nha (docs/LUAN_CHIEM_TINH.md muc 3) ----
+
+/** Diem thien the trong nha theo phe ngay/dem (sect): cat tinh cung phe +2, khac phe +1,5; hung tinh cung phe −1, khac phe −2;
+ * Mat Troi, Mat Trang +0,5; ba sao xa −0,5; Sao Thuy 0. */
+function diemSao(i: number, ngay: boolean): number {
+  const D: Readonly<Record<number, number>> = { 0: 0.5, 1: 0.5, 3: ngay ? 1.5 : 2, 4: ngay ? -2 : -1, 5: ngay ? 2 : 1.5, 6: ngay ? -1 : -2, 7: -0.5, 8: -0.5, 9: -0.5 };
+  return D[i] ?? 0;
+}
+
+/** Diem mot nha (chi de chon cau ket): thien the trong nha + pham vi chu nha + chu nha o truc (+1) hay nha khuat 6, 8, 12 (−1) — theo
+ * cach xet nha cua Lilly va phai Hy Lap co. Khong co nha (khong gio sinh) thi null. */
+export function diemNha(ls: LaSo, n: number): number | null {
+  const nha = ls.nha;
+  if (nha === null) return null;
+  const k = (i: number): number => ls.diem[i]?.kinh ?? 0, ngay = nhaCua(k(0), nha) >= 7;
+  let d = 0;
+  for (let i = 0; i < 10; i++) if (nhaCua(k(i), nha) === n) d += diemSao(i, ngay);
+  const r = CHU[cungCua(nha[n - 1] ?? 0)] ?? 0, pv = phamVi(r, k(r)), h = nhaCua(k(r), nha);
+  return d + (pv === 0 ? 1.5 : pv === 1 ? 1 : pv === null ? 0 : -1) + ([1, 4, 7, 10].includes(h) ? 1 : [6, 8, 12].includes(h) ? -1 : 0);
+}
+
+/** Nguong theo phan bo 12 nha × 3.000 la so gia (02/11): diem roi rac nen chon gan 1/4 nhat — ≥ 1,5 la 20 % nha "thuan",
+ * < −0,5 la 30 % nha "phai co gang". Thang tuong doi. */
+export const NGUONG_NHA = { tot: 1.5, kem: -0.5 } as const;
+
+/** Luan mot nha: cung dau nha, thien the trong nha, chu nha dang o dau (co dien; hien dai them dong chu), cau ket. */
+export function luanNha(ls: LaSo, n: number): string[] {
+  const nha = ls.nha;
+  if (nha === null) return [];
+  const k = (i: number): number => ls.diem[i]?.kinh ?? 0, s = cungCua(nha[n - 1] ?? 0), ten = (NHA_TEN[n - 1] ?? '').toLowerCase();
+  const trong = [...Array(10).keys()].filter((i) => nhaCua(k(i), nha) === n);
+  const r = CHU[s] ?? 0, h = nhaCua(k(r), nha), moi = CHU_MOI[s], d = diemNha(ls, n) ?? 0;
+  return [
+    `Nhà ${String(n)} bắt đầu ở ${CUNG[s] ?? ''}: việc ${ten} mang kiểu ${KIEU_CUNG[s] ?? ''}.`,
+    ...(trong.length === 0 ? ['Không có hành tinh nào trong nhà: việc này đọc qua cung đầu nhà và chủ nhà.']
+      : trong.map((i) => `${DIEM[i] ?? ''} ở nhà này: ${HANH_TINH_NHA[i]?.[n - 1] ?? ''}`)),
+    h === n ? `Chủ nhà là ${DIEM[r] ?? ''}, nằm ngay trong nhà này: việc này tự chủ, đóng vai trò lớn trong đời.`
+      : `Chủ nhà là ${DIEM[r] ?? ''}, đang ở nhà ${String(h)} (${(NHA_TEN[h - 1] ?? '').toLowerCase()}): việc ${ten} gắn với `
+        + `${(NHA_TEN[h - 1] ?? '').toLowerCase()}${[6, 8, 12].includes(h) ? ' — chủ nhà ở nhà khuất nên việc này hay gặp trở ngại, phải vất vả hơn' : ''}.`,
+    ...(moi === undefined ? [] : [`Theo cách hiện đại, ${DIEM[moi] ?? ''} cũng là chủ nhà này (đang ở nhà ${String(nhaCua(k(moi), nha))}).`]),
+    (d >= NGUONG_NHA.tot ? KET_NHA.tot : d < NGUONG_NHA.kem ? KET_NHA.kem : KET_NHA.vua).replace('{}', ten),
   ];
 }

@@ -3,7 +3,8 @@
  * 2.000 la so gia (co va khong co gio) ra du doan, khong cau trong, khong co phan can cung Moc khi khong co toa do.
  */
 import { laSo, type LaSo } from '../src/loi/chiemTinh.ts';
-import { phamVi, tongLuanCT } from '../src/loi/chiemTinhLuan.ts';
+import { NGUONG_NHA, diemNha, luanNha, phamVi, tongLuanCT } from '../src/loi/chiemTinhLuan.ts';
+import { HANH_TINH_NHA, KIEU_CUNG, NHA_TEN } from '../src/loi/chiemTinhNhaLoi.ts';
 import { GOC_CAP, KHI_CHAT, TO_THIEU, TO_TROI } from '../src/loi/chiemTinhLuanLoi.ts';
 
 /** La dung tay: 10 thien the theo kinh do cho truoc, Bac Giao Diem 0, khong cung Moc. */
@@ -41,5 +42,27 @@ describe('tong luan chiem tinh', () => {
 
   test('moi cap goc chieu co loi la hai thien the khac nhau, a < b, khong cap hai sao xa', () => {
     expect(Object.keys(GOC_CAP).filter((k) => { const [a = 0, b = 0] = k.split('-').map(Number); return !(a < b && b < 10 && a <= 4); })).toEqual([]);
+  });
+
+  test('luan tung nha: du loi 10 thien the × 12 nha; 1.000 la so × 12 nha ra du loi; ket luan ~1/4 moi dau; khong gio thi khong luan', () => {
+    expect([HANH_TINH_NHA.length, HANH_TINH_NHA.every((h) => h.length === 12 && h.every((x) => x.length > 15)), KIEU_CUNG.length, NHA_TEN.length])
+      .toEqual([10, true, 12, 12]);
+    let hat = 7, tot = 0, kem = 0, n = 0;
+    const r = (x: number): number => { hat = (hat * 1103515245 + 12345) % 2 ** 31; return (hat / 2 ** 31) * x; };
+    for (let i = 0; i < 1000; i++) {
+      const ls = laSo(Math.floor((2433283 + r(21900)) * 1440 + r(1440)), [10 + r(13), 103 + r(6)]);
+      for (let h = 1; h <= 12; h++) {
+        const l = luanNha(ls, h), d = diemNha(ls, h) ?? 0;
+        expect([l.length >= 3, l.some((x) => x.length < 15 || x.includes('undefined'))]).toEqual([true, false]);
+        n += 1; tot += d >= NGUONG_NHA.tot ? 1 : 0; kem += d < NGUONG_NHA.kem ? 1 : 0;
+      }
+    }
+    expect([tot / n > 0.1 && tot / n < 0.35, kem / n > 0.15 && kem / n < 0.4]).toEqual([true, true]);
+    expect(luanNha(dung([5, 8, 12, 15, 18, 20, 22, 25, 27, 29]), 1)).toEqual([]);
+  });
+
+  test('chu nha nam ngay trong nha minh: cung Moc Bach Duong, Sao Hoa o 10°', () => {
+    const ls: LaSo = { ...dung([100, 130, 160, 190, 10, 250, 280, 300, 320, 340]), moc: 0, dinh: 270, nha: Array.from({ length: 12 }, (_, i) => i * 30) };
+    expect(luanNha(ls, 1).some((x) => x.startsWith('Chủ nhà là Sao Hỏa, nằm ngay trong nhà này'))).toBe(true);
   });
 });
