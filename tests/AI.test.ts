@@ -32,9 +32,9 @@ describe('goi du lieu gui AI', () => {
     const tinh = tinhHoSo(hs());
     const d = duLieuNguoi(hs(), tinh, XEM, undefined, { so, cuoi: 0.05 });
     const m = d.slice(d.indexOf('## Tướng mặt'));
-    expect([d.endsWith(m), (m.match(/^- /gm) ?? []).length, m.includes('- Trung đình : hạ đình 1,10: trung đình dài — trung niên hanh thông (tốt)')]).toEqual([true, 12, true]);
+    expect([d.endsWith(m), (m.match(/^- /gm) ?? []).length, m.includes('- Trung đình : hạ đình 1,10: trung đình dài — trung niên là quãng mạnh (tốt)'), m.includes('Lời chốt của app: Kết:')]).toEqual([true, 12, true, true]);
     // loi day du chi o man hinh: muc gui AI ngan de luot dau con du token ra (vuaHanMuc)
-    expect([m.includes('- Miệng 30,0 %: miệng hẹp — lộc ăn kém, về già vất vả (cần lưu ý)'), m.length < 2000]).toEqual([true, true]);
+    expect([m.includes('- Miệng 30,0 %: miệng hẹp — lộc ăn mỏng (cần lưu ý)'), m.length < 2000]).toEqual([true, true]);
     const c = duLieuNguoi(hs(), tinh, XEM, undefined, { so, cuoi: 0.6 });
     expect([c.includes('app không giải'), c.includes('- Miệng 30,0 %\n'), c.includes('miệng hẹp —')]).toEqual([true, true, false]);
     expect(du(hs()).includes('Tướng mặt')).toBe(false);

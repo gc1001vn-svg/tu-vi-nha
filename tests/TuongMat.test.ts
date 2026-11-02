@@ -3,7 +3,7 @@
  * gop anh + anh lat guong, goc dau tu ma tran. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`, quy uoc `QUY_UOC` muc 26.
  */
 import { GIOI_HAN_GOC, MEO, U_MAU, boMeo, doMat, f35TheoCo, gocDau, khungCat, quaGoc, soDo, tieuCuPx, type DiemMoc, type LanDo } from '../src/loi/tuongMat.ts';
-import { CAC_KHOA, GIAI, KET, MAU, NHAY_GAN, SAI_TIEU_CU, giaiMat, hinhMat, ketLuan, mucMat, soVoiMau } from '../src/loi/tuongMatGiai.ts';
+import { CAC_KHOA, GIAI, MAU, NHAY_GAN, SAI_TIEU_CU, giaiMat, hinhMat, mucMat, soVoiMau } from '../src/loi/tuongMatGiai.ts';
 
 const RONG = 800, CAO = 1000;
 /** Diem dat theo px tren mat doi xung qua x = 420; con lai de giua anh. */
@@ -158,37 +158,16 @@ describe('loi giai tuong mat', () => {
     expect([xa.canhBao, CAC_KHOA.every((k) => xa.loi[k] !== null)]).toEqual([[], true]);
   });
 
-  test('mau: 15 so tang dan moi ti le, nguong = phan vi 25/75 cua mau (tru may duoi 1); du ket luan moi muc', () => {
+  test('mau: 15 so tang dan moi ti le, nguong = phan vi 25/75 cua mau (tru may duoi 1)', () => {
     const pv = (v: readonly number[], q: number): number => { const i = (v.length - 1) * q, d = Math.floor(i); return (v[d] ?? 0) + ((v[d + 1] ?? 0) - (v[d] ?? 0)) * (i - d); };
     for (const k of CAC_KHOA) {
       const v = MAU[k];
       expect([v.length, v.every((x, i) => i === 0 || x >= (v[i - 1] ?? 0))]).toEqual([15, true]);
       if (k !== 'may') expect(Math.abs(GIAI[k].nguong[0] - pv(v, 0.25))).toBeLessThan(0.011);
       expect(Math.abs(GIAI[k].nguong[1] - pv(v, 0.75))).toBeLessThan(0.011);
-      expect((['thap', 'vua', 'cao'] as const).every((m) => KET[k][m].y.length > 3)).toBe(true);
     }
     expect([soVoiMau('mui', 0.31), soVoiMau('mui', 0.2), soVoiMau('nguNhan', 5.45)])
       .toEqual(['Cánh mũi rộng hơn 13/15 người mẫu.', 'Cánh mũi rộng hơn 0/15 người mẫu.', 'Mắt dài hơn 13/15 người mẫu.']);
-  });
-
-  test('ket luan chung ca khuon mat: ngu quan, tam dinh, luu nien theo tuoi, tong the; chup gan thi chua du; anh cuoi thi khong co', () => {
-    const vua = Object.fromEntries(CAC_KHOA.map((k) => [k, MAU[k][7] ?? 0])) as Record<(typeof CAC_KHOA)[number], number>;
-    expect(ketLuan({ so: { ...vua, mui: 0.31, mieng: 0.34, mayCach: 0.85 }, cuoi: 0 })).toEqual([
-      'Dáng mặt cân, không nghiêng hẳn về hình nào trong ngũ hành.',
-      'Ngũ quan (máy đo được mày, mắt, mũi, miệng; tai không đo): mày, mũi thành; miệng kém. Theo Thần Tướng Toàn Biên "một quan '
-        + 'thành hưởng mười năm quý hiển", tức khoảng 20 năm hanh thông.',
-      'Trung đình, hạ đình cân nhau: các quãng đời đều đặn.',
-      'Vận theo tuổi (phép lưu niên, Toàn Biên): 15–27 (trán, chỉ xét bề ngang) bình thường; 28 tuổi (ấn đường) bình thường; 31–34 '
-        + '(mày) thuận; 35–40 (mắt) bình thường; 41–50 (mũi) thuận; 51–60 (miệng) cần giữ gìn; 61 trở đi (cằm, hàm) bình thường.',
-      'Tổng thể: tướng tốt (4 nét tốt, 1 nét cần lưu ý trên 12 nét xét được); mạnh về gia đình, nhà cửa, địa vị, vận theo tuổi; cần '
-        + 'lưu ý về tiền bạc, lộc ăn.',
-    ]);
-    const gan = ketLuan({ so: soDo(luoi(), RONG, CAO), cuoi: 0 }); // khong sua meo: bo 7 ti le nhay khoang cach, con 5 net van luan
-    expect(gan?.at(-1)?.includes(`${String(NHAY_GAN.length)} nét không xét vì ảnh chụp gần`)).toBe(true);
-    const so0 = soDo(luoi(), RONG, CAO); // may sat mat (u = 1): sai so lon het, con duoi 5 net thi chua du de luan
-    expect(ketLuan({ so: { ...so0, daiRong: 0.93 }, cuoi: 0, meo: { f35: 30, nguon: 'uoc', co: '1×1', u: 1, cach: 0.1, goc: so0 } })?.[0]
-      ?.startsWith('Chưa đủ nét để luận cả khuôn mặt')).toBe(true);
-    expect(ketLuan({ so: vua, cuoi: 0.5 })).toBeNull();
   });
 
   test('dang mat ngu hanh: Hoa tran hep, Moc mat dai ham khong rong, Tho ham rong mat ngan, Kim ham rong cam khong nhon, Thuy mat ngan', () => {

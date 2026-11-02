@@ -366,39 +366,6 @@ const HON: Readonly<Record<keyof SoDoMat, string>> = {
 export const soVoiMau = (khoa: keyof SoDoMat, x: number): string =>
   `${HON[khoa]} ${String(MAU[khoa].filter((v) => (khoa === 'nguNhan' ? v > x : v < x)).length)}/${String(MAU[khoa].length)} người mẫu.`;
 
-type LinhVuc = 'tinh' | 'tien' | 'nha' | 'van';
-const TEN_LV: Readonly<Record<LinhVuc, string>> = {
-  tinh: 'Tính cách, trí tuệ', tien: 'Tiền bạc, lộc ăn', nha: 'Gia đình, nhà cửa, địa vị', van: 'Vận theo tuổi',
-};
-type Ket = { readonly d: -1 | 0 | 1; readonly y: string };
-/**
- * Ket luan tung muc theo loi chinh (sach tuong Trung Hoa — goc cua tuong hoc Viet): +1 tot, −1 can luu y, 0 trung tinh hoac sach
- * khen che lan lon. Khoang mat khong co sach co noi thang nen luon 0. Dong "(*)" = chi doc qua trich doan.
- */
-export const KET: Readonly<Record<keyof SoDoMat, { readonly lv: LinhVuc } & Readonly<Record<MucMat, Ket>>>> = {
-  tran: { lv: 'van', thap: { d: -1, y: 'trán hẹp — thuở trẻ vất vả' }, vua: { d: 0, y: 'trán vừa' }, cao: { d: 1, y: 'trán rộng — quý, thuở trẻ thuận' } },
-  ham: { lv: 'nha', thap: { d: -1, y: 'hàm hẹp — về già ít điền sản' }, vua: { d: 0, y: 'hàm vừa' }, cao: { d: 1, y: 'hàm rộng — có đất, về già vững' } },
-  cam: { lv: 'van', thap: { d: -1, y: 'cằm nhọn — về già kém' }, vua: { d: 0, y: 'cằm vừa' }, cao: { d: 1, y: 'cằm vuông đầy — về già an ổn' } },
-  trungHa: { lv: 'van', thap: { d: 0, y: 'hạ đình dài — về già: sách khen chê lẫn lộn' },
-    vua: { d: 1, y: 'trung, hạ đình cân — đời đều đặn, cơm áo không thiếu' }, cao: { d: 1, y: 'trung đình dài — trung niên hanh thông' } },
-  nguNhan: { lv: 'tinh', thap: { d: 1, y: 'mắt dài — sáng dạ, tướng quý' }, vua: { d: 0, y: 'mắt vừa' },
-    cao: { d: -1, y: 'mắt nhỏ so với mặt — sách chê, trừ khi mắt sáng có thần' } },
-  khoangMat: { lv: 'tinh', thap: { d: 0, y: 'mắt gần — tập trung nhưng hay lo (*)' }, vua: { d: 0, y: 'mắt cách vừa' },
-    cao: { d: 0, y: 'mắt xa — rộng lượng nhưng dễ tin người (*)' } },
-  mui: { lv: 'tien', thap: { d: -1, y: 'cánh mũi hẹp — khó tích của' }, vua: { d: 0, y: 'cánh mũi vừa' },
-    cao: { d: 1, y: 'cánh mũi rộng — giữ được của' } },
-  mieng: { lv: 'tien', thap: { d: -1, y: 'miệng hẹp — lộc ăn kém, về già vất vả' }, vua: { d: 0, y: 'miệng vừa' },
-    cao: { d: 1, y: 'miệng rộng — có lộc ăn, phúc thọ' } },
-  daiRong: { lv: 'nha', thap: { d: 1, y: 'mặt rộng — có ruộng vườn, đứng trên người' }, vua: { d: 0, y: 'mặt dài rộng vừa' },
-    cao: { d: 0, y: 'mặt dài — quý nếu vuông, kém nếu nhọn hai đầu' } },
-  may: { lv: 'nha', thap: { d: -1, y: 'mày ngắn hơn mắt — ít nhờ anh em' }, vua: { d: 1, y: 'mày dài quá mắt — anh em hoà thuận' },
-    cao: { d: 1, y: 'mày dài — anh em đông, có lộc' } },
-  anDuong: { lv: 'tinh', thap: { d: -1, y: 'ấn đường hẹp — đường đời vất vả' }, vua: { d: 0, y: 'ấn đường vừa' },
-    cao: { d: 1, y: 'ấn đường rộng — lòng phẳng lặng, vận sớm' } },
-  mayCach: { lv: 'nha', thap: { d: -1, y: 'mày sát mắt — túng bức' }, vua: { d: 0, y: 'mày cách mắt vừa' },
-    cao: { d: 1, y: 'mày cao — thông minh, phú quý' } },
-};
-
 export const mucMat = (khoa: keyof SoDoMat, x: number): MucMat => {
   const [a, b] = GIAI[khoa].nguong;
   return x < a ? 'thap' : x > b ? 'cao' : 'vua';
@@ -460,27 +427,7 @@ export function giaiMat(m: MatDoGiai): { readonly canhBao: readonly string[]; re
   return { canhBao, loi: loi as Record<keyof SoDoMat, string | null> };
 }
 
-const QUAN: readonly (readonly [string, readonly (keyof SoDoMat)[]])[] = [
-  ['mày', ['may', 'mayCach', 'anDuong']], ['mắt', ['nguNhan', 'khoangMat']], ['mũi', ['mui']], ['miệng', ['mieng']],
-];
-/** Phep luu nien (bai "Luu nien van khi bo vi ca", Toan Bien q.1): 28 an duong, 31–34 may, 35–40 mat, 41–50 mui, 51–60 nhan trung → mieng. */
-const TUOI: readonly (readonly [string, readonly (keyof SoDoMat)[]])[] = [
-  ['15–27 (trán, chỉ xét bề ngang)', ['tran']], ['28 tuổi (ấn đường)', ['anDuong']], ['31–34 (mày)', ['may', 'mayCach']], ['35–40 (mắt)', ['nguNhan', 'khoangMat']],
-  ['41–50 (mũi)', ['mui']], ['51–60 (miệng)', ['mieng']], ['61 trở đi (cằm, hàm)', ['cam', 'ham']],
-];
-
-type Hinh = 'Mộc' | 'Kim' | 'Thủy' | 'Hỏa' | 'Thổ';
-/**
- * Mo ta hinh: Thai Thanh q.4 "木形長瘦，金形方正，水形肥而圓，土形重而厚，火形赤而上尖", Thuy Kinh Tap q.2 (金形取端方, 木形取瘦直,
- * 水形取肥圓, 火形人上尖下闊, 土形取厚重); luan: Ngu hanh ca (Toan Bien q.5).
- */
-const HINH: Readonly<Record<Hinh, readonly [string, string]>> = {
-  Mộc: ['dài, thon', 'tính hoà hoãn, thương người, làm việc thanh liêm'],
-  Kim: ['vuông vắn', 'thanh tú, xương rắn, có danh tiếng'],
-  Thủy: ['tròn đầy', 'lòng khó đoán nhưng rốt cuộc làm nên chức vị'],
-  Hỏa: ['trên hẹp dưới rộng', 'có quyền, mạnh mẽ, quyết đoán'],
-  Thổ: ['dày, rộng', 'đôn hậu, đời nhiều của cải'],
-};
+export type Hinh = 'Mộc' | 'Kim' | 'Thủy' | 'Hỏa' | 'Thổ';
 /**
  * Xep dang mat theo ngu hanh tu muc dai:rong, ham, tran, cam (so voi nguoi mau). Sach chi ta hinh, khong cho so: day la cach Claude
  * ghep, ghi ro tren man hinh. Null = khong nghieng han hinh nao.
@@ -494,44 +441,3 @@ export function hinhMat(so: SoDoMat): Hinh | null {
   if (dai === 'thap' && ham !== 'cao') return 'Thủy';
   return null;
 }
-
-/**
- * Ket luan chung ca khuon mat theo hai phep tong the cua sach tuong (doc nguyen van Toan Bien): ngu quan ("一官成十年之貴顯") va luu
- * nien, cong tam dinh va dem net tot / can luu y. Moi bo phan cong diem `KET` cac net cua no. Duoi 5 net xet duoc (anh chup gan) thi
- * chi bao chua du de luan; null khi khong net nao duoc giai (anh cuoi).
- */
-export function ketLuan(m: MatDoGiai): readonly string[] | null {
-  const g = giaiMat(m);
-  const co = CAC_KHOA.filter((k) => g.loi[k] !== null);
-  if (co.length === 0) return null;
-  const bo = CAC_KHOA.length - co.length;
-  if (co.length < 5) return [`Chưa đủ nét để luận cả khuôn mặt: ${String(bo)}/${String(CAC_KHOA.length)} nét không xét vì ảnh chụp gần. `
-    + 'Chụp lại cách 1,5–2 m (kê máy, hẹn giờ) để có kết luận chung.'];
-  const d = (k: keyof SoDoMat): number => (g.loi[k] === null ? 0 : KET[k][mucMat(k, m.so[k])].d);
-  const nhom = (ks: readonly (keyof SoDoMat)[]): number | null => (ks.some((k) => g.loi[k] !== null) ? ks.reduce((t, k) => t + d(k), 0) : null);
-  const quan = QUAN.map(([ten, ks]) => [ten, nhom(ks)] as const);
-  const thanh = quan.filter(([, x]) => x !== null && x > 0).map(([t]) => t), kem = quan.filter(([, x]) => x !== null && x < 0).map(([t]) => t);
-  const cau1 = `Ngũ quan (máy đo được mày, mắt, mũi, miệng; tai không đo): ${thanh.length === 0 ? 'chưa quan nào thành' : `${thanh.join(', ')} thành`}`
-    + `${kem.length === 0 ? '' : `; ${kem.join(', ')} kém`}. ${thanh.length === 0 ? 'Theo Thần Tướng Toàn Biên, mỗi quan thành mới được mười năm quý hiển.'
-      : `Theo Thần Tướng Toàn Biên "một quan thành hưởng mười năm quý hiển", tức khoảng ${String(thanh.length * 10)} năm hanh thông.`}`;
-  const th = g.loi.trungHa === null ? null : mucMat('trungHa', m.so.trungHa);
-  const cau2 = th === null ? null : th === 'cao' ? 'Trung đình dài hơn hạ đình: vận mạnh nhất ở trung niên.'
-    : th === 'vua' ? 'Trung đình, hạ đình cân nhau: các quãng đời đều đặn.' : 'Hạ đình dài hơn: về già, sách khen chê lẫn lộn.';
-  const chu = (x: number | null): string => (x === null ? 'chưa xét' : x > 0 ? 'thuận' : x < 0 ? 'cần giữ gìn' : 'bình thường');
-  const cau3 = `Vận theo tuổi (phép lưu niên, Toàn Biên): ${TUOI.map(([t, ks]) => `${t} ${chu(nhom(ks))}`).join('; ')}.`;
-  const diemLv = (Object.keys(TEN_LV) as LinhVuc[]).map((lv) => [lv, co.filter((k) => KET[k].lv === lv).map(d)] as const);
-  const manh = diemLv.filter(([, xs]) => xs.some((x) => x > 0) && !xs.some((x) => x < 0)).map(([lv]) => TEN_LV[lv].toLowerCase());
-  const yeu = diemLv.filter(([, xs]) => xs.some((x) => x < 0)).map(([lv]) => TEN_LV[lv].toLowerCase());
-  const tot = co.filter((k) => d(k) > 0).length, xau = co.filter((k) => d(k) < 0).length, hieu = tot - xau;
-  const nhan = hieu >= 3 ? 'tướng tốt' : hieu >= 1 ? 'tướng khá' : hieu === 0 ? 'tướng trung bình' : 'tướng có nhiều điểm cần lưu ý';
-  const cau4 = `Tổng thể: ${nhan} (${String(tot)} nét tốt, ${String(xau)} nét cần lưu ý trên ${String(co.length)} nét xét được)`
-    + `${manh.length === 0 ? '' : `; mạnh về ${manh.join(', ')}`}${yeu.length === 0 ? '' : `; cần lưu ý về ${yeu.join(', ')}`}`
-    + `${bo > 0 ? `; ${String(bo)} nét không xét vì ảnh chụp gần` : ''}.`;
-  const hinh = hinhMat(m.so);
-  const cau0 = hinh === null ? 'Dáng mặt cân, không nghiêng hẳn về hình nào trong ngũ hành.'
-    : `Dáng mặt gần hình ${hinh} (${HINH[hinh][0]}) — Ngũ hành ca (Toàn Biên) luận: ${HINH[hinh][1]}. Claude xếp theo mô tả hình trong `
-      + 'Thái Thanh Thần Giám, Thủy Kính Tập (sách không cho số đo); Thủy Kính Tập dặn chỉ xét dài ngắn béo gầy là xem ngũ hành '
-      + 'nông cạn, còn phải xem thần khí — máy không thấy.';
-  return [cau0, cau1, ...(cau2 === null ? [] : [cau2]), cau3, cau4];
-}
-

@@ -486,7 +486,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   khoảng "vừa" thì không giải — selfie ~40 cm thường bỏ mũi, miệng, trung:hạ, hàm, trán (người khác nhau méo khác nhau hơn khoảng
   giữa người với người). Khoảng cách hiện ra = 14 cm / u − 8 cm. Chưa thử iPhone thật: cỡ ảnh nút camera trước trả về, iPhone 17 khung
   "solo" bao nhiêu mm; CMDP gần nhất ~0,4 m, selfie gần hơn thì ngoại suy.
-- **Kết luận** (26/10, anh: "đủ thông tin nhưng không có kết luận" → "kết luận chung cho cả khuôn mặt"): `KET` gán mỗi mức một nhãn
+- **Kết luận** (26/10 — 02/11 thay bằng mục 33; anh: "đủ thông tin nhưng không có kết luận" → "kết luận chung cho cả khuôn mặt"): `KET` gán mỗi mức một nhãn
   theo lời chính (sách Trung Hoa): +1 tốt, −1 cần lưu ý, 0 trung tính / sách khen chê lẫn lộn, kèm lĩnh vực (tính cách – trí tuệ ·
   tiền bạc – lộc ăn · gia đình – nhà cửa – địa vị · vận theo tuổi). `ketLuan` luận cả khuôn mặt bằng hai phép tổng thể đọc nguyên văn
   trong *Toàn Biên*: **ngũ quan** ("一官成十年之貴顯，一府就十載之富豐", q.2 Ngũ quan tổng luận; q.1 "但一官成者，掌十年之貴祿") —
@@ -709,6 +709,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 ## 32. Luận năm nay — gộp các mục, chốt một lời (kế hoạch 02/11; `src/loi/namNayLuan*.ts`)
 - Cách chốt: **`docs/LUAN_NAM_NAY.md`** (nguồn ở mục 14). Tóm: kết chung = sao (chia ba như cũ, La Hầu – Kế Đô nặng hơn) + Thái Tuế (trị,
   xung nặng nhất) + Tam Tai; hạn không tính điểm; Kim Lâu, Hoang Ốc chỉ vào phần làm nhà, cưới hỏi.
+
+## 33. Luận tướng mặt — tổng hợp nhiều nước, chốt một lời (kế hoạch 02/11; `src/loi/tuongMatLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_TUONG_MAT.md`** (đo, ngưỡng, nguyên văn: mục 26). Tóm: nhãn chốt từng nét; hạ đình dài,
+  mặt dài xét theo hàm, cằm; mày dài quá mắt không cộng; khoảng mắt không tính; kết thuận ≥ 3, cần tự bồi đắp ≤ −1; 6 đoạn lời; bỏ "các
+  nền khác" khỏi app (thay phần **Kết luận** 26/10 ở mục 26).
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

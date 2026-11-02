@@ -20,7 +20,8 @@ import { NUOC_NGOAI } from '../tinh.ts';
 import { tuoiHop } from '../tuoiHop.ts';
 import type { SoDoMat } from '../tuongMat.ts';
 import { QUY_LUAT_CHUNG, giaiChiTay, mucTin, type KhungChiTay, type Luat } from '../chiTay.ts';
-import { CAC_KHOA, GIAI, KET, SO_ANH_MAU, dangSo, giaiMat, ketLuan, mucMat, type MatDoGiai } from '../tuongMatGiai.ts';
+import { CAC_KHOA, GIAI, SO_ANH_MAU, dangSo, giaiMat, type MatDoGiai } from '../tuongMatGiai.ts';
+import { luanMat, mucXet, netChot } from '../tuongMatLuan.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
 
@@ -169,17 +170,17 @@ function chiemTinh(hs: HoSo, lechNuoc: number | undefined): string {
 /** So do mat vua do trong may (khoi "Tuong mat"): chi so, khong anh; `meo` khi anh tu chup da sua meo. */
 export type MatDo = MatDoGiai;
 
-/** Moi net chi gui cau tom `KET` kem nhan: gui ca loi day du (2–4 nghin ky tu) thi luot dau AI chi con ~1.300–1.600 token ra, de bi cat. */
+/** Gui loi chot (`tuongMatLuan.ts`): tong luan + cau tom tung net; gui ca loi day du thi luot dau AI con it token ra, de bi cat. */
 function tuongMat(m: MatDo): string {
-  const g = giaiMat(m), kl = ketLuan(m);
+  const g = giaiMat(m), luan = luanMat(m), mc = mucXet(m);
   const tom = (k: keyof SoDoMat): string => {
-    const { d, y } = KET[k][mucMat(k, m.so[k])];
-    return `${y.replace('(*)', '(tướng học hiện đại)')} (${d > 0 ? 'tốt' : d < 0 ? 'cần lưu ý' : 'trung tính'})`;
+    const n = netChot(k, mc);
+    return n === null ? '' : `: ${n.y} (${n.d > 0 ? 'tốt' : n.d < 0 ? 'cần lưu ý' : 'trung tính'})`;
   };
-  return muc(`Tướng mặt (đo từ ảnh trong máy, xếp so với ${String(SO_ANH_MAU)} ảnh mẫu người Đông Á mặt tự nhiên; lời app soạn theo sách tướng)`, [
+  return muc(`Tướng mặt (đo từ ảnh trong máy, xếp so với ${String(SO_ANH_MAU)} ảnh mẫu người Đông Á mặt tự nhiên; lời app chốt từ nhiều sách tướng)`, [
     ...g.canhBao,
-    ...(kl === null ? [] : [`Kết luận chung của app: ${kl.join(' ')}`]),
-    ...CAC_KHOA.map((k) => `- ${GIAI[k].ten} ${dangSo(k, m.so[k])}${g.loi[k] === null ? '' : `: ${tom(k)}`}`),
+    ...(luan === null ? [] : [`Lời chốt của app: ${(luan[0]?.loi ?? []).join(' ')}`]),
+    ...CAC_KHOA.map((k) => `- ${GIAI[k].ten} ${dangSo(k, m.so[k])}${tom(k)}`),
   ]);
 }
 

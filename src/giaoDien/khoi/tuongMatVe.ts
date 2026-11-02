@@ -1,9 +1,10 @@
 /**
  * Noi dung khoi "Tuong mat" (nap luoi tu `tuongMat.ts`): nut chon/chup anh, trang thai, bang so do, loi giai. Anh khong luu, khong
  * gui di — doc vao bo nho, do xong bo. Loi do `src/loi/tuongMat.ts`, loi giai `src/loi/tuongMatGiai.ts`; MediaPipe nap khi bam
- * (`tuongMatMp.ts`).
+ * (`tuongMatMp.ts`). Loi chot (tong luan, tung viec, van, tung net): `src/loi/tuongMatLuan.ts` (`docs/LUAN_TUONG_MAT.md`).
  */
-import { CAC_KHOA, GIAI, KET, SO_ANH_MAU, dangSo, giaiMat, ketLuan, mucMat, soVoiMau } from '../../loi/tuongMatGiai.ts';
+import { CAC_KHOA, GIAI, SO_ANH_MAU, dangSo, giaiMat, soVoiMau } from '../../loi/tuongMatGiai.ts';
+import { IT_NHAT, luanMat, mucXet, netChot } from '../../loi/tuongMatLuan.ts';
 import { el } from '../chung.ts';
 import { MAT_DA_DO } from './tuongMat.ts';
 import type { KetQuaMat } from './tuongMatMp.ts';
@@ -12,7 +13,7 @@ import './tuongMat.css';
 const so = (x: number, le = 2): string => x.toFixed(le).replace('.', ',');
 
 function veKetQua(k: KetQuaMat): Node[] {
-  const g = giaiMat(k), co = CAC_KHOA.filter((khoa) => g.loi[khoa] !== null), kl = ketLuan(k);
+  const g = giaiMat(k), co = CAC_KHOA.filter((khoa) => g.loi[khoa] !== null), luan = luanMat(k), muc = mucXet(k);
   return [
     el('table', {}, el('tbody', {}, ...CAC_KHOA.map((khoa) => el('tr', {},
       el('th', { scope: 'row' }, GIAI[khoa].ten, el('small', {}, GIAI[khoa].y)), el('td', {}, dangSo(khoa, k.so[khoa])))))),
@@ -20,25 +21,19 @@ function veKetQua(k: KetQuaMat): Node[] {
       + `Đầu quay ngang ${so(k.goc.quay, 0)}°, ngẩng/cúi ${so(k.goc.ngua, 0)}°. Tải thư viện ${so(k.taiMs / 1000, 1)} giây, `
       + `đo ${so(k.doMs / 1000, 1)} giây.`),
     ...g.canhBao.map((c) => el('p', { class: 'canh-bao' }, c)),
-    ...(kl === null ? [] : [
-      el('h3', {}, 'Kết luận chung cả khuôn mặt (Claude tổng hợp theo sách tướng Trung Hoa, tham khảo)'),
-      ...kl.map((c, i) => el('p', {}, i === kl.length - 1 ? el('b', {}, c) : c)),
-      el('h3', {}, 'Từng nét'),
-      el('p', { class: 'ghi-chu' }, `So với ${String(SO_ANH_MAU)} ảnh chân dung người Đông Á (Nhật, Hàn, Hoa, Việt) mặt tự nhiên đo cùng máy `
-        + '— không so thẳng số trong sách vì lưới máy lệch vài chỗ. Nhãn tốt / cần lưu ý theo sách tướng Trung Hoa (gốc của tướng học '
-        + 'Việt); Ấn Độ, kinh Phật, Ả Rập, Hy Lạp – La Mã nhiều chỗ nói ngược, xem trong "Các nền khác". (*) = chỉ đọc qua trích đoạn '
-        + 'tìm kiếm, chưa mở được trang gốc.'),
-      el('ul', {}, ...co.map((khoa) => {
-        const muc = mucMat(khoa, k.so[khoa]), d = KET[khoa][muc].d;
-        return el('li', {}, el('b', {}, `${GIAI[khoa].ten} ${dangSo(khoa, k.so[khoa])}: `),
-          el('span', { class: `nhan nhan-${String(d)}` }, d > 0 ? 'Tốt' : d < 0 ? 'Cần lưu ý' : 'Trung tính'), ' ', g.loi[khoa] ?? '',
-          el('small', {}, ` ${soVoiMau(khoa, k.so[khoa])}`),
-          el('details', { class: 'nguon' }, el('summary', {}, 'Các nền khác, nguồn'), el('p', {}, GIAI[khoa].them[muc]),
-            el('p', {}, `Nguồn: ${GIAI[khoa].nguon}.`)));
-      }))]),
-    el('p', { class: 'ghi-chu' }, '"Tướng mạo bất như tướng tâm" — tướng mặt không bằng tướng lòng (Phan Kế Bính, Việt Nam phong tục). '
-      + 'Nhân tướng là quan niệm dân gian, không có cơ sở khoa học — đọc cho vui, đừng dựa vào để đánh '
-      + 'giá người. Số đo này (không có ảnh) được gửi kèm cho "AI tổng hợp mọi môn" nếu đo xong trước khi AI trả lời lần đầu.'),
+    ...(luan === null ? [] : [
+      el('h3', {}, 'Lời giải (Claude tổng hợp từ nhiều sách, nhiều nước rồi chốt; tham khảo)'),
+      ...luan.flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]),
+      ...(co.length < IT_NHAT ? [] : [
+        el('h3', {}, 'Từng nét'),
+        el('p', { class: 'ghi-chu' }, `So với ${String(SO_ANH_MAU)} ảnh chân dung người Đông Á (Nhật, Hàn, Hoa, Việt) mặt tự nhiên đo cùng máy.`),
+        el('ul', {}, ...co.map((khoa) => {
+          const n = netChot(khoa, muc), d = n?.d ?? 0;
+          return el('li', {}, el('b', {}, `${GIAI[khoa].ten} ${dangSo(khoa, k.so[khoa])}: `),
+            el('span', { class: `nhan nhan-${String(Math.sign(d))}` }, d > 0 ? 'Tốt' : d < 0 ? 'Cần lưu ý' : 'Trung tính'), ` ${n?.y ?? ''}.`,
+            el('small', {}, ` ${soVoiMau(khoa, k.so[khoa])}`));
+        }))])]),
+    el('p', { class: 'ghi-chu' }, 'Số đo này (không có ảnh) được gửi kèm cho "AI tổng hợp mọi môn" nếu đo xong trước khi AI trả lời lần đầu.'),
   ];
 }
 
