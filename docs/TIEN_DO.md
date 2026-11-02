@@ -20,8 +20,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đang làm: lời giải chuyên gia** (`docs/ke-hoach/2026-11-02-*.md`): tử vi xong 3 tầng; chiêm tinh xong tổng luận, từng
-  nhà; còn vận. Sau: bát tự, các môn khác; đợt 8 cũ lùi; 9 (người nhà).
+- **Đang làm: lời giải chuyên gia** (`docs/ke-hoach/2026-11-02-*.md`): tử vi, chiêm tinh xong 3 tầng (tổng luận, từng
+  cung/nhà, vận). Sau: bát tự, các môn khác; đợt 8 cũ lùi; 9 (người nhà).
 
 ## 3. Cần anh
 

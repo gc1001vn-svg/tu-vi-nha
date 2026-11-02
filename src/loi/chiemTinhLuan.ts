@@ -3,7 +3,9 @@
  * Alan Leo (1912): nguyen to – the, ba diem chinh, khi chat, sao chu, nhom cung dong; them pham vi (Ptolemy, Lilly), truc, ngay–dem,
  * ban cau, goc chieu chinh va the goc chieu. Khong co gio sinh (khong cung Moc, nha) thi bo phan can chung. Loi o `chiemTinhLuanLoi.ts`.
  */
-import { CUNG, DIEM, GOC, cungCua, gocChieu, lech, nhaCua, type LaSo } from './chiemTinh.ts';
+import { CUNG, DIEM, GOC, cungCua, gocChieu, kinhDo, lech, nhaCua, type LaSo } from './chiemTinh.ts';
+import { ngayVN } from './chiemTinhNgay.ts';
+import { CHU_KY, KET_VAN, QUA, TIEN_HOA, VONG_NAM, VUNG } from './chiemTinhVanLoi.ts';
 import { NHA, TU_KHOA } from './chiemTinhGiai.ts';
 import {
   BAN_CAU, BA_CUNG_THE, BA_KHAC_THE, GOC_CAP, KHI_CHAT, NGUYEN_TO, PHAM_VI, SECT, THE, THE_GOC, THE_TROI, TO_THIEU, TO_TROI, TROI_MOC,
@@ -191,4 +193,73 @@ export function luanNha(ls: LaSo, n: number): string[] {
     ...(moi === undefined ? [] : [`Theo cách hiện đại, ${DIEM[moi] ?? ''} cũng là chủ nhà này (đang ở nhà ${String(nhaCua(k(moi), nha))}).`]),
     (d >= NGUONG_NHA.tot ? KET_NHA.tot : d < NGUONG_NHA.kem ? KET_NHA.kem : KET_NHA.vua).replace('{}', ten),
   ];
+}
+
+// ---- Tang 3: van 12 thang toi (docs/LUAN_CHIEM_TINH.md muc 4) ----
+
+/** Sai so goc chieu khi hanh tinh cham cham diem goc: Moc, Tho 2°; ba sao xa 1,5°. */
+const ORB_QUA: Readonly<Record<number, number>> = { 5: 2, 6: 2, 7: 1.5, 8: 1.5, 9: 1.5 };
+/** Goc voi chinh no duoc xet (chu ky doi): Moc tro ve; Tho tro ve, vuong, doi; Thien Vuong vuong, doi; Hai Vuong, Diem Vuong vuong. */
+const GOC_CHINH_NO: Readonly<Record<number, readonly number[]>> = { 5: [0], 6: [0, 2, 4], 7: [2, 4], 8: [2], 9: [2] };
+/** Diem goc bi cham: 0..4 thien the, 11 cung Moc, 12 Thien Dinh. */
+const DIEM_GOC = [0, 1, 2, 3, 4, 11, 12];
+
+export interface Qua { readonly p: number; readonly n: number; readonly goc: number; readonly tu: number; readonly den: number }
+
+/** Cac lan hanh tinh cham (5..9) tao goc chinh voi diem goc trong 365 ngay tu `nay` (lay mau 3 ngay mot): luot dau – luot cuoi. */
+export function cacQua(ls: LaSo, nay: number): Qua[] {
+  const goc = (n: number): number | null => (n === 11 ? ls.moc : n === 12 ? ls.dinh : ls.diem[n]?.kinh ?? null);
+  const ra: Qua[] = [];
+  for (const p of [5, 6, 7, 8, 9]) {
+    const mau = Array.from({ length: 123 }, (_, j) => nay + j * 3 * 1440).map((t) => [t, kinhDo(p, t)] as const);
+    for (const n of [...DIEM_GOC, p]) {
+      const kn = goc(n);
+      if (kn === null) continue;
+      GOC.forEach((g, gi) => {
+        if (n === p && !(GOC_CHINH_NO[p] ?? []).includes(gi)) return;
+        let tu: number | null = null, den = 0;
+        for (const [t, k] of mau) {
+          if (Math.abs(Math.abs(lech(k, kn)) - g.do) <= (ORB_QUA[p] ?? 1.5)) { tu ??= t; den = t; }
+        }
+        if (tu !== null) ra.push({ p, n, goc: gi, tu, den });
+      });
+    }
+  }
+  return ra;
+}
+
+/** Diem moi lan cham: [thuan, cang, hop] theo hanh tinh cham; diem goc Mat Troi, Mat Trang, cung Moc, Thien Dinh nang gap ruoi. */
+const DIEM_QUA: Readonly<Record<number, readonly [number, number, number]>> = {
+  5: [1.5, -0.5, 1.5], 6: [1, -1.5, -1], 7: [0.5, -1, -0.5], 8: [0.5, -1, -0.5], 9: [0.5, -1.5, -1],
+};
+/** Nguong theo phan bo 600 la so gia × mot thoi diem xem ngau nhien (phan vi 75 = 6,75 · 25 = 0,25; 02/11) — thang tuong doi
+ * (diem lech duong vi Sao Moc tao nhieu goc thuan moi nam). */
+export const NGUONG_VAN_CT = { thuan: 6.75, kho: 0.25 } as const;
+
+const thangNam = (t: number): string => ngayVN(t).slice(3);
+const lop = (g: number): 0 | 1 | 2 => (g === 1 || g === 3 ? 0 : g === 0 ? 2 : 1);
+
+/** Van 12 thang toi: cac lan hanh tinh cham, chu ky doi, nam xoay theo tuoi, Mat Trang tien hoa, ket luan. `sinh`, `nay`: phut UTC. */
+export function vanCT(ls: LaSo, sinh: number, nay: number): { ket: keyof typeof KET_VAN; diem: number; loi: string[] } {
+  const qua = cacQua(ls, nay);
+  const tenGoc = (n: number): string => (n === 11 ? 'cung Mọc' : n === 12 ? 'Thiên Đỉnh' : DIEM[n] ?? '');
+  const khi = (q: Qua): string => (thangNam(q.tu) === thangNam(q.den) ? `tháng ${thangNam(q.tu)}` : `${thangNam(q.tu)} – ${thangNam(q.den)}`);
+  const nang = (q: Qua): number => Math.abs(DIEM_QUA[q.p]?.[lop(q.goc)] ?? 0) * ([0, 1, 11, 12].includes(q.n) ? 1.5 : 1) + (q.p >= 6 ? 0.5 : 0)
+    + (q.n === q.p ? 2 : 0);
+  // Chi ke 6 lan nang nhat (cham Mat Troi, Mat Trang, truc; hanh tinh cham hon; chu ky doi), xep theo thoi gian; diem van tinh du.
+  const chon = [...qua].sort((a, b) => nang(b) - nang(a)).slice(0, 6).sort((a, b) => a.tu - b.tu);
+  const loi = chon.map((q) => (q.n === q.p
+    ? `${CHU_KY[`${String(q.p)}-${String(q.goc)}`] ?? ''} (${khi(q)})`
+    : `${DIEM[q.p] ?? ''} ${(GOC[q.goc]?.ten ?? '').toLowerCase()} ${tenGoc(q.n)} (${khi(q)}) — chuyện ${VUNG[q.n] ?? ''}: ${QUA[q.p]?.[lop(q.goc)] ?? ''}.`));
+  if (qua.length > chon.length) loi.push(`Còn ${String(qua.length - chon.length)} góc nhẹ hơn (phần lớn của Sao Mộc), không kể ra.`);
+  const diem = qua.reduce((t, q) => t + (DIEM_QUA[q.p]?.[lop(q.goc)] ?? 0) * ([0, 1, 11, 12].includes(q.n) ? 1.5 : 1), 0);
+  const tuoi = Math.floor((nay - sinh) / (365.2422 * 1440));
+  if (ls.moc !== null && tuoi >= 0) {
+    const h = (tuoi % 12) + 1, s = (cungCua(ls.moc) + tuoi) % 12, sao = DIEM[CHU[s] ?? 0] ?? '', ten = (NHA_TEN[h - 1] ?? '').toLowerCase();
+    loi.push(VONG_NAM.replace('{n}', String(tuoi)).replace('{h}', String(h)).replaceAll('{ten}', ten).replaceAll('{sao}', sao));
+  }
+  const tienHoa = cungCua(kinhDo(1, sinh + (nay - sinh) / 365.2422));
+  loi.push(TIEN_HOA.replace('{cung}', CUNG[tienHoa] ?? '').replace('{kieu}', KIEU_CUNG[tienHoa] ?? ''));
+  const ket = qua.length === 0 ? 'em' : diem >= NGUONG_VAN_CT.thuan ? 'thuan' : diem < NGUONG_VAN_CT.kho ? 'kho' : 'vua';
+  return { ket, diem, loi: [...loi, KET_VAN[ket]] };
 }

@@ -346,7 +346,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   `tests/ChiemTinh.test.ts`, Playwright khổ 390×844 (có giờ, không rõ giờ, nước ngoài).
 
 - **Tổng luận, luận từng nhà (02/11)**: nguyên tố, thể, ba điểm chính, sao chủ, phẩm vị, sát trục, ngày/đêm, bán cầu, góc chiếu
-  chính; 12 nhà (cung đầu nhà, thiên thể trong nhà, chủ nhà ở đâu) — cách chốt, nguồn ở **`docs/LUAN_CHIEM_TINH.md`**.
+  chính; 12 nhà (cung đầu nhà, thiên thể trong nhà, chủ nhà ở đâu); vận 12 tháng tới (hành tinh chậm chạm điểm gốc, chu kỳ đời,
+  năm xoay theo tuổi, Mặt Trăng tiến hóa) — cách chốt, nguồn ở **`docs/LUAN_CHIEM_TINH.md`**.
 
 ## 24. Tarot (`src/loi/tarot.ts`, thẻ "Gieo quẻ", tra 22/10)
 - **Bộ bài**: bộ 1909 do Pamela Colman Smith vẽ, A. E. Waite soạn — hết bản quyền ở Mỹ (in 1909) và Anh/EU (Smith mất 1951, Waite

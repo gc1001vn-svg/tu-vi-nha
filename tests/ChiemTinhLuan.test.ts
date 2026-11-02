@@ -2,8 +2,8 @@
  * Tong luan chiem tinh (`src/loi/chiemTinhLuan.ts`): pham vi dung bang Ptolemy; dem nguyen to tren la dung tay; nhan the chu T;
  * 2.000 la so gia (co va khong co gio) ra du doan, khong cau trong, khong co phan can cung Moc khi khong co toa do.
  */
-import { laSo, type LaSo } from '../src/loi/chiemTinh.ts';
-import { NGUONG_NHA, diemNha, luanNha, phamVi, tongLuanCT } from '../src/loi/chiemTinhLuan.ts';
+import { kinhDo, laSo, type LaSo } from '../src/loi/chiemTinh.ts';
+import { NGUONG_NHA, NGUONG_VAN_CT, cacQua, diemNha, luanNha, phamVi, tongLuanCT, vanCT } from '../src/loi/chiemTinhLuan.ts';
 import { HANH_TINH_NHA, KIEU_CUNG, NHA_TEN } from '../src/loi/chiemTinhNhaLoi.ts';
 import { GOC_CAP, KHI_CHAT, TO_THIEU, TO_TROI } from '../src/loi/chiemTinhLuanLoi.ts';
 
@@ -65,4 +65,29 @@ describe('tong luan chiem tinh', () => {
     const ls: LaSo = { ...dung([100, 130, 160, 190, 10, 250, 280, 300, 320, 340]), moc: 0, dinh: 270, nha: Array.from({ length: 12 }, (_, i) => i * 30) };
     expect(luanNha(ls, 1).some((x) => x.startsWith('Chủ nhà là Sao Hỏa, nằm ngay trong nhà này'))).toBe(true);
   });
+
+  test('van: Sao Tho vuong Mat Troi, Sao Tho tro ve, nam xoay theo tuoi tinh dung tren la dung tay', () => {
+    const nay = 2461346 * 1440; // 01/11/2026
+    const tho = kinhDo(6, nay + 100 * 1440);
+    const ls: LaSo = { ...dung([tho + 90, 200, 210, 220, 230, 10, tho, 300, 320, 340]), moc: 0, dinh: 270, nha: Array.from({ length: 12 }, (_, i) => i * 30) };
+    const q = cacQua(ls, nay);
+    expect([q.some((x) => x.p === 6 && x.n === 0 && x.goc === 2), q.some((x) => x.p === 6 && x.n === 6 && x.goc === 0)]).toEqual([true, true]);
+    const sinh = nay - Math.round(13.5 * 365.2422 * 1440); // tuoi tron 13: nha 2, cung Kim Nguu, chu nam Sao Kim
+    const l = vanCT(ls, sinh, nay).loi;
+    expect([l.some((x) => x.startsWith('Sao Thổ trở về')), l.some((x) => x.includes('năm tuổi tròn 13 ứng nhà 2') && x.includes('chủ năm là Sao Kim'))])
+      .toEqual([true, true]);
+  });
+
+  // Moi la ~16 ms (astronomy-engine, 615 lan tinh vi tri) → 100 la, cho thoi han 20 s khi chay song song.
+  test('van: 100 la so gia — du loi, toi da 6 goc ke ra, ket luan moi dau 10–40 %', () => {
+    let hat = 11, tot = 0, kho = 0;
+    const r = (x: number): number => { hat = (hat * 1103515245 + 12345) % 2 ** 31; return (hat / 2 ** 31) * x; };
+    for (let i = 0; i < 100; i++) {
+      const sinh = Math.floor((2433283 + r(18250)) * 1440 + r(1440)), nay = sinh + Math.floor((15 + r(65)) * 365.2422 * 1440);
+      const v = vanCT(laSo(sinh, [10 + r(13), 103 + r(6)]), sinh, nay);
+      expect([v.loi.some((x) => x.length < 15 || x.includes('undefined')), v.loi.filter((x) => x.includes(') — chuyện ')).length <= 6]).toEqual([false, true]);
+      tot += v.diem >= NGUONG_VAN_CT.thuan ? 1 : 0; kho += v.diem < NGUONG_VAN_CT.kho ? 1 : 0;
+    }
+    expect([tot / 100 > 0.1 && tot / 100 < 0.4, kho / 100 > 0.1 && kho / 100 < 0.4]).toEqual([true, true]);
+  }, 20_000);
 });

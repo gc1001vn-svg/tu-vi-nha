@@ -56,4 +56,22 @@ tinh ở các cung cùng một sao cai quản thì lá số đậm màu sao đó
 - Test: đủ 120 câu; 1.000 lá số × 12 nhà ra đủ lời; câu kết mỗi đầu trong khoảng 10–40 %; không giờ sinh thì không luận nhà; chủ nhà
   nằm ngay trong nhà mình ra đúng câu.
 
-Còn: tầng 3 (vận: hành tinh chậm đi qua điểm gốc, chu kỳ Sao Thổ…).
+## 4. Tầng 3 — vận 12 tháng tới (02/11; `vanCT`, `cacQua`, lời `chiemTinhVanLoi.ts`)
+
+- **Cách chốt** (dùng nhiều nhất từ xưa tới nay, các trường phái đều có): hành tinh chậm (Mộc, Thổ, Thiên Vương, Hải Vương, Diêm Vương)
+  đi tới góc chính với điểm gốc (Mặt Trời, Mặt Trăng, Thủy, Kim, Hỏa, cung Mọc, Thiên Đỉnh) — sai số 2° cho Mộc, Thổ, 1,5° cho ba sao
+  xa (sách dùng 1–3°, Claude chọn giữa). Lấy mẫu 3 ngày một trong 365 ngày tới, ghi tháng đầu – tháng cuối (nghịch hành có thể đi qua
+  nhiều lượt). Lời theo hành tinh chạm (câu thuận, câu căng, câu trùng) × việc của điểm bị chạm — kiến thức chung từ Robert Hand
+  *Planets in Transit* (còn bản quyền, chưa đọc), không chép.
+- **Chu kỳ đời**: hành tinh chậm tạo góc với chính nó lúc sinh — Sao Mộc trở về (12 năm), Sao Thổ trở về / vuông / đối (29–30, 7, 14…),
+  Thiên Vương vuông / đối (21, 42), Hải Vương, Diêm Vương vuông — mốc các sách hiện đại cùng nói.
+- **Năm xoay theo tuổi** (profection, phái Hy Lạp cổ phục hồi): tuổi tròn n → nhà (n mod 12) + 1 tính từ cung Mọc, chủ cung đó là "chủ
+  năm". **Mặt Trăng tiến hóa** (secondary progression, hiện đại): vị trí Mặt Trăng lúc (sinh + tuổi ngày).
+- **Chỉ kể 6 lần nặng nhất** (chạm Mặt Trời, Mặt Trăng, trục; hành tinh chậm hơn; chu kỳ đời) — bản đầu ra 14 dòng một năm, quá dài;
+  ghi "còn k góc nhẹ hơn". **Kết luận**: Mộc thuận/trùng +1,5, căng −0,5 · Thổ thuận +1, căng −1,5, trùng −1 · Thiên Vương, Hải Vương
+  thuận +0,5, căng −1, trùng −0,5 · Diêm Vương thuận +0,5, căng −1,5, trùng −1; điểm chạm Mặt Trời, Mặt Trăng, cung Mọc, Thiên Đỉnh ×1,5.
+  Ngưỡng = phân vị 75 / 25 trên 600 lá số giả × một thời điểm xem ngẫu nhiên (6,75 và 0,25; điểm lệch dương vì Sao Mộc mỗi năm tạo
+  nhiều góc thuận). Không góc nào thì nói "một năm tương đối êm".
+- "Bây giờ" lấy ở giao diện, lõi nhận qua tham số (luật 2). Đo: 16 ms một lần tính trên máy ảo (Node).
+- Test: lá dựng tay (Sao Thổ vuông Mặt Trời, Sao Thổ trở về, năm xoay tuổi 13 → nhà 2, chủ năm Sao Kim); 100 lá số giả: đủ lời, ≤ 6
+  góc kể ra, kết luận mỗi đầu 10–40 %.

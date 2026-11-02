@@ -6,7 +6,7 @@ import { CUNG, CUNG_ANH, DIEM, DIEM_ANH, GOC, chuan, kinhDo, laSo, cungCua, dinh
 import {
   BAC_GIAO_DIEM, CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NGHICH_HANH, NHA, THIEN_DINH, TRANG_QUA_CUNG, TU_KHOA, Y_GOC, Y_TUAN_TRANG,
 } from '../../loi/chiemTinhGiai.ts';
-import { luanNha, tongLuanCT } from '../../loi/chiemTinhLuan.ts';
+import { luanNha, tongLuanCT, vanCT } from '../../loi/chiemTinhLuan.ts';
 import { NHA_TEN } from '../../loi/chiemTinhNhaLoi.ts';
 import { TUAN_TRANG, gioVN, gocChieuQua, khoangNghich, ngayVN, phutUtcTuMs, sapNghich, trangDoiCung, tuanTrang } from '../../loi/chiemTinhNgay.ts';
 import type { HoSo } from '../../loi/hoSo.ts';
@@ -145,6 +145,11 @@ export function veChiemTinh(hs: HoSo, lechNuoc: number | undefined): Node[] {
       ...tongLuanCT(ls).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
       el('p', { class: 'ghi-chu' }, 'Claude tổng hợp nhiều trường phái chiêm tinh phương Tây (cổ điển và hiện đại) rồi chốt lời; chỉ để '
         + 'tham khảo.')),
+    // Van 12 thang toi (tang 3): "bay gio" lay o giao dien, loi nhan qua tham so (luat 2).
+    el('details', { class: 'ct-them ct-tong', open: '' }, el('summary', {}, 'Vận 12 tháng tới'),
+      ...vanCT(ls, r.phut, phutUtcTuMs(Date.now())).loi.map((l) => el('p', {}, l)),
+      el('p', { class: 'ghi-chu' }, 'Xét hành tinh chậm (Mộc, Thổ, Thiên Vương, Hải Vương, Diêm Vương) tạo góc với các điểm chính của lá số trong '
+        + '12 tháng tới (sai số 2° cho Mộc, Thổ; 1,5° cho ba sao xa). Claude tổng hợp rồi chốt lời; chỉ để tham khảo.')),
     // Luan tung nha (tang 2): moi nha mot muc gap; can gio sinh va toa do.
     el('h3', {}, 'Luận từng nhà'),
     ...(ls.nha === null ? [el('p', { class: 'ghi-chu' }, 'Cần giờ sinh và nơi sinh trong nước để có 12 nhà.')]

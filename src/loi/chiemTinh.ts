@@ -157,6 +157,8 @@ export function gocChieu(ls: LaSo): GocChieu[] {
 export interface PhuongAn { readonly lyDo: string; readonly khac: string }
 export interface LaSoNguoi {
   readonly laSo: LaSo;
+  /** Thoi diem sinh, phut UTC (khong ro gio: 12 gio trua) — de tinh tuoi, van. */
+  readonly phut: number;
   /** Tinh ly lay toa do va toa do do; null khi bo cung Moc va nha. */
   readonly noi: { readonly ten: string; readonly viDo: number; readonly kinhDo: number } | null;
   /** Gio sinh ±15 phut, mui gio chua chac: Mat Troi, Mat Trang, cung Moc doi cung (`docs/QUY_UOC.md` muc 8). */
@@ -188,7 +190,7 @@ export function laSoNguoi(hs: HoSo, lechNuocNgoai?: number, nut: Nut = 'trungBin
       return cungCua(a) === cungCua(b) ? [] : [`${ten} từ ${tenCung(a)} sang ${tenCung(b)}`];
     });
     return {
-      laSo: laSo(dau + 720 - l, null, nut), noi: null, phuongAn: [],
+      laSo: laSo(dau + 720 - l, null, nut), phut: dau + 720 - l, noi: null, phuongAn: [],
       ghiChu: ['Không rõ giờ sinh: tính lúc 12 giờ trưa, bỏ cung Mọc và nhà.',
         ...(doi.length === 0 ? [] : [`Trong ngày sinh có đổi cung: ${doi.join('; ')}.`])],
     };
@@ -210,7 +212,7 @@ export function laSoNguoi(hs: HoSo, lechNuocNgoai?: number, nut: Nut = 'trungBin
     if (khac !== '' && !phuongAn.some((p) => p.khac === khac)) phuongAn.push({ lyDo, khac });
   }
   return {
-    laSo: ls, noi: td === undefined ? null : { ten: td[2], viDo: td[0], kinhDo: td[1] }, phuongAn,
+    laSo: ls, phut: t, noi: td === undefined ? null : { ten: td[2], viDo: td[0], kinhDo: td[1] }, phuongAn,
     ghiChu: [...(l.lyDo === undefined ? [] : [l.lyDo]),
       ...(nuocNgoai ? ['Sinh ở nước ngoài: app chưa có toạ độ nơi sinh nên bỏ cung Mọc và nhà.'] : [])],
   };
