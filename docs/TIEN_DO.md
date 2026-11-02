@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 02/11/2026 — **lời giải chuyên gia (đọc rộng, chốt một lời): tử vi, chiêm tinh, bát tự, thần số xong** (anh dặn 02/11).
+Cập nhật: 02/11/2026 — **lời giải chuyên gia (đọc rộng, chốt một lời): 5 môn xong** (anh dặn 02/11).
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -13,7 +13,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Khối mỗi người (`src/giaoDien/khoi/`): tử vi (Altuvi 345/345), năm nay (bảng báo 2026 144/144), bát tự + đại vận (`sxtwl`),
   hướng Bát trạch, tuổi hợp, thần số học, chiêm tinh (mục 23, có tổng luận), nhịp sinh học, tướng mặt (26), chỉ tay (27).
 - Tử vi hạn năm, tháng, ngày + 9 sao lưu (`luuHan.ts`, mục 16) · **tổng luận, luận cung, vận hạn** tổng hợp nhiều phái (mục 28) ·
-  bát tự, thần số cùng cách (mục 29, 30).
+  bát tự, thần số, Bát trạch cùng cách (mục 29–31).
 - "Gieo quẻ": Kinh Dịch, bói Kiều, tarot 78 lá (mục 24) · "Hôm nay": "Chọn ngày theo việc" (mục 17–19), "Chiêm tinh hôm nay".
 - "Phong thủy" (mục 20–22): la bàn + lưu hướng nhà · thước Lỗ Ban · phi tinh năm/tháng, hướng kỵ năm.
 - AI Groq miễn phí (mục 25): "AI tổng hợp" + hỏi đáp dưới mỗi người, quẻ, tarot · chỉ tay (mục 27): chụp ảnh → máy tự dò 4
@@ -21,12 +21,12 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đang làm: lời giải chuyên gia** (`docs/ke-hoach/2026-11-02-*.md`): tử vi, chiêm tinh, bát tự, thần số xong 3 tầng.
+- **Đang làm: lời giải chuyên gia** (`docs/ke-hoach/2026-11-02-*.md`): 5 môn xong (tử vi, chiêm tinh, bát tự, thần số, Bát trạch).
   Sau: các môn khác, lời chốt vào AI; đợt 8 cũ lùi; 9 (người nhà).
 
 ## 3. Cần anh
 
-- **Đọc tử vi, bát tự, thần số của anh**: chỗ sai, khó hiểu, chung chung thì báo em.
+- **Đọc tử vi, bát tự, thần số, Bát trạch của anh**: chỗ sai, khó hiểu, chung chung thì báo em.
 - **Thử chỉ tay**: khối "Chỉ tay" → nút chụp ảnh → đường màu có nằm trên nếp tay không, sửa ô sai → bấm AI. Lệch thì báo em.
 - Còn chờ: thử tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: dồn, xoá một lần sau cùng; đã nằm trong `main`; tên đủ có `claude/` phía trước):

@@ -701,6 +701,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   mặt phẳng, 8 mũi tên đầy / trống (Phillips, tên Việt), số lặp, số vắng gộp một câu; vận: 4 đỉnh cao + thử thách (Jordan – Decoz, đỉnh 1
   hết ở 36 − số chủ đạo rút một chữ số), năm / tháng cá nhân; không chấm tốt xấu; chưa làm số theo tên.
 
+## 31. Luận Bát trạch — tổng hợp nhiều phái, chốt một lời (kế hoạch 02/11; `src/loi/batTrachLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh: **`docs/LUAN_BAT_TRACH.md`**. Tóm: bảng 8 hướng giữ nguyên (mục 14); nhóm nhà theo **tọa** (*Bát Trạch
+  Minh Kính*), trục Đông – Tây, Đông Nam – Tây Bắc ghi thêm cách tính theo hướng; khác nhóm thì gỡ theo thứ tự đổi cửa, chọn phòng, xoay
+  giường; bố trí cửa, giường, bàn, bếp (tọa hung hướng cát, kèm lời phản biện), bàn thờ, nhà vệ sinh.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|

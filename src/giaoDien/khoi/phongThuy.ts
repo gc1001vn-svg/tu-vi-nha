@@ -1,9 +1,10 @@
 /**
- * Khoi "Huong tot, huong xau (cung phi …)" (`src/loi/batTrach.ts`) va "Tuoi hop, tuoi ky" (`src/loi/tuoiHop.ts`).
+ * Khoi "Huong tot, huong xau (cung phi …)" (`src/loi/batTrach.ts`, luan `batTrachLuan.ts` — nguon, ly do: `docs/LUAN_BAT_TRACH.md`)
+ * va "Tuoi hop, tuoi ky" (`src/loi/tuoiHop.ts`).
  */
 import { CHI } from '../../loi/amLich.ts';
 import { batTrach } from '../../loi/batTrach.ts';
-import { xemLaBan } from '../../loi/laBan.ts';
+import { luanBatTrach } from '../../loi/batTrachLuan.ts';
 import { hv } from '../../loi/hanViet/index.ts';
 import { tinhHoSo } from '../../loi/hoSo.ts';
 import { tuoiHop } from '../../loi/tuoiHop.ts';
@@ -15,15 +16,13 @@ export const veKhoiHuong: VeKhoi = (hs, tr) => {
   const bt = batTrach(k.cungPhi);
   // Sinh giua Tet va Lap Xuan: cung phi theo Tet khac mac dinh Lap Xuan (QUY_UOC muc 1) — ghi ro tren man hinh.
   const theoTet = tinhHoSo(hs, lechNuocNgoai(hs), { namCungPhi: 'tet' }).chinh.cungPhi;
-  const nha = hs.huongNha === undefined ? undefined : xemLaBan(hs.huongNha).huong;
-  const saoNha = bt.huong.find((h) => h.huong === nha?.huong);
   return khoi(`Hướng tốt, hướng xấu (cung phi ${k.cungPhi})`, false,
-    el('p', {}, `${bt.nhom}: hướng tốt ${bt.huong.filter((h) => h.tot).map((h) => h.huong).join(', ')}.`),
-    nha === undefined || saoNha === undefined ? null : dongMuc(`Nhà ${String(nha.do)}° ${nha.huong}`,
-      { ten: saoNha.sao, mucDo: saoNha.tot ? 'tot' : 'xau', nghia: `Hướng nhà đã đo (sơn ${nha.son}). ${saoNha.nghia}` }),
     ...bt.huong.map((h) => dongMuc(h.huong, { ten: h.sao, mucDo: h.tot ? 'tot' : 'xau', nghia: h.nghia })),
     theoTet !== k.cungPhi && el('p', { class: 'canh-bao' }, `Cung phi tính theo năm Lập Xuân; nếu tính theo Tết thì là ${theoTet}.`),
-    el('p', { class: 'dong-muc-chu' }, `Bát trạch: chọn hướng nhà, cửa, giường theo cung phi. ${LOI_SOAN}`));
+    // Luan (ke hoach 2026-11-02-bat-trach): menh quai, nha da do huong, bo tri tung viec — chi loi chot.
+    ...luanBatTrach(k.cungPhi, hs.huongNha).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
+    el('p', { class: 'dong-muc-chu' }, 'Claude tổng hợp nhiều phái phong thủy nhà ở (sách Bát trạch cổ, cách dùng hiện nay) rồi chốt lời; '
+      + 'chỉ để tham khảo.'));
 };
 
 export const veKhoiTuoiHop: VeKhoi = (_hs, tr) => {
