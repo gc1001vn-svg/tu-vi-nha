@@ -109,7 +109,7 @@ Sách viết từ kinh nghiệm xem thật (bản in nhắc năm 1984); đúng p
 - Ngưỡng "vững / yếu" = phân vị 75 / 25 của điểm trên 3.000 lá số giả (2,7 và −0,9): thang tương đối, khoảng 1/4 lá số mỗi đầu.
 - Test `tests/LuanTuVi.test.ts`: đủ 60 tinh hệ có lời, không lời thừa · tứ hóa theo can năm khớp bộ an sao 3.000/3.000 lá ·
   không câu trống · câu kể chuyện không lặp quá 30 % lá số · cách cục đúng định nghĩa trên lá mẫu.
-- Còn: tầng 3 (đại vận, năm theo Thiên Lương + tứ hóa), đưa lời chốt vào AI;
+- Còn: đưa lời chốt vào AI;
   đối chiếu cách cục với lá số mẫu trong sách (Thiên Lương có lá số danh nhân).
 
 ## 9. Tầng 2 — luận từng cung (02/11)
@@ -130,3 +130,28 @@ Sách viết từ kinh nghiệm xem thật (bản in nhắc năm 1984); đúng p
   vd Phu Thê kỵ Cự Môn, Thất Sát, Phá Quân, Tham Lang, Liêm Trinh, Vũ Khúc) và tính Tuần Triệt như ở Mệnh. Ngưỡng = phân vị 75 / 25
   của điểm 11 cung × 3.000 lá số giả (2,7 và −1,0). Test: không trường hợp nào sao kỵ, mờ mà kết luận "thuận hơn phần đông".
 - Cung Mệnh khi bấm: đoạn tinh hệ + trỏ về Tổng luận (không lặp).
+
+## 10. Tầng 3 — vận hạn (02/11)
+
+- **Nguồn**: *Toàn Thư* q.1 (thơ "nhập hạn cát hung" của từng sao, trong phần luận cung Mệnh) và q.3 (luận đại hạn mười năm: cung
+  sao miếu vượng không sát thì "mười năm yên", có Kình Đà Hỏa Linh Không Kiếp Kỵ thì "thành bại không đều"; xét riêng đại hạn,
+  tiểu hạn, thái tuế rồi xét chồng nhau; "Kình Đà điệp tịnh", "Thất Sát trùng phùng" — có Tử Vi, Thiên Tướng, Lộc Tồn thì giải);
+  Thiên Lương (đại vận là chính, tiểu hạn ~1/10; thiên thời — tam hợp cung vận so tam hợp tuổi; nhân hòa — sao vận cùng bộ sao
+  Mệnh; địa lợi — hành cung so hành Mệnh; năm: can năm so can tuổi, năm xung, năm phá); *Tân Biên* (đại vận tốt thì năm xấu cũng
+  nhẹ); tứ hóa theo can cung đại vận và can năm (cách các phái Đài Loan dùng, nhiều thầy Việt nay cũng dùng).
+- **Đại vận** (`luanDaiVan`): việc nổi lên = tên cung vận · sao chính của vận (câu sáng / mờ, soạn từ thơ nhập hạn *Toàn Thư*) ·
+  cát / sát hội về · thiên thời, nhân hòa, địa lợi · tứ hóa theo can cung vận · kết "thuận / bình thường / nhiều thử thách". Điểm =
+  điểm tam phương (như Mệnh) + thiên thời (cùng hành +1,5 · khắc xuất +0,5 · sinh xuất 0 · sinh nhập −0,5 · khắc nhập −1,5; Thiên
+  Lương xếp sinh nhập là "tưởng thuận mà hụt" vì có Thiên Không) + nhân hòa +1 + địa lợi ±0,5 + tứ hóa vận trong tam phương (Lộc +1,
+  Quyền/Khoa +0,5, Kỵ −1, Kỵ ngay cung vận −2). Trọng số Claude đặt theo thứ tự các sách nhấn; ngưỡng = phân vị 75 / 25 của 12 cung
+  × 3.000 lá số giả (3,6 và −0,4). Trong app có thêm danh sách 12 đại vận trong đời với kết luận từng vận.
+- **Năm** (`luanNam`): tiểu hạn (tên cung, sao chính) · sao lưu hội về · tứ hóa năm · can năm so can tuổi (sinh nhập +1, khắc xuất
+  +0,5, đồng 0, sinh xuất −0,5, khắc nhập −1) · năm tuổi / xung / phá (−0,5) · Kình Đà điệp (−1,5) · Thất Sát trùng phùng không giải
+  (−1,5); ngưỡng = phân vị 75 / 25 của 3.000 lá số × 3 năm xem 2024, 2026, 2028 (2,1 và −2,7). Câu cuối ghép với đại vận theo bảng 3×3
+  (*Tân Biên*: vận tốt thì năm xấu nhẹ, vận xấu thì năm tốt bớt).
+- **Đổi lời cổ**: thơ nhập hạn phán "quan tai", "tử vong", "một mạng về suối vàng" → app nói "phòng kiện tụng", "giữ sức khỏe",
+  "cẩn thận đi lại". Dòng nghĩa sao lưu cũ có chữ "tai nạn, tai họa" → phần năm chỉ nêu tên sao lưu hội về.
+- **Chưa dùng**: sao Nam Đẩu / Bắc Đẩu ứng nửa đầu hay nửa sau đại vận (*Toàn Thư*, cần bảng phân sao chưa thống nhất); bài "mười
+  hai chi sở kỵ" (tuổi nào kỵ cung hạn nào — lời rất nặng); phi hóa từng cung; tháng, ngày vẫn theo cách đếm sao của *Tân Biên*.
+- Test: 12 đại vận theo tuổi bắt đầu từ số Cục, cách nhau 10 năm; kết luận đại vận, năm mỗi đầu ~1/4; không câu trống; tuổi Giáp năm
+  Nhâm ra "can năm sinh cho can tuổi", năm Tý tuổi Tý ra "năm tuổi".

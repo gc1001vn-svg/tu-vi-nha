@@ -3,7 +3,12 @@
  * (ngay sinh gia, luat 1) ra du doan, khong cau trong; cau chinh khong lap qua nhieu giua cac la so; phan bo "the Menh".
  */
 import { lapLaSo, type LaSo } from '../src/loi/tuVi/laSo.ts';
-import { NGUONG_CUNG, NGUONG_MENH, cachCuc, diemCung, diemMenh, khoaTinhHe, luanCung, tenTuHoa, tongLuan } from '../src/loi/tuVi/luan.ts';
+import {
+  NGUONG_CUNG, NGUONG_MENH, NGUONG_NAM, NGUONG_VAN, cachCuc, diemCung, diemMenh, dsDaiVan, khoaTinhHe, luanCung, luanDaiVan, luanNam, tenTuHoa,
+  tongLuan,
+} from '../src/loi/tuVi/luan.ts';
+import { CAN_NAM, CHI_NAM, KET_VAN } from '../src/loi/tuVi/luanHanLoi.ts';
+import { tinhLuuHan } from '../src/loi/tuVi/luuHan.ts';
 import { CUNG_SAO, HOP_KY, SUC_KHOE } from '../src/loi/tuVi/luanCungLoi.ts';
 import { CACH_LOI, TINH_HE } from '../src/loi/tuVi/luanLoi.ts';
 
@@ -105,5 +110,30 @@ describe('luan tu vi tang 1', () => {
     console.log(`ket luan cung: thuan ${(100 * tot / n).toFixed(0)} %, phai de tam ${(100 * kem / n).toFixed(0)} %`);
     expect(nguoc).toBe(0);
     expect([tot / n > 0.15 && tot / n < 0.35, kem / n > 0.15 && kem / n < 0.35]).toEqual([true, true]);
+  });
+
+  test('tang 3: dai van, nam — du loi, ket luan ~1/4 moi dau; 12 dai van theo tuoi tu so cuc', () => {
+    let vt = 0, vk = 0, vn = 0, nt = 0, nk = 0, nn = 0;
+    for (const { ls, nam } of MAU.slice(0, 1000)) {
+      const ds = dsDaiVan(ls, nam);
+      expect([ds.length, ds[0]?.tuoi, ds.every((v, i) => i === 0 || v.tuoi === (ds[i - 1]?.tuoi ?? 0) + 10)]).toEqual([12, ls.soCuc, true]);
+      for (const c of ls.cung) {
+        const v = luanDaiVan(ls, c.chi, nam);
+        expect([v.loi.some((x) => x.includes('undefined') || x.length < 15), v.loi.at(-1)]).toEqual([false, KET_VAN[v.ket]]);
+        vn += 1; vt += v.diem >= NGUONG_VAN.thuan ? 1 : 0; vk += v.diem < NGUONG_VAN.kho ? 1 : 0;
+      }
+      const n = luanNam(ls, tinhLuuHan(ls, 6, { nam: 2026, thang: 7, ngay: 15 }), nam);
+      expect(n.loi.some((x) => x.includes('undefined') || x.length < 15)).toBe(false);
+      nn += 1; nt += n.diem >= NGUONG_NAM.thuan ? 1 : 0; nk += n.diem < NGUONG_NAM.kho ? 1 : 0;
+    }
+    console.log(`dai van: thuan ${(100 * vt / vn).toFixed(0)} %, kho ${(100 * vk / vn).toFixed(0)} % · nam 2026: thuan ${(100 * nt / nn).toFixed(0)} %, kho ${(100 * nk / nn).toFixed(0)} %`);
+    expect([vt / vn > 0.15 && vt / vn < 0.35, vk / vn > 0.15 && vk / vn < 0.35, nt / nn > 0.1 && nt / nn < 0.4, nk / nn > 0.1 && nk / nn < 0.4])
+      .toEqual([true, true, true, true]);
+  });
+
+  test('tang 3: can nam Nham sinh can tuoi Giap (Thuy sinh Moc), nam Ty trung tuoi Ty', () => {
+    const ls = lapLaSo({ ngay: 5, thang: 3, nam: 1984, chiGio: 2, gioiTinh: 'nam', namXem: 2032 });
+    const n = luanNam(ls, tinhLuuHan(ls, 3, { nam: 2032, thang: 7, ngay: 15 }), 1984);
+    expect([n.loi.includes(CAN_NAM.sinhNhap), n.loi.includes(CHI_NAM.tuoi)]).toEqual([true, true]);
   });
 });

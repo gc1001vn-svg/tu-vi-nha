@@ -685,6 +685,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_TU_VI.md`** (file riêng vì dài). Tóm: xem cách cục trước rồi mới tới sao
   (*Toàn Thư*); 60 tinh hệ Mệnh; sức Mệnh theo tam phương tứ chính; tứ hóa năm sinh; lối Việt (vòng Thái Tuế, Mệnh – Cục, âm dương)
   nói nhẹ; app chỉ hiện lời chốt. Tầng 2 (02/11): bấm cung → đoạn luận cung (14 sao × 11 cung, sao hợp/kỵ từng cung theo *Toàn Thư*).
+  Tầng 3 (02/11): đại vận (là chính) + năm (thêm bớt) — thiên thời, nhân hòa, địa lợi (Thiên Lương), tứ hóa vận, năm; tháng, ngày giữ cách *Tân Biên*.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

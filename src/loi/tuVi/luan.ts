@@ -6,6 +6,10 @@
 import { napAm, type Cung, type LaSo, type Sao } from './laSo.ts';
 import { CUNG_SAO, HOP_KY, KET_CUNG, PHU_CUNG, SUC_KHOE } from './luanCungLoi.ts';
 import {
+  CAN_NAM, CHI_NAM, DIA_LOI, GHEP, KET_NAM, KET_VAN, KINH_DA_DIEP, NHAN_HOA, SAT_TRUNG, SAT_TRUNG_GIAI, THIEN_THOI, VAN_SAO,
+} from './luanHanLoi.ts';
+import type { LuuHan } from './luuHan.ts';
+import {
   AM_DUONG, CACH_LOI, HOA, MENH_CUC, PHUC_DUC, SUC_MENH, THAI_TUE, TINH_HE, VIEC_SAO, VO_CHINH, VO_CHINH_NHAT_NGUYET,
 } from './luanLoi.ts';
 import { BINH, CHINH_TINH, CHU_DE, THAN_CU } from './nghia.ts';
@@ -59,14 +63,20 @@ const catSat = (c: Cung): number => c.sao.reduce((t, s) => t + (CAT[s.ten] ?? 0)
 
 /** Diem suc Menh (chi de chon loi, khong hien so). */
 export function diemMenh(ls: LaSo): number {
-  const m = ls.menh, menh = cungO(ls, m);
-  let goc = sangCung(menh) ?? (sangCung(cungO(ls, m + 6)) ?? 0) * 0.5 - 1;
-  if (menh.tuan || menh.triet) goc += goc > 0 ? -1 : 1; // Tuan Triet: sao sang bot, sao mo do (Tan Bien)
-  const tp = tamPhuong(m).reduce((t, x, i) => t + catSat(cungO(ls, x)) * (TRONG[i] ?? 0.6), 0);
+  const m = ls.menh;
   const gp = (giap(ls, m, 'Tả Phù', 'Hữu Bật') ? 0.5 : 0) + (giap(ls, m, 'Văn Xương', 'Văn Khúc') ? 0.5 : 0)
     + (giap(ls, m, 'Thái Dương', 'Thái Âm') ? 0.5 : 0) - (giap(ls, m, 'Địa Không', 'Địa Kiếp') ? 0.5 : 0)
     - (giap(ls, m, 'Hỏa Tinh', 'Linh Tinh') ? 0.5 : 0);
-  return goc + tp + gp;
+  return diemTamPhuong(ls, m) + gp;
+}
+
+/** Diem tam phuong tu chinh cua mot cung (Menh, cung dai van, cung tieu han): sang chinh tinh (vo chinh dieu muon cung doi mot
+ * nua, − 1), Tuan Triet (sao sang bot, sao mo do — Tan Bien), cat − sat theo trong so ban cung / cung doi / tam hop. */
+export function diemTamPhuong(ls: LaSo, chi: number): number {
+  const c = cungO(ls, chi);
+  let goc = sangCung(c) ?? (sangCung(cungO(ls, chi + 6)) ?? 0) * 0.5 - 1;
+  if (c.tuan || c.triet) goc += goc > 0 ? -1 : 1;
+  return goc + tamPhuong(chi).reduce((t, x, i) => t + catSat(cungO(ls, x)) * (TRONG[i] ?? 0.6), 0);
 }
 
 /** Nguong vung / yeu theo phan bo 3.000 la so gia (phan vi 75 = 2,7 · 25 = −0,9; 02/11): thang so tuong doi — khoang 1/4 la so
@@ -145,17 +155,22 @@ export function tenTuHoa(can: number, phai: LaSo['phai']): readonly [string, str
 }
 
 /** Cau tu hoa nam sinh: hoa nao theo sao nao vao cung nao, viec gi thuan / vuong. */
-function cauTuHoa(ls: LaSo, namAm: number): { chi: number; loi: string }[] {
-  return tenTuHoa((((namAm - 4) % 10) + 10) % 10, ls.phai).flatMap((sao, i) => {
+const canCua = (nam: number): number => (((nam - 4) % 10) + 10) % 10;
+
+/** Cau tu hoa theo can `can` (nam sinh, can cung dai van, can nam xem): hoa nao theo sao nao vao cung nao. Tu hoa nam sinh la sao
+ * co san tren la so; tu hoa van, nam tim cung cua sao chu. */
+function cauHoa(ls: LaSo, can: number, dau = '', goc = true): { chi: number; ten: string; loi: string }[] {
+  return tenTuHoa(can, ls.phai).flatMap((sao, i) => {
     const tenHoa = (['Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kỵ'] as const)[i] ?? 'Hóa Lộc';
-    const c = ls.cung.find((x) => co(x, tenHoa));
-    return c === undefined ? [] : [{ chi: c.chi, loi: `${tenHoa} theo sao ${sao} vào cung ${c.ten} (${CHU_DE[c.ten] ?? ''}): `
+    const c = ls.cung.find((x) => co(x, goc ? tenHoa : sao));
+    return c === undefined ? [] : [{ chi: c.chi, ten: tenHoa, loi: `${dau}${tenHoa} theo sao ${sao} vào cung ${c.ten} (${CHU_DE[c.ten] ?? ''}): `
       + `${HOA[tenHoa]} — mang màu ${VIEC_SAO[sao] ?? sao}.` }];
   });
 }
 
 const HANH = { Kim: 'K', Thủy: 'T', Hỏa: 'H', Thổ: 'O', Mộc: 'M' } as const;
 const SINH = 'MHOKT'; // Moc sinh Hoa sinh Tho sinh Kim sinh Thuy sinh Moc
+const KHAC = 'MOTHK'; // Moc khac Tho khac Thuy khac Hoa khac Kim khac Moc
 const ke = (vong: string, a: string, b: string): boolean => vong.charAt((vong.indexOf(a) + 1) % 5) === b;
 
 /** Tong luan Menh – Than. `namAm`: nam am sinh (theo Tet) — can chi tuoi, tu hoa, vong Thai Tue, nap am. */
@@ -190,7 +205,7 @@ export function tongLuan(ls: LaSo, namAm: number): DoanLuan[] {
       + 'gặp hung tinh như ngọc có vết").');
   }
 
-  const hoa = cauTuHoa(ls, namAm).map((h) => h.loi);
+  const hoa = cauHoa(ls, canCua(namAm)).map((h) => h.loi);
 
   const hm = napAm(chi + 1, can + 1); // chu cai hanh K T H O M, cung bang HANH
   const hc = HANH[(ls.cuc.split(' ')[0] ?? 'Thổ') as keyof typeof HANH] ?? 'O';
@@ -265,7 +280,7 @@ export function luanCung(ls: LaSo, chi: number, namAm: number): string[] {
   const cat = CAT_TEN.filter((t) => co(c, t) && !daNoi(t)), sat = SAT_TEN.filter((t) => co(c, t) && !daNoi(t));
   if (cat.length > 0) out.push(`Có ${cat.join(', ')} giúp: việc này dễ có người đỡ, thuận hơn.`);
   if (sat.length > 0) out.push(`Gặp ${sat.join(', ')}: việc này hay trắc trở, cần cẩn thận.`);
-  out.push(...cauTuHoa(ls, namAm).filter((h) => h.chi === chi).map((h) => h.loi));
+  out.push(...cauHoa(ls, canCua(namAm)).filter((h) => h.chi === chi).map((h) => h.loi));
   if (c.tuan || c.triet) {
     out.push(`Có ${c.tuan && c.triet ? 'Tuần, Triệt' : c.tuan ? 'Tuần' : 'Triệt'}: việc này hay bị chậm, bị cản; sao xấu trong cung lại được giảm bớt.`);
   }
@@ -275,4 +290,112 @@ export function luanCung(ls: LaSo, chi: number, namAm: number): string[] {
   out.push((d >= NGUONG_CUNG.tot ? KET_CUNG.tot : d < NGUONG_CUNG.kem ? KET_CUNG.kem : KET_CUNG.vua).replace('{}', viec));
   if (c.ten === 'Tật Ách') out.push(SUC_KHOE);
   return out.filter((x) => x !== '');
+}
+
+// ---- Tang 3: van han (docs/LUAN_TU_VI.md muc 10) ----
+
+type QuanHe = 'dong' | 'sinhNhap' | 'sinhXuat' | 'khacNhap' | 'khacXuat';
+/** `a` so voi `b` (phia minh): a sinh b = sinh nhap, b sinh a = sinh xuat, a khac b = khac nhap, b khac a = khac xuat. */
+const quanHe = (a: string, b: string): QuanHe => (a === b ? 'dong' : ke(SINH, a, b) ? 'sinhNhap' : ke(SINH, b, a) ? 'sinhXuat'
+  : ke(KHAC, a, b) ? 'khacNhap' : 'khacXuat');
+/** Hanh tam hop theo chi % 4: Than Ty Thin Thuy · Ty Dau Suu Kim · Dan Ngo Tuat Hoa · Hoi Mao Mui Moc. */
+const TAM_HOP = 'TKHM';
+const CHI_HANH = 'TOMMOHHOKKOT';
+const CAN_HANH = 'MMHHOOKKTT';
+const CAN_TEN = ['Giáp', 'Ất', 'Bính', 'Đinh', 'Mậu', 'Kỷ', 'Canh', 'Tân', 'Nhâm', 'Quý'];
+/** Bo sao (Thien Luong): Tu Phu Vu Tuong · Sat Pha Liem Tham · Co Nguyet Dong Luong · Cu Nhat. */
+const BO: Readonly<Record<string, number>> = {
+  'Tử Vi': 0, 'Thiên Phủ': 0, 'Vũ Khúc': 0, 'Thiên Tướng': 0, 'Thất Sát': 1, 'Phá Quân': 1, 'Tham Lang': 1, 'Liêm Trinh': 1,
+  'Thiên Cơ': 2, 'Thái Âm': 2, 'Thiên Đồng': 2, 'Thiên Lương': 2, 'Cự Môn': 3, 'Thái Dương': 3,
+};
+const boCung = (ls: LaSo, chi: number): number[] => {
+  const ch = chinhTinh(cungO(ls, chi));
+  return (ch.length > 0 ? ch : chinhTinh(cungO(ls, chi + 6))).map((t) => BO[t] ?? -1);
+};
+const PHA = [[0, 9], [1, 4], [2, 11], [3, 6], [5, 8], [7, 10]];
+const LUU_DIEM: Readonly<Record<string, number>> = {
+  'Lưu Lộc Tồn': 1, 'Lưu Thiên Mã': 0.5, 'Lưu Kình Dương': -1, 'Lưu Đà La': -1, 'Lưu Tang Môn': -0.5, 'Lưu Bạch Hổ': -0.5,
+  'Lưu Thiên Khốc': -0.5, 'Lưu Thiên Hư': -0.5,
+};
+
+export type KetVan = 'thuan' | 'vua' | 'kho';
+/** Nguong theo phan bo (phan vi 75 / 25; 02/11): dai van — 12 cung × 3.000 la so gia (3,6 · −0,4); nam — 3.000 la so × 3 nam
+ * xem 2024, 2026, 2028 (2,1 · −2,7). Thang tuong doi: khoang 1/4 "thuan", 1/4 "kho". */
+export const NGUONG_VAN = { thuan: 3.6, kho: -0.4 } as const;
+export const NGUONG_NAM = { thuan: 2.1, kho: -2.7 } as const;
+
+/** Cau sao chinh o cung van / han (VAN_SAO, cau sang / mo); vo chinh dieu muon cung doi. */
+function saoVan(ls: LaSo, chi: number, cho: string): string[] {
+  const loi = (s: Sao): string => {
+    const t = VAN_SAO[s.ten];
+    if (t === undefined) return '';
+    return `${s.ten}${s.doSang === null ? '' : ` (${TEN_SANG[s.doSang]})`}: ${typeof t === 'string' ? t : s.doSang === 'B' || s.doSang === 'H' ? t[1] : t[0]}`;
+  };
+  const ch = cungO(ls, chi).sao.filter((s) => s.loai === 1), doi = cungO(ls, chi + 6).sao.filter((s) => s.loai === 1);
+  return ch.length > 0 ? ch.map(loi)
+    : [`${cho} không có sao chính, mượn sao cung đối (${doi.map((s) => s.ten).join(', ')}) nên ứng nhẹ hơn. ${doi.map(loi).join(' ')}`];
+}
+
+/** Cat / sat trong cung va cung doi (ten), de giai thich diem. */
+function catSatCau(ls: LaSo, chi: number): string[] {
+  const o = [chi, chi + 6].map((x) => cungO(ls, x));
+  const cat = CAT_TEN.filter((t) => o.some((c) => co(c, t))), sat = SAT_TEN.filter((t) => o.some((c) => co(c, t)));
+  return [...(cat.length > 0 ? [`Cát tinh hội về: ${cat.join(', ')}.`] : []), ...(sat.length > 0 ? [`Sát tinh hội về: ${sat.join(', ')}.`] : [])];
+}
+
+/** Luan mot dai van (cung `chi`): tam diem + cau. Dai van la chinh (Thien Luong, Tan Bien). */
+export function luanDaiVan(ls: LaSo, chi: number, namAm: number): { ket: KetVan; diem: number; loi: string[] } {
+  const c = cungO(ls, chi), canSinh = canCua(namAm), chiSinh = m12(namAm - 4);
+  const tt = quanHe(TAM_HOP.charAt(chi % 4), TAM_HOP.charAt(chiSinh % 4));
+  const boMenh = boCung(ls, ls.menh), nh = boCung(ls, chi).some((b) => boMenh.includes(b));
+  const hc = CHI_HANH.charAt(chi), hm = napAm(chiSinh + 1, canSinh + 1);
+  const dl = hc === hm || ke(SINH, hc, hm) ? 'thuan' : ke(KHAC, hc, hm) ? 'can' : 'bo';
+  const hoa = cauHoa(ls, CAN_TEN.indexOf(c.canChi.split(' ')[0] ?? ''), 'Vận này: ', false);
+  const tp = tamPhuong(chi);
+  const dHoa = hoa.reduce((t, h) => t + (!tp.includes(h.chi) ? 0 : h.ten === 'Hóa Kỵ' ? (h.chi === chi ? -2 : -1) : h.ten === 'Hóa Lộc' ? 1 : 0.5), 0);
+  const diem = diemTamPhuong(ls, chi) + { dong: 1.5, khacXuat: 0.5, sinhXuat: 0, sinhNhap: -0.5, khacNhap: -1.5 }[tt] + (nh ? 1 : 0)
+    + { thuan: 0.5, bo: 0, can: -0.5 }[dl] + dHoa;
+  const ket: KetVan = diem >= NGUONG_VAN.thuan ? 'thuan' : diem < NGUONG_VAN.kho ? 'kho' : 'vua';
+  return {
+    ket, diem,
+    loi: [`Đại vận ${String(c.daiVan)}–${String(c.daiVan + 9)} tuổi ở cung ${c.ten}: mười năm này chuyện ${CHU_DE[c.ten] ?? ''} nổi lên.`,
+      ...saoVan(ls, chi, 'Cung vận'), ...catSatCau(ls, chi), THIEN_THOI[tt], nh ? NHAN_HOA.hop : NHAN_HOA.khac, DIA_LOI[dl],
+      ...hoa.map((h) => h.loi), KET_VAN[ket]],
+  };
+}
+
+/** Moi dai van trong doi theo tuoi bat dau: cung, ket luan. */
+export function dsDaiVan(ls: LaSo, namAm: number): { tuoi: number; chi: number; ten: string; ket: KetVan }[] {
+  return [...ls.cung].sort((a, b) => a.daiVan - b.daiVan).map((c) => ({ tuoi: c.daiVan, chi: c.chi, ten: c.ten, ket: luanDaiVan(ls, c.chi, namAm).ket }));
+}
+
+/** Luan nam dang xem: cung tieu han, sao luu, tu hoa nam, can nam so can tuoi, nam tuoi / xung / pha, Kinh Da diep, That Sat trung
+ * phung; roi ghep voi dai van dang chay (Tan Bien: dai van tot thi nam xau cung nhe). */
+export function luanNam(ls: LaSo, lh: LuuHan, namAm: number): { ket: KetVan; diem: number; loi: string[] } {
+  const th = lh.tieuHan, c = cungO(ls, th), canSinh = canCua(namAm), chiSinh = m12(namAm - 4);
+  const canX = canCua(lh.namAm), chiX = m12(lh.namAm - 4), tp = tamPhuong(th);
+  const luuTp = tp.reduce((t, x, i) => t + lh.sao.filter((s) => s.chi === x).reduce((u, s) => u + (LUU_DIEM[s.ten] ?? 0), 0) * (TRONG[i] ?? 0.6), 0);
+  const hoa = cauHoa(ls, canX, 'Năm nay: ', false);
+  const dHoa = hoa.reduce((t, h) => t + (!tp.includes(h.chi) ? 0 : h.ten === 'Hóa Kỵ' ? (h.chi === th ? -2 : -1) : h.ten === 'Hóa Lộc' ? 1 : 0.5), 0);
+  const qh = quanHe(CAN_HANH.charAt(canX), CAN_HANH.charAt(canSinh));
+  const chi = chiX === chiSinh ? 'tuoi' : m12(chiX - chiSinh) === 6 ? 'xung' : PHA.some(([a, b]) => (a === chiX && b === chiSinh) || (b === chiX && a === chiSinh)) ? 'pha' : null;
+  const vung = [th, th + 6].map(m12);
+  const luuO = (ten: string): boolean => lh.sao.some((s) => s.ten === ten && vung.includes(s.chi));
+  const luuKD = luuO('Lưu Kình Dương') || luuO('Lưu Đà La');
+  const diep = luuKD && vung.some((x) => co(cungO(ls, x), 'Kình Dương', 'Đà La'));
+  const trung = luuKD && tp.some((x) => co(cungO(ls, x), 'Thất Sát'));
+  const giai = trung && tp.some((x) => co(cungO(ls, x), 'Tử Vi', 'Thiên Tướng', 'Lộc Tồn'));
+  const diem = diemTamPhuong(ls, th) + luuTp + dHoa + { sinhNhap: 1, khacXuat: 0.5, dong: 0, sinhXuat: -0.5, khacNhap: -1 }[qh]
+    + (chi === null ? 0 : -0.5) + (diep ? -1.5 : 0) + (trung && !giai ? -1.5 : 0);
+  const ket: KetVan = diem >= NGUONG_NAM.thuan ? 'thuan' : diem < NGUONG_NAM.kho ? 'kho' : 'vua';
+  const dv = ls.daiVanNay === null ? null : luanDaiVan(ls, ls.daiVanNay, namAm).ket;
+  const ghep = GHEP[dv === null ? 'chua' : `${dv}|${ket}`] ?? '';
+  const luuVe = lh.sao.filter((s) => vung.includes(s.chi) && (LUU_DIEM[s.ten] ?? 0) !== 0).map((s) => s.ten);
+  return {
+    ket, diem,
+    loi: [`Năm ${lh.canChi}: tiểu hạn ở cung ${c.ten} — chuyện ${CHU_DE[c.ten] ?? ''} nổi lên trong năm.`, ...saoVan(ls, th, 'Cung hạn'),
+      ...catSatCau(ls, th), ...(luuVe.length > 0 ? [`Sao lưu năm nay hội về: ${luuVe.join(', ')}.`] : []),
+      ...hoa.map((h) => h.loi), CAN_NAM[qh], ...(chi === null ? [] : [CHI_NAM[chi]]), ...(diep ? [KINH_DA_DIEP] : []),
+      ...(trung ? [SAT_TRUNG + (giai ? SAT_TRUNG_GIAI : '')] : []), `${KET_NAM[ket]}; ${ghep}`],
+  };
 }

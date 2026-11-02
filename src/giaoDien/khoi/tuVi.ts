@@ -8,7 +8,7 @@ import { CHI, canChiNam, dinhDangAm } from '../../loi/amLich.ts';
 import { hv } from '../../loi/hanViet/index.ts';
 import type { KetQuaHoSo } from '../../loi/hoSo.ts';
 import { tinhTuVi, type Cung, type LaSo, type Sao } from '../../loi/tuVi/laSo.ts';
-import { luanCung, tongLuan } from '../../loi/tuVi/luan.ts';
+import { dsDaiVan, luanCung, luanDaiVan, luanNam, tongLuan } from '../../loi/tuVi/luan.ts';
 import { danhGiaHan, tinhLuuHan, type LuuHan } from '../../loi/tuVi/luuHan.ts';
 import { CHU_DE, HAN, NGHIA_CUNG, SAO_LUU, SAO_LUU_TRUNG } from '../../loi/tuVi/nghia.ts';
 import { el, khoi, type VeKhoi } from '../chung.ts';
@@ -128,17 +128,30 @@ function hanHomNay(ls: LaSo, lh: LuuHan, giaDinh: boolean, namAm: number): HTMLE
   const phaiKia = (kia: number, nay: number, viec: string): HTMLElement | null => (kia === nay ? null
     : el('p', { class: 'canh-bao' }, `Nếu tính theo sách Toàn Thư (khởi từ cung Lưu Thái Tuế, gọi là Đẩu Quân) thì ${viec} này ở `
       + `cung ${tenCung(ls, kia)}.`));
-  const dv = ls.daiVanNay === null ? 'chưa vào đại vận đầu' : `đại vận đang chạy ở cung ${tenCung(ls, ls.daiVanNay)}`;
   const thang = `${String(lh.thangAm)}${lh.nhuan ? ' nhuận' : ''}`;
+  // Dai van, nam: luan tong hop (luan.ts tang 3); thang, ngay: cach dem sao cua Tan Bien (`phan`).
+  const TEN = { thuan: 'thuận', vua: 'bình thường', kho: 'nhiều thử thách' } as const;
+  const cDv = ls.daiVanNay === null ? undefined : ls.cung[ls.daiVanNay];
+  const dv = cDv === undefined ? null : luanDaiVan(ls, cDv.chi, namAm);
+  const nam = luanNam(ls, lh, namAm);
   return [
-    el('p', { class: 'tv-tieu-de' }, 'Hạn theo hôm nay'),
-    el('p', { class: 'ghi-chu' }, HAN.ketLuan),
+    el('p', { class: 'tv-tieu-de' }, 'Vận hạn'),
+    dv === null || cDv === undefined ? el('p', {}, `Chưa vào đại vận đầu (bắt đầu từ ${String(ls.soCuc)} tuổi).`)
+      : el('details', { class: 'tv-giai', open: '' },
+        el('summary', {}, `Đại vận ${String(cDv.daiVan)}–${String(cDv.daiVan + 9)} tuổi · cung ${tenCung(ls, cDv.chi)} · ${TEN[dv.ket]}`),
+        ...dv.loi.map((l) => el('p', {}, l))),
+    el('details', { class: 'tv-giai' }, el('summary', {}, 'Các đại vận trong đời'),
+      el('ul', {}, ...dsDaiVan(ls, namAm).map((v) => el('li', {}, `${String(v.tuoi)}–${String(v.tuoi + 9)} tuổi · cung ${v.ten}: `
+        + `${TEN[v.ket]}${v.chi === ls.daiVanNay ? ' (đang chạy)' : ''}`)))),
+    el('details', { class: 'tv-giai', open: '' },
+      el('summary', {}, `Năm ${lh.canChi} ${String(lh.namAm)} · tiểu hạn ở cung ${tenCung(ls, lh.tieuHan)} · ${nam.ket === 'kho' ? 'nhiều trở ngại' : TEN[nam.ket]}`),
+      ...nam.loi.map((l) => el('p', {}, l)), el('p', {}, `Lưu Thái Tuế ở cung ${tenCung(ls, lh.thaiTue)}.`)),
+    el('p', { class: 'ghi-chu' }, `Đại vận, năm: Claude tổng hợp nhiều phái rồi chốt lời (đại vận là chính, năm chỉ thêm bớt). Tháng, ngày `
+      + `dưới đây tính theo cách sách Tân Biên. ${HAN.ketLuan}`),
     giaDinh ? el('p', { class: 'canh-bao' }, 'Hạn tháng, ngày tính theo giờ giả định đang chọn.') : null,
-    phan(`Năm ${lh.canChi} ${String(lh.namAm)} · tiểu hạn ở cung ${tenCung(ls, lh.tieuHan)}`, lh.tieuHan, 'trong năm', false,
-      el('p', {}, HAN.nam), el('p', {}, `Lưu Thái Tuế ở cung ${tenCung(ls, lh.thaiTue)}; ${dv}.`)),
     phan(`Tháng ${thang} âm · nguyệt hạn ở cung ${tenCung(ls, lh.thang)}`, lh.thang, 'trong tháng này', false,
       el('p', {}, HAN.thang), phaiKia(lh.thangPhaiKia, lh.thang, 'tháng')),
-    phan(`Hôm nay ${String(lh.ngayAm)}/${thang} âm · nhật hạn ở cung ${tenCung(ls, lh.ngay)}`, lh.ngay, 'hôm nay', true,
+    phan(`Hôm nay ${String(lh.ngayAm)}/${thang} âm · nhật hạn ở cung ${tenCung(ls, lh.ngay)}`, lh.ngay, 'hôm nay', false,
       el('p', {}, HAN.ngay), phaiKia(lh.ngayPhaiKia, lh.ngay, 'ngày')),
     el('details', { class: 'tv-giai' }, el('summary', {}, `9 sao lưu năm ${lh.canChi}`),
       el('ul', {}, ...lh.sao.map((s) => el('li', {}, el('span', { class: loaiSao(s) }, s.ten),
