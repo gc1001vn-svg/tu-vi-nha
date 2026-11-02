@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 02/11/2026 — **lời giải chuyên gia (đọc rộng, chốt một lời): tử vi, chiêm tinh, bát tự xong** (anh dặn 02/11).
+Cập nhật: 02/11/2026 — **lời giải chuyên gia (đọc rộng, chốt một lời): tử vi, chiêm tinh, bát tự, thần số xong** (anh dặn 02/11).
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -13,7 +13,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Khối mỗi người (`src/giaoDien/khoi/`): tử vi (Altuvi 345/345), năm nay (bảng báo 2026 144/144), bát tự + đại vận (`sxtwl`),
   hướng Bát trạch, tuổi hợp, thần số học, chiêm tinh (mục 23, có tổng luận), nhịp sinh học, tướng mặt (26), chỉ tay (27).
 - Tử vi hạn năm, tháng, ngày + 9 sao lưu (`luuHan.ts`, mục 16) · **tổng luận, luận cung, vận hạn** tổng hợp nhiều phái (mục 28) ·
-  bát tự cùng cách (mục 29).
+  bát tự, thần số cùng cách (mục 29, 30).
 - "Gieo quẻ": Kinh Dịch, bói Kiều, tarot 78 lá (mục 24) · "Hôm nay": "Chọn ngày theo việc" (mục 17–19), "Chiêm tinh hôm nay".
 - "Phong thủy" (mục 20–22): la bàn + lưu hướng nhà · thước Lỗ Ban · phi tinh năm/tháng, hướng kỵ năm.
 - AI Groq miễn phí (mục 25): "AI tổng hợp" + hỏi đáp dưới mỗi người, quẻ, tarot · chỉ tay (mục 27): chụp ảnh → máy tự dò 4
@@ -21,12 +21,12 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đang làm: lời giải chuyên gia** (`docs/ke-hoach/2026-11-02-*.md`): tử vi, chiêm tinh, bát tự xong 3 tầng. Sau: các
-  môn khác, lời chốt vào AI; đợt 8 cũ lùi; 9 (người nhà).
+- **Đang làm: lời giải chuyên gia** (`docs/ke-hoach/2026-11-02-*.md`): tử vi, chiêm tinh, bát tự, thần số xong 3 tầng.
+  Sau: các môn khác, lời chốt vào AI; đợt 8 cũ lùi; 9 (người nhà).
 
 ## 3. Cần anh
 
-- **Đọc tử vi, bát tự của anh** (tổng luận, từng cung / từng việc, vận): chỗ sai, khó hiểu, chung chung thì báo em.
+- **Đọc tử vi, bát tự, thần số của anh**: chỗ sai, khó hiểu, chung chung thì báo em.
 - **Thử chỉ tay**: khối "Chỉ tay" → nút chụp ảnh → đường màu có nằm trên nếp tay không, sửa ô sai → bấm AI. Lệch thì báo em.
 - Còn chờ: thử tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: dồn, xoá một lần sau cùng; đã nằm trong `main`; tên đủ có `claude/` phía trước):
@@ -39,7 +39,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Chỉ tay (mục 27): máy dò chưa ai chấm, chụp lại đổi ~1/4 ô, chưa thử Safari iPhone; luật Tây 2 sách, chưa có sách Việt cổ.
 - La bàn: bắc từ hay bắc thật chưa thấy tài liệu Apple (VN lệch <2°, anh so không lệch; mục 20).
 - Hạn tháng chưa so Altuvi; Mệnh chủ/Thân chủ theo *Toàn Thư*; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
-- Tử vi, bát tự: AI chưa dùng lời mới; tử vi tháng, ngày còn đếm sao Tân Biên; bát tự chưa so lá mẫu sách.
+- Lời giải mới chưa vào AI; tử vi tháng, ngày còn đếm sao Tân Biên; bát tự chưa so lá mẫu; thần số chưa có số tên.
 - Tướng mặt: ngưỡng tạm theo 15 ảnh Đông Á (1 người Việt); hiện đại Nhật–Hàn đọc qua trích đoạn.
 - AI (mục 25): gán sai cung ~1/10 hồ sơ, thêm lời khuyên ngoài dữ liệu — app chỉ nhắc; siết lời dặn thì đo lại.
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Chọn ngày chỉ hạ Được (kiêng trùng `cnlunar` 61 %, mục 17–19).

@@ -66,7 +66,7 @@ const chuSo = (n: number): number[] => (n < 10 ? [n] : [...chuSo(Math.floor(n / 
 const tongChuSo = (n: number): number => chuSo(n).reduce((s, c) => s + c, 0);
 
 /** Cong chu so toi khi con 1–9 hoac gap mot so trong `giu`. */
-function rutGon(n: number, giu: readonly number[] = []): number {
+export function rutGon(n: number, giu: readonly number[] = []): number {
   let so = n;
   while (so > 9 && !giu.includes(so)) so = tongChuSo(so);
   return so;

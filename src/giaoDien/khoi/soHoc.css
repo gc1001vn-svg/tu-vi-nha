@@ -2,7 +2,6 @@
 .so-hoc .sh-lon { display: flex; align-items: baseline; gap: 10px; margin: 2px 0 4px; }
 .so-hoc .sh-so { font-size: 2.6rem; font-weight: 700; line-height: 1.1; color: var(--vang); }
 .so-hoc .sh-loi, .so-hoc .sh-chu-thich { font-size: 0.9rem; color: var(--mo); }
-.so-hoc .dong .sh-loi { flex-basis: 100%; }
 
 .so-hoc .sh-luoi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; max-width: 240px; margin: 12px 0 6px; }
 .so-hoc .sh-luoi > span {
@@ -17,3 +16,9 @@
 .so-hoc .sh-thanh > i { position: absolute; top: 0; bottom: 0; border-radius: 6px; background: var(--xanh); }
 .so-hoc .sh-thanh > i.sh-am { background: var(--do); }
 .so-hoc .sh-nguy { color: var(--do); }
+/* Loi giai chuyen gia (02/11): tong luan, bieu do, van — tieu de vang nhu tu vi, bat tu; dinh cao dang di qua to dam. */
+.sh-luan { margin-top: 8px; }
+.sh-luan > summary { color: var(--vang); cursor: pointer; min-height: 44px; display: flex; align-items: center; font-weight: 600; }
+.sh-luan h4 { margin: 12px 0 4px; font-size: 0.95rem; color: var(--vang); }
+.sh-luan ul { margin: 4px 0; padding-left: 20px; }
+.sh-luan li.dang { color: var(--vang); font-weight: 700; }

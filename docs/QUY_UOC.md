@@ -124,7 +124,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Không rõ giờ: trụ và khởi vận tính lúc 12:00 (thẻ chính `hoSo.ts` lấy 00:00 — ngày Lập Xuân rơi trước 12:00 thì khối bát tự và cung phi có thể khác, cả hai đều hiện phương án kia). Đã kiểm: máy (`sxtwl` 2.700 ca, `NGUON_MO`).
 ## 13. Thần số học, cung hoàng đạo, nhịp sinh học (`src/loi/soHoc.ts`, chỉ dùng ngày dương)
 - Số chủ đạo: cộng mọi chữ số dd/mm/yyyy, còn >11 thì cộng tiếp; giữ 10, 11, 22/4, 33/6; không có số 1 [W29]. Vênh: fptshop, hellobacsi chỉ kê 2–11 và 22/4 (tổng 33 về 6); mytour, thuviennhadat giữ 33 → app ghi "33/6". Tuỳ chọn `rutGonRieng`: rút gọn ngày, tháng, năm riêng rồi cộng (trang nước ngoài) [W30].
-- Năm cá nhân = ngày + tháng sinh + năm xem, rút về 1–9 (đổi 01/01, mục 1); tháng cá nhân = năm cá nhân + tháng. Số ngày sinh: rút gọn ngày, giữ 11, 22. Lưới 3×3 bỏ số 0; mũi tên chưa làm (các trang đặt tên vênh) [W31].
+- Năm cá nhân = ngày + tháng sinh + năm xem, rút về 1–9 (đổi 01/01, mục 1); tháng cá nhân = năm cá nhân + tháng. Số ngày sinh: rút gọn ngày, giữ 11, 22. Lưới 3×3 bỏ số 0 [W31]; mũi tên, đỉnh cao, thử thách, số thái độ: mục 30.
 - Cung hoàng đạo: tới 22/10 tra bảng ngày cố định của `lunar-typescript` (vênh 1 ngày ở 21/6, 23/10, 22/11 [W32]); nay lấy Mặt Trời tính thật ở khối Chiêm tinh (mục 23). Bảng Hán–Việt `cungHoangDao` giữ vì thư viện vẫn trả chữ đó.
 - Nhịp sinh học: sin(2πt/T), T = 23, 28, 33 ngày, t = số ngày từ ngày sinh; ghi rõ không có cơ sở khoa học [W33].
 ## 14. Năm nay, hướng Bát trạch, tuổi hợp (`src/loi/namNay.ts`, `batTrach.ts`, `tuoiHop.ts`, đo 19/10)
@@ -695,6 +695,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_BAT_TU.md`**. Tóm: vượng suy theo lệnh tháng (nặng nhất), gốc trong chi, can giúp;
   dụng thần ức phù làm gốc, điều hậu đè lên khi sinh hè / đông thiếu Thủy / Hỏa, tòng và chuyên vượng giữ hiếm; cách cục lấy ở lệnh
   tháng (*Tử Bình Chân Thuyên*); không dùng thần sát, hóa khí; đại vận xét chi nặng, năm xét can nặng; app chỉ hiện lời chốt.
+
+## 30. Luận thần số học — tổng hợp nhiều trường phái, chốt một lời (kế hoạch 02/11; `src/loi/soHocLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_THAN_SO.md`**. Tóm: số chủ đạo, ngày sinh, thái độ (ngày + tháng, rút 1–9); lưới:
+  mặt phẳng, 8 mũi tên đầy / trống (Phillips, tên Việt), số lặp, số vắng gộp một câu; vận: 4 đỉnh cao + thử thách (Jordan – Decoz, đỉnh 1
+  hết ở 36 − số chủ đạo rút một chữ số), năm / tháng cá nhân; không chấm tốt xấu; chưa làm số theo tên.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
