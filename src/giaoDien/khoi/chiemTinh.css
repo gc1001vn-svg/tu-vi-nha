@@ -23,3 +23,4 @@
 .chiem-tinh ul { margin: 4px 0; padding-left: 18px; }
 .chiem-tinh li { margin: 6px 0; }
 .chiem-tinh .ct-them > summary { min-height: 44px; display: flex; align-items: center; font-weight: 600; color: var(--vang); cursor: pointer; }
+.ct-tong h4 { margin: 12px 0 4px; font-size: 0.95rem; color: var(--vang); }

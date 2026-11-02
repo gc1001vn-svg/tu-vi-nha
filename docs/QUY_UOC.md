@@ -345,6 +345,9 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   hệ. Ký hiệu vẽ bằng đường lấy từ phông DejaVu Sans (`scripts/ky_hieu_sao.py`) vì iPhone đổi ♈… thành emoji. Đã kiểm:
   `tests/ChiemTinh.test.ts`, Playwright khổ 390×844 (có giờ, không rõ giờ, nước ngoài).
 
+- **Tổng luận (02/11)**: nguyên tố, thể, ba điểm chính, sao chủ, phẩm vị, sát trục, ngày/đêm, bán cầu, góc chiếu chính — cách chốt,
+  nguồn ở **`docs/LUAN_CHIEM_TINH.md`**.
+
 ## 24. Tarot (`src/loi/tarot.ts`, thẻ "Gieo quẻ", tra 22/10)
 - **Bộ bài**: bộ 1909 do Pamela Colman Smith vẽ, A. E. Waite soạn — hết bản quyền ở Mỹ (in 1909) và Anh/EU (Smith mất 1951, Waite
   1942). Không dùng tên "Rider-Waite" (nhãn hiệu US Games) và bản tô màu 1971. Ảnh: bản quét "Pam-A" của Holly Voley trên Wikimedia

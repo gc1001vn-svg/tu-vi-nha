@@ -11,7 +11,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 - Năm thẻ: "Hôm nay" · "Tra cứu" (không lưu) · "Của tôi" (một hồ sơ + file sao lưu) · "Gieo quẻ" · "Phong thủy". Người nhà: đợt 9.
 - Khối mỗi người (`src/giaoDien/khoi/`): tử vi (Altuvi 345/345), năm nay (bảng báo 2026 144/144), bát tự + đại vận (`sxtwl`),
-  hướng Bát trạch, tuổi hợp, thần số học, chiêm tinh (mục 23), nhịp sinh học, tướng mặt (mục 26), chỉ tay (mục 27).
+  hướng Bát trạch, tuổi hợp, thần số học, chiêm tinh (mục 23, có tổng luận), nhịp sinh học, tướng mặt (26), chỉ tay (27).
 - Tử vi hạn năm, tháng, ngày + 9 sao lưu (`luuHan.ts`, mục 16) · **tổng luận, luận cung, vận hạn** tổng hợp nhiều phái (mục 28).
 - "Gieo quẻ": Kinh Dịch, bói Kiều, tarot 78 lá (mục 24) · "Hôm nay": "Chọn ngày theo việc" (mục 17–19), "Chiêm tinh hôm nay".
 - "Phong thủy" (mục 20–22): la bàn + lưu hướng nhà · thước Lỗ Ban · phi tinh năm/tháng, hướng kỵ năm.
@@ -20,9 +20,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đang làm: lời giải chuyên gia, tử vi trước** (`docs/ke-hoach/2026-11-02-loi-giai-chuyen-gia.md`). Đợt 7 xong; máy dò chỉ
-  tay chờ anh thử.
-- Sau đó: chiêm tinh, bát tự, các môn khác (cùng cách); đợt 8 cũ lùi; 9 (người nhà). Chưa làm: lưu thời, lưu đại hạn.
+- **Đang làm: lời giải chuyên gia** (`docs/ke-hoach/2026-11-02-*.md`): tử vi xong 3 tầng; chiêm tinh xong tầng 1 (tổng luận),
+  còn nhà, vận. Sau: bát tự, các môn khác; đợt 8 cũ lùi; 9 (người nhà).
 
 ## 3. Cần anh
 

@@ -6,6 +6,7 @@ import { CUNG, CUNG_ANH, DIEM, DIEM_ANH, GOC, chuan, kinhDo, laSo, cungCua, dinh
 import {
   BAC_GIAO_DIEM, CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NGHICH_HANH, NHA, THIEN_DINH, TRANG_QUA_CUNG, TU_KHOA, Y_GOC, Y_TUAN_TRANG,
 } from '../../loi/chiemTinhGiai.ts';
+import { tongLuanCT } from '../../loi/chiemTinhLuan.ts';
 import { TUAN_TRANG, gioVN, gocChieuQua, khoangNghich, ngayVN, phutUtcTuMs, sapNghich, trangDoiCung, tuanTrang } from '../../loi/chiemTinhNgay.ts';
 import type { HoSo } from '../../loi/hoSo.ts';
 import { el } from '../chung.ts';
@@ -138,7 +139,12 @@ export function veChiemTinh(hs: HoSo, lechNuoc: number | undefined): Node[] {
     veBanhXe(ls, gc, `Bánh xe lá số: ${ba.join(', ')}`),
     el('p', { class: 'ghi-chu' }, 'Đường xanh: góc thuận (lục hợp, tam hợp); đường đỏ: góc nghịch (vuông, đối).'),
     bang,
-    el('h3', {}, 'Lời giải'), ...loiGiai, hanhTinh,
+    // Tong luan (ke hoach chiem tinh 02/11): chi loi chot; nguon, ly do o docs/LUAN_CHIEM_TINH.md.
+    el('details', { class: 'ct-them ct-tong', open: '' }, el('summary', {}, 'Tổng luận lá số'),
+      ...tongLuanCT(ls).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
+      el('p', { class: 'ghi-chu' }, 'Claude tổng hợp nhiều trường phái chiêm tinh phương Tây (cổ điển và hiện đại) rồi chốt lời; chỉ để '
+        + 'tham khảo.')),
+    el('h3', {}, 'Lời giải từng điểm'), ...loiGiai, hanhTinh,
     // Goc chieu thuong 20–30 dong: gap lai cho khoi khoi dai, bam moi mo.
     el('details', { class: 'ct-them' }, el('summary', {}, `Góc chiếu (${String(gc.length)}) — lệch càng nhỏ càng mạnh`),
       gc.length === 0 ? el('p', {}, 'Không có góc chiếu chính nào.') : goc),
