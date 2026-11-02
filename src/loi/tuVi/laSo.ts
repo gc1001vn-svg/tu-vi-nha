@@ -184,7 +184,7 @@ const kc = (cung1: number, cung2: number, chieu: number): number =>
  * Hanh nap am cua can chi (so 1..10, 1..12) — bang `matranNapAm` cua `AmDuong.py` rut gon:
  * cap chi (Ty Suu, Dan Mao…) lech dan mot buoc tren vong K T H O M, het ba cap thi lap lai.
  */
-const napAm = (chi: number, can: number): string =>
+export const napAm = (chi: number, can: number): string =>
   'KTHOM'.charAt((Math.floor((can - 1) / 2) + (Math.floor((chi - 1) / 2) % 3)) % 5);
 
 /** `timTuVi`: dem cuc tu cung Dan toi khi vuot ngay sinh; du le thi lui, chan thi tien. */

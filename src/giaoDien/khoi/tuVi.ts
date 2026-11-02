@@ -8,6 +8,7 @@ import { CHI, canChiNam, dinhDangAm } from '../../loi/amLich.ts';
 import { hv } from '../../loi/hanViet/index.ts';
 import type { KetQuaHoSo } from '../../loi/hoSo.ts';
 import { tinhTuVi, type Cung, type LaSo, type Sao } from '../../loi/tuVi/laSo.ts';
+import { tongLuan } from '../../loi/tuVi/luan.ts';
 import { danhGiaHan, tinhLuuHan, type LuuHan } from '../../loi/tuVi/luuHan.ts';
 import {
   BINH, CHINH_TINH, CHU_DE, HAN, NGHIA_CUNG, PHU_TINH, SAO_LUU, SAO_LUU_TRUNG, THAN_CHUNG, THAN_CU, TRIET, TUAN, VO_CHINH_DIEU,
@@ -166,6 +167,14 @@ function hanHomNay(ls: LaSo, lh: LuuHan, giaDinh: boolean): HTMLElement[] {
   ].filter((x) => x !== null);
 }
 
+/** Tong luan Menh – Than (`luan.ts`, ke hoach loi giai chuyen gia 02/11): chi loi chot, nguon o `docs/LUAN_TU_VI.md`. */
+function veTongLuan(ls: LaSo, namAm: number): HTMLElement {
+  return el('details', { class: 'tv-giai tv-tong', open: '' }, el('summary', {}, 'Tổng luận lá số (Mệnh – Thân)'),
+    ...tongLuan(ls, namAm).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
+    el('p', { class: 'ghi-chu' }, 'Claude tổng hợp nhiều phái tử vi (sách cổ Trung Hoa, sách và kinh nghiệm thầy Việt) rồi chốt một '
+      + 'lời; chỉ để tham khảo. Luận từng cung, vận hạn theo cách này sẽ thay dần phần nghĩa từng sao khi bấm cung.'));
+}
+
 /** Luoi 12 cung + phan chi tiet cung dang chon (mac dinh cung Menh). Bam o chi doi phan chi tiet, khong ve lai luoi. */
 function laSo(ls: LaSo, kq: KetQuaHoSo, ten: string, giaDinh: boolean, lh: LuuHan): HTMLElement[] {
   const chiTietCung = el('div', { class: 'tv-chi-tiet', 'aria-live': 'polite' });
@@ -189,6 +198,7 @@ function laSo(ls: LaSo, kq: KetQuaHoSo, ten: string, giaDinh: boolean, lh: LuuHa
       'Độ sáng sao chính: M Miếu, V Vượng, Đ Đắc là sáng (đứng chỗ hợp) · B Bình là vừa · H Hãm là mờ (đứng chỗ không hợp). '
       + 'Số góc dưới: tuổi bắt đầu đại vận (tô vàng: đang chạy). '
       + 'Viền vàng: cung Mệnh. Năm, Tháng, Ngày: cung hạn theo hôm nay; "L." là sao lưu năm nay. Bấm một cung để xem đủ sao và lời giải.'),
+    veTongLuan(ls, kq.am.nam),
     chiTietCung,
   ];
 }

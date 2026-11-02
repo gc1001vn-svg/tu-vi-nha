@@ -1,0 +1,209 @@
+/**
+ * Luan tu vi tang 1 — tong luan Menh – Than (ke hoach `docs/ke-hoach/2026-11-02-loi-giai-chuyen-gia.md`; cach chot, nguon:
+ * `docs/LUAN_TU_VI.md` muc 7). Thu tu theo *Toan Thu*: xem cach cuc truoc, roi sao; Menh doc kem tam phuong tu chinh.
+ * Loi Claude soan o `luanLoi.ts`. Thuoc: `tests/LuanTuVi.test.ts`.
+ */
+import { napAm, type Cung, type LaSo } from './laSo.ts';
+import {
+  AM_DUONG, CACH_LOI, HOA, MENH_CUC, PHUC_DUC, SUC_MENH, THAI_TUE, TINH_HE, VIEC_SAO, VO_CHINH, VO_CHINH_NHAT_NGUYET,
+} from './luanLoi.ts';
+import { BINH, CHINH_TINH, CHU_DE, THAN_CU } from './nghia.ts';
+
+const TEN_SANG = { M: 'miếu', V: 'vượng', Đ: 'đắc địa', B: 'bình hòa', H: 'hãm địa' } as const;
+
+export interface DoanLuan { readonly tieuDe: string; readonly loi: readonly string[] }
+
+const m12 = (x: number): number => ((x % 12) + 12) % 12;
+const cungO = (ls: LaSo, chi: number): Cung => {
+  const c = ls.cung[m12(chi)];
+  if (c === undefined) throw new Error('tu vi: thieu cung');
+  return c;
+};
+const co = (c: Cung, ...ten: string[]): boolean => ten.some((t) => c.sao.some((s) => s.ten === t));
+const chinhTinh = (c: Cung): string[] => c.sao.filter((s) => s.loai === 1).map((s) => s.ten);
+/** Tam phuong tu chinh: ban cung, cung doi, hai cung tam hop. */
+const tamPhuong = (chi: number): number[] => [chi, chi + 6, chi + 4, chi + 8].map(m12);
+const trongTp = (ls: LaSo, chi: number, ten: string): boolean => tamPhuong(chi).some((x) => co(cungO(ls, x), ten));
+const giap = (ls: LaSo, chi: number, a: string, b: string): boolean => {
+  const t = cungO(ls, chi - 1), p = cungO(ls, chi + 1);
+  return (co(t, a) && co(p, b)) || (co(t, b) && co(p, a));
+};
+
+/** Khoa tinh he cua cung: "A+B" (dong cung) · "A|B+C" (sao le | chinh tinh cung doi) · "VCD|B+C" (vo chinh dieu). */
+export function khoaTinhHe(ls: LaSo, chi: number): string {
+  const ch = chinhTinh(cungO(ls, chi)), doi = chinhTinh(cungO(ls, chi + 6)).join('+');
+  if (ch.length === 0) return `VCD|${doi}`;
+  return ch.length === 1 ? `${ch[0] ?? ''}|${doi}` : ch.join('+');
+}
+
+const DIEM_SANG: Readonly<Record<string, number>> = { M: 2, V: 2, Đ: 1, B: 0, H: -2 };
+const CAT: Readonly<Record<string, number>> = {
+  'Tả Phù': 1, 'Hữu Bật': 1, 'Văn Xương': 1, 'Văn Khúc': 1, 'Thiên Khôi': 1, 'Thiên Việt': 1, 'Lộc Tồn': 1, 'Hóa Lộc': 1.5,
+  'Hóa Quyền': 1, 'Hóa Khoa': 1,
+};
+const SAT: Readonly<Record<string, number>> = {
+  'Kình Dương': 1, 'Đà La': 1, 'Hỏa Tinh': 1, 'Linh Tinh': 1, 'Địa Không': 1.5, 'Địa Kiếp': 1.5, 'Hóa Kỵ': 1.5,
+};
+/** Ban cung ×1, cung doi ×0,8, tam hop ×0,6 — "ban cung manh nhat, cung doi thu nhi" (docs/LUAN_TU_VI.md muc 7). */
+const TRONG = [1, 0.8, 0.6, 0.6] as const;
+
+/** Diem sang trung binh cua chinh tinh trong cung (null: vo chinh dieu). */
+function sangCung(c: Cung): number | null {
+  const d = c.sao.filter((s) => s.loai === 1 && s.doSang !== null).map((s) => DIEM_SANG[s.doSang ?? 'B'] ?? 0);
+  return d.length === 0 ? null : d.reduce((a, b) => a + b, 0) / d.length;
+}
+
+/** Cat tinh tru sat tinh cua mot cung (khong trong so). */
+const catSat = (c: Cung): number => c.sao.reduce((t, s) => t + (CAT[s.ten] ?? 0) - (SAT[s.ten] ?? 0), 0);
+
+/** Diem suc Menh (chi de chon loi, khong hien so). */
+export function diemMenh(ls: LaSo): number {
+  const m = ls.menh, menh = cungO(ls, m);
+  let goc = sangCung(menh) ?? (sangCung(cungO(ls, m + 6)) ?? 0) * 0.5 - 1;
+  if (menh.tuan || menh.triet) goc += goc > 0 ? -1 : 1; // Tuan Triet: sao sang bot, sao mo do (Tan Bien)
+  const tp = tamPhuong(m).reduce((t, x, i) => t + catSat(cungO(ls, x)) * (TRONG[i] ?? 0.6), 0);
+  const gp = (giap(ls, m, 'Tả Phù', 'Hữu Bật') ? 0.5 : 0) + (giap(ls, m, 'Văn Xương', 'Văn Khúc') ? 0.5 : 0)
+    + (giap(ls, m, 'Thái Dương', 'Thái Âm') ? 0.5 : 0) - (giap(ls, m, 'Địa Không', 'Địa Kiếp') ? 0.5 : 0)
+    - (giap(ls, m, 'Hỏa Tinh', 'Linh Tinh') ? 0.5 : 0);
+  return goc + tp + gp;
+}
+
+/** Nguong vung / yeu theo phan bo 3.000 la so gia (phan vi 75 = 2,7 · 25 = −0,9; 02/11): thang so tuong doi — khoang 1/4 la so
+ * "vung", 1/4 "yeu" so voi cac la so khac, khong phai thang tuyet doi. */
+export const NGUONG_MENH = { vung: 2.7, yeu: -0.9 } as const;
+
+const sangToi = (ls: LaSo, ten: string, tot: boolean): boolean => tamPhuong(ls.menh).some((x) => cungO(ls, x).sao
+  .some((s) => s.ten === ten && (tot ? s.doSang === 'M' || s.doSang === 'V' || s.doSang === 'Đ' : s.doSang === 'H')));
+
+/** Cach cuc: [khoa loi, tot?, dieu kien]. Dinh nghia theo Toan Thu q.1 va sach Viet (docs/LUAN_TU_VI.md muc 3, 7). */
+type DieuKien = (ls: LaSo, m: number, mc: Cung, k: string) => boolean;
+const c = (khoa: string, tot: boolean, dk: DieuKien): readonly [string, boolean, DieuKien] => [khoa, tot, dk];
+const CACH = [
+  c('tuPhuDong', true, (_ls, _m, mc) => co(mc, 'Tử Vi') && co(mc, 'Thiên Phủ')),
+  c('tuPhuTrieu', true, (ls, m, mc) => !co(mc, 'Tử Vi', 'Thiên Phủ') && [m + 4, m + 6, m + 8].some((x) => co(cungO(ls, x), 'Tử Vi'))
+    && [m + 4, m + 6, m + 8].some((x) => co(cungO(ls, x), 'Thiên Phủ'))),
+  c('phuTuongTrieu', true, (ls, m, mc) => !co(mc, 'Thiên Phủ', 'Thiên Tướng')
+    && [m + 4, m + 6, m + 8].some((x) => co(cungO(ls, x), 'Thiên Phủ')) && [m + 4, m + 6, m + 8].some((x) => co(cungO(ls, x), 'Thiên Tướng'))),
+  c('quanThan', true, (ls, m, mc) => co(mc, 'Tử Vi') && trongTp(ls, m, 'Tả Phù') && trongTp(ls, m, 'Hữu Bật')),
+  c('cucHuong', true, (_ls, m, mc, k) => m === 6 && k === 'Tử Vi|Tham Lang' && !co(mc, ...Object.keys(SAT))),
+  c('satTrieu', true, (_ls, m, _mc, k) => [0, 2, 6, 8].includes(m) && k.startsWith('Thất Sát|')),
+  c('coNguyet', true, (ls, m, mc) => ['Thiên Cơ', 'Thái Âm', 'Thiên Đồng', 'Thiên Lương'].every((t) => trongTp(ls, m, t))
+    && !co(mc, 'Tử Vi', 'Thiên Phủ', 'Thất Sát', 'Phá Quân', 'Tham Lang')),
+  c('satPhaTham', true, (_ls, _m, mc) => co(mc, 'Thất Sát', 'Phá Quân', 'Tham Lang')),
+  c('nhatNguyetMinh', true, (ls) => sangToi(ls, 'Thái Dương', true) && sangToi(ls, 'Thái Âm', true)),
+  c('nhatXuat', true, (_ls, m, mc) => m === 3 && co(mc, 'Thái Dương')),
+  c('kimXan', true, (_ls, m, _mc, k) => m === 6 && k === 'Thái Dương|Thiên Lương'),
+  c('nguyetLang', true, (_ls, m, _mc, k) => m === 11 && k === 'Thái Âm|Thiên Cơ'),
+  c('minhChau', true, (ls, m, _mc, k) => m === 7 && k.startsWith('VCD|') && co(cungO(ls, 3), 'Thái Dương') && co(cungO(ls, 11), 'Thái Âm')),
+  c('thachTrung', true, (_ls, m, _mc, k) => (m === 0 || m === 6) && k === 'Cự Môn|Thiên Cơ'),
+  c('cuNhat', true, (_ls, _m, _mc, k) => k === 'Thái Dương+Cự Môn'),
+  c('cuCo', true, (_ls, _m, _mc, k) => k === 'Thiên Cơ+Cự Môn'),
+  c('thamHoa', true, (ls, m, mc) => co(mc, 'Tham Lang') && (trongTp(ls, m, 'Hỏa Tinh') || trongTp(ls, m, 'Linh Tinh'))),
+  c('thamVu', true, (_ls, _m, _mc, k) => k === 'Vũ Khúc+Tham Lang'),
+  c('vuThuVien', true, (_ls, m, mc) => m === 3 && co(mc, 'Vũ Khúc')),
+  c('locMa', true, (ls, m) => (trongTp(ls, m, 'Lộc Tồn') || trongTp(ls, m, 'Hóa Lộc')) && trongTp(ls, m, 'Thiên Mã')),
+  c('tamKy', true, (ls, m) => trongTp(ls, m, 'Hóa Lộc') && trongTp(ls, m, 'Hóa Quyền') && trongTp(ls, m, 'Hóa Khoa')),
+  c('songLoc', true, (ls, m) => trongTp(ls, m, 'Lộc Tồn') && trongTp(ls, m, 'Hóa Lộc')),
+  c('taHuuGiap', true, (ls, m) => giap(ls, m, 'Tả Phù', 'Hữu Bật')),
+  c('xuongKhucGiap', true, (ls, m) => giap(ls, m, 'Văn Xương', 'Văn Khúc')),
+  c('nhatNguyetGiap', true, (ls, m) => giap(ls, m, 'Thái Dương', 'Thái Âm')),
+  c('toaQuy', true, (ls, m, mc) => (co(mc, 'Thiên Khôi') && trongTp(ls, m, 'Thiên Việt')) || (co(mc, 'Thiên Việt') && trongTp(ls, m, 'Thiên Khôi'))),
+  c('vanQue', true, (_ls, m, mc) => (m === 1 || m === 7) && co(mc, 'Văn Xương') && co(mc, 'Văn Khúc')),
+  c('kinhMieu', true, (ls, m, mc) => [1, 4, 7, 10].includes(m) && co(mc, 'Kình Dương')
+    && tamPhuong(m).some((x) => cungO(ls, x).sao.some((s) => (CAT[s.ten] ?? 0) > 0))),
+  c('maDau', true, (_ls, m, mc) => m === 6 && co(mc, 'Kình Dương')),
+  c('khongKiepGiap', false, (ls, m) => giap(ls, m, 'Địa Không', 'Địa Kiếp')),
+  c('kinhDaGiap', false, (ls, m, mc) => giap(ls, m, 'Kình Dương', 'Đà La') && !co(mc, 'Hóa Kỵ')),
+  c('kinhDaGiapKy', false, (ls, m, mc) => giap(ls, m, 'Kình Dương', 'Đà La') && co(mc, 'Hóa Kỵ')),
+  c('hoaLinhGiap', false, (ls, m) => giap(ls, m, 'Hỏa Tinh', 'Linh Tinh')),
+  c('nhatNguyetPhan', false, (ls) => sangToi(ls, 'Thái Dương', false) && sangToi(ls, 'Thái Âm', false)),
+  c('khongKiepMenh', false, (_ls, _m, mc) => co(mc, 'Địa Không', 'Địa Kiếp')),
+  c('locPhungKhong', false, (_ls, _m, mc) => co(mc, 'Lộc Tồn', 'Hóa Lộc') && co(mc, 'Địa Không', 'Địa Kiếp')),
+  c('maKhong', false, (_ls, _m, mc) => co(mc, 'Thiên Mã') && (mc.tuan || mc.triet || co(mc, 'Địa Không', 'Địa Kiếp'))),
+];
+
+/** Cac cach cuc cua Menh: [khoa, tot?]. */
+export function cachCuc(ls: LaSo): (readonly [string, boolean])[] {
+  const m = ls.menh, mc = cungO(ls, m), k = khoaTinhHe(ls, m);
+  return CACH.filter(([, , dk]) => dk(ls, m, mc, k)).map(([t, tot]) => [t, tot] as const);
+}
+
+/** Tu hoa theo can nam (0 = Giap): [Loc, Quyen, Khoa, Ky] — cung bang `laSo.ts` (Altuvi nam Canh: Khoa Thai Am, Ky Thien Dong). */
+export function tenTuHoa(can: number, phai: LaSo['phai']): readonly [string, string, string, string] {
+  const B: readonly (readonly [string, string, string, string])[] = [
+    ['Liêm Trinh', 'Phá Quân', 'Vũ Khúc', 'Thái Dương'], ['Thiên Cơ', 'Thiên Lương', 'Tử Vi', 'Thái Âm'],
+    ['Thiên Đồng', 'Thiên Cơ', 'Văn Xương', 'Liêm Trinh'], ['Thái Âm', 'Thiên Đồng', 'Thiên Cơ', 'Cự Môn'],
+    ['Tham Lang', 'Thái Âm', 'Hữu Bật', 'Thiên Cơ'], ['Vũ Khúc', 'Tham Lang', 'Thiên Lương', 'Văn Khúc'],
+    phai === 'altuvi' ? ['Thái Dương', 'Vũ Khúc', 'Thái Âm', 'Thiên Đồng'] : ['Thái Dương', 'Vũ Khúc', 'Thiên Đồng', 'Thái Âm'],
+    ['Cự Môn', 'Thái Dương', 'Văn Khúc', 'Văn Xương'], ['Thiên Lương', 'Tử Vi', 'Thiên Phủ', 'Vũ Khúc'],
+    ['Phá Quân', 'Cự Môn', 'Thái Âm', 'Tham Lang'],
+  ];
+  const h = B[can];
+  if (h === undefined) throw new Error('tu vi: thieu tu hoa');
+  return h;
+}
+
+const HANH = { Kim: 'K', Thủy: 'T', Hỏa: 'H', Thổ: 'O', Mộc: 'M' } as const;
+const SINH = 'MHOKT'; // Moc sinh Hoa sinh Tho sinh Kim sinh Thuy sinh Moc
+const ke = (vong: string, a: string, b: string): boolean => vong.charAt((vong.indexOf(a) + 1) % 5) === b;
+
+/** Tong luan Menh – Than. `namAm`: nam am sinh (theo Tet) — can chi tuoi, tu hoa, vong Thai Tue, nap am. */
+export function tongLuan(ls: LaSo, namAm: number): DoanLuan[] {
+  const m = ls.menh, mc = cungO(ls, m), k = khoaTinhHe(ls, m);
+  const can = (((namAm - 4) % 10) + 10) % 10, chi = m12(namAm - 4);
+
+  const kieu: string[] = [];
+  if (k.startsWith('VCD|')) {
+    const nhatNguyet = sangToi(ls, 'Thái Dương', true) && sangToi(ls, 'Thái Âm', true);
+    kieu.push(VO_CHINH + (nhatNguyet ? VO_CHINH_NHAT_NGUYET : ''), `Mượn sao cung đối — ${TINH_HE[k.slice(4)] ?? ''}`);
+  } else {
+    kieu.push(TINH_HE[k] ?? '');
+    // Tung sao chinh: sang / binh / ham theo bang do sang Altuvi, nghia theo Tan Bien (`nghia.ts`).
+    for (const s of mc.sao.filter((x) => x.loai === 1)) {
+      const t = CHINH_TINH[s.ten], d = s.doSang;
+      if (t === undefined || d === null) continue;
+      kieu.push(`${s.ten} ${TEN_SANG[d]}: ${d === 'H' ? t.ham : d === 'B' ? t.binh ?? BINH : t.sang}`);
+    }
+  }
+
+  const d = diemMenh(ls);
+  const the = [d >= NGUONG_MENH.vung ? SUC_MENH.vung : d < NGUONG_MENH.yeu ? SUC_MENH.yeu : SUC_MENH.vua];
+  if (mc.tuan || mc.triet) the.push(`Mệnh gặp ${mc.tuan && mc.triet ? 'cả Tuần lẫn Triệt' : mc.tuan ? 'Tuần' : 'Triệt'}: như có tấm `
+    + 'màn che — sao sáng bị bớt sức, sao mờ lại đỡ xấu; việc hay bị chậm, bị cản giữa chừng.');
+
+  const cc = cachCuc(ls);
+  const satMenh = mc.sao.filter((s) => (SAT[s.ten] ?? 0) > 0).map((s) => s.ten);
+  const cach = cc.map(([t]) => CACH_LOI[t] ?? '');
+  if (cc.some(([, tot]) => tot) && (satMenh.length >= 2 || satMenh.includes('Hóa Kỵ'))) {
+    cach.push(`Mệnh có ${satMenh.join(', ')} nên các cách tốt trên bị phá một phần: phát không bền, phải biết giữ (sách cổ: "cát tinh `
+      + 'gặp hung tinh như ngọc có vết").');
+  }
+
+  const hoa = tenTuHoa(can, ls.phai).map((sao, i) => {
+    const tenHoa = (['Hóa Lộc', 'Hóa Quyền', 'Hóa Khoa', 'Hóa Kỵ'] as const)[i] ?? 'Hóa Lộc';
+    const c = ls.cung.find((x) => co(x, tenHoa));
+    return c === undefined ? '' : `${tenHoa} theo sao ${sao} vào cung ${c.ten} (${CHU_DE[c.ten] ?? ''}): ${HOA[tenHoa]} — mang màu `
+      + `${VIEC_SAO[sao] ?? sao}.`;
+  }).filter((x) => x !== '');
+
+  const hm = napAm(chi + 1, can + 1); // chu cai hanh K T H O M, cung bang HANH
+  const hc = HANH[(ls.cuc.split(' ')[0] ?? 'Thổ') as keyof typeof HANH] ?? 'O';
+  const viet = [
+    THAI_TUE[m12(m - chi) % 4] ?? '',
+    hm === hc ? MENH_CUC.dong : ke(SINH, hm, hc) || ke(SINH, hc, hm) ? MENH_CUC.sinh : MENH_CUC.khac,
+    chi % 2 === m % 2 ? AM_DUONG.thuan : AM_DUONG.nghich,
+  ];
+
+  const than = cungO(ls, ls.than), pd = ls.cung.find((x) => x.ten === 'Phúc Đức');
+  const dpd = pd === undefined ? 0 : (sangCung(pd) ?? 0) + catSat(pd);
+  const sau = [THAN_CU[than.ten] ?? '', dpd >= 2 ? PHUC_DUC.tot : dpd <= -1 ? PHUC_DUC.kem : PHUC_DUC.vua];
+
+  return [
+    { tieuDe: 'Kiểu người (sao chính cung Mệnh)', loi: kieu },
+    { tieuDe: 'Thế của Mệnh', loi: the },
+    ...(cach.length === 0 ? [] : [{ tieuDe: 'Cách cục', loi: cach }]),
+    { tieuDe: 'Tứ hóa năm sinh: việc thuận, việc vướng', loi: hoa },
+    { tieuDe: 'Gốc và thái độ sống (lối xem Việt)', loi: viet },
+    { tieuDe: 'Nửa đời sau và phúc', loi: sau },
+  ];
+}

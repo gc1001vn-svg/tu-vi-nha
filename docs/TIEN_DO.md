@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 01/11/2026 — **đợt 7 phần 3: chỉ tay — chụp ảnh, máy tự dò, điền sẵn ô, AI diễn giải**.
+Cập nhật: 02/11/2026 — **lời giải chuyên gia: đọc rộng mọi phái, chốt một lời — tử vi trước** (anh dặn 02/11).
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -12,7 +12,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Năm thẻ: "Hôm nay" · "Tra cứu" (không lưu) · "Của tôi" (một hồ sơ + file sao lưu) · "Gieo quẻ" · "Phong thủy". Người nhà: đợt 9.
 - Khối mỗi người (`src/giaoDien/khoi/`): tử vi (Altuvi 345/345), năm nay (bảng báo 2026 144/144), bát tự + đại vận (`sxtwl`),
   hướng Bát trạch, tuổi hợp, thần số học, chiêm tinh (mục 23), nhịp sinh học, tướng mặt (mục 26), chỉ tay (mục 27).
-- Tử vi hạn năm, tháng, ngày + 9 sao lưu theo hôm nay (`luuHan.ts`, `QUY_UOC` mục 16).
+- Tử vi hạn năm, tháng, ngày + 9 sao lưu (`luuHan.ts`, mục 16) · **tổng luận Mệnh – Thân** tổng hợp nhiều phái (mục 28).
 - "Gieo quẻ": Kinh Dịch, bói Kiều, tarot 78 lá (mục 24) · "Hôm nay": "Chọn ngày theo việc" (mục 17–19), "Chiêm tinh hôm nay".
 - "Phong thủy" (mục 20–22): la bàn + lưu hướng nhà · thước Lỗ Ban · phi tinh năm/tháng, hướng kỵ năm.
 - AI Groq miễn phí (mục 25): "AI tổng hợp" + hỏi đáp dưới mỗi người, quẻ, tarot · chỉ tay (mục 27): chụp ảnh → máy tự dò 4
@@ -20,14 +20,15 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- Đợt 7 (`docs/ke-hoach/2026-10-23-dot-7.md`) xong 3 phần; máy dò chỉ tay chờ anh thử trên iPhone.
-- Sau đợt 7: 8, 9 (người nhà). Chưa làm: lưu thời, tứ hóa lưu niên, lưu đại hạn.
+- **Đang làm: lời giải chuyên gia, tử vi trước** (`docs/ke-hoach/2026-11-02-loi-giai-chuyen-gia.md`). Đợt 7 xong; máy dò chỉ
+  tay chờ anh thử.
+- Sau đó: chiêm tinh, bát tự, các môn khác (cùng cách); đợt 8 cũ lùi; 9 (người nhà). Chưa làm: lưu thời, lưu đại hạn.
 
 ## 3. Cần anh
 
-- **Thử chỉ tay**: khối "Chỉ tay" → "Chụp hoặc chọn ảnh lòng bàn tay — máy tự dò" → đường màu có nằm trên nếp tay không, sửa ô
-  sai → "AI diễn giải và dự đoán". Đường nào lệch thì báo em (chụp màn hình được; ảnh không vào repo).
-- Thử tướng mặt: "Tự chụp (camera trước)", "Chọn ảnh có sẵn" → chụp màn hình dòng "Máy cách mặt ước…". So cung Mọc với astro-seek.
+- **Đọc "Tổng luận lá số"** (khối tử vi, dưới lưới 12 cung) của anh: chỗ nào sai, khó hiểu, chung chung thì báo em.
+- **Thử chỉ tay**: khối "Chỉ tay" → nút chụp ảnh → đường màu có nằm trên nếp tay không, sửa ô sai → bấm AI. Lệch thì báo em.
+- Còn chờ: thử tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: dồn, xoá một lần sau cùng; đã nằm trong `main`; tên đủ có `claude/` phía trước):
   `determined-galileo-xz2mc5` (lịch sử còn ngày sinh thật — nên xoá), `nifty-johnson-b0rxcq`, `luu-han-loi-giai`,
   `loi-giai-de-hieu`, `nguon-phat-dao`, `kinh-goc-cuu-dieu`, `ngoc-hap-ky`, `dot-4-kinh-dich`, `blissful-sagan-ur507y`,
@@ -37,9 +38,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 - Chỉ tay (mục 27): máy dò chưa ai chấm, chụp lại đổi ~1/4 ô, chưa thử Safari iPhone; luật Tây 2 sách, chưa có sách Việt cổ.
 - La bàn: bắc từ hay bắc thật chưa thấy tài liệu Apple (VN lệch <2°, anh so không lệch; mục 20).
-- Hạn tháng chưa so Altuvi; tháng nhuận tính như tháng trước. Mệnh chủ/Thân chủ theo *Toàn Thư*, chưa so Altuvi; tuổi đại vận
-  bát tự ghi tuổi mụ (chưa có nguồn Việt).
-- Lời giải các môn chưa ai rành đọc lại; bát tự đếm thô, chưa xét vượng suy; phụ tinh tốt/xấu theo `ansaotuvi` lệch sách vài sao.
+- Hạn tháng chưa so Altuvi; Mệnh chủ/Thân chủ theo *Toàn Thư*; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
+- Tử vi mới có tổng luận; luận cung, vận hạn còn lời cũ. Bát tự đếm thô; các môn khác chờ làm lại cùng cách.
 - Tướng mặt: ngưỡng tạm theo 15 ảnh Đông Á (1 người Việt); hiện đại Nhật–Hàn đọc qua trích đoạn.
 - AI (mục 25): gán sai cung ~1/10 hồ sơ, thêm lời khuyên ngoài dữ liệu — app chỉ nhắc; siết lời dặn thì đo lại.
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Chọn ngày chỉ hạ Được (kiêng trùng `cnlunar` 61 %, mục 17–19).
