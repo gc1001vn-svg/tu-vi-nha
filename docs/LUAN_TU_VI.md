@@ -109,5 +109,24 @@ Sách viết từ kinh nghiệm xem thật (bản in nhắc năm 1984); đúng p
 - Ngưỡng "vững / yếu" = phân vị 75 / 25 của điểm trên 3.000 lá số giả (2,7 và −0,9): thang tương đối, khoảng 1/4 lá số mỗi đầu.
 - Test `tests/LuanTuVi.test.ts`: đủ 60 tinh hệ có lời, không lời thừa · tứ hóa theo can năm khớp bộ an sao 3.000/3.000 lá ·
   không câu trống · câu kể chuyện không lặp quá 30 % lá số · cách cục đúng định nghĩa trên lá mẫu.
-- Còn: tầng 2 (luận từng cung thay nghĩa từng sao), tầng 3 (đại vận, năm theo Thiên Lương + tứ hóa), đưa lời chốt vào AI;
+- Còn: tầng 3 (đại vận, năm theo Thiên Lương + tứ hóa), đưa lời chốt vào AI;
   đối chiếu cách cục với lá số mẫu trong sách (Thiên Lương có lá số danh nhân).
+
+## 9. Tầng 2 — luận từng cung (02/11)
+
+- **Nguồn**: *Toàn Thư* q.2 luận 11 cung theo từng sao (đọc nguyên văn: Huynh Đệ, Thê Thiếp, Tử Nữ, Tài Bạch, Tật Ách, Thiên Di,
+  Nô Bộc, Quan Lộc, Điền Trạch, Phúc Đức, Phụ Mẫu); *Tân Biên* phần luận đoán 12 cung (đọc mẫu cung Thê Thiếp: cùng khung "sao +
+  sao đi cùng → kết quả", thêm phụ tinh lối Việt); cách đọc phổ biến hiện nay.
+- **Cách luận một cung** (`luan.ts` `luanCung`): sao chính theo nghĩa riêng của cung (14 sao × 11 cung, câu sáng / câu mờ) ·
+  vô chính diệu mượn sao cung đối, nói rõ "ứng nhẹ hơn" · sao phụ riêng của cung (Phu Thê: Đào Hồng Hỷ, Cô Quả, Riêu; Tài Bạch:
+  Lộc Tồn, Mã, Hao; Quan Lộc: Quốc Ấn, Mã, Hình; Phúc Đức: Thiên Đức, Nguyệt Đức, Khốc Hư, Thọ; …) · cát / sát trong cung · tứ hóa
+  rơi vào cung · Tuần Triệt · Thân cư · cung Phụ Mẫu thêm Thái Dương (cha), Thái Âm (mẹ) sáng hay mờ (*Toàn Thư*: "xem cha mẹ lấy
+  Thái Dương làm cha, Thái Âm làm mẹ") · câu kết "thuận hơn phần đông / bình thường / phải để tâm hơn phần đông".
+- **Đổi lời cổ sang lời nay** (lý do): sách cổ đếm số anh em, số con theo sao ("Thiên Phủ năm người") — gia đình nay ít con, các
+  thầy hiện đại cũng bỏ → app chỉ nói đông / ít, hòa / không hòa. Sách cổ phán "khắc" (mất) cha mẹ, vợ chồng, "ba lần làm rể" →
+  app nói xu hướng: vất vả, ít gần, dễ trắc trở, nên cưới muộn. Tật Ách chỉ là lời nhắc, kèm câu "không thay khám bệnh".
+- **Câu kết không được ngược lời sao**: bản đầu chỉ chấm theo độ sáng + cát/sát → Phu Thê có Cự Môn sáng ra "thuận lợi hơn phần
+  đông" trong khi câu sao nói "hay khắc khẩu". Sửa: thêm bảng sao **hợp / kỵ** từng cung rút từ *Toàn Thư* q.2 (±1,5 điểm mỗi sao;
+  vd Phu Thê kỵ Cự Môn, Thất Sát, Phá Quân, Tham Lang, Liêm Trinh, Vũ Khúc) và tính Tuần Triệt như ở Mệnh. Ngưỡng = phân vị 75 / 25
+  của điểm 11 cung × 3.000 lá số giả (2,7 và −1,0). Test: không trường hợp nào sao kỵ, mờ mà kết luận "thuận hơn phần đông".
+- Cung Mệnh khi bấm: đoạn tinh hệ + trỏ về Tổng luận (không lặp).

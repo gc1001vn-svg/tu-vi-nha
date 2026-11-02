@@ -3,7 +3,8 @@
  * (ngay sinh gia, luat 1) ra du doan, khong cau trong; cau chinh khong lap qua nhieu giua cac la so; phan bo "the Menh".
  */
 import { lapLaSo, type LaSo } from '../src/loi/tuVi/laSo.ts';
-import { NGUONG_MENH, cachCuc, diemMenh, khoaTinhHe, tenTuHoa, tongLuan } from '../src/loi/tuVi/luan.ts';
+import { NGUONG_CUNG, NGUONG_MENH, cachCuc, diemCung, diemMenh, khoaTinhHe, luanCung, tenTuHoa, tongLuan } from '../src/loi/tuVi/luan.ts';
+import { CUNG_SAO, HOP_KY, SUC_KHOE } from '../src/loi/tuVi/luanCungLoi.ts';
 import { CACH_LOI, TINH_HE } from '../src/loi/tuVi/luanLoi.ts';
 
 /** 3.000 la so gia, rai deu nam 1950–2009, du thang, ngay, gio, gioi (LCG hat co dinh). */
@@ -79,5 +80,30 @@ describe('luan tu vi tang 1', () => {
     expect(co(mc, 'minhChau')).toBe(true);
     // Sat Pha Tham khong lan voi Co Nguyet Dong Luong.
     expect(MAU.filter(({ ls }) => co(ls, 'satPhaTham') && co(ls, 'coNguyet')).length).toBe(0);
+  });
+
+  test('tang 2: du loi 14 sao chinh × 11 cung; 3.000 la so × 12 cung ra du loi; ket luan cung ~1/4 thuan, ~1/4 phai de tam', () => {
+    const SAO = ['Tử Vi', 'Thiên Cơ', 'Thái Dương', 'Vũ Khúc', 'Thiên Đồng', 'Liêm Trinh', 'Thiên Phủ', 'Thái Âm', 'Tham Lang', 'Cự Môn',
+      'Thiên Tướng', 'Thiên Lương', 'Thất Sát', 'Phá Quân'];
+    const CUNG = ['Huynh Đệ', 'Phu Thê', 'Tử Tức', 'Tài Bạch', 'Tật Ách', 'Thiên Di', 'Nô Bộc', 'Quan Lộc', 'Điền Trạch', 'Phúc Đức', 'Phụ Mẫu'];
+    expect(CUNG.flatMap((c) => SAO.filter((s) => CUNG_SAO[c]?.[s] === undefined).map((s) => `${c}/${s}`))).toEqual([]);
+    let tot = 0, kem = 0, n = 0, nguoc = 0;
+    for (const { ls, nam } of MAU) {
+      for (const c of ls.cung) {
+        const l = luanCung(ls, c.chi, nam);
+        expect([l.length >= 2, l.some((x) => x.includes('undefined') || x.length < 15)]).toEqual([true, false]);
+        if (c.ten === 'Tật Ách') expect(l.at(-1)).toBe(SUC_KHOE);
+        if (c.chi !== ls.menh && c.sao.every((s) => s.loai !== 1)) expect(l[0]?.startsWith('Không có sao chính, mượn sao cung đối')).toBe(true);
+        if (c.chi === ls.menh) continue;
+        const d = diemCung(ls, c.chi);
+        n += 1; tot += d >= NGUONG_CUNG.tot ? 1 : 0; kem += d < NGUONG_CUNG.kem ? 1 : 0;
+        // Loi sao noi xau (sao ky voi cung, mo) ma ket luan "thuan hon phan dong" = nguoc nhau.
+        const ch = c.sao.filter((s) => s.loai === 1);
+        if (d >= NGUONG_CUNG.tot && ch.length > 0 && ch.every((s) => HOP_KY[c.ten]?.ky.includes(s.ten) === true && (s.doSang === 'B' || s.doSang === 'H'))) nguoc += 1;
+      }
+    }
+    console.log(`ket luan cung: thuan ${(100 * tot / n).toFixed(0)} %, phai de tam ${(100 * kem / n).toFixed(0)} %`);
+    expect(nguoc).toBe(0);
+    expect([tot / n > 0.15 && tot / n < 0.35, kem / n > 0.15 && kem / n < 0.35]).toEqual([true, true]);
   });
 });

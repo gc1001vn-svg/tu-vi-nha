@@ -684,7 +684,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 ## 28. Luận tử vi — tổng hợp nhiều phái, chốt một lời (kế hoạch 02/11; `src/loi/tuVi/luan*.ts`)
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_TU_VI.md`** (file riêng vì dài). Tóm: xem cách cục trước rồi mới tới sao
   (*Toàn Thư*); 60 tinh hệ Mệnh; sức Mệnh theo tam phương tứ chính; tứ hóa năm sinh; lối Việt (vòng Thái Tuế, Mệnh – Cục, âm dương)
-  nói nhẹ; app chỉ hiện lời chốt.
+  nói nhẹ; app chỉ hiện lời chốt. Tầng 2 (02/11): bấm cung → đoạn luận cung (14 sao × 11 cung, sao hợp/kỵ từng cung theo *Toàn Thư*).
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

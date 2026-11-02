@@ -12,7 +12,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Năm thẻ: "Hôm nay" · "Tra cứu" (không lưu) · "Của tôi" (một hồ sơ + file sao lưu) · "Gieo quẻ" · "Phong thủy". Người nhà: đợt 9.
 - Khối mỗi người (`src/giaoDien/khoi/`): tử vi (Altuvi 345/345), năm nay (bảng báo 2026 144/144), bát tự + đại vận (`sxtwl`),
   hướng Bát trạch, tuổi hợp, thần số học, chiêm tinh (mục 23), nhịp sinh học, tướng mặt (mục 26), chỉ tay (mục 27).
-- Tử vi hạn năm, tháng, ngày + 9 sao lưu (`luuHan.ts`, mục 16) · **tổng luận Mệnh – Thân** tổng hợp nhiều phái (mục 28).
+- Tử vi hạn năm, tháng, ngày + 9 sao lưu (`luuHan.ts`, mục 16) · **tổng luận + luận từng cung** tổng hợp nhiều phái (mục 28).
 - "Gieo quẻ": Kinh Dịch, bói Kiều, tarot 78 lá (mục 24) · "Hôm nay": "Chọn ngày theo việc" (mục 17–19), "Chiêm tinh hôm nay".
 - "Phong thủy" (mục 20–22): la bàn + lưu hướng nhà · thước Lỗ Ban · phi tinh năm/tháng, hướng kỵ năm.
 - AI Groq miễn phí (mục 25): "AI tổng hợp" + hỏi đáp dưới mỗi người, quẻ, tarot · chỉ tay (mục 27): chụp ảnh → máy tự dò 4
@@ -26,7 +26,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 3. Cần anh
 
-- **Đọc "Tổng luận lá số"** (khối tử vi, dưới lưới 12 cung) của anh: chỗ nào sai, khó hiểu, chung chung thì báo em.
+- **Đọc "Tổng luận lá số" và bấm từng cung** (khối tử vi) của anh: chỗ nào sai, khó hiểu, chung chung thì báo em.
 - **Thử chỉ tay**: khối "Chỉ tay" → nút chụp ảnh → đường màu có nằm trên nếp tay không, sửa ô sai → bấm AI. Lệch thì báo em.
 - Còn chờ: thử tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: dồn, xoá một lần sau cùng; đã nằm trong `main`; tên đủ có `claude/` phía trước):
@@ -39,7 +39,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Chỉ tay (mục 27): máy dò chưa ai chấm, chụp lại đổi ~1/4 ô, chưa thử Safari iPhone; luật Tây 2 sách, chưa có sách Việt cổ.
 - La bàn: bắc từ hay bắc thật chưa thấy tài liệu Apple (VN lệch <2°, anh so không lệch; mục 20).
 - Hạn tháng chưa so Altuvi; Mệnh chủ/Thân chủ theo *Toàn Thư*; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
-- Tử vi mới có tổng luận; luận cung, vận hạn còn lời cũ. Bát tự đếm thô; các môn khác chờ làm lại cùng cách.
+- Tử vi: vận hạn còn lời cũ (tầng 3), AI chưa dùng lời mới. Bát tự đếm thô; các môn khác chờ làm lại cùng cách.
 - Tướng mặt: ngưỡng tạm theo 15 ảnh Đông Á (1 người Việt); hiện đại Nhật–Hàn đọc qua trích đoạn.
 - AI (mục 25): gán sai cung ~1/10 hồ sơ, thêm lời khuyên ngoài dữ liệu — app chỉ nhắc; siết lời dặn thì đo lại.
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Chọn ngày chỉ hạ Được (kiêng trùng `cnlunar` 61 %, mục 17–19).
