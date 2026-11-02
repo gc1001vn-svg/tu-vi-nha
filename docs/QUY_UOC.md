@@ -691,6 +691,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   nói nhẹ; app chỉ hiện lời chốt. Tầng 2 (02/11): bấm cung → đoạn luận cung (14 sao × 11 cung, sao hợp/kỵ từng cung theo *Toàn Thư*).
   Tầng 3 (02/11): đại vận (là chính) + năm (thêm bớt) — thiên thời, nhân hòa, địa lợi (Thiên Lương), tứ hóa vận, năm; tháng, ngày giữ cách *Tân Biên*.
 
+## 29. Luận bát tự — tổng hợp nhiều phái, chốt một lời (kế hoạch 02/11; `src/loi/batTuLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_BAT_TU.md`**. Tóm: vượng suy theo lệnh tháng (nặng nhất), gốc trong chi, can giúp;
+  dụng thần ức phù làm gốc, điều hậu đè lên khi sinh hè / đông thiếu Thủy / Hỏa, tòng và chuyên vượng giữ hiếm; cách cục lấy ở lệnh
+  tháng (*Tử Bình Chân Thuyên*); không dùng thần sát, hóa khí; đại vận xét chi nặng, năm xét can nặng; app chỉ hiện lời chốt.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|

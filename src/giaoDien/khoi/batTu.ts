@@ -1,28 +1,28 @@
 /**
- * Khoi "Bat tu (Tu tru)": bang 4 tru, nhat chu, ngu hanh (dem va theo quan he voi nhat chu), khong vong, dai van, van dang
- * chay va nam nay theo thap than, giai nghia. Tinh o `src/loi/batTu.ts`.
+ * Khoi "Bat tu (Tu tru)": bang 4 tru, ngu hanh (tinh ca can an), khong vong; tong luan, luan tung viec, dai van, nam nay — loi chot
+ * cua `src/loi/batTuLuan.ts` (ke hoach `docs/ke-hoach/2026-11-02-bat-tu.md`; nguon, ly do: `docs/LUAN_BAT_TU.md`). Tinh: `batTu.ts`.
  */
 import { dinhDangNgay } from '../../loi/amLich.ts';
-import { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH, khacTru, tinhBatTu, type Tru, type VanNam } from '../../loi/batTu.ts';
+import { NGHIA_THAP_THAN, khacTru, tinhBatTu, type Tru } from '../../loi/batTu.ts';
+import { dsVanBT, luanNamBT, luanVanBT, luanViec, phanTich, tongLuanBT } from '../../loi/batTuLuan.ts';
+import { hv } from '../../loi/hanViet/index.ts';
 import { el, khoi, type VeKhoi } from '../chung.ts';
 import './batTu.css';
 
 const COT = ['Năm', 'Tháng', 'Ngày', 'Giờ'];
-
-/** "can Quý là Thiên Tài — … Chi Hợi (can chính ẩn trong chi là Nhâm) là Kiếp Tài — …" */
-const giaiVan = (v: VanNam): string => {
-  const [can = '', chi = ''] = v.canChi.split(' ');
-  const [t1, t2] = v.thapThan;
-  return `can ${can} là ${t1} — ${NGHIA_VAN[t1] ?? ''} Chi ${chi} (can chính ẩn trong chi là ${v.tang}) là ${t2} — ${NGHIA_VAN[t2] ?? ''}`;
-};
+const VAN = { thuan: 'thuận', vua: 'bình thường', kho: 'nhiều thử thách' } as const;
+const VIEC = { thuan: 'thuận hơn phần đông', vua: 'bình thường', kho: 'phải để tâm hơn' } as const;
+const giai = (tom: string, mo: boolean, loi: readonly string[]): HTMLElement =>
+  el('details', { class: 'giai', ...(mo ? { open: '' } : {}) }, el('summary', {}, tom), ...loi.map((l) => el('p', {}, l)));
 
 export const veKhoiBatTu: VeKhoi = (hs, tr, ngayXem) => {
   const b = tinhBatTu(hs, tr.chinh, ngayXem);
+  const p = phanTich(b);
   // Them phuong an cua ho so (doi mui gio, ±15 phut); trung dong loi da tinh thi Set bo.
   const ghiChu = new Set(b.ghiChu);
-  for (const p of tr.khac) {
-    const khac = khacTru(b.tru, tinhBatTu(hs, p.ketQua, ngayXem).tru);
-    if (khac !== '') ghiChu.add(`${p.lyDo}: ${khac}`);
+  for (const x of tr.khac) {
+    const khac = khacTru(b.tru, tinhBatTu(hs, x.ketQua, ngayXem).tru);
+    if (khac !== '') ghiChu.add(`${x.lyDo}: ${khac}`);
   }
 
   const hang = (nhan: string, f: (t: Tru) => Node | string, lon = false): HTMLElement =>
@@ -39,52 +39,52 @@ export const veKhoiBatTu: VeKhoi = (hs, tr, ngayXem) => {
       hang('Trường sinh', (t) => t.truongSinh),
     ));
 
-  const nhieu = Math.max(1, ...b.nguHanh.map((x) => x.so));
-  const nguHanh = el('div', { class: 'ngu-hanh' }, ...b.nguHanh.map((x) => el('div', {},
-    `${x.hanh} ${String(x.so)}`, el('div', { class: 'thanh', style: `width:${String(Math.round(x.so / nhieu * 100))}%` }))));
+  // Ngu hanh theo trong so may luan dung (ca can an, lenh thang nang nhat), hien phan tram.
+  const tong = p.hanh.reduce((s, x) => s + x, 0) || 1;
+  const nhieu = Math.max(...p.hanh);
+  const nguHanh = el('div', { class: 'ngu-hanh' }, ...p.hanh.map((x, e) => el('div', {},
+    `${hv('nguHanh', '木火土金水'.charAt(e))} ${String(Math.round(x / tong * 100))}\u00a0%`,
+    el('div', { class: 'thanh', style: `width:${String(Math.round(x / (nhieu || 1) * 100))}%` }))));
 
-  const tong = b.nhomHanh.reduce((t, x) => t + x.so, 0);
-  const giup = b.nhomHanh.filter((x) => x.nhom === 'Tỷ Kiếp' || x.nhom === 'Ấn').reduce((t, x) => t + x.so, 0);
-  const nhomHanh = [
-    el('p', {}, 'Xếp theo quan hệ với nhật chủ (chính mình):'),
-    el('ul', { class: 'nhom-hanh' }, ...b.nhomHanh.map((x) => el('li', {}, el('b', {}, x.nhom),
-      ` — ${NHOM_HANH[x.nhom]?.la ?? ''}: hành ${x.hanh}, ${String(x.so)} chữ`))),
-    ...b.nhomHanh.filter((x) => x.so >= 3).map((x) =>
-      el('p', {}, el('b', {}, `${x.nhom} nhiều`), ` (${String(x.so)} chữ ${x.hanh}): ${NHOM_HANH[x.nhom]?.nhieu ?? ''}`)),
-    ...b.nhomHanh.filter((x) => x.so === 0).map((x) =>
-      el('p', {}, el('b', {}, `Thiếu ${x.nhom}`), ` (không có chữ ${x.hanh}): ${NHOM_HANH[x.nhom]?.thieu ?? ''}`)),
-    el('p', { class: 'ghi-chu' }, `Hành đỡ cho mình (Tỷ Kiếp, Ấn): ${String(giup)}/${String(tong)} chữ; hành làm mình tốn sức `
-      + `(Thực Thương, Tài, Quan Sát): ${String(tong - giup)}/${String(tong)} chữ. Đây chỉ là đếm thô, chưa tính mùa sinh và can ẩn `
-      + 'trong chi, nên chưa nói được mình mạnh hay yếu.'),
-  ];
   const vanNay = b.daiVan.find((v) => v.dangChay);
   const dau = b.daiVan[0];
-  const daiVan = el('div', { class: 'dai-van' }, ...b.daiVan.map((v) => el('div', { class: v.dangChay ? 'van dang' : 'van' },
-    el('div', {}, `${String(v.tuoi)} tuổi`), el('div', { class: 'cc' }, v.canChi), el('div', {}, String(v.batDau.nam)))));
+  const ds = dsVanBT(b, p);
+  const daiVan = el('div', { class: 'dai-van' }, ...ds.map((v, i) => el('div', { class: v.dangChay ? 'van dang' : 'van' },
+    el('div', {}, `${String(v.tuoi)} tuổi`), el('div', { class: 'cc' }, v.canChi), el('div', {}, String(b.daiVan[i]?.batDau.nam ?? '')),
+    el('div', { class: `ket ${v.ket}` }, VAN[v.ket]))));
+  const lvNay = vanNay === undefined ? null : luanVanBT(b, vanNay, p);
+  const nam = luanNamBT(b, p);
 
   const thapThan = [...new Set(b.tru.flatMap((t) => (t === null ? [] : [t.thapThan, ...t.tangCan.map((c) => c.thapThan)])))]
     .filter((t) => t in NGHIA_THAP_THAN);
-  const giai = el('details', { class: 'giai' }, el('summary', {}, 'Giải nghĩa thập thần, trường sinh, đại vận'),
+  const thuatNgu = el('details', { class: 'giai' }, el('summary', {}, 'Giải nghĩa thuật ngữ'),
     el('p', {}, 'Nhật chủ là can của ngày sinh, tượng trưng cho chính mình; mọi can chi khác xét theo quan hệ sinh – khắc với nhật chủ.'),
     el('p', {}, 'Thập thần là tên của quan hệ đó, ghi cho từng can và tàng can (can ẩn trong chi). "Mình" dưới đây là nhật chủ:'),
     el('ul', {}, ...thapThan.map((t) => el('li', {}, `${t}: ${NGHIA_THAP_THAN[t] ?? ''}`))),
     el('p', {}, 'Trường sinh: sức của nhật chủ ở từng chi, mạnh ở Lâm Quan, Đế Vượng, yếu ở Bệnh, Tử, Mộ, Tuyệt.'),
     el('p', {}, 'Đại vận: mỗi vận 10 năm, can chi đi tiếp từ trụ tháng; năm sinh can dương thì nam đi thuận, nữ đi nghịch, can âm thì ngược lại.'),
-    el('p', { class: 'ghi-chu' }, 'Lời do Claude soạn lại theo quan niệm dân gian.'));
+    el('p', { class: 'ghi-chu' }, 'Nghĩa chung từng thuật ngữ, Claude soạn lại; phần luận ở trên mới là lời chốt.'));
 
   return khoi('Bát tự (Tứ trụ)', false,
     bang,
-    el('p', {}, el('b', {}, `Nhật chủ ${b.nhatChu}`), ` — ${b.nghiaNhatChu}`),
-    el('p', { class: 'nhan-muc' }, 'Ngũ hành (đếm can và chi, không tính tàng can)'), nguHanh, ...nhomHanh,
+    el('p', { class: 'nhan-muc' }, 'Ngũ hành (tính cả can ẩn trong chi, lệnh tháng nặng nhất)'), nguHanh,
     el('p', {}, `Không vong (theo trụ ngày): ${b.khongVong}`),
+    ...[...ghiChu].map((c) => el('p', { class: 'canh-bao' }, c)),
+    el('details', { class: 'giai bt-tong', open: '' }, el('summary', {}, 'Tổng luận lá số'),
+      ...tongLuanBT(b, p).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
+      el('p', { class: 'ghi-chu' }, 'Claude tổng hợp nhiều phái bát tự (sách cổ Trung Hoa; cách đọc Đài Loan – Hồng Kông, Hàn, Nhật, Việt) '
+        + 'rồi chốt một lời; chỉ để tham khảo.')),
+    el('p', { class: 'nhan-muc' }, 'Luận từng việc'),
+    ...luanViec(b, hs.gioiTinh, p).map((v) => giai(`${v.ten} · ${VIEC[v.ket]}`, false, v.loi)),
     el('p', { class: 'nhan-muc' }, 'Đại vận'),
     el('p', {}, `Khởi vận ${String(b.khoiVan.nam)} năm ${String(b.khoiVan.thang)} tháng ${String(b.khoiVan.ngay)} ngày sau khi sinh`
       + `${dau === undefined ? '' : ` (từ ${dinhDangNgay(dau.batDau)})`}, đi ${b.thuan ? 'thuận' : 'nghịch'}. Tuổi ghi là tuổi mụ năm bắt đầu vận.`),
     daiVan,
-    vanNay === undefined ? el('p', { class: 'ghi-chu' }, 'Hôm nay chưa vào vận nào trong 8 vận trên.')
-      : el('p', {}, el('b', {}, `Vận đang chạy ${vanNay.canChi}`), ` (từ ${String(vanNay.tuoi)} tuổi): ${giaiVan(vanNay)}`),
-    el('p', {}, el('b', {}, `Năm nay ${b.namNay.canChi}`), ` (tính từ Lập Xuân): ${giaiVan(b.namNay)}`),
-    ...[...ghiChu].map((c) => el('p', { class: 'canh-bao' }, c)),
-    giai,
+    vanNay === undefined || lvNay === null ? el('p', { class: 'ghi-chu' }, 'Hôm nay chưa vào vận nào trong 8 vận trên.')
+      : giai(`Vận đang chạy ${vanNay.canChi} (${String(vanNay.tuoi)}–${String(vanNay.tuoi + 9)} tuổi) · ${VAN[lvNay.ket]}`, true, lvNay.loi),
+    giai(`Năm ${b.namNay.canChi} (tính từ Lập Xuân) · ${nam.ket === 'kho' ? 'nhiều trở ngại' : VAN[nam.ket]}`, true, nam.loi),
+    el('p', { class: 'ghi-chu' }, 'Đại vận là chính (chi nặng hơn can), năm thêm bớt (can nặng hơn chi); xét theo hành hợp, hành kỵ của lá số. '
+      + 'Claude tổng hợp rồi chốt lời; chỉ để tham khảo.'),
+    thuatNgu,
   );
 };

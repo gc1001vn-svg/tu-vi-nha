@@ -20,9 +20,17 @@ export interface Tru {
   readonly napAm: string;
   /** Truong sinh (dia the) cua nhat chu tai chi cua tru nay. */
   readonly truongSinh: string;
+  /** Chi so [can, chi] trong `CAN`, `CHI` — cho may luan (`batTuLuan.ts`). */
+  readonly so: readonly [number, number];
 }
 /** Mot can chi gap tren duong doi (dai van, nam dang xem): thap than cua can va cua chinh khi (tang can dau) cua chi. */
-export interface VanNam { readonly canChi: string; readonly thapThan: readonly [string, string]; /** Can chinh an trong chi. */ readonly tang: string }
+export interface VanNam {
+  readonly canChi: string;
+  readonly thapThan: readonly [string, string];
+  /** Can chinh an trong chi. */
+  readonly tang: string;
+  readonly so: readonly [number, number];
+}
 export interface DaiVan extends VanNam { readonly tuoi: number; readonly batDau: NgayDuong; readonly dangChay: boolean }
 export interface BatTu {
   /** Nam, thang, ngay, gio; gio = null khi khong ro gio. */
@@ -34,7 +42,7 @@ export interface BatTu {
   readonly khongVong: string;
   /** Dem 8 chu (6 khi khong ro gio): can theo hanh can, chi theo hanh chinh — khong cong tang can. */
   readonly nguHanh: readonly { readonly hanh: string; readonly so: number }[];
-  /** Cung so chu do, xep theo quan he voi hanh nhat chu: Ty Kiep, Thuc Thuong, Tai, Quan Sat, An (khoa `NHOM_HANH`). */
+  /** Cung so chu do, xep theo quan he voi hanh nhat chu: Ty Kiep, Thuc Thuong, Tai, Quan Sat, An. */
   readonly nhomHanh: readonly { readonly nhom: string; readonly hanh: string; readonly so: number }[];
   readonly khoiVan: { readonly nam: number; readonly thang: number; readonly ngay: number };
   readonly thuan: boolean;
@@ -46,31 +54,34 @@ export interface BatTu {
   readonly ghiChu: readonly string[];
 }
 
-/** Loi Claude soan lai theo quan niem dan gian (luat 6): moi can cua nhat chu mot doan — hinh tuong, manh, yeu, hop viec gi. */
+/**
+ * Moi can nhat chu mot doan, Claude soan moi (luat 6): hinh tuong va dieu kien can theo *Trich Thien Tuy* "Thien can luan"
+ * (nguyen van zh.wikisource), net tinh theo cach doc pho bien hien nay. Ly do chon: `docs/LUAN_BAT_TU.md` muc 3.
+ */
 const NGHIA_CAN: Readonly<Record<string, string>> = {
-  '甲': 'Dương Mộc, như cây lớn: thẳng thắn, muốn vươn lên, thích đứng đầu. Có chí, giữ lời, hay che chở người khác; điểm yếu là '
-    + 'cứng, khó cúi đầu, dễ gãy khi sức ép quá lớn. Hợp việc cần dựng nền lâu dài như quản lý, giáo dục, xây dựng.',
-  '乙': 'Âm Mộc, như cỏ hoa, dây leo: mềm mỏng, khéo xoay xở, dễ thích nghi. Biết dựa thế, giỏi giao tế, bền bỉ âm thầm; điểm yếu '
-    + 'là hay do dự, dễ dựa dẫm. Hợp việc cần khéo léo, tỉ mỉ như thiết kế, tư vấn, buôn bán.',
-  '丙': 'Dương Hỏa, như mặt trời: sôi nổi, rộng rãi, thích được thấy. Nhiệt tình, hào phóng, truyền năng lượng cho người khác; điểm '
-    + 'yếu là nóng vội, thiếu kiên nhẫn, dễ phô trương. Hợp việc cần xuất hiện, truyền cảm hứng như bán hàng, truyền thông, dẫn dắt nhóm.',
-  '丁': 'Âm Hỏa, như ngọn đèn: ấm áp, tinh tế, chu đáo với người gần. Nhạy cảm, có chiều sâu, giỏi soi chi tiết; điểm yếu là hay lo, '
-    + 'dễ tổn thương, cảm xúc lên xuống. Hợp việc cần tỉ mỉ, tinh thần như nghiên cứu, nghệ thuật, chăm sóc người khác.',
-  '戊': 'Dương Thổ, như núi, đất dày: vững vàng, đáng tin, chậm thay đổi. Trung hậu, giữ chữ tín, chịu được áp lực; điểm yếu là bảo '
-    + 'thủ, chậm thích nghi. Hợp việc cần ổn định, bao quát như quản lý, nhà đất, làm chỗ dựa cho tập thể.',
-  '己': 'Âm Thổ, như đất ruộng vườn: bao dung, chịu khó, giỏi vun đắp. Khéo chăm lo, thực tế, dễ gần; điểm yếu là hay lo xa, ôm việc, '
-    + 'khó từ chối. Hợp việc cần nuôi dưỡng, sắp xếp như giáo dục, dịch vụ, hành chính.',
-  '庚': 'Dương Kim, như sắt thép: cứng rắn, quyết đoán, trọng nghĩa. Thẳng thắn, dám làm, chịu rèn luyện; điểm yếu là nóng, cứng '
-    + 'nhắc, dễ va chạm. Hợp việc cần kỷ luật, xử lý dứt khoát như kỹ thuật, quân đội, pháp luật.',
-  '辛': 'Âm Kim, như châu ngọc: tinh tế, kỹ tính, giữ thể diện. Có gu, chú ý tiểu tiết, tự trọng cao; điểm yếu là dễ tự ái, kén chọn. '
-    + 'Hợp việc cần sự tinh xảo như tài chính, làm đẹp, kiểm định, thủ công.',
-  '壬': 'Dương Thủy, như sông biển: rộng lượng, năng động, nhiều ý tưởng. Thông minh, thích đi, thích đổi mới; điểm yếu là khó ổn '
-    + 'định, dễ phóng túng. Hợp việc cần di chuyển, giao lưu như thương mại, du lịch, vận tải.',
-  '癸': 'Âm Thủy, như mưa sương: kín đáo, nhạy cảm, thấm dần mà bền. Trực giác tốt, nghĩ sâu; điểm yếu là hay nghĩ nhiều, dễ bi '
-    + 'quan. Hợp việc cần chiều sâu như nghiên cứu, tư vấn, viết lách.',
+  '甲': 'Dương Mộc, như cây cổ thụ vươn thẳng: cần Hỏa để nở hoa kết trái, mùa xuân không ưa Kim chặt, mùa thu không ưa Thổ dày; '
+    + 'đất ẩm, trời hòa thì đứng vững lâu dài. Người thẳng, có chí, muốn dựng nền và che chở người khác; điểm yếu là cứng, khó cúi đầu.',
+  '乙': 'Âm Mộc, như cỏ hoa, dây leo: mềm mà dai, khéo len lỏi qua chỗ khó; có Bính Đinh sưởi ấm thì không sợ Kim, bám được Giáp '
+    + '(như dây leo dựa cây lớn) thì mùa nào cũng sống tốt. Người mềm dẻo, khéo giao tế, biết dựa thế; điểm yếu là dễ do dự, dựa dẫm.',
+  '丙': 'Dương Hỏa, như mặt trời: mạnh mẽ, không ngại lạnh giá, nung được Canh Kim; gặp Tân thì hợp mà dịu lại, Thổ nhiều thì hiền, '
+    + 'Thủy mạnh lại càng tỏ khí tiết. Người nhiệt tình, rộng rãi, thích được thấy và truyền lửa cho người khác; điểm yếu là nóng vội.',
+  '丁': 'Âm Hỏa, như ngọn đèn: mềm ở ngoài, sáng ở trong; vượng không gay gắt, suy không tắt hẳn, có Giáp làm củi thì thu đông vẫn '
+    + 'cháy bền. Người ấm áp, chu đáo, tinh ý, giỏi soi chi tiết và giữ lửa lâu; điểm yếu là hay lo, cảm xúc lên xuống.',
+  '戊': 'Dương Thổ, như núi, như đê: dày, nặng, trung chính; đủ ẩm thì nuôi được vạn vật, khô nóng quá thì sinh bệnh, ở chỗ bị xung '
+    + 'thì nên giữ yên. Người vững vàng, giữ chữ tín, làm chỗ dựa cho tập thể; điểm yếu là chậm đổi, bảo thủ.',
+  '己': 'Âm Thổ, như đất ruộng vườn: thấp, ẩm, giỏi chứa giữ và vun đắp; không sợ Mộc nhiều, không sợ Thủy mạnh, ít Hỏa thì tối, có Kim '
+    + 'thì sáng ra. Người bao dung, chịu khó, thực tế, khéo chăm lo; điểm yếu là lo xa, ôm việc, khó từ chối.',
+  '庚': 'Dương Kim, như sắt thép: cứng mạnh nhất trong mười can; gặp Thủy thì trong, được Hỏa rèn thì sắc, đất ẩm nuôi được, đất khô '
+    + 'thì giòn. Người quyết đoán, trọng nghĩa, dám làm, chịu rèn luyện; điểm yếu là cứng, nóng, dễ va chạm.',
+  '辛': 'Âm Kim, như châu ngọc: mềm, ấm, trong; sợ đất dày vùi lấp, thích nước trong rửa sáng, nóng thì cần Thổ đỡ, lạnh thì cần Đinh '
+    + 'sưởi. Người tinh tế, có gu, trọng thể diện, kỹ từng chi tiết; điểm yếu là dễ tự ái, kén chọn.',
+  '壬': 'Dương Thủy, như sông lớn: cương mà linh hoạt, chảy mãi không dừng, tiết được khí Kim; gốc mạnh lại thêm Quý thì như lũ, cần '
+    + 'Mậu làm đê. Người thông minh, năng động, nhiều ý tưởng, thích đi, thích đổi mới; điểm yếu là khó ổn định, dễ buông thả.',
+  '癸': 'Âm Thủy, như mưa móc: nhỏ nhất mà thấm khắp nơi, không sợ Hỏa Thổ, gặp đúng thời thì biến hóa lớn. Người kín đáo, trực giác '
+    + 'tốt, nghĩ sâu, bền bỉ âm thầm; điểm yếu là nghĩ nhiều, dễ bi quan.',
 };
 
-/** Loi Claude soan lai theo quan niem dan gian, moi thap than mot doan (khoa la ten tieng Viet). */
+/** Nghia chung tung thap than (giai nghia thuat ngu), Claude soan lai; khoa la ten tieng Viet. */
 export const NGHIA_THAP_THAN: Readonly<Record<string, string>> = {
   'Tỷ Kiên': 'cùng hành, cùng tính âm/dương với mình: anh em, bạn bè, tính tự lập. Vừa phải thì có bạn đồng hành, chí tự lực; '
     + 'nhiều quá thì cứng đầu, dễ tranh phần.',
@@ -90,35 +101,6 @@ export const NGHIA_THAP_THAN: Readonly<Record<string, string>> = {
     + 'cô độc, nghĩ nhiều làm ít.',
   'Chính Ấn': 'sinh ra mình, khác tính âm/dương: mẹ, thầy, học vấn, được che chở; nhân hậu, học hành và giấy tờ thuận. Nhiều quá thì '
     + 'dễ ỷ lại.',
-};
-
-/** Thap than cua can (hoac chinh khi cua chi) dai van, nam dang xem: nghia trong khoang thoi gian do. */
-export const NGHIA_VAN: Readonly<Record<string, string>> = {
-  'Tỷ Kiên': 'có bạn đồng hành, tự lực cánh sinh; dễ phải chia phần, cạnh tranh với người ngang hàng.',
-  'Kiếp Tài': 'dám làm, dám liều; dễ hao tiền vì bạn bè, hùn hạp — cẩn thận chuyện tiền chung.',
-  'Thực Thần': 'thong thả, có lộc ăn, hợp sáng tạo, học thêm nghề; tinh thần thoải mái.',
-  'Thương Quan': 'nhiều ý tưởng, muốn thay đổi; dễ va chạm cấp trên, lời nói dễ gây chuyện.',
-  'Thiên Tài': 'có cơ hội tiền bất ngờ, buôn bán, đi lại; dễ tiêu hoang.',
-  'Chính Tài': 'thu nhập đều, làm ăn chắc chắn; hợp tích lũy, lo việc nhà.',
-  'Thất Sát': 'áp lực, thử thách, cạnh tranh gắt; vượt được thì lên, nên giữ sức khỏe.',
-  'Chính Quan': 'có chức phận, trách nhiệm, được ghi nhận; hợp thi cử, thăng tiến.',
-  'Thiên Ấn': 'hợp học điều mới, nghề riêng, suy ngẫm; dễ cô đơn, nghĩ nhiều.',
-  'Chính Ấn': 'được che chở, học hành, giấy tờ thuận; được người trên giúp.',
-};
-
-/** Nam nhom hanh theo quan he voi nhat chu, thu tu trong `BatTu.nhomHanh`: la gi, nghia khi nhieu va khi thieu. */
-export const NHOM_HANH: Readonly<Record<string, { readonly la: string; readonly nhieu: string; readonly thieu: string }>> = {
-  'Tỷ Kiếp': { la: 'cùng hành với mình (anh em, bạn bè, người ngang hàng)', nhieu: 'tự tin, cứng đầu, đông bạn nhưng dễ tranh phần, hao tiền vì bạn.',
-    thieu: 'dễ thiếu tự tin, ít người cùng chí hướng; nên tìm cộng sự đáng tin.' },
-  'Thực Thương': { la: 'hành do mình sinh ra (tài năng, lời nói, sự sáng tạo)', nhieu: 'giỏi thể hiện, sáng tạo, ăn nói; dễ nói quá lời, không chịu gò bó.',
-    thieu: 'ít bộc lộ, khó nói ra ý mình; nên tập trình bày, viết ra.' },
-  'Tài': { la: 'hành bị mình khắc (tiền bạc, của cải)', nhieu: 'nhạy với tiền, thực tế, nhưng dễ mệt vì lo kiếm; nếu bản thân yếu mà '
-    + 'Tài nhiều thì tiền khó giữ.',
-    thieu: 'ít để tâm tiền bạc, tiêu tùy hứng; nên lập kế hoạch chi tiêu.' },
-  'Quan Sát': { la: 'hành khắc mình (công việc, kỷ luật, áp lực, chức phận)', nhieu: 'chịu nhiều áp lực, kỷ luật, trách nhiệm nặng; dễ căng thẳng.',
-    thieu: 'tự do, ít ràng buộc, nhưng dễ thiếu kỷ luật, khó giữ nề nếp.' },
-  'Ấn': { la: 'hành sinh ra mình (cha mẹ, thầy, học hành, sự che chở)', nhieu: 'được che chở, học nhiều, nhưng dễ ỷ lại, chậm hành động.',
-    thieu: 'phải tự lập sớm, ít được nâng đỡ; nên chủ động tìm thầy, học thêm.' },
 };
 
 const TEN_TRU = ['năm', 'tháng', 'ngày', 'giờ'] as const;
@@ -168,6 +150,7 @@ function lapTru(can: number, chi: number, nhat: number, laNgay: boolean): Tru {
     tangCan: (LunarUtil.ZHI_HIDE_GAN[z] ?? []).map((c) => ({ can: hv('can', c), thapThan: thapThan(c) })),
     napAm: hv('napAm', LunarUtil.NAYIN[g + z] ?? ''),
     truongSinh: hv('truongSinh', LunarUtil.CHANG_SHENG[ts] ?? ''),
+    so: [can, chi],
   };
 }
 
@@ -193,7 +176,7 @@ const hai = (n: number): string => String(n).padStart(2, '0');
 function vanNam(nhat: string, g: string, z: string): VanNam {
   const tt = (c: string): string => hv('thapThan', LunarUtil.SHI_SHEN[nhat + c] ?? '');
   const tang = LunarUtil.ZHI_HIDE_GAN[z]?.[0] ?? '';
-  return { canChi: `${hv('can', g)} ${hv('chi', z)}`, thapThan: [tt(g), tt(tang)], tang: hv('can', tang) };
+  return { canChi: `${hv('can', g)} ${hv('chi', z)}`, thapThan: [tt(g), tt(tang)], tang: hv('can', tang), so: [CAN.indexOf(g), CHI.indexOf(z)] };
 }
 
 export function tinhBatTu(hs: HoSo, kq: KetQuaHoSo, ngayXem: NgayDuong): BatTu {

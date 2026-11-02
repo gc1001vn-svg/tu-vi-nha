@@ -21,4 +21,9 @@
 .giai { margin-top: 10px; font-size: 0.9rem; }
 .giai > summary { color: var(--vang); cursor: pointer; min-height: 44px; display: flex; align-items: center; }
 .giai ul { margin: 4px 0; padding-left: 20px; }
-.nhom-hanh { margin: 4px 0; padding-left: 20px; font-size: 0.95rem; }
+
+/* Loi giai chuyen gia (02/11): tong luan, tung viec, van — tieu de vang nhu tu vi, chiem tinh; ket dai van mau theo thuan / kho. */
+.bt-tong h4 { margin: 12px 0 4px; font-size: 0.95rem; color: var(--vang); }
+.dai-van .ket { font-size: 12px; }
+.dai-van .ket.thuan { color: var(--xanh); }
+.dai-van .ket.kho { color: var(--do); }

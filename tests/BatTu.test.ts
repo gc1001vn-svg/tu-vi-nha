@@ -6,7 +6,8 @@
  */
 import { Solar } from 'lunar-typescript';
 import vang from './vang/bat-tu-sxtwl.json';
-import { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH, tinhBatTu, type BatTu } from '../src/loi/batTu.ts';
+import { NGHIA_THAP_THAN, tinhBatTu, type BatTu } from '../src/loi/batTu.ts';
+import { THAP_THAN } from '../src/loi/batTuLuanLoi.ts';
 import { hv } from '../src/loi/hanViet/index.ts';
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 
@@ -138,17 +139,16 @@ describe('bat tu: van, nam nay, nhom hanh theo nhat chu', () => {
     expect(b.nhomHanh.map((x) => `${x.nhom} ${x.hanh} ${String(x.so)}`))
       .toEqual(['Tỷ Kiếp Thủy 2', 'Thực Thương Mộc 2', 'Tài Hỏa 0', 'Quan Sát Thổ 4', 'Ấn Kim 0']);
     expect(b.nhomHanh.reduce((t, x) => t + x.so, 0)).toBe(b.nguHanh.reduce((t, x) => t + x.so, 0));
-    expect(Object.keys(NHOM_HANH).sort()).toEqual(b.nhomHanh.map((x) => x.nhom).sort());
   });
 
   test('van dang chay va nam nay theo thap than; nam doi o Lap Xuan (04/02/2026 03:02 gio VN)', () => {
     const b = bt('1985-03-15', '02:00');
     expect(b.daiVan.find((v) => v.dangChay)).toMatchObject({ canChi: 'Ất Hợi', thapThan: ['Thực Thần', 'Kiếp Tài'], tang: 'Nhâm' });
-    expect(b.namNay).toEqual({ canChi: 'Bính Ngọ', thapThan: ['Chính Tài', 'Thiên Tài'], tang: 'Đinh' });
+    expect(b.namNay).toEqual({ canChi: 'Bính Ngọ', thapThan: ['Chính Tài', 'Thiên Tài'], tang: 'Đinh', so: [2, 6] });
     expect(bt('1985-03-15', '02:00', {}, { nam: 2026, thang: 2, ngay: 3 }).namNay)
-      .toEqual({ canChi: 'Ất Tỵ', thapThan: ['Thực Thần', 'Chính Tài'], tang: 'Bính' });
+      .toEqual({ canChi: 'Ất Tỵ', thapThan: ['Thực Thần', 'Chính Tài'], tang: 'Bính', so: [1, 5] });
     expect(bt('1985-03-15', '02:00', {}, { nam: 2026, thang: 2, ngay: 4 }).namNay.canChi).toBe('Bính Ngọ');
     const moi = [b.namNay, ...b.daiVan].flatMap((v) => v.thapThan);
-    expect(moi.filter((t) => !(t in NGHIA_VAN))).toEqual([]);
+    expect(moi.filter((t) => !(THAP_THAN as readonly string[]).includes(t))).toEqual([]);
   });
 });

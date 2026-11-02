@@ -3,7 +3,8 @@
  * 10 thap than, chiem tinh — va chu dung quy uoc (`docs/QUY_UOC.md` muc 10: NFC, dau kieu cu Hỏa Thủy Hòa, Tỵ Kỷ Kỵ). Ngay sinh GIA.
  */
 import { LOI_DAN, YEU_CAU } from '../src/loi/ai/loiDan.ts';
-import { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH, tinhBatTu } from '../src/loi/batTu.ts';
+import { NGHIA_THAP_THAN, tinhBatTu } from '../src/loi/batTu.ts';
+import { CACH, LY_DO, NGHE, THAN_MUC, THAP_THAN, TINH, VAN_THAN, VIEC } from '../src/loi/batTuLuanLoi.ts';
 import {
   BAC_GIAO_DIEM, CUNG_MOC, HANH_TINH, MAT_TRANG, MAT_TROI, NGHICH_HANH, NHA, THIEN_DINH, TRANG_QUA_CUNG, TU_KHOA, Y_GOC, Y_TUAN_TRANG,
 } from '../src/loi/chiemTinhGiai.ts';
@@ -35,7 +36,7 @@ function moiDoan(): [string, string][] {
     }
   };
   them('tuVi', { NGHIA_CUNG, CHU_DE, CHINH_TINH, PHU_TINH, SAO_LUU, SAO_LUU_TRUNG, THAN_CU, THAN_CHUNG, HAN, BINH, TUAN, TRIET, VO_CHINH_DIEU });
-  them('batTu', { NGHIA_THAP_THAN, NGHIA_VAN, NHOM_HANH });
+  them('batTu', { NGHIA_THAP_THAN, CACH, LY_DO, NGHE, THAN_MUC, TINH, VAN_THAN, VIEC });
   them('namNay', { NGUON_SAO_HAN });
   them('tarot', { LA, TRAI });
   them('chiemTinh', { MAT_TROI, MAT_TRANG, CUNG_MOC, HANH_TINH, TU_KHOA, NHA, Y_GOC, BAC_GIAO_DIEM, THIEN_DINH, TRANG_QUA_CUNG, Y_TUAN_TRANG, NGHICH_HANH });
@@ -90,7 +91,7 @@ describe('loi giai', () => {
     expect(gap.size).toBe(17);
   });
 
-  test('bat tu: 10 nhat chu khac nhau deu co loi; thap than, van, nhom hanh du', () => {
+  test('bat tu: 10 nhat chu khac nhau deu co loi; thap than, van du', () => {
     const nhat = new Map<string, string>();
     for (let i = 0; i < 10; i++) {
       const h = hs({ ngaySinh: ngay(i) });
@@ -99,9 +100,8 @@ describe('loi giai', () => {
     }
     expect(nhat.size).toBe(10);
     expect([...nhat.values()].filter((v) => v.length < 100)).toEqual([]);
-    expect(Object.keys(NGHIA_VAN).sort()).toEqual(Object.keys(NGHIA_THAP_THAN).sort());
-    expect(Object.keys(NGHIA_VAN)).toHaveLength(10);
-    expect(Object.keys(NHOM_HANH)).toHaveLength(5);
+    expect([...THAP_THAN]).toEqual(Object.keys(NGHIA_THAP_THAN));
+    expect([VAN_THAN.length, TINH.length]).toEqual([10, 10]);
   });
 
   test('chu dung quy uoc: NFC, dau kieu cu, Tỵ Kỷ Kỵ, khong thua khoang trang, khong rong', () => {
