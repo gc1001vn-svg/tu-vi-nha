@@ -109,3 +109,25 @@ describe('hoi them AI tong hop', () => {
       YEU_CAU.kieu('').includes('chỉ trích câu thơ có trong DỮ LIỆU')]).toEqual([true, true, true]);
   });
 });
+
+describe('mau, huong hanh hop venh Bat trach (do AI that 03/11)', () => {
+  test('huong hanh hop la huong xau cua cung phi thi ghi venh; huong tot thi giu nguyen', async () => {
+    const { huongHop } = await import('../src/loi/ai/duLieu.ts');
+    const { UNG_DUNG } = await import('../src/loi/batTuLuanLoi.ts');
+    const hoa = UNG_DUNG([1]);
+    expect(hoa).toContain('hướng Nam');
+    // Cung phi Doai (Tay tu menh): Nam la Ngu Quy, Tay Bac Sinh Khi.
+    expect(huongHop(hoa, 'Đoài')).toContain('Vênh Bát trạch: hướng Nam là Ngũ Quỷ (xấu)');
+    expect(huongHop(UNG_DUNG([3]), 'Đoài')).toBe(UNG_DUNG([3]));
+    expect(huongHop(null, 'Đoài')).toBeNull();
+    expect(huongHop('Hành hợp: Hỏa.', 'Đoài')).toBe('Hành hợp: Hỏa.');
+    // Ho so gia moi: dong gui AI luon co, va neu co ghi venh thi huong do dung la huong xau Bat trach.
+    for (let i = 0; i < 30; i++) {
+      const h: HoSo = { ...HS, id: `v${String(i)}`, gioiTinh: i % 2 === 0 ? 'nam' : 'nu', ngaySinh: `${String(1950 + i * 2)}-0${String(1 + (i % 9))}-1${String(i % 9)}` };
+      const d = duLieuNguoi(h, tinhHoSo(h), XEM, undefined);
+      const dong = d.split('\n').find((l) => l.startsWith('Cách dùng phổ biến'));
+      expect(dong).toBeDefined();
+      for (const m of (dong ?? '').matchAll(/hướng (\p{L}+) là (\p{L}+ \p{L}+) \(xấu\)/gu)) expect(d).toContain(`${m[1] ?? ''}: ${m[2] ?? ''} (xấu)`);
+    }
+  });
+});

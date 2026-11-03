@@ -21,26 +21,26 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 ## 2. Việc kế
 
 - **Xong: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn; lời chốt vào AI (mục 41); hỏi thêm theo việc (mục 42).
-  **Đo AI thật bản cuối: đêm 03/11** (`do-ai.ts`, `do-ai-so.ts`). Sau: đợt 9.
+  Đo AI thật 03/11 một phần (mục 42) — **còn**: hỏi sâu, Kiều, đo so 23/10. Sau: đợt 9.
 
 ## 3. Cần anh
 
 - **Đọc lời giải các môn của anh** (14 môn ở mục 2): chỗ sai, khó hiểu, chung chung thì báo em.
 - **Hỏi thêm AI** "tháng này ngày nào tốt để cưới?": có nêu đúng ngày app chọn không.
-- **Thử chỉ tay**: chụp ảnh → đường màu có nằm trên nếp tay không, sửa ô sai. Lệch thì báo em.
+- **Thử chỉ tay**: chụp ảnh → đường màu có nằm trên nếp tay không.
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng; đã gộp `main`; tên đủ có `claude/` trước):
   `determined-galileo-xz2mc5` (còn ngày sinh thật — nên xoá), `nifty-johnson-b0rxcq`, `luu-han-loi-giai`,
   `loi-giai-de-hieu`, `nguon-phat-dao`, `kinh-goc-cuu-dieu`, `ngoc-hap-ky`, `dot-4-kinh-dich`, `blissful-sagan-ur507y`,
   `sleepy-davinci-hezr5a`, `friendly-noether-rzz6tw`, `tuong-mat-luan`, `chi-tay-luan`, `kinh-dich-luan`, `tarot-luan`,
-  `tuoi-hop-luan`, `boi-kieu-luan`, `chon-ngay-luan`, `phi-tinh-luan`, `ai-loi-chot`. Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches.
+  `tuoi-hop-luan`, `boi-kieu-luan`, `chon-ngay-luan`, `phi-tinh-luan`, `ai-loi-chot`, `do-ai-ban-cuoi`. Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches.
 
 ## 4. Nợ, chỗ chưa chắc
 
 - Chỉ tay (mục 27): máy dò chưa ai chấm, chụp lại đổi ~1/4 ô, chưa thử Safari iPhone; Nhật – Hàn đọc trích đoạn, thiếu sách Việt cổ.
-- La bàn: bắc từ hay bắc thật chưa thấy tài liệu Apple (VN lệch <2°, anh so không lệch; mục 20).
+- La bàn: bắc từ hay bắc thật chưa rõ (VN lệch <2°, anh so không lệch; mục 20).
 - Hạn tháng chưa so Altuvi; Mệnh chủ/Thân chủ theo *Toàn Thư*; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
-- AI: lượt đầu chỉ lời chốt gọn; hỏi thêm theo việc (nhận bằng từ khoá) mới có lời đủ; gán sai cung ~1/10 (mục 25, 41, 42).
+- AI: lượt đầu chỉ lời chốt gọn; hỏi thêm (nhận bằng từ khoá) mới có lời đủ; gán sai cung ~1/10; vài lỗi đọc còn lại (mục 42).
 - Tử vi tháng, ngày đếm sao Tân Biên; bát tự chưa so lá mẫu; thần số chưa có số tên.
 - Tướng mặt: ngưỡng tạm (15 ảnh Đông Á, 1 người Việt); Nhật, Hàn, hiện đại đọc qua trích đoạn; kết đo trên mặt giả.
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Chọn ngày: kỵ tục chỉ hạ Được (mục 39).

@@ -762,9 +762,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   ("Phụ Mẫu — cha mẹ"), luật "app chấm thuộc đúng cung cùng dòng"; lượt 2 — bịa 0/3, bẫy 9/10, đọc tay: cung nói đúng nghĩa, AI dùng "app
   chấm", "app luận", lời chốt năm nay. Câu bẫy trượt cả 3 lượt (kể cả lượt trả lời dặn cũ): **màu sơn nhà** — AI suy màu theo mệnh nạp
   âm, có thể ngược khối bát tự (app chọn màu theo hành hợp) → gửi kèm dòng "Cách dùng phổ biến" (màu, nghề, hướng theo hành hợp), luật
-  "màu chỉ lấy từ dòng đó"; trong kịch bản đo thay câu bẫy màu bằng câu đá phong thủy. **Bản cuối chưa đo** — khoá Groq chạm hạn mức
-  ngày sau ~3,5 lượt đo (200.000 token/ngày, dùng chung cả nhà); đo lại hôm sau. Lần 23/10 (dữ liệu cũ): bẫy 10/10 — chưa tách được do
-  dữ liệu mới hay mô hình đổi.
+  "màu chỉ lấy từ dòng đó"; trong kịch bản đo thay câu bẫy màu bằng câu đá phong thủy. Bản cuối đo một phần chiều 03/11 (số ở mục 42):
+  Groq hết hạn mức ngày giữa chừng nên chưa đo lại câu màu, chưa tách được do dữ liệu hay do mô hình (lần 23/10, dữ liệu cũ: bẫy 10/10).
 
 ## 42. Hỏi thêm theo việc; chọn ngày, phi tinh, bói Kiều vào AI; đo AI cho khỏi cạn khoá (kế hoạch 03/11 `2026-11-03-xu-ly-ton.md`; `src/loi/ai/hoiSau.ts`)
 - Hỏi thêm ở "AI tổng hợp": câu nói tới việc nào thì gói lượt đó = "Người xem" + **"Lời app luận đủ cho câu hỏi này"** + lời chốt gọn
@@ -780,14 +779,28 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Bói Kiều: khối "AI giải quẻ Kiều" dưới luận quẻ — cặp câu rút, hai câu trước sau, đoạn truyện, việc đang chọn ở ô 18 đề mục lúc bấm,
   lời chốt app; dặn chỉ trích câu có trong dữ liệu; gạch chân tên nhân vật không có trong quẻ. Gói ≤ 2.500 ký tự.
 - Đo AI thật (`do-ai.ts`): hỏi thêm bằng gói như app; trần 100.000 token một lượt; Groq báo hết hạn mức ngày thì dừng ngay, không chờ;
-  ghi token thật, `system_fingerprint` (đổi là Groq đổi mô hình — lần sau tách được nguyên nhân). Câu sâu: ngày cưới phải nêu ngày app
+  ghi token thật, `system_fingerprint` (đo 03/11: dấu đổi mỗi lượt, không chỉ ra mô hình đổi). Câu sâu: ngày cưới phải nêu ngày app
   chọn; sửa nhà nêu hướng nên để yên; màu lấy từ dòng "Cách dùng phổ biến"; bói Kiều không trích câu ngoài quẻ. Đo so bản 23/10
   (`do-ai-so.ts`, mã `ea3f70a`) câu "màu sơn nhà" ×3: trượt → do mô hình, qua → do dữ liệu.
 - Khoá dùng chung cả nhà: hạn mức ngày hồi dần (tiêu đề Groq 03/11: lượt/ngày hồi ~86 giây một lượt; token/ngày không có tiêu đề) —
   đo lúc đêm, mỗi ngày tối đa một lượt.
 - Số đo 03/11 (thước `tests/AIHoiSau.test.ts`, hồ sơ giả 10/05/1990 06:14 Hà Nội): 4 câu mẫu → gói 8.451–8.807 ký tự, giữ lời tổng hợp,
-  lượt ra 1.500; 30 hồ sơ × 14 câu: chữ đúng quy ước, vừa chỗ trống; lời "tình duyên" và "công việc" trùng < 20 %. **AI thật: chưa đo** —
-  hẹn 01:00 đêm 03/11 giờ Việt Nam.
+  lượt ra 1.500; 30 hồ sơ × 14 câu: chữ đúng quy ước, vừa chỗ trống; lời "tình duyên" và "công việc" trùng < 20 %. Sửa sau đo thật: gói giữ nguyên số
+  trên; chỗ trống bớt 64 ký tự (dặn mục Hôm nay).
+- **AI thật 03/11 ~14:00 giờ VN** (gpt-oss-120b, hồ sơ giả gia0 1957 và gia4 2011 không giờ): Groq báo hết hạn mức ngày sau
+  **23.481 token** (Groq ghi khoá đã dùng 195.673/200.000 trong 24 giờ trượt — lúc bắt đầu chỉ còn ~28.000). Đo được: tổng hợp 2/2,
+  từ bịa máy dò 0/2, bẫy nói "chưa có" 3/3 (năm 2031, nhịp sinh học ngày mai, số may mắn). **Chưa đo**: 4 câu hỏi sâu, 2 quẻ Kiều,
+  đo so bản 23/10.
+- Đọc tay: cung nói đúng nghĩa, "app chấm" đúng dòng (Tật Ách, Phu Thê, Tử Tức); màu lấy đúng dòng "Cách dùng phổ biến"; thiếu giờ
+  sinh thì nói không có lá tử vi. Lỗi thấy: (1) gia0 khuyên "hướng Nam trang trí nhà" — hướng hành hợp nhưng Bát trạch người đó Nam là
+  Ngũ Quỷ → dòng màu – hướng gửi AI thêm "Vênh Bát trạch: hướng … là … (xấu) — hướng nhà, cửa theo Bát trạch" (`huongHop`, cả lượt đầu
+  lẫn hỏi màu; thước `tests/AIHoiSau.test.ts`); (2) gia4 mục "Hôm nay" kể lá chiêm tinh lúc sinh như hôm nay → dặn trong yêu cầu
+  lượt đầu; (3) tên lạ "Vệ Thần" (dữ liệu ghi Sao Thiên Vương) — máy dò theo từ điển không bắt tên ngoài từ điển; (4) đọc ngược nhịp
+  sinh học ("+90 % đang xuống" thành "giảm nhẹ"), lấy đại vận Phu Thê 24–33 đã qua nói chuyện vợ chồng hiện tại. (3), (4) chưa sửa.
+- `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
+  fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
+  còn cách đo so bản 23/10.
+- Hạn mức: khoá dùng chung, ngày 03/11 cả nhà dùng gần hết — lần sau thăm trước, còn dưới ~100.000 thì hoãn.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

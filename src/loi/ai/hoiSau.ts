@@ -26,7 +26,7 @@ import { luanMat } from '../tuongMatLuan.ts';
 import { tinhTuVi } from '../tuVi/laSo.ts';
 import { diemCung, dsDaiVan, luanCung, luanDaiVan, luanNam, NGUONG_CUNG, tongLuan } from '../tuVi/luan.ts';
 import { tinhLuuHan } from '../tuVi/luuHan.ts';
-import { KET_CHU, phanNguoi, type MatDo, type Mon } from './duLieu.ts';
+import { KET_CHU, huongHop, phanNguoi, type MatDo, type Mon } from './duLieu.ts';
 
 /** Mot doan loi day du: `khoa` de bo trung; `thay`: mon co doan gon trong goi cu ma doan nay da noi du (khong gui lai). */
 export interface DoanThem { readonly khoa: string; readonly thay?: Mon; readonly chu: string }
@@ -277,7 +277,7 @@ export function doanThem(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong, lechNuoc: num
       else if (loai === 'phongThuy') ra.push(...phongThuy(gt === 'nam'));
       else if (loai === 'mau') {
         const { b, p } = n.bt(), d = tongLuanBT(b, p).find((y) => y.tieuDe.startsWith('Hành hợp'));
-        if (d !== undefined) ra.push({ khoa: 'btt:dung', chu: doan(`Bát tự — ${d.tieuDe}`, d.loi) });
+        if (d !== undefined) ra.push({ khoa: 'btt:dung', chu: doan(`Bát tự — ${d.tieuDe}`, d.loi.map((l) => huongHop(l, k.cungPhi) ?? l)) });
       } else if (loai === 'mon') ra.push(...mon(gt));
     } catch {
       // Mon nay loi (so lieu thieu): bo, cac viec khac van gui.

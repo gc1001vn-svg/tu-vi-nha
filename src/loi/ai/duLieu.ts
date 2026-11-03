@@ -134,6 +134,19 @@ function nam(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   ]);
 }
 
+/**
+ * Dong "Cach dung pho bien" (mau, nghe, huong theo hanh hop bat tu) + ghi vênh voi Bat trach: huong hanh hop la huong xau cua cung phi thi
+ * noi ro huong nha, cua theo Bat trach (do 03/11: AI khuyen "huong Nam trang tri nha" khi Nam la Ngu Quy cua nguoi do).
+ */
+export function huongHop(dong: string | null, cungPhi: string): string | null {
+  if (dong === null || !dong.startsWith('Cách dùng phổ biến')) return dong;
+  const bt = batTrach(cungPhi);
+  const xau = [...dong.matchAll(/hướng (Đông|Tây|Nam|Bắc)(?!\p{L}| \p{L})/gu)].map((m) => bt.huong.find((h) => h.huong === m[1]))
+    .filter((h) => h !== undefined && !h.tot);
+  return xau.length === 0 ? dong : `${dong} Vênh Bát trạch: ${xau.map((h) => `hướng ${h?.huong ?? ''} là ${h?.sao ?? ''} (xấu)`).join(', ')}`
+    + ' — hướng nhà, cửa theo Bát trạch.';
+}
+
 function batTu(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   const b = tinhBatTu(hs, tr.chinh, ngayXem);
   const tru = (ten: string, t: Tru | null): string => (t === null ? `Trụ ${ten}: không rõ giờ sinh.`
@@ -147,7 +160,7 @@ function batTu(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
     `Lời chốt của app: ${tomTat(tongLuanBT(b, p).filter((d) => !d.tieuDe.startsWith('Nhật chủ') && !d.tieuDe.startsWith('Hợp, xung')))}`,
     `Từng việc (app chấm): ${luanViec(b, hs.gioiTinh, p).map((v) => `${v.ten} ${KET_CHU[v.ket] ?? ''}`).join(', ')}.`,
     // Mau, nghe, huong theo hanh hop (do 03/11: khong gui thi AI tu suy mau theo menh nap am, co the nguoc khoi bat tu).
-    tongLuanBT(b, p).flatMap((d) => d.loi).find((l) => l.startsWith('Cách dùng phổ biến')) ?? null,
+    huongHop(tongLuanBT(b, p).flatMap((d) => d.loi).find((l) => l.startsWith('Cách dùng phổ biến')) ?? null, tr.chinh.cungPhi),
     `Không vong: ${b.khongVong}. Khởi vận ${String(b.khoiVan.nam)} năm ${String(b.khoiVan.thang)} tháng ${String(b.khoiVan.ngay)} ngày `
       + `sau khi sinh, đi ${b.thuan ? 'thuận' : 'nghịch'}.`,
     `Đại vận (tuổi mụ bắt đầu, can chi, năm bắt đầu): ${b.daiVan.map((v) => `${String(v.tuoi)} tuổi ${v.canChi} (${String(v.batDau.nam)})`).join('; ')}.`,
