@@ -25,6 +25,9 @@ export const YEU_CAU = {
   que: (cau: string): string => `Giải quẻ trong DỮ LIỆU cho ${hoi(cau)}. Các mục: Ý chính · Lời khuyên · Điều nên tránh. `
     + 'Dựa vào nguyên văn và lời app giải của các đoạn nên đọc.',
   tarot: (cau: string): string => `Đọc trải bài trong DỮ LIỆU cho ${hoi(cau)}. Các mục: Từng lá theo vị trí · Ý chung · Lời khuyên.`,
+  kieu: (cau: string): string => `Giải quẻ bói Kiều trong DỮ LIỆU cho ${cau.trim() === '' ? 'việc ghi ở dòng "Việc đang hỏi"' : hoi(cau)}. Các mục: `
+    + 'Ý hai câu thơ · Ứng vào việc hỏi · Lời khuyên. Dựa vào lời chốt của app; chỉ trích câu thơ có trong DỮ LIỆU, không dẫn câu Kiều khác. '
+    + 'Bói Kiều là thú chơi văn chương: nói nhẹ nhàng, không phán chắc.',
   chiTay: (cau: string): string => `Dựa vào DỮ LIỆU, diễn giải bàn tay người xem cho ${hoi(cau)} rồi dự đoán. Các mục: Tổng quan · `
     + 'Từng đường · Dự đoán (tính cách; công việc, tiền bạc; tình cảm, gia đình; sức khoẻ, sức bền; các giai đoạn đời) · Lưu ý. Dùng đúng '
     + 'các ô đã chọn trong mục "Bàn tay người xem" và luật tương ứng, không viết kiểu "nếu… thì…". Mỗi dòng "- " trong mục Dự đoán mở '

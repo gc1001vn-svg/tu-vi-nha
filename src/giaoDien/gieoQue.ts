@@ -113,8 +113,8 @@ function veQueKieu(q: QueKieu): HTMLElement {
     el('p', { class: 'ghi-chu' }, `Tên đoạn, tóm tắt: ${LOI_SOAN}`));
 }
 
-/** Luan que (`kieuLuan.ts`): chon viec dang hoi trong 18 de muc thi doi dong "Theo việc hỏi". */
-function veLuanKieu(luan: typeof import('../loi/kieuLuan.ts'), q: QueKieu): HTMLElement {
+/** Luan que (`kieuLuan.ts`): chon viec dang hoi trong 18 de muc thi doi dong "Theo việc hỏi"; `viec` doc de muc dang chon (khoi AI). */
+function veLuanKieu(luan: typeof import('../loi/kieuLuan.ts'), q: QueKieu): { readonly the: HTMLElement; readonly viec: () => number } {
   const chon = el('select', { 'aria-label': 'Việc đang hỏi' }, ...luan.TEN_MUC.map((t, i) => el('option', { value: String(i) }, t)));
   const noi = el('div', {});
   const ve = (): void => {
@@ -123,8 +123,8 @@ function veLuanKieu(luan: typeof import('../loi/kieuLuan.ts'), q: QueKieu): HTML
   };
   chon.addEventListener('change', ve);
   ve();
-  return el('div', {}, el('h3', {}, 'Luận quẻ (Claude tổng hợp cách bói Kiều xưa rồi chốt; tham khảo)'),
-    el('label', { class: 'chon-viec' }, 'Việc đang hỏi: ', chon), noi);
+  return { the: el('div', {}, el('h3', {}, 'Luận quẻ (Claude tổng hợp cách bói Kiều xưa rồi chốt; tham khảo)'),
+    el('label', { class: 'chon-viec' }, 'Việc đang hỏi: ', chon), noi), viec: () => Number(chon.value) };
 }
 
 function veBoiKieu(): HTMLElement {
@@ -134,7 +134,9 @@ function veBoiKieu(): HTMLElement {
     Promise.all([import('../loi/kieu.ts'), import('../loi/kieuLuan.ts')]).then(([k, luan]) => {
       const cap = (crypto.getRandomValues(new Uint32Array(1))[0] ?? 0) % k.SO_CAP;
       const q = k.queKieu(cap);
-      ketQua.replaceChildren(veQueKieu(q), veLuanKieu(luan, q));
+      const lk = veLuanKieu(luan, q);
+      ketQua.replaceChildren(veQueKieu(q), lk.the,
+        khoiAI('AI giải quẻ Kiều', `kieu:${String(++soLanGieo)}`, { loai: 'kieu', luan, q, viec: lk.viec }));
     }, (e: unknown) => { ketQua.replaceChildren(loi(e)); });
   });
   return el('section', { class: 'the' },

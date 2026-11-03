@@ -3,12 +3,13 @@
  * trong bo nho khi app dang mo (khong ghi may — ke hoach), dong mo lai khoi van con. Ten rieng AI neu ma du lieu khong co thi
  * gach chan (`kiemBia.ts`). AI mien phi qua Groq (`goi.ts`).
  */
-import { duLieuChiTay, duLieuNguoi, duLieuQue, duLieuTarot } from '../../loi/ai/duLieu.ts';
-import { TU_NGUOI, timBia } from '../../loi/ai/kiemBia.ts';
+import { duLieuChiTay, duLieuKieu, duLieuNguoi, duLieuQue, duLieuTarot } from '../../loi/ai/duLieu.ts';
+import { duLieuHoi } from '../../loi/ai/hoiSau.ts';
+import { TU_KIEU, TU_NGUOI, timBia } from '../../loi/ai/kiemBia.ts';
 import { YEU_CAU } from '../../loi/ai/loiDan.ts';
 import { TU_CHI_TAY } from '../../loi/chiTay.ts';
 import { el } from '../chung.ts';
-import { goiAI, loiTiengViet, type TinNhan } from './goi.ts';
+import { goiAI, loiTiengViet, luotHoiThem, type TinNhan } from './goi.ts';
 import type { ChuDe } from './index.ts';
 import { docAI } from './luu.ts';
 import './ai.css';
@@ -39,11 +40,13 @@ const PHIEN = new Map<string, Phien>();
 const lamMoi = (p: Phien): void => { for (const f of p.nghe) f(); };
 
 const duLieuCua = (cd: ChuDe): string => (cd.loai === 'nguoi' ? duLieuNguoi(cd.hs, cd.tr, cd.ngayXem, cd.lechNuoc, cd.mat())
-  : cd.loai === 'que' ? duLieuQue(cd.k, cd.g, cd.mh) : cd.loai === 'tarot' ? duLieuTarot(cd.t, cd.kieu, cd.rut) : duLieuChiTay(cd.k, cd.gioiTinh));
+  : cd.loai === 'que' ? duLieuQue(cd.k, cd.g, cd.mh) : cd.loai === 'tarot' ? duLieuTarot(cd.t, cd.kieu, cd.rut)
+    : cd.loai === 'kieu' ? duLieuKieu(cd.luan, cd.q, cd.viec()) : duLieuChiTay(cd.k, cd.gioiTinh));
 
 function taoPhien(cd: ChuDe): Phien {
   const tuDien = cd.loai === 'nguoi' ? TU_NGUOI : cd.loai === 'que' ? [...TU_NGUOI, ...cd.k.QUE.map((q) => q.tenDu)]
-    : cd.loai === 'tarot' ? cd.t.LA.flatMap((l) => [l.anh, l.ten, ...(l.khac === null ? [] : [l.khac])]) : [...TU_NGUOI, ...TU_CHI_TAY];
+    : cd.loai === 'tarot' ? cd.t.LA.flatMap((l) => [l.anh, l.ten, ...(l.khac === null ? [] : [l.khac])])
+      : cd.loai === 'kieu' ? TU_KIEU : [...TU_NGUOI, ...TU_CHI_TAY];
   return { cd, duLieu: '', tuDien, luot: [], dung: null, nghe: new Set() };
 }
 
@@ -66,13 +69,18 @@ async function goi(p: Phien, gui: string, hoi: string | null): Promise<void> {
   lamMoi(p);
   try {
     if (!p.luot.some((x) => x.dap !== '')) p.duLieu = duLieuCua(p.cd);
-    const kq = await goiAI(khoa, p.duLieu, tin, (them) => {
+    // Hoi them o khoi mot nguoi: cau noi toi viec nao thi gui loi app luan du cua viec do (`hoiSau.ts`); khong thi goi gon.
+    const cd = p.cd;
+    const luot = hoi === null || cd.loai !== 'nguoi' ? { duLieu: null, tin }
+      : luotHoiThem(tin, (cho) => duLieuHoi(cd.hs, cd.tr, cd.ngayXem, cd.lechNuoc, cd.mat(), hoi, cho));
+    const duLieu = luot.duLieu ?? p.duLieu;
+    const kq = await goiAI(khoa, duLieu, luot.tin, (them) => {
       l.dap += them;
       // Ve lai toi da moi khung hinh mot lan, chu chay nhanh van muot.
       if (cho === 0) cho = requestAnimationFrame(() => { cho = 0; lamMoi(p); });
     }, p.dung.signal);
     l.dap = kq.chu;
-    l.bia = [...new Set(timBia(kq.chu, p.duLieu, p.tuDien).map((b) => b.tu))];
+    l.bia = [...new Set(timBia(kq.chu, luot.duLieu === null ? p.duLieu : `${p.duLieu}\n${duLieu}`, p.tuDien).map((b) => b.tu))];
     l.ghiChu = (kq.ket === 'tuChoi' ? 'Groq chặn câu trả lời này. ' : kq.ket === 'quaDai' ? 'Câu trả lời quá dài nên bị cắt. ' : '')
       + `Mô hình ${kq.moHinh} qua Groq, miễn phí.`;
   } catch (e) {
@@ -112,7 +120,7 @@ function veChu(chu: string, bia: readonly string[]): HTMLElement[] {
   return ra;
 }
 
-const NUT_DAU = { nguoi: 'AI viết lời tổng hợp', que: 'AI giải quẻ', tarot: 'AI đọc trải bài', chiTay: 'AI diễn giải và dự đoán' } as const;
+const NUT_DAU = { nguoi: 'AI viết lời tổng hợp', que: 'AI giải quẻ', tarot: 'AI đọc trải bài', chiTay: 'AI diễn giải và dự đoán', kieu: 'AI giải quẻ Kiều' } as const;
 
 export function vePhien(ma: string, cd: ChuDe): Node[] {
   const p = PHIEN.get(ma) ?? taoPhien(cd);
@@ -143,12 +151,17 @@ export function vePhien(ma: string, cd: ChuDe): Node[] {
       if (o !== null) con.push(el('label', { class: 'cot' }, 'Việc muốn hỏi', o));
       con.push(el('div', { class: 'nut-hang' }, nut));
     } else {
-      const o = el('input', { type: 'text', maxlength: '500', placeholder: 'Hỏi thêm AI về phần trên…', enterkeyhint: 'send' });
+      const o = el('input', { type: 'text', maxlength: '500', enterkeyhint: 'send',
+        placeholder: cd.loai === 'nguoi' ? 'Hỏi thêm một việc cụ thể…' : 'Hỏi thêm AI về phần trên…' });
       const nut = el('button', { type: 'button', class: 'chinh' }, 'Hỏi');
       const hoi = (): void => { const c = o.value.trim(); if (c !== '') void goi(p, c, c); };
       nut.addEventListener('click', hoi);
       o.addEventListener('keydown', (ev) => { if (ev.key === 'Enter' && !ev.isComposing) hoi(); });
       con.push(el('div', { class: 'ai-o-hoi' }, o, nut));
+    }
+    if (cd.loai === 'nguoi') {
+      con.push(el('p', { class: 'ghi-chu' }, 'Hỏi thêm về một việc (tình duyên, công việc, ngày tốt để cưới, sửa nhà năm nay…) thì app gửi '
+        + 'kèm lời luận đầy đủ của việc đó.'));
     }
     con.push(el('p', { class: 'ghi-chu' }, 'AI chỉ đọc số app đã tính, không gửi tên; hỏi đáp không lưu, đóng app là mất. '
       + 'Lời AI là quan niệm dân gian, để tham khảo; AI có thể chép nhầm chỗ (sao, cung), đối chiếu với số app bên trên.'));

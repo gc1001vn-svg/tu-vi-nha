@@ -25,6 +25,8 @@ import { CAC_KHOA, GIAI, SO_ANH_MAU, dangSo, giaiMat, type MatDoGiai } from '../
 import { luanMat, mucXet, netChot } from '../tuongMatLuan.ts';
 import { luanTay } from '../chiTayLuan.ts';
 import type * as KinhDichLuan from '../kinhDichLuan.ts';
+import type { QueKieu } from '../kieu.ts';
+import type * as KieuLuan from '../kieuLuan.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { NGUONG_CUNG, diemCung, luanDaiVan, luanNam, tongLuan } from '../tuVi/luan.ts';
 import { CHU_DE } from '../tuVi/nghia.ts';
@@ -57,7 +59,7 @@ export function cau(s: string, toi = 90): string {
 }
 const cham = (x: string): string => (x.endsWith('…') ? x : `${x}.`);
 const tomTat = (xs: readonly DoanLuan[], toi = 90): string => cham(xs.map((d) => `${d.tieuDe}: ${cau(d.loi[0] ?? '', toi)}`).join(' · '));
-const KET_CHU: Readonly<Record<string, string>> = { thuan: 'thuận', vua: 'vừa', kho: 'cần giữ gìn' };
+export const KET_CHU: Readonly<Record<string, string>> = { thuan: 'thuận', vua: 'vừa', kho: 'cần giữ gìn' };
 
 function nguoiXem(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   const k = tr.chinh;
@@ -228,21 +230,30 @@ function tuongMat(m: MatDo): string {
   ]);
 }
 
-/** Du lieu mot nguoi gui AI: moi mon da tinh, theo thu tu khoi tren man hinh. Mon nao loi thi ghi loi, cac mon khac van gui. */
-export function duLieuNguoi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong, lechNuoc: number | undefined, mat?: MatDo): string {
-  const phan: (() => string)[] = [
-    (): string => nguoiXem(hs, tr, ngayXem), (): string => tuVi(hs, tr, ngayXem), (): string => nam(hs, tr, ngayXem),
-    (): string => batTu(hs, tr, ngayXem),
-    (): string => huong(hs, tr), (): string => tuoi(tr), (): string => soHoc(hs, ngayXem), (): string => chiemTinh(hs, lechNuoc),
-    ...(mat === undefined ? [] : [(): string => tuongMat(mat)]),
+/** Cac phan goi du lieu mot nguoi, theo thu tu khoi tren man hinh; `hoiSau.ts` chon phan nao con cho o luot hoi them. */
+export type Mon = 'nguoi' | 'tuVi' | 'nam' | 'batTu' | 'huong' | 'tuoi' | 'soHoc' | 'chiemTinh' | 'tuongMat';
+
+/** Tung phan (mon) goi du lieu mot nguoi. Mon nao loi thi ghi loi, cac mon khac van gui. */
+export function phanNguoi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong, lechNuoc: number | undefined, mat?: MatDo): { readonly mon: Mon; readonly chu: string }[] {
+  const phan: (readonly [Mon, () => string])[] = [
+    ['nguoi', (): string => nguoiXem(hs, tr, ngayXem)], ['tuVi', (): string => tuVi(hs, tr, ngayXem)], ['nam', (): string => nam(hs, tr, ngayXem)],
+    ['batTu', (): string => batTu(hs, tr, ngayXem)],
+    ['huong', (): string => huong(hs, tr)], ['tuoi', (): string => tuoi(tr)], ['soHoc', (): string => soHoc(hs, ngayXem)],
+    ['chiemTinh', (): string => chiemTinh(hs, lechNuoc)],
+    ...(mat === undefined ? [] : [['tuongMat', (): string => tuongMat(mat)] as const]),
   ];
-  return phan.map((f) => {
+  return phan.map(([mon, f]) => {
     try {
-      return f();
+      return { mon, chu: f() };
     } catch (e) {
-      return `## (Một mục không tính được: ${e instanceof Error ? e.message : String(e)})`;
+      return { mon, chu: `## (Một mục không tính được: ${e instanceof Error ? e.message : String(e)})` };
     }
-  }).join('\n\n');
+  });
+}
+
+/** Du lieu mot nguoi gui AI o luot dau (va luot hoi them khong nhan ra viec nao): moi mon da tinh, gon. */
+export function duLieuNguoi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong, lechNuoc: number | undefined, mat?: MatDo): string {
+  return phanNguoi(hs, tr, ngayXem, lechNuoc, mat).map((p) => p.chu).join('\n\n');
 }
 
 /** Que Kinh Dich vua gieo: que chu, hao dong, que bien, que ho, Mai Hoa (neu co), cac doan nen doc kem nguyen van + loi app. */
@@ -304,4 +315,20 @@ export function duLieuChiTay(k: KhungChiTay, gioiTinh: GioiTinh): string {
     muc('Quy luật chung', QUY_LUAT_CHUNG.map((l) => `- ${tin(l)} ${l.chot}${venh(l)}`)),
     muc('Lời chốt của app (Claude tổng hợp nhiều nước)', luanTay(k).slice(0, 1).flatMap((d) => d.loi.map((x) => `- ${x}`))),
   ].join('\n\n');
+}
+
+/**
+ * Que boi Kieu vua mo (ke hoach 2026-11-03-xu-ly-ton): cap cau rut, hai cau truoc sau, doan truyen (ten, tom tat Claude soan), viec dang
+ * hoi (18 de muc), loi chot app (`kieuLuan.ts`). Module luan truyen vao de goi AI khong keo theo chu Truyen Kieu.
+ */
+export function duLieuKieu(luan: typeof KieuLuan, q: QueKieu, viec: number): string {
+  const l = luan.luanKieu(q, viec).filter((d) => d.tieuDe !== 'Nhìn cho đúng');
+  return muc('Quẻ bói Kiều vừa mở (Truyện Kiều, Nguyễn Du; máy mở ngẫu nhiên một cặp lục bát)', [
+    `Việc đang hỏi (đề mục bói Kiều xưa): ${luan.TEN_MUC[viec] ?? luan.TEN_MUC[0] ?? ''}.`,
+    `Câu ${String(q.so)}–${String(q.so + 1)}, đoạn "${q.hoi.ten}". Tóm tắt đoạn (app soạn): ${q.hoi.tomTat}`,
+    q.truoc.length === 0 ? null : `Hai câu trước: ${q.truoc.join(' / ')}`,
+    `Cặp câu rút được: ${q.luc} / ${q.bat}`,
+    q.sau.length === 0 ? null : `Hai câu sau: ${q.sau.join(' / ')}`,
+    `Lời chốt của app: ${l.map((d) => `${d.tieuDe}: ${d.loi.join(' ')}`).join(' · ')}`,
+  ]);
 }

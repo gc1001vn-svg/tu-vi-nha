@@ -9,6 +9,8 @@ import type * as KinhDichTinh from '../../loi/kinhDich.ts';
 import type * as KinhDichChu from '../../loi/kinhDichChu.ts';
 import type * as KinhDichGiai from '../../loi/kinhDichGiai.ts';
 import type * as KinhDichLuan from '../../loi/kinhDichLuan.ts';
+import type { QueKieu } from '../../loi/kieu.ts';
+import type * as KieuLuan from '../../loi/kieuLuan.ts';
 import type * as TarotMod from '../../loi/tarot.ts';
 import type * as TarotLuan from '../../loi/tarotLuan.ts';
 import type { MatDo } from '../../loi/ai/duLieu.ts';
@@ -17,14 +19,16 @@ import { MAT_DA_DO, khoaNguoi } from '../khoi/tuongMat.ts';
 
 type Tarot = typeof TarotMod & typeof TarotLuan;
 
-/** Dieu dua cho AI doc: mot nguoi (moi mon da tinh), que Kinh Dich, trai tarot vua gieo, chi tay nguoi xem tu chon. */
+/** Dieu dua cho AI doc: mot nguoi (moi mon da tinh), que Kinh Dich, trai tarot vua gieo, chi tay nguoi xem tu chon, que boi Kieu. */
 export type ChuDe =
   | { readonly loai: 'nguoi'; readonly hs: HoSo; readonly tr: TinhRa; readonly ngayXem: NgayDuong; readonly lechNuoc: number | undefined;
     /** So do mat da do (neu co) luc gui luot dau — khoi tuong mat co the do sau khi khoi AI da mo. */
     readonly mat: () => MatDo | undefined }
   | { readonly loai: 'que'; readonly k: typeof KinhDichTinh & typeof KinhDichChu & typeof KinhDichGiai & typeof KinhDichLuan; readonly g: KinhDichTinh.Gieo; readonly mh: KinhDichTinh.MaiHoaGio | null }
   | { readonly loai: 'tarot'; readonly t: Tarot; readonly kieu: keyof Tarot['TRAI']; readonly rut: readonly TarotMod.LaRut[] }
-  | { readonly loai: 'chiTay'; readonly k: KhungChiTay; readonly gioiTinh: GioiTinh };
+  | { readonly loai: 'chiTay'; readonly k: KhungChiTay; readonly gioiTinh: GioiTinh }
+  /** Que boi Kieu vua mo; `viec`: de muc dang chon o o "Việc đang hỏi" luc bam nut AI. */
+  | { readonly loai: 'kieu'; readonly luan: typeof KieuLuan; readonly q: QueKieu; readonly viec: () => number };
 
 /** `ma`: cung ma thi dung lai phien dang co (hoi thoai con nguyen khi app ve lai). */
 export const khoiAI = (tieuDe: string, ma: string, cd: ChuDe): HTMLElement =>

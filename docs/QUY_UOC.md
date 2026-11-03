@@ -766,6 +766,29 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   ngày sau ~3,5 lượt đo (200.000 token/ngày, dùng chung cả nhà); đo lại hôm sau. Lần 23/10 (dữ liệu cũ): bẫy 10/10 — chưa tách được do
   dữ liệu mới hay mô hình đổi.
 
+## 42. Hỏi thêm theo việc; chọn ngày, phi tinh, bói Kiều vào AI; đo AI cho khỏi cạn khoá (kế hoạch 03/11 `2026-11-03-xu-ly-ton.md`; `src/loi/ai/hoiSau.ts`)
+- Hỏi thêm ở "AI tổng hợp": câu nói tới việc nào thì gói lượt đó = "Người xem" + **"Lời app luận đủ cho câu hỏi này"** + lời chốt gọn
+  các môn còn chỗ. Việc nhận ra: 12 việc theo cung tử vi (tình duyên, công việc, tiền, sức khỏe, con, cha mẹ, anh em, bạn bè, đi xa, nhà
+  đất, phúc, tính cách → luận cung + bát tự từng việc + chiêm tinh từng nhà), năm nay (năm nay, tử vi năm, bát tự năm, thần số, phi tinh
+  năm), đại vận (đang chạy + kế, tử vi và bát tự), ngày tốt cho 5 việc (tháng này tính từ hôm nay + tháng sau, theo tuổi), hướng – sửa
+  nhà (Bát trạch đủ + phi tinh năm, tháng), màu – nghề (dụng thần bát tự), tên môn (tổng luận môn đó). Gõ không dấu cũng nhận; "cuối
+  năm" không nhầm "cưới". Không nhận ra việc nào → gói gọn như lượt đầu.
+- Hạn mức: gói vừa chỗ trống tính đúng cách `vuaHanMuc` (`choDuLieu`): sau lời tổng hợp ~3.300 ký tự còn ~9.000 ký tự; chỗ trống dưới
+  4.000 thì bỏ cặp hỏi đáp cũ nhất trước (`luotHoiThem`). Đoạn không vừa thì bỏ cả đoạn, không cắt giữa.
+- Hỏi năm khác (2031, "năm sau"): gói ghi "App chưa tính năm …", không kèm năm nay; "ngày mai" + nhật hạn / nhịp sinh học: ghi chỉ tính
+  hôm nay. Người xem nam hỏi ngày cưới: không nhắc Kim Lâu (tục xét tuổi cô dâu, dòng "Theo việc" đã dặn).
+- Bói Kiều: khối "AI giải quẻ Kiều" dưới luận quẻ — cặp câu rút, hai câu trước sau, đoạn truyện, việc đang chọn ở ô 18 đề mục lúc bấm,
+  lời chốt app; dặn chỉ trích câu có trong dữ liệu; gạch chân tên nhân vật không có trong quẻ. Gói ≤ 2.500 ký tự.
+- Đo AI thật (`do-ai.ts`): hỏi thêm bằng gói như app; trần 100.000 token một lượt; Groq báo hết hạn mức ngày thì dừng ngay, không chờ;
+  ghi token thật, `system_fingerprint` (đổi là Groq đổi mô hình — lần sau tách được nguyên nhân). Câu sâu: ngày cưới phải nêu ngày app
+  chọn; sửa nhà nêu hướng nên để yên; màu lấy từ dòng "Cách dùng phổ biến"; bói Kiều không trích câu ngoài quẻ. Đo so bản 23/10
+  (`do-ai-so.ts`, mã `ea3f70a`) câu "màu sơn nhà" ×3: trượt → do mô hình, qua → do dữ liệu.
+- Khoá dùng chung cả nhà: hạn mức ngày hồi dần (tiêu đề Groq 03/11: lượt/ngày hồi ~86 giây một lượt; token/ngày không có tiêu đề) —
+  đo lúc đêm, mỗi ngày tối đa một lượt.
+- Số đo 03/11 (thước `tests/AIHoiSau.test.ts`, hồ sơ giả 10/05/1990 06:14 Hà Nội): 4 câu mẫu → gói 8.451–8.807 ký tự, giữ lời tổng hợp,
+  lượt ra 1.500; 30 hồ sơ × 14 câu: chữ đúng quy ước, vừa chỗ trống; lời "tình duyên" và "công việc" trùng < 20 %. **AI thật: chưa đo** —
+  hẹn 01:00 đêm 03/11 giờ Việt Nam.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|

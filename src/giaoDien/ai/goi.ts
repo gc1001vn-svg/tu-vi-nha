@@ -16,6 +16,10 @@ export interface KetQuaGoi {
   readonly moHinh: string;
   /** 'quaDai': het tran token, chu bi cat; 'tuChoi': bo loc noi dung cua Groq chan. */
   readonly ket: 'xong' | 'quaDai' | 'tuChoi';
+  /** Token that Groq tinh (manh cuoi dong su kien) — kich ban do cong don de khong vuot han muc ngay. */
+  readonly token?: { readonly vao: number; readonly ra: number };
+  /** `system_fingerprint`: doi la mo hinh / cau hinh ben Groq doi — de tach diem do tut do minh hay do Groq. */
+  readonly dauVet?: string;
 }
 
 /** `fetch` de test thay mang; `moHinh`, `diaChi` de kich ban do so cac mo hinh, tram trung gian. */
@@ -49,6 +53,26 @@ export function vuaHanMuc(heThong: string, tin: readonly TinNhan[]): { readonly 
   return { tin: t, ra: Math.max(1000, Math.min(tran, Math.floor(HAN_MUC_PHUT - uoc(t)))) };
 }
 
+/**
+ * Cho trong (ky tu) cho DU LIEU o luot nay de `vuaHanMuc` khong phai bo cap hoi dap nao — cung cach uoc. Luot hoi them gui goi theo
+ * cau hoi (`hoiSau.ts`) thi goi vua cho nay.
+ */
+export function choDuLieu(tin: readonly TinNhan[]): number {
+  const tran = tin.length > 1 ? 1500 : 3000;
+  return Math.floor((HAN_MUC_PHUT - tran - 200) * 2.2) - `${LOI_DAN}\n\nDỮ LIỆU:\n`.length - tin.reduce((s, m) => s + m.content.length, 0) - 2;
+}
+
+/**
+ * Luot hoi them co goi theo cau hoi: `taoGoi(cho)` tra goi vua `cho` ky tu, hoac null (cau hoi khong noi viec nao → dung goi gon, de
+ * `vuaHanMuc` lo). Cho trong duoi 4.000 ky tu thi bo cap hoi dap cu nhat truoc (nhu `vuaHanMuc`), giu cau moi.
+ */
+export function luotHoiThem(tin: readonly TinNhan[], taoGoi: (cho: number) => string | null): { readonly duLieu: string | null; readonly tin: readonly TinNhan[] } {
+  let t = tin;
+  while (t.length > 1 && choDuLieu(t) < 4000) t = t.slice(2);
+  const d = taoGoi(choDuLieu(t));
+  return d === null ? { duLieu: null, tin } : { duLieu: d, tin: t };
+}
+
 /** Giay cho trong loi Groq ("… try again in 1m2.5s"): trinh duyet khong doc duoc dau `retry-after` (Groq khong mo, thu 23/10). */
 function giayTrongLoi(s: string): number | null {
   const m = /try again in (?:(\d+)h)?(?:(\d+)m(?!s))?(?:([\d.]+)(m?)s)?/.exec(s);
@@ -56,7 +80,13 @@ function giayTrongLoi(s: string): number | null {
   return giay > 0 ? Math.ceil(giay) : null;
 }
 
-interface Manh { readonly choices?: readonly { readonly delta?: { readonly content?: string | null }; readonly finish_reason?: string | null }[] }
+interface Dung { readonly prompt_tokens?: number; readonly completion_tokens?: number }
+interface Manh {
+  readonly choices?: readonly { readonly delta?: { readonly content?: string | null }; readonly finish_reason?: string | null }[];
+  readonly system_fingerprint?: string;
+  readonly usage?: Dung | null;
+  readonly x_groq?: { readonly usage?: Dung };
+}
 
 export async function goiAI(khoa: string, duLieu: string, tin: readonly TinNhan[], khiChu: (them: string) => void, dung: AbortSignal,
   tc: TuyChonGoi = {}): Promise<KetQuaGoi> {
@@ -81,20 +111,23 @@ export async function goiAI(khoa: string, duLieu: string, tin: readonly TinNhan[
   // Dong su kien: moi dong "data: {…}", het bang "data: [DONE]"; dong chua tron thi doi manh sau.
   let chu = '', du = '';
   let ket: KetQuaGoi['ket'] = 'xong';
+  let token: KetQuaGoi['token'], dauVet: string | undefined;
   const doc = res.body.pipeThrough(new TextDecoderStream()).getReader();
   for (let r = await doc.read(); !r.done; r = await doc.read()) {
     const dong = (du + r.value).split('\n');
     du = dong.pop() ?? '';
     for (const d of dong) {
       if (!d.startsWith('data: ') || d === 'data: [DONE]') continue;
-      const c = (JSON.parse(d.slice(6)) as Manh).choices?.[0];
+      const o = JSON.parse(d.slice(6)) as Manh, c = o.choices?.[0], u = o.x_groq?.usage ?? o.usage ?? undefined;
+      if (u !== undefined) token = { vao: u.prompt_tokens ?? 0, ra: u.completion_tokens ?? 0 };
+      if (o.system_fingerprint !== undefined) dauVet = o.system_fingerprint;
       const t = c?.delta?.content ?? '';
       if (t !== '') { chu += t; khiChu(t); }
       if (c?.finish_reason === 'length') ket = 'quaDai';
       if (c?.finish_reason === 'content_filter') ket = 'tuChoi';
     }
   }
-  return { chu, moHinh, ket };
+  return { chu, moHinh, ket, ...(token === undefined ? {} : { token }), ...(dauVet === undefined ? {} : { dauVet }) };
 }
 
 /** Loi → cau tieng Viet. Mat mang va trinh duyet chan goi thang (CORS) deu ra TypeError, khong tach duoc. */

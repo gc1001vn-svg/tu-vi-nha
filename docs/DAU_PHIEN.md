@@ -22,7 +22,8 @@ thư viện + số đo `docs/NGUON_MO.md` — đọc khi làm tới đúng môn,
 | `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/sinh_am_doi_chieu.mjs` | khi nâng `lunar-typescript` — sinh lại âm Hán–Việt độc lập cho thước đối chiếu |
 | `python3 scripts/ve_icon.py` | vẽ lại icon (Thái cực + Bát quái, anh chọn 14/10) |
 | `python3 scripts/ky_hieu_sao.py` | vẽ lại ký hiệu chiêm tinh từ phông DejaVu (cần `pip install fonttools`) |
-| `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-ai.ts <thư_mục_tạm> [10] [mô_hình,…]` | đo AI thật qua Groq miễn phí (chờ theo hạn mức phút, có thể lâu): cần `GROQ_API_KEY` trong bí mật môi trường và mạng tới `api.groq.com` |
+| `node --experimental-strip-types --disable-warning=ExperimentalWarning --import ./scripts/doi-chieu/nap-raw.mjs scripts/doi-chieu/do-ai.ts <thư_mục_tạm> [0,4] [mô_hình,…] [tong,bay,sau,kieu] [100000]` | đo AI thật qua Groq (QUY_UOC mục 42): lời tổng hợp, 10 câu bẫy, 4 câu hỏi sâu, 2 quẻ Kiều; trần token, Groq báo hết hạn mức ngày thì dừng. **Khoá dùng chung cả nhà** (200.000 token/ngày): đo lúc đêm, mỗi ngày tối đa một lượt. Cần `GROQ_API_KEY` trong bí mật môi trường và mạng tới `api.groq.com` |
+| `git worktree add <tạm>/cu ea3f70a && ln -s $PWD/node_modules <tạm>/cu/ && node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-ai-so.ts <tạm>/cu <tạm> 3` | đo so bản mã cũ với mô hình hôm nay (một câu hỏi thêm × 3): tách điểm tụt do dữ liệu hay do Groq; xong `git worktree remove <tạm>/cu` |
 | `npm run build && NODE_PATH=$(npm root -g) node scripts/doi-chieu/do-mat.mjs <thư_mục_tạm>` | đo tướng mặt trên bản dựng (Chromium, 57 ảnh phạm vi công cộng tải vào thư mục tạm, ~3 phút; in phân bố để đặt ngưỡng lời giải): cần mạng tới upload.wikimedia.org lần đầu (tải dồn bị 429 → chạy lại, ảnh đã tải được giữ) |
 | `node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/doi-chieu/do-chi-tay.ts <thư_mục_tạm> [5]` | đo AI diễn giải, dự đoán chỉ tay thật qua Groq (5 khung giả + 4 câu bẫy, ~10 phút vì hạn mức): cần `GROQ_API_KEY` và mạng tới `api.groq.com` |
 | `npm run build && NODE_PATH=$(npm root -g) node scripts/doi-chieu/do-chi-tay-anh.mjs <thư_mục_tạm>` | đo máy tự dò chỉ tay trên bản dựng (Chromium, 8 ảnh Commons tải vào thư mục tạm, lần đầu ~2 phút vì cách nhau 15 giây; in ô trùng, ghi ảnh vẽ đường để soát bằng mắt) |
@@ -37,6 +38,7 @@ Bẫy: `check:ten` (bản chuẩn `ghi-nho/cong-cu/check_ten.mjs`) bắt nhầm 
 
 - Hồ sơ, ngày sinh, ảnh người nhà **chỉ nằm trong máy** (trình duyệt), không bao giờ vào repo.
   Ca kiểm dùng **ngày sinh giả** (`scripts/doi-chieu/mau-altuvi.json`).
+- Gọi trang ngoài (Wikisource, archive.org…): User-Agent tên chung `tu-vi-nha/1.0 (+https://github.com/gc1001vn-svg/tu-vi-nha)` — **không kèm email ai** (03/11 lỡ gửi email anh cho Wikisource; repo, lịch sử git không có).
 - Khoá API (đợt 7): người dùng nhập trên từng máy. Không vào git, không gõ vào chat, không đặt vào thân
   lệnh `Bash`. `check:khoa` trong `npm run do` quét hình dạng khoá trong mọi file git theo dõi.
 

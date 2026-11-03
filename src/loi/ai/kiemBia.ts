@@ -18,6 +18,11 @@ export const TU_NGUOI: readonly string[] = [
   ...Object.keys(NGHIA_THAP_THAN), ...CUNG, ...batTrach('Khảm').huong.map((h) => h.sao),
 ];
 
+/** Ten nhan vat Truyen Kieu (nhieu chu): AI neu ten khong co trong que vua mo thi gach chan — de dan sai doan. */
+export const TU_KIEU: readonly string[] = ['Thúy Kiều', 'Thúy Vân', 'Kim Trọng', 'Vương Quan', 'Vương ông', 'Vương bà', 'Mã Giám Sinh', 'Tú Bà',
+  'Sở Khanh', 'Thúc Sinh', 'Thúc ông', 'Hoạn Thư', 'Hoạn bà', 'Giác Duyên', 'Từ Hải', 'Hồ Tôn Hiến', 'Đạm Tiên', 'Bạc Bà', 'Bạc Hạnh',
+  'Khuyển Ưng', 'Khuyển Phệ', 'Tam Hợp', 'Chung công'];
+
 export interface Bia { readonly tu: string; readonly vt: number }
 
 const chuCai = '\\p{L}\\p{M}\\p{N}';
