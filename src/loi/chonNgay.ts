@@ -101,25 +101,37 @@ export function gioLyThuanPhong(am: NgayAm): GioXuatHanh[] {
   });
 }
 
-/** Ngay xau theo thang am cua mot ngay: Duong Cong Ky, Sat Chu Duong, Tho Tu (`tranh`) va Sat Chu Am (`xau`). */
-export function ngayXauThang(am: NgayAm, chiNgay: number): LyDo[] {
+/**
+ * Ngay xau theo thang am cua mot ngay: Duong Cong Ky, Sat Chu Duong, Tho Tu (`kyTuc`: mac dinh `xau`) va Sat Chu Am (`xau`).
+ * Hiep Ky Bien Phuong Thu (Thanh, sach lich trieu dinh) q.36 bac Duong Cong Ky, q.6 bo Tho Tu; Sat Chu khong co trong sach —
+ * `docs/LUAN_CHON_NGAY.md`. Giu `tranh` thi truyen `kyTuc = 'tranh'` (cach cu, tuc Viet).
+ */
+export function ngayXauThang(am: NgayAm, chiNgay: number, kyTuc: 'xau' | 'tranh' = 'xau'): LyDo[] {
   const chi = CHI.charAt(chiNgay);
   const co = (bang: string): boolean => bang.charAt(am.thang - 1) === chi;
   return [
-    DUONG_CONG.some(([t, n]) => t === am.thang && n === am.ngay) && { loai: 'tranh', chu: 'Dương Công Kỵ: kiêng mọi việc lớn' },
-    co(SAT_CHU_DUONG) && { loai: 'tranh', chu: 'Sát Chủ Dương: kiêng xây dựng, cưới hỏi, buôn bán, đi xa' },
-    co(THO_TU) && { loai: 'tranh', chu: 'Thọ Tử: trăm việc đều kỵ' },
+    DUONG_CONG.some(([t, n]) => t === am.thang && n === am.ngay) && { loai: kyTuc, chu: `Dương Công Kỵ: ${TUC}kiêng mọi việc lớn` },
+    co(SAT_CHU_DUONG) && { loai: kyTuc, chu: `Sát Chủ Dương: ${TUC}kiêng xây dựng, cưới hỏi, buôn bán, đi xa` },
+    co(THO_TU) && { loai: kyTuc, chu: `Thọ Tử: ${TUC}kiêng trăm việc` },
     co(SAT_CHU_AM) && { loai: 'xau', chu: 'Sát Chủ Âm: kiêng việc mai táng, thờ cúng' },
   ].filter((x): x is LyDo => x !== false);
 }
 
-const LOI_KY: Readonly<Record<string, string>> = { 'Tam Nương': 'kiêng khởi sự việc lớn', 'Nguyệt Kỵ': 'kiêng đi xa, khởi sự' };
+/** Tien to cho ky chi co trong tuc (sach lich chinh thuc bac hoac khong co). */
+export const TUC = 'tục ';
+const LOI_KY: Readonly<Record<string, string>> = {
+  'Tam Nương': `${TUC}kiêng khởi sự việc lớn`, 'Nguyệt Kỵ': 'sách lịch chỉ ghi việc nhỏ ngày này; kiêng đi xa, khởi sự',
+};
 
 /**
  * Lich ghi kieng viec: mac dinh `xau` (chi chan muc Tot) vi muc kieng cua thu vien trung cnlunar chi 58–65% (kappa 0,02–0,16,
  * `scripts/doi-chieu/so-cnlunar.mjs`); `tranh` = xep Tranh nhu ngay ky (QUY_UOC muc 19).
  */
-export interface TuyChonChonNgay { readonly kiengLich?: 'xau' | 'tranh' }
+export interface TuyChonChonNgay {
+  readonly kiengLich?: 'xau' | 'tranh';
+  /** Ky chi co trong tuc (Duong Cong, Tho Tu, Tam Nuong, Sat Chu Duong): mac dinh `xau` (chi chan muc Tot) theo Hiep Ky; `tranh` = cach cu. */
+  readonly kyTuc?: 'xau' | 'tranh';
+}
 
 /** Cham mot ngay cho mot viec. `chiNamSinh` (0 = Ty) bo trong thi khong xet tuoi. */
 export function chamNgay(d: NgayDuong, viec: Viec, chiNamSinh?: number, tc: TuyChonChonNgay = {}): NgayChon {
@@ -130,8 +142,8 @@ export function chamNgay(d: NgayDuong, viec: Viec, chiNamSinh?: number, tc: TuyC
   const ly: LyDo[] = [];
   const kieng = ten.filter((t) => c.kieng.includes(t));
   if (kieng.length > 0) ly.push({ loai: tc.kiengLich ?? 'xau', chu: `Lịch ghi kiêng ${kieng.join(', ').toLowerCase()}` });
-  for (const k of c.ngayKy) ly.push({ loai: 'tranh', chu: `${k}: ${LOI_KY[k] ?? ''}` });
-  ly.push(...ngayXauThang(n.am, n.chiNgay));
+  for (const k of c.ngayKy) ly.push({ loai: k === 'Nguyệt Kỵ' ? 'tranh' : tc.kyTuc ?? 'xau', chu: `${k}: ${LOI_KY[k] ?? ''}` });
+  ly.push(...ngayXauThang(n.am, n.chiNgay, tc.kyTuc ?? 'xau'));
   if (chiNamSinh !== undefined) {
     const lech = (n.chiNgay - chiNamSinh + 12) % 12;
     const tuoi = hv('chi', CHI.charAt(chiNamSinh));

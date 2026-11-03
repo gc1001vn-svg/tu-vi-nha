@@ -208,7 +208,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   lichngaytot, lichvannien tháng 6 nhuận 2025) [W46].
 - **Việc → mục nên/kiêng** của hoàng lịch: cưới hỏi 嫁娶, 納采 · động thổ 動土 · khai trương 開市 · xuất hành 出行 · mua xe 交易,
   納財 (chưa chắc: không nguồn nào có mục riêng).
-- **Luật chấm** (Claude đặt, ghi lý do từng ngày): **Tránh** nếu Tam Nương, Nguyệt Kỵ, Dương Công Kỵ, Sát Chủ Dương, Thọ Tử,
+- **Luật chấm** (Claude đặt, ghi lý do từng ngày; 03/11 kỵ tục hạ xuống Được — mục 39): **Tránh** nếu Tam Nương, Nguyệt Kỵ, Dương Công Kỵ, Sát Chủ Dương, Thọ Tử,
   hoặc chi ngày lục xung chi năm sinh. Không Tránh thì **Tốt** khi Hoàng Đạo + lịch ghi nên việc đó + không có lý do xấu (Hắc
   Đạo, lịch ghi kiêng, lịch không ghi nên, Sát Chủ Âm, ngày Khổng Minh xấu khi xuất hành); còn lại **Được**. Lục hợp, tam hợp
   tuổi chỉ ghi thêm. Năm phạm Kim Lâu (cưới hỏi, động thổ), Hoang Ốc (động thổ), Tam Tai (cưới hỏi, động thổ, khai trương)
@@ -739,6 +739,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_BOI_KIEU.md`** (chữ, cách bói: mục 17). Tóm: chữ vui buồn trong câu (câu rút ×1, câu bên
   ×0,5) + cảnh 21 đoạn ×0,5; người trong câu; lời theo 18 đề mục của thầy bói Kiều xưa (chỉ lấy tên mục) × 3 mức; không chép sách bói Kiều.
 
+## 39. Luận chọn ngày — sách lịch chính thức và tục Việt, chốt một lời (kế hoạch 03/11; `src/loi/chonNgayLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_CHON_NGAY.md`** (bảng, luật chấm: mục 17–19). Tóm: theo *Hiệp Kỷ Biện Phương Thư* —
+  Dương Công Kỵ (sách bác), Thọ Tử (sách bỏ), Tam Nương, Sát Chủ Dương (không có) hạ xuống Được, ghi "tục kiêng" (`kyTuc`); Nguyệt Kỵ, xung
+  tuổi vẫn Tránh; ngày nên chọn xếp theo lý do tốt + sao Đức; Tránh 2026 từ 44 % xuống 10 % số ngày.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
@@ -756,6 +761,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 | `phaiTuVi` | `altuvi` · `ansaotuvi` | `altuvi` (luật 3) | tử vi: Thiên Giải, Phá Toái, Hỏa/Linh Tinh, năm Canh (Khôi, Việt, Hóa Khoa, Hóa Kỵ, Lưu Hà), Mệnh chủ/Thân chủ |
 | `menhMauSo` | `napAm` · `cungPhi` | `napAm` | màu, số hợp mệnh (màn "Hôm nay") |
 | `cauKieu` | `motCap` · `haiCap` | `motCap` (một cặp lục bát) | bói Kiều (mục 17) |
+| `kyTuc` | `xau` · `tranh` | `xau` (kỵ chỉ có trong tục: Dương Công, Thọ Tử, Tam Nương, Sát Chủ Dương — chỉ hạ Được, ghi "tục kiêng"; theo *Hiệp Kỷ*) | chọn ngày (mục 39) |
 | `namMaiHoa` | `tet` · `lapXuan` | `tet` | Kinh Dịch: Mai Hoa (mục 18) |
 | `hoCanKhon` | `theoSach` · `giuNguyen` | `theoSach` (乾坤無互) | Kinh Dịch: quẻ hỗ của Càn, Khôn |
 | `kiengLich` | `xau` · `tranh` | `xau` (kiêng của hai hoàng lịch trùng 61 %) | chọn ngày: lịch ghi kiêng việc (mục 19) |
