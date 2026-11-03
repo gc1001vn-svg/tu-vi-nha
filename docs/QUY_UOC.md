@@ -365,7 +365,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   what will come) — app không chọn lá đại diện (Significator) mà rút đủ 10 lá từ 78 lá.
 - **Xáo bài**: Fisher–Yates một phần, số ngẫu nhiên 32 bit từ `crypto.getRandomValues` ở vỏ ngoài; test 78.000 lần rút đều (khi
   bình phương), 10.000 lần trải 10 lá không trùng, lá ngược 50 % ± 1 %.
-- Nghĩa xuôi, ngược: Claude soạn lại theo Waite (1910) và cách đọc phổ biến; chưa người rành đọc lại.
+- Nghĩa xuôi, ngược: Claude soạn lại theo Waite (1910) và cách đọc phổ biến; chưa người rành đọc lại. Lời gộp cả trải: mục 36.
 
 ## 25. AI (đợt 7 phần 1: `src/loi/ai/`, `src/giaoDien/ai/`, làm và đo thật 23/10)
 - **Hãng, cách gọi**: Groq miễn phí (anh chọn 23/10: "không tốn tiền, ưu tiên ngay trong app"; bản đầu dùng Claude trả phí, bỏ
@@ -724,6 +724,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_KINH_DICH.md`** (nguyên văn, luật đọc: mục 18). Tóm: chấm chữ cát hung trong nguyên văn
   theo *Hệ Từ*; đoạn Chu Hy làm chính, cộng nửa lời quẻ biến (Trình Hồi); quẻ hỗ không tính điểm; Thể – Dụng chỉ khi Mai Hoa; vị trí hào
   theo *Hệ Từ*, Vương Bật; kết thuận ≥ 1,5, thận trọng ≤ −0,5.
+
+## 36. Luận trải tarot — tổng hợp nhiều sách, chốt một lời (kế hoạch 03/11; `src/loi/tarotLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_TAROT.md`** (bộ bài, trải, xáo: mục 24). Tóm: độ tốt xấu từng lá theo Waite + tên lá số
+  *Book T*; lá triều 0; lá ngược nửa sức (Waite "lesser degree"); luật đa số bộ theo *Book T*; nợ: nghĩa lá ngược từng lá theo cách đọc
+  hiện đại, vênh Waite.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

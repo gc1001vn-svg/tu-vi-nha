@@ -132,7 +132,7 @@ function veBoiKieu(): HTMLElement {
       'Bói Kiều là thú chơi dân gian: tự đặt hai câu thơ vào việc mình đang hỏi mà suy ngẫm. Chữ theo bản phổ thông, đã soát với hai bản khác.'));
 }
 
-type Tarot = typeof import('../loi/tarot.ts');
+type Tarot = typeof import('../loi/tarot.ts') & typeof import('../loi/tarotLuan.ts');
 type KieuTrai = keyof Tarot['TRAI'];
 
 /** Mot la da rut: anh (lat nguoc neu la nguoc), vi tri, ten Anh + ten Viet, nghia. */
@@ -154,10 +154,13 @@ function veTarot(): HTMLElement {
   const nut = (kieu: KieuTrai, chu: string): HTMLElement => {
     const n = el('button', { type: 'button', class: 'chinh' }, chu);
     n.addEventListener('click', () => {
-      import('../loi/tarot.ts').then((t) => {
+      Promise.all([import('../loi/tarot.ts'), import('../loi/tarotLuan.ts')]).then(([bai, luan]) => {
+        const t: Tarot = { ...bai, ...luan };
         const viTri = t.TRAI[kieu].viTri;
         const rut = t.rutBai([...crypto.getRandomValues(new Uint32Array(2 * viTri.length))], viTri.length, oNguoc.checked);
         ketQua.replaceChildren(el('div', { class: 'cac-la' }, ...rut.map((r, i) => veLa(t, r.so, r.nguoc, viTri[i] ?? ['', '']))),
+          el('h3', {}, 'Luận trải bài (Claude tổng hợp nhiều sách rồi chốt; tham khảo)'),
+          ...t.luanTarot(kieu, rut).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]),
           khoiAI('AI đọc trải bài', `tarot:${String(++soLanGieo)}`, { loai: 'tarot', t, kieu, rut }));
       }, (e: unknown) => { ketQua.replaceChildren(loi(e)); });
     });

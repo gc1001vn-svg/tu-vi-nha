@@ -8,7 +8,10 @@ import * as kinhDich from '../src/loi/kinhDich.ts';
 import * as kinhDichChu from '../src/loi/kinhDichChu.ts';
 import * as kinhDichGiai from '../src/loi/kinhDichGiai.ts';
 import * as kinhDichLuan from '../src/loi/kinhDichLuan.ts';
-import * as tarot from '../src/loi/tarot.ts';
+import * as tarotBai from '../src/loi/tarot.ts';
+import * as tarotLuan from '../src/loi/tarotLuan.ts';
+
+const tarot = { ...tarotBai, ...tarotLuan };
 import { NUOC_NGOAI } from '../src/loi/tinh.ts';
 
 const XEM = { nam: 2026, thang: 10, ngay: 23 };
@@ -53,7 +56,7 @@ describe('goi du lieu gui AI', () => {
     const q = duLieuQue(k, kinhDich.gieo([7, 7, 7, 7, 7, 9]), null);
     expect([q.includes('Quẻ chủ: quẻ 1 Thuần Càn'), q.includes('Hào động: 6'), q.includes('nguyên văn "'), q.includes('Lời chốt của app')]).toEqual([true, true, true, true]);
     const t = duLieuTarot(tarot, 'baLa', [{ so: 0, nguoc: false }, { so: 77, nguoc: true }, { so: 22, nguoc: false }]);
-    expect([t.includes('Quá khứ'), t.includes('The Fool'), t.includes('King of Pentacles — Vua Tiền, lá ngược')]).toEqual([true, true, true]);
+    expect([t.includes('Quá khứ'), t.includes('The Fool'), t.includes('King of Pentacles — Vua Tiền, lá ngược'), t.includes('Lời chốt của app')]).toEqual([true, true, true, true]);
   });
 });
 

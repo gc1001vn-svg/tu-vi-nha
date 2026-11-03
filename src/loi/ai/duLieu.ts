@@ -16,6 +16,7 @@ import { xemLaBan } from '../laBan.ts';
 import { namNay, type Muc } from '../namNay.ts';
 import { nhipSinhHoc, tenSo, thanSo } from '../soHoc.ts';
 import type * as TarotMod from '../tarot.ts';
+import type * as TarotLuan from '../tarotLuan.ts';
 import { NUOC_NGOAI } from '../tinh.ts';
 import { tuoiHop } from '../tuoiHop.ts';
 import type { SoDoMat } from '../tuongMat.ts';
@@ -28,7 +29,7 @@ import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
 
 type KinhDich = typeof KinhDichTinh & typeof KinhDichChu & typeof KinhDichGiai & typeof KinhDichLuan;
-type Tarot = typeof TarotMod;
+type Tarot = typeof TarotMod & typeof TarotLuan;
 
 const tenChi = (i: number): string => hv('chi', CHI.charAt(i));
 const DO_SANG = { M: 'Miếu', V: 'Vượng', Đ: 'Đắc', B: 'Bình', H: 'Hãm' } as const;
@@ -238,7 +239,7 @@ export function duLieuTarot(t: Tarot, kieu: keyof Tarot['TRAI'], rut: readonly T
     const [vt = '', yNghia = ''] = trai.viTri[i] ?? [];
     return la === undefined ? null : `- ${vt} (${yNghia}): ${la.anh} — ${la.ten}${r.nguoc ? ', lá ngược' : ', lá xuôi'}. `
       + `App giải: ${r.nguoc ? la.nguoc : la.xuoi}`;
-  }));
+  }).concat([`Lời chốt của app (Claude tổng hợp nhiều sách): ${t.luanTarot(kieu, rut).slice(0, 3).flatMap((d) => d.loi).join(' ')}`]));
 }
 
 /**

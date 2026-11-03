@@ -10,11 +10,12 @@ import type * as KinhDichChu from '../../loi/kinhDichChu.ts';
 import type * as KinhDichGiai from '../../loi/kinhDichGiai.ts';
 import type * as KinhDichLuan from '../../loi/kinhDichLuan.ts';
 import type * as TarotMod from '../../loi/tarot.ts';
+import type * as TarotLuan from '../../loi/tarotLuan.ts';
 import type { MatDo } from '../../loi/ai/duLieu.ts';
 import { isoNgay, khoiNap, lechNuocNgoai, type VeKhoi } from '../chung.ts';
 import { MAT_DA_DO, khoaNguoi } from '../khoi/tuongMat.ts';
 
-type Tarot = typeof TarotMod;
+type Tarot = typeof TarotMod & typeof TarotLuan;
 
 /** Dieu dua cho AI doc: mot nguoi (moi mon da tinh), que Kinh Dich, trai tarot vua gieo, chi tay nguoi xem tu chon. */
 export type ChuDe =
