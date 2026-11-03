@@ -113,13 +113,28 @@ function veQueKieu(q: QueKieu): HTMLElement {
     el('p', { class: 'ghi-chu' }, `Tên đoạn, tóm tắt: ${LOI_SOAN}`));
 }
 
+/** Luan que (`kieuLuan.ts`): chon viec dang hoi trong 18 de muc thi doi dong "Theo việc hỏi". */
+function veLuanKieu(luan: typeof import('../loi/kieuLuan.ts'), q: QueKieu): HTMLElement {
+  const chon = el('select', { 'aria-label': 'Việc đang hỏi' }, ...luan.TEN_MUC.map((t, i) => el('option', { value: String(i) }, t)));
+  const noi = el('div', {});
+  const ve = (): void => {
+    noi.replaceChildren(...luan.luanKieu(q, Number(chon.value)).flatMap((d) => [el('h4', {}, d.tieuDe),
+      ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]));
+  };
+  chon.addEventListener('change', ve);
+  ve();
+  return el('div', {}, el('h3', {}, 'Luận quẻ (Claude tổng hợp cách bói Kiều xưa rồi chốt; tham khảo)'),
+    el('label', { class: 'chon-viec' }, 'Việc đang hỏi: ', chon), noi);
+}
+
 function veBoiKieu(): HTMLElement {
   const ketQua = el('div', { 'aria-live': 'polite' });
   const nut = el('button', { type: 'button', class: 'chinh' }, 'Mở sách');
   nut.addEventListener('click', () => {
-    import('../loi/kieu.ts').then((k) => {
+    Promise.all([import('../loi/kieu.ts'), import('../loi/kieuLuan.ts')]).then(([k, luan]) => {
       const cap = (crypto.getRandomValues(new Uint32Array(1))[0] ?? 0) % k.SO_CAP;
-      ketQua.replaceChildren(veQueKieu(k.queKieu(cap)));
+      const q = k.queKieu(cap);
+      ketQua.replaceChildren(veQueKieu(q), veLuanKieu(luan, q));
     }, (e: unknown) => { ketQua.replaceChildren(loi(e)); });
   });
   return el('section', { class: 'the' },

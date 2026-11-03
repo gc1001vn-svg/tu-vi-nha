@@ -175,7 +175,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   Máy chọn đều một trong 1.627 cặp lục bát (`crypto` ở giao diện), hiện thêm một cặp trước, một cặp sau để đọc ra ý.
   Vênh: khấn ai (Từ Hải, Giác Duyên, Thúy Kiều: Phạm Đan Quế, loigiaihay · Thúy Kiều, Kim Trọng: Phan Kế Bính) → mặc định
   câu thứ nhất; đọc mấy câu (Phan Kế Bính "mấy câu", Phạm Đan Quế 2 câu) → tuỳ chọn `cauKieu`; trang trái/phải, đếm dòng
-  thì máy không cần. Không làm: lời giải sẵn từng câu (sách bói Kiều còn bản quyền), bói "3 lần" (không thấy nguồn).
+  thì máy không cần. Không làm: lời giải sẵn từng câu (sách bói Kiều còn bản quyền), bói "3 lần" (không thấy nguồn). Lời gộp: mục 38.
 - **21 đoạn**: "Mở đầu" (câu 1–38) + 20 hồi theo mục lục bản Nguyễn Can Mộng 1936; ranh hồi tìm bằng so khớp OCR (lệch 0–2 câu),
   đặt ở câu lục; tên đoạn, tóm tắt Claude soạn lại.
 
@@ -734,6 +734,10 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_TUOI_HOP.md`** (bảng chi cũ: mục 14). Tóm: theo *Tam Mệnh Thông Hội*, *Hiệp Kỷ*; "tứ hành
   xung" tách lại (chỉ cặp đối nhau là xung); Tỵ–Thân "hợp mà có hình"; xung mà mệnh sinh nhau thì giảm; oán thần (Hàn) chỉ ghi; không xét
   cung phi hai người; so hai năm: chi + nạp âm + can, hợp ≥ 1,5, kỵ ≤ −1.
+
+## 38. Luận quẻ bói Kiều — cách bói xưa và tục bói sách các nước, chốt một lời (kế hoạch 03/11; `src/loi/kieuLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_BOI_KIEU.md`** (chữ, cách bói: mục 17). Tóm: chữ vui buồn trong câu (câu rút ×1, câu bên
+  ×0,5) + cảnh 21 đoạn ×0,5; người trong câu; lời theo 18 đề mục của thầy bói Kiều xưa (chỉ lấy tên mục) × 3 mức; không chép sách bói Kiều.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
