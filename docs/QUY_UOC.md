@@ -749,6 +749,23 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   Tuế, Tuế Phá, Tam Sát; tháng: sao xấu năm – tháng chồng nhau là nặng nhất; sửa câu Thái Tuế (tựa lưng: hai bên vênh), Ngũ Hoàng (bỏ chữ
   "tai họa"); Bát Bạch vận 9 vênh; không khuyên vật phẩm; câu *Tử Bạch Quyết* chưa đọc được nên không dùng.
 
+## 41. Lời chốt các môn vào AI tổng hợp (kế hoạch 03/11 `2026-11-03-ai-loi-chot.md`; `src/loi/ai/duLieu.ts`, `loiDan.ts`)
+- Mỗi môn (tử vi, năm nay, bát tự, Bát trạch, thần số, chiêm tinh) thêm dòng "Lời chốt của app": câu đầu mỗi đoạn luận (cắt ở ranh từ,
+  ~90 ký tự — `cau`), kết đại vận / năm ("app luận"), tử vi chấm 12 cung ("app chấm" theo `NGUONG_CUNG`), bát tự chấm 7 việc. Lời dặn luật 3:
+  lời chốt là kết luận chính, số liệu thô chỉ để giải thích.
+- Bớt phần thô đã có lời chốt thay: 12 cung chỉ ghi sao chính + 23 phụ tinh lớn (lục cát, lục sát, tứ hóa, Lộc Tồn, Thiên Mã, nhóm đào hoa);
+  bỏ hạn năm đếm sao kiểu Tân Biên (thay bằng luận năm), đếm ngũ hành thô bát tự, góc chiếu phụ (giữ 6 góc chính), lời giải dài năm nay.
+- Độ dài (hồ sơ giả 10/05/1990 06:14 Hà Nội): 8.500 → **8.968 ký tự** (thêm nghĩa ngắn 12 cung, dòng màu – nghề – hướng); lời dặn 1.060 → 1.277. Lượt đầu vẫn xin 3.000 token ra; hỏi thêm sau
+  lời tổng hợp ~3.300 ký tự vẫn giữ lời đó (`tests/AIGoi.test.ts`, dư ít). Đo mặt thì dài thêm 1,4–1,9 nghìn ký tự như cũ (mục 26).
+- **Đo AI thật 03/11** (kịch bản đo AI, gpt-oss-120b, 3 hồ sơ giả + 10 câu bẫy mỗi lượt): lượt 1 (bản đầu) — tên bịa 0/3, bẫy "chưa có"
+  9/10, đọc tay thấy AI lấy "Phụ Mẫu … cần lưu ý" nói chuyện vợ chồng, gọi một sao tử vi là "theo Bát tự" → thêm nghĩa ngắn từng cung
+  ("Phụ Mẫu — cha mẹ"), luật "app chấm thuộc đúng cung cùng dòng"; lượt 2 — bịa 0/3, bẫy 9/10, đọc tay: cung nói đúng nghĩa, AI dùng "app
+  chấm", "app luận", lời chốt năm nay. Câu bẫy trượt cả 3 lượt (kể cả lượt trả lời dặn cũ): **màu sơn nhà** — AI suy màu theo mệnh nạp
+  âm, có thể ngược khối bát tự (app chọn màu theo hành hợp) → gửi kèm dòng "Cách dùng phổ biến" (màu, nghề, hướng theo hành hợp), luật
+  "màu chỉ lấy từ dòng đó"; trong kịch bản đo thay câu bẫy màu bằng câu đá phong thủy. **Bản cuối chưa đo** — khoá Groq chạm hạn mức
+  ngày sau ~3,5 lượt đo (200.000 token/ngày, dùng chung cả nhà); đo lại hôm sau. Lần 23/10 (dữ liệu cũ): bẫy 10/10 — chưa tách được do
+  dữ liệu mới hay mô hình đổi.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|

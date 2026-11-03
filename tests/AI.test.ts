@@ -1,7 +1,9 @@
 /**
  * AI dot 7 phan 1 — phan khong can mang: goi du lieu gui di (du cac mon, khong ten), do chu bia. Ngay sinh GIA. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`.
  */
-import { duLieuNguoi, duLieuQue, duLieuTarot } from '../src/loi/ai/duLieu.ts';
+import { vuaHanMuc } from '../src/giaoDien/ai/goi.ts';
+import { cau, duLieuNguoi, duLieuQue, duLieuTarot } from '../src/loi/ai/duLieu.ts';
+import { LOI_DAN, YEU_CAU } from '../src/loi/ai/loiDan.ts';
 import { TU_NGUOI, timBia } from '../src/loi/ai/kiemBia.ts';
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 import * as kinhDich from '../src/loi/kinhDich.ts';
@@ -20,6 +22,17 @@ const hs = (o: Partial<HoSo> = {}): HoSo =>
 const du = (h: HoSo, lech?: number): string => duLieuNguoi(h, tinhHoSo(h, lech), XEM, lech);
 
 describe('goi du lieu gui AI', () => {
+  test('loi chot cac mon (ke hoach 2026-11-03-ai-loi-chot): moi mon co "Lời chốt của app"; tu vi cham tung cung; luot dau con ≥ 2.900 token ra', () => {
+    const d = du(hs());
+    const phan = (ten: string): string => d.split(/\n(?=## )/).find((x) => x.startsWith(`## ${ten}`)) ?? '';
+    for (const m of ['Tử vi', 'Năm nay', 'Bát tự', 'Hướng nhà', 'Thần số học', 'Chiêm tinh']) expect([m, phan(m).includes('Lời chốt của app')]).toEqual([m, true]);
+    expect([(phan('Tử vi').match(/ · app chấm: (tốt|vừa|cần lưu ý)/g) ?? []).length, phan('Tử vi').includes('Tràng Sinh'), d.includes('..')]).toEqual([12, false, false]);
+    expect(vuaHanMuc(`${LOI_DAN}\n\nDỮ LIỆU:\n${d}`, [{ role: 'user', content: YEU_CAU.nguoi() }]).ra).toBeGreaterThanOrEqual(2900);
+    // khong gio sinh: tu vi chua lap duoc, cac mon khac van co loi chot
+    expect(phan.call(null, 'Bát tự').length > 0 && du(hs({ gioSinh: null })).includes('Lời chốt của app')).toBe(true);
+    expect([cau('Câu một. Câu hai.'), cau('a '.repeat(80)).endsWith('…'), cau('Ngắn.')]).toEqual(['Câu một', true, 'Ngắn']);
+  });
+
   test('du 9 muc, dung so may tinh, khong ten nguoi, khong muc nao loi, ~8 nghin token tro xuong', () => {
     const d = du(hs());
     expect(d.match(/^## [^(\n]+/gm)?.map((m) => m.slice(3).trim())).toEqual(['Người xem', 'Tử vi', 'Năm nay', 'Bát tự', 'Hướng nhà',

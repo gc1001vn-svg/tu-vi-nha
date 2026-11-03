@@ -21,8 +21,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 2. Việc kế
 
-- **Đang làm: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn xong — các môn ở dòng trên.
-  Sau: lời chốt các môn vào AI; đợt 8 cũ lùi; 9 (người nhà).
+- **Xong: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn; lời chốt vào AI tổng hợp (mục 41).
+  Sau: anh đọc lời giải các môn; đợt 8 cũ lùi; 9 (người nhà).
 
 ## 3. Cần anh
 
@@ -39,7 +39,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Chỉ tay (mục 27): máy dò chưa ai chấm, chụp lại đổi ~1/4 ô, chưa thử Safari iPhone; Nhật – Hàn đọc trích đoạn, thiếu sách Việt cổ.
 - La bàn: bắc từ hay bắc thật chưa thấy tài liệu Apple (VN lệch <2°, anh so không lệch; mục 20).
 - Hạn tháng chưa so Altuvi; Mệnh chủ/Thân chủ theo *Toàn Thư*; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
-- Lời giải mới chưa vào AI (trừ tướng mặt, chỉ tay, Kinh Dịch, tarot, tuổi hợp); tử vi tháng, ngày đếm sao Tân Biên; bát tự chưa so lá mẫu; thần số chưa có số tên.
+- AI nhận lời chốt gọn (câu đầu mỗi đoạn, mục 41); tử vi tháng, ngày đếm sao Tân Biên; bát tự chưa so lá mẫu; thần số chưa có số tên.
 - Tướng mặt: ngưỡng tạm (15 ảnh Đông Á, 1 người Việt); Nhật, Hàn, hiện đại đọc qua trích đoạn; kết đo trên mặt giả.
 - AI (mục 25): gán sai cung ~1/10 hồ sơ, thêm lời khuyên ngoài dữ liệu — app chỉ nhắc; siết lời dặn thì đo lại.
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Chọn ngày: kỵ tục chỉ hạ Được (mục 39).

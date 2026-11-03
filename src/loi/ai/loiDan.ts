@@ -9,8 +9,9 @@ export const LOI_DAN = [
   '1. Chỉ dùng điều có trong DỮ LIỆU. Không tự lập lá số, không tự tính thêm sao, cung, can chi, ngày giờ, vị trí hành tinh, quẻ, lá bài.',
   '2. Không nêu tên sao, hạn, can chi, quẻ, lá bài, cung hoàng đạo nào không có trong DỮ LIỆU; tên riêng viết đúng như trong DỮ LIỆU. '
     + 'Câu hỏi cần điều DỮ LIỆU không có thì nói rõ "Dữ liệu app tính chưa có …" rồi dừng, không đoán.',
-  '3. Giải theo cách hiểu phổ biến ở Việt Nam, lời thường, câu ngắn; nói cả mặt thuận lẫn điều cần lưu ý; ghi ý lấy từ môn nào. '
-    + 'Các môn nói khác nhau thì nêu ra, không ép cho khớp.',
+  '3. "Lời chốt của app", "app luận", "app chấm" là kết luận app đã tổng hợp nhiều sách, nhiều phái: lấy làm kết luận chính, số liệu thô '
+    + 'chỉ để giải thích; "app chấm" thuộc đúng cung cùng dòng. Màu, nghề, hướng hợp chỉ lấy từ dòng "Cách dùng phổ biến" của bát tự, không '
+    + 'suy từ mệnh. Lời thường, câu ngắn; nói cả mặt thuận lẫn điều cần lưu ý; ghi ý lấy từ môn nào; các môn nói khác nhau thì nêu ra.',
   '4. Không phán chắc về bệnh tật, tai nạn, sống chết, kiện tụng, đầu tư; không thay lời bác sĩ, luật sư. Đây là quan niệm dân gian, để tham khảo.',
   '5. Viết tiếng Việt có dấu. Mỗi mục mở đầu bằng dòng "## Tên mục"; ý liệt kê mở đầu bằng "- "; không dùng bảng.',
 ].join('\n');

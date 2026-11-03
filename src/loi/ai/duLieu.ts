@@ -6,7 +6,7 @@
 import { CHI, canChiNam, dinhDangAm, dinhDangNgay, duongSangAm, type NgayDuong } from '../amLich.ts';
 import { batTrach } from '../batTrach.ts';
 import { tinhBatTu, type Tru } from '../batTu.ts';
-import { DIEM, GOC, dinhDang, gocChieu, laSoNguoi, nhaCua } from '../chiemTinh.ts';
+import { DIEM, GOC, dinhDang, laSoNguoi, nhaCua } from '../chiemTinh.ts';
 import { hv } from '../hanViet/index.ts';
 import { moTaKhac, tuoiMu, type GioiTinh, type HoSo, type TinhRa } from '../hoSo.ts';
 import type * as KinhDichTinh from '../kinhDich.ts';
@@ -26,6 +26,13 @@ import { luanMat, mucXet, netChot } from '../tuongMatLuan.ts';
 import { luanTay } from '../chiTayLuan.ts';
 import type * as KinhDichLuan from '../kinhDichLuan.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
+import { NGUONG_CUNG, diemCung, luanDaiVan, luanNam, tongLuan } from '../tuVi/luan.ts';
+import { CHU_DE } from '../tuVi/nghia.ts';
+import { dsVanBT, luanNamBT, luanViec, phanTich, tongLuanBT } from '../batTuLuan.ts';
+import { tongLuanTS, vanTS } from '../soHocLuan.ts';
+import { gocChinh, tongLuanCT, type DoanLuan } from '../chiemTinhLuan.ts';
+import { luanBatTrach } from '../batTrachLuan.ts';
+import { luanNamNay } from '../namNayLuan.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
 
 type KinhDich = typeof KinhDichTinh & typeof KinhDichChu & typeof KinhDichGiai & typeof KinhDichLuan;
@@ -36,6 +43,21 @@ const DO_SANG = { M: 'Miếu', V: 'Vượng', Đ: 'Đắc', B: 'Bình', H: 'Hãm
 const muc = (tieuDe: string, dong: readonly (string | null)[]): string =>
   [`## ${tieuDe}`, ...dong.filter((d) => d !== null && d !== '')].join('\n');
 const so1 = (x: number): string => x.toFixed(1).replace('.', ',');
+
+/**
+ * Loi chot gui AI phai gon (han muc 8.000 token/phut tinh ca dau ra xin truoc, `vuaHanMuc`): moi doan chi lay cau dau, cat o ranh tu.
+ * AI duoc dan lay "Lời chốt của app" lam ket luan chinh cua mon (`LOI_DAN` luat 3).
+ */
+export function cau(s: string, toi = 90): string {
+  const het = s.search(/[.!?](\s|$)/u);
+  if (het >= 0 && het < toi) return s.slice(0, het);
+  if (s.length <= toi) return s.replace(/[.!?]$/u, '');
+  const cat = s.lastIndexOf(' ', toi);
+  return `${s.slice(0, cat > 0 ? cat : toi).replace(/[,;:—–\s]+$/u, '')}…`;
+}
+const cham = (x: string): string => (x.endsWith('…') ? x : `${x}.`);
+const tomTat = (xs: readonly DoanLuan[], toi = 90): string => cham(xs.map((d) => `${d.tieuDe}: ${cau(d.loi[0] ?? '', toi)}`).join(' · '));
+const KET_CHU: Readonly<Record<string, string>> = { thuan: 'thuận', vua: 'vừa', kho: 'cần giữ gìn' };
 
 function nguoiXem(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   const k = tr.chinh;
@@ -55,6 +77,10 @@ function nguoiXem(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
 }
 
 const tenSao = (s: Sao): string => (s.doSang === null ? s.ten : `${s.ten} (${DO_SANG[s.doSang]})`);
+/** Phu tinh lon gui AI (luc cat, luc sat, tu hoa, Loc Ton, Thien Ma, sao dao hoa): du 12 cung moi sao thi qua dai cho han muc; app luan du sao. */
+const PHU_LON = new Set(['Tả Phù', 'Hữu Bật', 'Văn Xương', 'Văn Khúc', 'Thiên Khôi', 'Thiên Việt', 'Lộc Tồn', 'Thiên Mã', 'Hóa Lộc', 'Hóa Quyền',
+  'Hóa Khoa', 'Hóa Kỵ', 'Kình Dương', 'Đà La', 'Hỏa Tinh', 'Linh Tinh', 'Địa Không', 'Địa Kiếp', 'Đào Hoa', 'Hồng Loan', 'Thiên Hỷ',
+  'Thiên Hình', 'Thiên Riêu']);
 
 function tuVi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   const kq = tr.chinh;
@@ -64,14 +90,18 @@ function tuVi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   const tenCung = (chi: number): string => `${ls.cung[chi]?.ten ?? ''} (${tenChi(chi)})`;
   const cung = ls.cung.map((c) => {
     const chinh = c.sao.filter((s) => s.loai === 1).map(tenSao);
-    const tot = c.sao.filter((s) => s.loai > 1 && s.loai < 10).map(tenSao);
-    const xau = c.sao.filter((s) => s.loai > 10).map(tenSao);
-    return [`- ${c.ten} (${tenChi(c.chi)}, ${c.canChi})${c.chi === ls.menh ? ' · cung Mệnh' : ''}${c.chi === ls.than ? ' · Thân cư' : ''}`,
+    const tot = c.sao.filter((s) => s.loai > 1 && s.loai < 10 && PHU_LON.has(s.ten)).map(tenSao);
+    const xau = c.sao.filter((s) => s.loai > 10 && PHU_LON.has(s.ten)).map(tenSao);
+    // Nghia ngan cua cung (do 03/11: AI tung lay "Phụ Mẫu … cần lưu ý" de noi chuyen vo chong).
+    return [`- ${c.ten} — ${(CHU_DE[c.ten] ?? '').split(',')[0] ?? ''} (${tenChi(c.chi)}, ${c.canChi})${c.chi === ls.menh ? ' · cung Mệnh' : ''}${c.chi === ls.than ? ' · Thân cư' : ''}`,
       `đại vận ${String(c.daiVan)}–${String(c.daiVan + 9)} tuổi${c.chi === ls.daiVanNay ? ' (đang chạy)' : ''}`,
       chinh.length === 0 ? 'vô chính diệu' : `chính tinh: ${chinh.join(', ')}`,
       ...(tot.length === 0 ? [] : [`sao tốt: ${tot.join(', ')}`]), ...(xau.length === 0 ? [] : [`sao xấu: ${xau.join(', ')}`]),
-      ...(c.tuan ? ['có Tuần'] : []), ...(c.triet ? ['có Triệt'] : [])].join(' · ');
+      ...(c.tuan ? ['có Tuần'] : []), ...(c.triet ? ['có Triệt'] : []),
+      `app chấm: ${((d: number): string => (d >= NGUONG_CUNG.tot ? 'tốt' : d < NGUONG_CUNG.kem ? 'cần lưu ý' : 'vừa'))(diemCung(ls, c.chi))}`].join(' · ');
   });
+  const ln = luanNam(ls, lh, kq.am.nam);
+  const dv = ls.daiVanNay === null ? null : luanDaiVan(ls, ls.daiVanNay, kq.am.nam);
   const han = (ten: string, chi: number): string => {
     const d = danhGiaHan(ls, lh, chi);
     return `${ten} ở cung ${tenCung(chi)}: hạn ${d.ket} (${String(d.tot)} sao tốt, ${String(d.xau)} sao xấu trong ${String(d.tong)} sao hội về).`;
@@ -79,23 +109,26 @@ function tuVi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   return muc('Tử vi (lá số theo sách Tử Vi Đẩu Số Tân Biên)', [
     `${ls.amDuong}, ${ls.cuc}. Mệnh chủ ${ls.menhChu}, Thân chủ ${ls.thanChu}. Mệnh ở cung ${tenChi(ls.menh)}, `
       + `Thân cư ${tenCung(ls.than)}. Năm xem ${String(ls.tuoi)} tuổi mụ.`,
-    '12 cung (tên, chi, can chi; độ sáng sao chính: Miếu, Vượng, Đắc sáng, Bình vừa, Hãm mờ):',
+    '12 cung (độ sáng: Miếu, Vượng, Đắc sáng, Bình vừa, Hãm mờ; chỉ ghi sao chính, phụ tinh lớn; "app chấm" đã xét đủ sao):',
     ...cung,
-    `Đại vận đang chạy: ${ls.daiVanNay === null ? 'chưa vào đại vận đầu' : `cung ${tenCung(ls.daiVanNay)}`}.`,
-    han(`Năm ${lh.canChi} ${String(lh.namAm)}: tiểu hạn`, lh.tieuHan),
-    `Lưu Thái Tuế năm ${lh.canChi} ở cung ${tenCung(lh.thaiTue)}.`,
+    `Lời chốt của app: ${tomTat(tongLuan(ls, kq.am.nam))}`,
+    `Đại vận đang chạy: ${ls.daiVanNay === null || dv === null ? 'chưa vào đại vận đầu.' : `cung ${tenCung(ls.daiVanNay)}; app luận: ${KET_CHU[dv.ket] ?? ''} — ${cham(cau(dv.loi[0] ?? ''))}`}`,
+    `Năm ${lh.canChi} ${String(lh.namAm)}: tiểu hạn ở cung ${tenCung(lh.tieuHan)}; app luận: ${KET_CHU[ln.ket] ?? ''} — ${cham(cau(ln.loi.at(-1) ?? '', 120))}`,
     han(`Tháng ${String(lh.thangAm)}${lh.nhuan ? ' nhuận' : ''} âm: nguyệt hạn`, lh.thang),
     han(`Hôm nay (${String(lh.ngayAm)}/${String(lh.thangAm)} âm): nhật hạn`, lh.ngay),
-    `Sao lưu năm ${lh.canChi}: ${lh.sao.map((s) => `${s.ten} ở cung ${tenCung(s.chi)}`).join('; ')}.`,
+    `Sao lưu năm ${lh.canChi} (Lưu Thái Tuế ở ${tenCung(lh.thaiTue)}): ${[...new Set(lh.sao.map((x) => x.chi))]
+      .map((chi) => `${tenCung(chi)}: ${lh.sao.filter((x) => x.chi === chi).map((x) => x.ten).join(', ')}`).join('; ')}.`,
   ]);
 }
 
 function nam(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   const n = namNay(hs, tr.chinh, ngayXem);
-  const dong = (nhan: string, m: Muc): string => `${nhan}: ${m.ten} (${m.mucDo === 'tot' ? 'tốt' : m.mucDo === 'xau' ? 'xấu' : 'vừa'}) — ${m.nghia}`;
+  const dong = (nhan: string, m: Muc): string => `${nhan} ${m.ten} (${m.mucDo === 'tot' ? 'tốt' : m.mucDo === 'xau' ? 'xấu' : 'vừa'})`;
+  const l = luanNamNay(n);
   return muc(`Năm nay (năm âm ${n.canChi} ${String(n.namAm)}, ${String(n.tuoiMu)} tuổi mụ, tính từ Tết)`, [
-    dong('Sao chiếu mệnh', n.sao), dong('Hạn', n.han), dong('Kim Lâu', n.kimLau), dong('Hoang Ốc', n.hoangOc),
-    dong('Tam Tai', n.tamTai), dong('Thái Tuế', n.thaiTue),
+    `${[dong('Sao chiếu mệnh', n.sao), dong('Hạn', n.han), dong('Kim Lâu', n.kimLau), dong('Hoang Ốc', n.hoangOc),
+      dong('Tam Tai', n.tamTai), dong('Thái Tuế', n.thaiTue)].join('; ')}.`,
+    `Lời chốt của app: ${cham(cau(l[0]?.loi[0] ?? '', 120))} Việc lớn: ${cham((l[1]?.loi ?? []).map((x) => cau(x, 70)).join('; '))}`,
   ]);
 }
 
@@ -105,16 +138,22 @@ function batTu(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
     : `Trụ ${ten}: ${t.can} ${t.chi} — can ${t.can} là ${t.thapThan}; tàng can ${t.tangCan.map((c) => `${c.can} (${c.thapThan})`).join(', ')}`
       + `; nạp âm ${t.napAm}; trường sinh ${t.truongSinh}.`);
   const van = b.daiVan.find((v) => v.dangChay);
+  const p = phanTich(b), vanLuan = dsVanBT(b, p).find((v) => v.dangChay), namLuan = luanNamBT(b, p);
   return muc('Bát tự (tứ trụ)', [
     ...(['năm', 'tháng', 'ngày', 'giờ'] as const).map((ten, i) => tru(ten, b.tru[i] ?? null)),
-    `Nhật chủ ${b.nhatChu}. Ngũ hành (đếm can, chi; không tính tàng can): ${b.nguHanh.map((x) => `${x.hanh} ${String(x.so)}`).join(', ')}.`,
-    `Theo quan hệ với nhật chủ: ${b.nhomHanh.map((x) => `${x.nhom} (hành ${x.hanh}) ${String(x.so)}`).join(', ')}.`,
+    `Nhật chủ ${b.nhatChu}.`,
+    `Lời chốt của app: ${tomTat(tongLuanBT(b, p).filter((d) => !d.tieuDe.startsWith('Nhật chủ') && !d.tieuDe.startsWith('Hợp, xung')))}`,
+    `Từng việc (app chấm): ${luanViec(b, hs.gioiTinh, p).map((v) => `${v.ten} ${KET_CHU[v.ket] ?? ''}`).join(', ')}.`,
+    // Mau, nghe, huong theo hanh hop (do 03/11: khong gui thi AI tu suy mau theo menh nap am, co the nguoc khoi bat tu).
+    tongLuanBT(b, p).flatMap((d) => d.loi).find((l) => l.startsWith('Cách dùng phổ biến')) ?? null,
     `Không vong: ${b.khongVong}. Khởi vận ${String(b.khoiVan.nam)} năm ${String(b.khoiVan.thang)} tháng ${String(b.khoiVan.ngay)} ngày `
       + `sau khi sinh, đi ${b.thuan ? 'thuận' : 'nghịch'}.`,
     `Đại vận (tuổi mụ bắt đầu, can chi, năm bắt đầu): ${b.daiVan.map((v) => `${String(v.tuoi)} tuổi ${v.canChi} (${String(v.batDau.nam)})`).join('; ')}.`,
     van === undefined ? 'Hôm nay chưa vào đại vận nào.'
-      : `Đại vận đang chạy ${van.canChi}: can là ${van.thapThan[0]}, chi (can chính ẩn ${van.tang}) là ${van.thapThan[1]}.`,
-    `Năm nay ${b.namNay.canChi} (tính từ Lập Xuân): can là ${b.namNay.thapThan[0]}, chi (can chính ẩn ${b.namNay.tang}) là ${b.namNay.thapThan[1]}.`,
+      : `Đại vận đang chạy ${van.canChi}: can là ${van.thapThan[0]}, chi (can chính ẩn ${van.tang}) là ${van.thapThan[1]}`
+        + `${vanLuan === undefined ? '' : `; app luận: ${KET_CHU[vanLuan.ket] ?? ''}`}.`,
+    `Năm nay ${b.namNay.canChi} (tính từ Lập Xuân): can là ${b.namNay.thapThan[0]}, chi (can chính ẩn ${b.namNay.tang}) là ${b.namNay.thapThan[1]}`
+      + `; app luận: ${KET_CHU[namLuan.ket] ?? ''} — ${cham(cau(namLuan.loi.at(-1) ?? '', 140))}`,
     ...b.ghiChu.map((c) => `Lưu ý: ${c}`),
   ]);
 }
@@ -127,12 +166,14 @@ function huong(hs: HoSo, tr: TinhRa): string {
     `${bt.nhom}. ${bt.huong.map((h) => `${h.huong}: ${h.sao} (${h.tot ? 'tốt' : 'xấu'})`).join('; ')}.`,
     nha === undefined || sao === undefined ? null
       : `Nhà đã đo bằng la bàn: ${String(nha.do)}° hướng ${nha.huong} (sơn ${nha.son}) — ${sao.sao} (${sao.tot ? 'tốt' : 'xấu'}).`,
+    `Lời chốt của app: ${luanBatTrach(tr.chinh.cungPhi, hs.huongNha).slice(0, 2).map((d) => cham(cau(d.loi[0] ?? '', 130))).join(' ')}`,
   ]);
 }
 
 /** Loi chot (`tuoiHopLuan.ts`): xep 12 tuoi theo sach co, khong gui bang "tu hanh xung" cua tuc Viet (lan luc hop vao nhom xung). */
 function tuoi(tr: TinhRa): string {
-  return muc('Tuổi hợp, tuổi kỵ (theo chi năm sinh; app xếp theo sách cổ)', luanTuoi(tr.chinh.chiNam)[0]?.loi.map((l) => `- ${l}`) ?? []);
+  return muc('Tuổi hợp, tuổi kỵ (theo chi năm sinh; app xếp theo sách cổ)',
+    [`${(luanTuoi(tr.chinh.chiNam)[0]?.loi ?? []).map((l) => l.split(' — ')[0]).join('; ')}.`]);
 }
 
 function soHoc(hs: HoSo, ngayXem: NgayDuong): string {
@@ -145,6 +186,8 @@ function soHoc(hs: HoSo, ngayXem: NgayDuong): string {
       `Số chủ đạo ${tenSo(t.chuDao)}; số ngày sinh ${String(t.ngaySinh)}; năm cá nhân ${String(t.namXem)}: ${String(t.namCaNhan)}; `
         + `tháng cá nhân ${String(ngayXem.thang)}/${String(ngayXem.nam)}: ${String(t.thangCaNhan)}.`,
       `Biểu đồ ngày sinh (số lần mỗi chữ số 1–9): ${t.luoi.map((x, i) => `${String(i + 1)}×${String(x)}`).join(', ')}.`,
+      `Lời chốt của app: ${tomTat(tongLuanTS(t, sinh).filter((d) => d.tieuDe.startsWith('Số chủ đạo') || d.tieuDe === 'Kết hợp'))} `
+        + `Vận: ${vanTS(t, sinh, ngayXem).loi.filter((x, i) => i === 0 || x.startsWith('Năm cá nhân')).map((x) => cham(cau(x, 80))).join(' ')}`,
     ]),
     muc(`Nhịp sinh học hôm nay (ngày thứ ${String(n.ngay)} kể từ ngày sinh)`, [
       n.nhip.map((x) => `${x.ten} ${x.phanTram > 0 ? '+' : ''}${String(x.phanTram)}% ${x.len ? 'đang lên' : 'đang xuống'}`
@@ -161,7 +204,8 @@ function chiemTinh(hs: HoSo, lechNuoc: number | undefined): string {
   return muc('Chiêm tinh (hoàng đạo nhiệt đới, nhà Placidus, Bắc Giao Điểm trung bình)', [
     `${diem.join('; ')}.`,
     ls.moc === null || ls.dinh === null ? null : `Cung Mọc ${dinhDang(ls.moc)}; Thiên Đỉnh ${dinhDang(ls.dinh)}.`,
-    `Góc chiếu: ${gocChieu(ls).map((g) => `${DIEM[g.a] ?? ''} ${GOC[g.goc]?.ten.toLowerCase() ?? ''} ${DIEM[g.b] ?? ''} (lệch ${so1(g.orb)}°)`).join('; ')}.`,
+    `Góc chiếu chính: ${gocChinh(ls).map((g) => `${DIEM[g.a] ?? ''} ${GOC[g.goc]?.ten.toLowerCase() ?? ''} ${DIEM[g.b] ?? ''} (lệch ${so1(g.orb)}°)`).join('; ')}.`,
+    `Lời chốt của app: ${tomTat(tongLuanCT(ls).slice(0, 3), 80)}`,
     ...r.ghiChu.map((c) => `Lưu ý: ${c}`),
     ...r.phuongAn.map((p) => `${p.lyDo}: ${p.khac}.`),
   ]);
@@ -224,7 +268,7 @@ export function duLieuQue(k: KinhDich, g: KinhDichTinh.Gieo, mh: KinhDichTinh.Ma
       + `${k.LUAN[mh.quanHe].ten} — ${k.LUAN[mh.quanHe].loi}`,
     'Đoạn nên đọc theo số hào động (luật Chu Hy):',
     ...doan,
-    `Lời chốt của app (Claude tổng hợp nhiều nhà chú giải): ${k.luanQue(g, mh).slice(0, 2).flatMap((d) => d.loi).join(' ')}`,
+    `Lời chốt của app: ${k.luanQue(g, mh).slice(0, 2).flatMap((d) => d.loi).join(' ')}`,
   ]);
 }
 
@@ -236,7 +280,7 @@ export function duLieuTarot(t: Tarot, kieu: keyof Tarot['TRAI'], rut: readonly T
     const [vt = '', yNghia = ''] = trai.viTri[i] ?? [];
     return la === undefined ? null : `- ${vt} (${yNghia}): ${la.anh} — ${la.ten}${r.nguoc ? ', lá ngược' : ', lá xuôi'}. `
       + `App giải: ${r.nguoc ? la.nguoc : la.xuoi}`;
-  }).concat([`Lời chốt của app (Claude tổng hợp nhiều sách): ${t.luanTarot(kieu, rut).slice(0, 3).flatMap((d) => d.loi).join(' ')}`]));
+  }).concat([`Lời chốt của app: ${t.luanTarot(kieu, rut).slice(0, 3).flatMap((d) => d.loi).join(' ')}`]));
 }
 
 /**
