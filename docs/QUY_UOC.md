@@ -800,7 +800,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.
-- Hạn mức: khoá dùng chung, ngày 03/11 cả nhà dùng gần hết — lần sau thăm trước, còn dưới ~100.000 thì hoãn.
+- Hạn mức ngày Groq tính trượt 24 giờ: ~3,5 lượt đo sáng 03/11 (02:45–03:30 UTC) chưa hồi hết lúc đo chiều — số dùng của
+  người nhà không tách được. Lần sau đo cách lượt trước ≥ 24 giờ; thăm trước, còn dưới ~100.000 thì hoãn.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
