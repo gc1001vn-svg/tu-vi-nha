@@ -23,10 +23,11 @@ import { QUY_LUAT_CHUNG, giaiChiTay, mucTin, type KhungChiTay, type Luat } from 
 import { CAC_KHOA, GIAI, SO_ANH_MAU, dangSo, giaiMat, type MatDoGiai } from '../tuongMatGiai.ts';
 import { luanMat, mucXet, netChot } from '../tuongMatLuan.ts';
 import { luanTay } from '../chiTayLuan.ts';
+import type * as KinhDichLuan from '../kinhDichLuan.ts';
 import { tinhTuVi, type Sao } from '../tuVi/laSo.ts';
 import { danhGiaHan, tinhLuuHan } from '../tuVi/luuHan.ts';
 
-type KinhDich = typeof KinhDichTinh & typeof KinhDichChu & typeof KinhDichGiai;
+type KinhDich = typeof KinhDichTinh & typeof KinhDichChu & typeof KinhDichGiai & typeof KinhDichLuan;
 type Tarot = typeof TarotMod;
 
 const tenChi = (i: number): string => hv('chi', CHI.charAt(i));
@@ -225,6 +226,7 @@ export function duLieuQue(k: KinhDich, g: KinhDichTinh.Gieo, mh: KinhDichTinh.Ma
       + `${k.LUAN[mh.quanHe].ten} — ${k.LUAN[mh.quanHe].loi}`,
     'Đoạn nên đọc theo số hào động (luật Chu Hy):',
     ...doan,
+    `Lời chốt của app (Claude tổng hợp nhiều nhà chú giải): ${k.luanQue(g, mh).slice(0, 2).flatMap((d) => d.loi).join(' ')}`,
   ]);
 }
 

@@ -9,15 +9,16 @@ import type * as Tinh from '../loi/kinhDich.ts';
 import type { DoanDoc, Gieo, Hao, MaiHoaGio } from '../loi/kinhDich.ts';
 import type * as Chu from '../loi/kinhDichChu.ts';
 import type * as Giai from '../loi/kinhDichGiai.ts';
+import type * as Luan from '../loi/kinhDichLuan.ts';
 import { khoiAI } from './ai/index.ts';
 import { el } from './chung.ts';
 import './gieoQue.css';
 import { LOI_SOAN } from './khoi/namNay.ts';
 
-type KinhDich = typeof Tinh & typeof Chu & typeof Giai;
+type KinhDich = typeof Tinh & typeof Chu & typeof Giai & typeof Luan;
 const taiKinhDich = (): Promise<KinhDich> =>
-  Promise.all([import('../loi/kinhDich.ts'), import('../loi/kinhDichChu.ts'), import('../loi/kinhDichGiai.ts')])
-    .then(([tinh, chu, giai]) => ({ ...tinh, ...chu, ...giai }));
+  Promise.all([import('../loi/kinhDich.ts'), import('../loi/kinhDichChu.ts'), import('../loi/kinhDichGiai.ts'), import('../loi/kinhDichLuan.ts')])
+    .then(([tinh, chu, giai, luan]) => ({ ...tinh, ...chu, ...giai, ...luan }));
 
 const loi = (e: unknown): HTMLElement => el('p', { class: 'loi' }, `Không mở được: ${e instanceof Error ? e.message : String(e)}`);
 
@@ -64,6 +65,8 @@ function veQueDich(k: KinhDich, g: Gieo, mh: MaiHoaGio | null): HTMLElement {
     el('p', { class: 'ghi-chu' }, 'Đoạn nên đọc theo số hào động (luật Chu Hy):'),
     ...doan.map(veDoan),
     el('p', { class: 'ghi-chu' }, `Nguyên văn theo bản Kanripo (bỏ dấu câu). Lời giải: ${LOI_SOAN}`),
+    el('h3', {}, 'Luận quẻ (Claude tổng hợp nhiều nhà chú giải rồi chốt; tham khảo)'),
+    ...k.luanQue(g, mh).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]),
     khoiAI('AI giải quẻ', `que:${String(++soLanGieo)}`, { loai: 'que', k, g, mh }));
 }
 

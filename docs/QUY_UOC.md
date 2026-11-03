@@ -198,7 +198,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   體用總訣 (quyển 2).
 - **Đo**: 14 ví dụ trong sách khớp 14/14; 300 giờ ngẫu nhiên 1950–2050 so `meihua-ts-lib` (`scripts/doi-chieu/so-mai-hoa.mjs`):
   291 khớp, 4 lệch vì quẻ Càn/Khôn lấy hỗ theo sách, 5 lệch vì thư viện đổi năm ở Lập Xuân, 0 lệch chưa giải thích.
-- **Không làm**: Lục hào nạp giáp (lục thân, thế ứng), nhập kết quả gieo tay, Mai Hoa lấy quẻ theo chữ, vật, tiếng.
+- **Không làm**: Lục hào nạp giáp (lục thân, thế ứng), nhập kết quả gieo tay, Mai Hoa lấy quẻ theo chữ, vật, tiếng. Lời gộp: mục 35.
 
 ## 19. Chọn ngày theo việc (`src/loi/chonNgay.ts`, tra 21/10)
 - **Nguồn**: 3 agent tra 21/10; trang Việt không mở thẳng được (lỗi DNS), đọc qua **tóm tắt tìm kiếm** → các ca trong
@@ -719,6 +719,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_CHI_TAY.md`** (khung, máy dò, AI, nguyên văn: mục 27). Tóm: thêm Tây cổ (Indagine),
   Desbarrolles, Saint-Germain, Nhật – Hàn (chỉ tay ngang); chỉ tay ngang không chấm điểm; sự nghiệp từ đường đời "gắn gia đình"; kết
   thuận ≥ 1,5, cần tự bồi đắp ≤ −2,5; 7 đoạn lời; màn hình bỏ mức tin, "từng sách nói gì" (AI vẫn nhận).
+
+## 35. Luận quẻ Kinh Dịch — tổng hợp nhiều nhà chú giải, chốt một lời (kế hoạch 03/11; `src/loi/kinhDichLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_KINH_DICH.md`** (nguyên văn, luật đọc: mục 18). Tóm: chấm chữ cát hung trong nguyên văn
+  theo *Hệ Từ*; đoạn Chu Hy làm chính, cộng nửa lời quẻ biến (Trình Hồi); quẻ hỗ không tính điểm; Thể – Dụng chỉ khi Mai Hoa; vị trí hào
+  theo *Hệ Từ*, Vương Bật; kết thuận ≥ 1,5, thận trọng ≤ −0,5.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
