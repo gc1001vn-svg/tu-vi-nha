@@ -9,6 +9,7 @@ import { xemLaBan, type Phuong } from '../loi/laBan.ts';
 import { xemLoBan, type DoanCung } from '../loi/loBan.ts';
 import { docSoDoGo } from '../loi/nhap.ts';
 import { phiTinh, type Ban, type HuongKy, type O } from '../loi/phiTinh.ts';
+import { luanPhiTinh } from '../loi/phiTinhLuan.ts';
 import { el, homNay7, khoi, tinh } from './chung.ts';
 import { dongMuc, LOI_SOAN } from './khoi/namNay.ts';
 
@@ -245,6 +246,8 @@ function vePhiTinh(): HTMLElement {
     el('p', {}, el('b', {}, 'Hướng kỵ năm nay')), ...p.ky.map(dongKy),
     el('p', {}, el('b', {}, 'Tháng này'), ` (từ tiết ${p.tiet.ten} ${String(d.ngay)}/${String(d.thang)}): ${p.thang.o['Giữa'].ten} vào giữa.`),
     veLuoi(p.thang, 'Phi tinh tháng này'),
+    // Loi chot (ke hoach 2026-11-03-phi-tinh; ly do: docs/LUAN_PHI_TINH.md).
+    ...luanPhiTinh(p).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
     el('p', { class: 'ghi-chu' }, 'Lưới đặt Nam ở trên, Bắc ở dưới như bảng phi tinh trong sách. Đứng giữa nhà: phía nào ứng ô đó. '
       + 'Sao tháng cùng nghĩa sao năm, tác động nhẹ hơn. Tốt/xấu từng sao theo Huyền Không (thư viện lunar); Thái Tuế, Tuế Phá, '
       + `Tam Sát theo chi năm. La bàn ở trên tự báo khi hướng đo trùng hướng kỵ. ${LOI_SOAN}`));

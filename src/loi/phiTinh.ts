@@ -32,7 +32,7 @@ const NGHIA = [
   'Sao bệnh: dễ ốm đau; tránh kê giường, tránh động thổ phía này.',
   'Sao thị phi: dễ cãi cọ, kiện tụng.',
   'Sao văn xương: lợi học hành, thi cử, viết lách.',
-  'Sao xấu nhất: tai họa, bệnh nặng; tránh động thổ, sửa chữa phía này.',
+  'Sao nặng nhất trong các sao phải tránh động: không động thổ, sửa lớn phía này (sách lịch xưa coi là tượng vua ở giữa, dân thường phải tránh).',
   'Quyền lực, quý nhân, tiền bạc.',
   'Dễ mất trộm, hao tài, va chạm.',
   'Sao tài lộc; từ Vận 9 (2024) nhiều thầy coi là đã thoái khí, kém trước.',
@@ -64,7 +64,7 @@ export function huongKy(chiNam: number, nam: Ban): HuongKy[] {
   const vuong = [0, 3, 6, 9].find((x) => (x - chiNam + 12) % 4 === 0) ?? 0;
   const sat = (vuong + 6) % 12;
   return [
-    { ten: 'Thái Tuế', huong: huongChi(chiNam), son: [tenChi(chiNam)], nghia: 'Phía này nên để yên, kỵ động thổ, sửa lớn; tựa lưng về được, kỵ quay mặt về.' },
+    { ten: 'Thái Tuế', huong: huongChi(chiNam), son: [tenChi(chiNam)], nghia: 'Phía này nên để yên, kỵ động thổ, sửa lớn; kỵ quay mặt về. Tựa lưng về: thầy nay nói được, tục dời nhà xưa nói cũng xấu.' },
     { ten: 'Tuế Phá', huong: huongChi(chiNam + 6), son: [tenChi(chiNam + 6)], nghia: 'Đối Thái Tuế: kỵ động thổ, sửa chữa phía này.' },
     { ten: 'Tam Sát', huong: huongChi(sat), son: [tenChi(sat - 1), tenChi(sat), tenChi(sat + 1)], nghia: 'Kỵ động thổ; kỵ nhất đặt lưng (tọa) về phía này.' },
     { ten: 'Ngũ Hoàng', huong: oCua(nam, 5), nghia: NGHIA[4] ?? '' },

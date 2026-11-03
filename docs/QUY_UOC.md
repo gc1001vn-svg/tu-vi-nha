@@ -304,7 +304,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Hướng kỵ năm**: Thái Tuế = sơn chi năm, Tuế Phá = sơn đối diện, Tam Sát = ba sơn quanh chi đối diện chi vượng của tam hợp (Dần
   Ngọ Tuất → Hợi Tý Sửu, Bắc; Thân Tý Thìn → Nam; Tỵ Dậu Sửu → Đông; Hợi Mão Mùi → Tây — masterseanchan 2027–2029; 2026 "tam sát
   chính Bắc" theo báo cáo CLSA trên Sing Tao). Cafeland ghi 2026 "ba hung sát dồn về Nam" — 1 nguồn, không theo. Thái Tuế "tựa
-  lưng được, kỵ quay mặt về" (太歲可座不可向 — chinatimes, taiwannews), vị trí Thái Tuế "nên để yên" (Sing Tao); Tam Sát "không tựa
+  lưng được, kỵ quay mặt về" (太歲可座不可向 — chinatimes, taiwannews; 03/11 vênh với phép dời nhà xưa — mục 40), vị trí Thái Tuế "nên để yên" (Sing Tao); Tam Sát "không tựa
   lưng, không động thổ" (三煞方不可坐 — một tài liệu, chưa đủ 2 nguồn). Ngũ Hoàng, Nhị Hắc chiếm cả ô (45°), ba sao kia chiếm sơn (15°).
 - **Thư viện lệch**: `getYearPositionTaiSui` ghi năm Tuất, Hợi ở 坎 (Bắc); theo 24 sơn (mục 20) Tuất, Hợi thuộc Càn (Tây Bắc) → app
   theo 24 sơn (`tests/PhiTinh.test.ts`). La bàn báo khi hướng hay tọa đo được trùng hướng kỵ năm.
@@ -743,6 +743,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_CHON_NGAY.md`** (bảng, luật chấm: mục 17–19). Tóm: theo *Hiệp Kỷ Biện Phương Thư* —
   Dương Công Kỵ (sách bác), Thọ Tử (sách bỏ), Tam Nương, Sát Chủ Dương (không có) hạ xuống Được, ghi "tục kiêng" (`kyTuc`); Nguyệt Kỵ, xung
   tuổi vẫn Tránh; ngày nên chọn xếp theo lý do tốt + sao Đức; Tránh 2026 từ 44 % xuống 10 % số ngày.
+
+## 40. Luận phi tinh — sách lịch chính thức và Huyền Không hiện đại, chốt một lời (kế hoạch 03/11; `src/loi/phiTinhLuan*.ts`)
+- Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_PHI_TINH.md`** (cách tính: mục 22). Tóm: hướng "nên để yên" gộp Ngũ Hoàng, Nhị Hắc, Thái
+  Tuế, Tuế Phá, Tam Sát; tháng: sao xấu năm – tháng chồng nhau là nặng nhất; sửa câu Thái Tuế (tựa lưng: hai bên vênh), Ngũ Hoàng (bỏ chữ
+  "tai họa"); Bát Bạch vận 9 vênh; không khuyên vật phẩm; câu *Tử Bạch Quyết* chưa đọc được nên không dùng.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
