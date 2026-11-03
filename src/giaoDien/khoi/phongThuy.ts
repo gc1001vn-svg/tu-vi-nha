@@ -1,15 +1,15 @@
 /**
  * Khoi "Huong tot, huong xau (cung phi …)" (`src/loi/batTrach.ts`, luan `batTrachLuan.ts` — nguon, ly do: `docs/LUAN_BAT_TRACH.md`)
- * va "Tuoi hop, tuoi ky" (`src/loi/tuoiHop.ts`).
+ * va "Tuoi hop, tuoi ky" (luan `src/loi/tuoiHopLuan.ts` — nguon, ly do: `docs/LUAN_TUOI_HOP.md`).
  */
 import { CHI } from '../../loi/amLich.ts';
 import { batTrach } from '../../loi/batTrach.ts';
 import { luanBatTrach } from '../../loi/batTrachLuan.ts';
 import { hv } from '../../loi/hanViet/index.ts';
 import { tinhHoSo } from '../../loi/hoSo.ts';
-import { tuoiHop } from '../../loi/tuoiHop.ts';
+import { luanCap, luanTuoi } from '../../loi/tuoiHopLuan.ts';
 import { el, khoi, lechNuocNgoai, type VeKhoi } from '../chung.ts';
-import { LOI_SOAN, dongMuc } from './namNay.ts';
+import { dongMuc } from './namNay.ts';
 
 export const veKhoiHuong: VeKhoi = (hs, tr) => {
   const k = tr.chinh;
@@ -27,13 +27,23 @@ export const veKhoiHuong: VeKhoi = (hs, tr) => {
 
 export const veKhoiTuoiHop: VeKhoi = (_hs, tr) => {
   const k = tr.chinh;
-  const t = tuoiHop(k.chiNam);
+  // So voi mot nam sinh khac: chi nhap nam, khong luu (nguoi nha: dot 9).
+  const o = el('input', { type: 'text', inputmode: 'numeric', maxlength: '4', placeholder: 'vd 1990', 'aria-label': 'Năm sinh âm lịch người kia' });
+  const ket = el('div', { 'aria-live': 'polite' });
+  const nut = el('button', { type: 'button' }, 'So tuổi');
+  const so = (): void => {
+    const n = Number(o.value.trim());
+    ket.replaceChildren(...(Number.isInteger(n) && n >= 1900 && n <= 2100
+      ? luanCap(k.am.nam, n).filter((d) => d.tieuDe !== 'Nhìn cho đúng').flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l, i) => el('p', {}, i === 0 && d.loi.length === 1 ? el('b', {}, l) : l))])
+      : [el('p', { class: 'loi' }, 'Nhập năm sinh âm lịch từ 1900 đến 2100.')]));
+  };
+  nut.addEventListener('click', so);
+  o.addEventListener('keydown', (e) => { if (e.key === 'Enter') so(); });
   return khoi('Tuổi hợp, tuổi kỵ', false,
     el('p', {}, `Tuổi ${hv('chi', CHI.charAt(k.chiNam))} (${k.conGiap}), năm sinh tính theo Tết.`),
-    dongMuc('Tam hợp', { ten: t.tamHop.join(', '), mucDo: 'tot', nghia: 'Hợp nhau nhất: làm ăn, kết bạn, cưới hỏi đều thuận.' }),
-    dongMuc('Lục hợp', { ten: t.lucHop, mucDo: 'tot', nghia: 'Hợp đôi: dễ thương nhau, nâng đỡ nhau.' }),
-    dongMuc('Tứ hành xung', { ten: t.tuHanhXung.join(', '), mucDo: 'xau', nghia: 'Dễ bất đồng; việc lớn làm chung nên cân nhắc.' }),
-    dongMuc('Lục xung', { ten: t.lucXung, mucDo: 'xau', nghia: 'Xung mạnh nhất: dân gian kiêng cưới hỏi, hùn hạp.' }),
-    dongMuc('Lục hại', { ten: t.lucHai, mucDo: 'xau', nghia: 'Dễ hiểu lầm, ngấm ngầm làm hại nhau.' }),
-    el('p', { class: 'dong-muc-chu' }, LOI_SOAN));
+    ...luanTuoi(k.chiNam).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
+    el('h4', {}, 'So với năm sinh một người khác'),
+    el('p', { class: 'ghi-chu' }, 'Nhập năm âm lịch của người kia (sinh trước Tết thì lấy năm trước). Không lưu vào máy.'),
+    el('div', { class: 'nut-hang' }, o, nut), ket,
+    el('p', { class: 'dong-muc-chu' }, 'Claude tổng hợp sách cổ Trung Hoa, cách xem Việt, Hàn rồi chốt lời; chỉ để tham khảo.'));
 };

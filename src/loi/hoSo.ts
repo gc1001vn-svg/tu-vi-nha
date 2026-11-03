@@ -65,7 +65,7 @@ const HANH_QUAI = ' 水土木木 金金土火';
 
 const conGiap = (chi: number): string => BANG.conGiap[CON_GIAP.charAt(chi) as keyof typeof BANG.conGiap].nghia;
 
-function napAmNam(namAm: number): string {
+export function napAmNam(namAm: number): string {
   const ten = LunarUtil.NAYIN[CAN.charAt((namAm + 6) % 10) + CHI.charAt((namAm + 8) % 12)];
   if (ten === undefined) throw new Error(`Thieu nap am nam ${String(namAm)}`);
   return ten;

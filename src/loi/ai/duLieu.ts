@@ -18,7 +18,7 @@ import { nhipSinhHoc, tenSo, thanSo } from '../soHoc.ts';
 import type * as TarotMod from '../tarot.ts';
 import type * as TarotLuan from '../tarotLuan.ts';
 import { NUOC_NGOAI } from '../tinh.ts';
-import { tuoiHop } from '../tuoiHop.ts';
+import { luanTuoi } from '../tuoiHopLuan.ts';
 import type { SoDoMat } from '../tuongMat.ts';
 import { QUY_LUAT_CHUNG, giaiChiTay, mucTin, type KhungChiTay, type Luat } from '../chiTay.ts';
 import { CAC_KHOA, GIAI, SO_ANH_MAU, dangSo, giaiMat, type MatDoGiai } from '../tuongMatGiai.ts';
@@ -130,12 +130,9 @@ function huong(hs: HoSo, tr: TinhRa): string {
   ]);
 }
 
+/** Loi chot (`tuoiHopLuan.ts`): xep 12 tuoi theo sach co, khong gui bang "tu hanh xung" cua tuc Viet (lan luc hop vao nhom xung). */
 function tuoi(tr: TinhRa): string {
-  const t = tuoiHop(tr.chinh.chiNam);
-  return muc('Tuổi hợp, tuổi kỵ (theo chi năm sinh)', [
-    `Tuổi ${tenChi(tr.chinh.chiNam)}: tam hợp ${t.tamHop.join(', ')}; lục hợp ${t.lucHop}; tứ hành xung ${t.tuHanhXung.join(', ')}; `
-      + `lục xung ${t.lucXung}; lục hại ${t.lucHai}.`,
-  ]);
+  return muc('Tuổi hợp, tuổi kỵ (theo chi năm sinh; app xếp theo sách cổ)', luanTuoi(tr.chinh.chiNam)[0]?.loi.map((l) => `- ${l}`) ?? []);
 }
 
 function soHoc(hs: HoSo, ngayXem: NgayDuong): string {
