@@ -80,7 +80,9 @@ async function goi(p: Phien, gui: string, hoi: string | null): Promise<void> {
       if (cho === 0) cho = requestAnimationFrame(() => { cho = 0; lamMoi(p); });
     }, p.dung.signal);
     l.dap = kq.chu;
-    l.bia = [...new Set(timBia(kq.chu, luot.duLieu === null ? p.duLieu : `${p.duLieu}\n${duLieu}`, p.tuDien).map((b) => b.tu))];
+    // Ten nguoi dung tu go trong cau hoi ("Sao Chiron ở đâu?") khong phai AI bia.
+    const daGui = [p.duLieu, luot.duLieu ?? '', ...tin.filter((m) => m.role === 'user').map((m) => m.content)].join('\n');
+    l.bia = [...new Set(timBia(kq.chu, daGui, p.tuDien).map((b) => b.tu))];
     l.ghiChu = (kq.ket === 'tuChoi' ? 'Groq chặn câu trả lời này. ' : kq.ket === 'quaDai' ? 'Câu trả lời quá dài nên bị cắt. ' : '')
       + `Mô hình ${kq.moHinh} qua Groq, miễn phí.`;
   } catch (e) {

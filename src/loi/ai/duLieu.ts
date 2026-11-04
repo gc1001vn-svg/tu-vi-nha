@@ -3,9 +3,9 @@
  * de AI doc va de `kiemBia.ts` so ten rieng trong loi AI voi chuoi nay. Loi thuan: ngay xem va phut lech mui gio nuoc ngoai
  * nhan qua tham so. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`.
  */
-import { CHI, canChiNam, dinhDangAm, dinhDangNgay, duongSangAm, type NgayDuong } from '../amLich.ts';
+import { CHI, canChiNam, dinhDangAm, dinhDangNgay, duongSangAm, soNgay, type NgayDuong } from '../amLich.ts';
 import { batTrach } from '../batTrach.ts';
-import { tinhBatTu, type Tru } from '../batTu.ts';
+import { tinhBatTu, type DaiVan, type Tru } from '../batTu.ts';
 import { DIEM, GOC, dinhDang, laSoNguoi, nhaCua } from '../chiemTinh.ts';
 import { hv } from '../hanViet/index.ts';
 import { moTaKhac, tuoiMu, type GioiTinh, type HoSo, type TinhRa } from '../hoSo.ts';
@@ -94,9 +94,10 @@ function tuVi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
     const chinh = c.sao.filter((s) => s.loai === 1).map(tenSao);
     const tot = c.sao.filter((s) => s.loai > 1 && s.loai < 10 && PHU_LON.has(s.ten)).map(tenSao);
     const xau = c.sao.filter((s) => s.loai > 10 && PHU_LON.has(s.ten)).map(tenSao);
-    // Nghia ngan cua cung (do 03/11: AI tung lay "Phụ Mẫu … cần lưu ý" de noi chuyen vo chong).
+    // Nghia ngan cua cung (do 03/11: AI tung lay "Phụ Mẫu … cần lưu ý" de noi chuyen vo chong); van da qua ghi ro (03/11: AI lay dai van
+    // Phu Thê 24–33 da qua noi chuyen vo chong hien tai).
     return [`- ${c.ten} — ${(CHU_DE[c.ten] ?? '').split(',')[0] ?? ''} (${tenChi(c.chi)}, ${c.canChi})${c.chi === ls.menh ? ' · cung Mệnh' : ''}${c.chi === ls.than ? ' · Thân cư' : ''}`,
-      `đại vận ${String(c.daiVan)}–${String(c.daiVan + 9)} tuổi${c.chi === ls.daiVanNay ? ' (đang chạy)' : ''}`,
+      `đại vận ${String(c.daiVan)}–${String(c.daiVan + 9)} tuổi${c.chi === ls.daiVanNay ? ' (đang chạy)' : c.daiVan + 10 <= ls.tuoi ? ' (đã qua)' : ''}`,
       chinh.length === 0 ? 'vô chính diệu' : `chính tinh: ${chinh.join(', ')}`,
       ...(tot.length === 0 ? [] : [`sao tốt: ${tot.join(', ')}`]), ...(xau.length === 0 ? [] : [`sao xấu: ${xau.join(', ')}`]),
       ...(c.tuan ? ['có Tuần'] : []), ...(c.triet ? ['có Triệt'] : []),
@@ -110,7 +111,7 @@ function tuVi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   };
   return muc('Tử vi (lá số theo sách Tử Vi Đẩu Số Tân Biên)', [
     `${ls.amDuong}, ${ls.cuc}. Mệnh chủ ${ls.menhChu}, Thân chủ ${ls.thanChu}. Mệnh ở cung ${tenChi(ls.menh)}, `
-      + `Thân cư ${tenCung(ls.than)}. Năm xem ${String(ls.tuoi)} tuổi mụ.`,
+      + `Thân cư ${tenCung(ls.than)}.`,
     '12 cung (độ sáng: Miếu, Vượng, Đắc sáng, Bình vừa, Hãm mờ; chỉ ghi sao chính, phụ tinh lớn; "app chấm" đã xét đủ sao):',
     ...cung,
     `Lời chốt của app: ${tomTat(tongLuan(ls, kq.am.nam))}`,
@@ -154,6 +155,7 @@ function batTu(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
       + `; nạp âm ${t.napAm}; trường sinh ${t.truongSinh}.`);
   const van = b.daiVan.find((v) => v.dangChay);
   const p = phanTich(b), vanLuan = dsVanBT(b, p).find((v) => v.dangChay), namLuan = luanNamBT(b, p);
+  const giai = (v: DaiVan): string => (v.dangChay ? 'đang chạy' : soNgay(v.batDau) <= soNgay(ngayXem) ? 'đã qua' : 'sắp tới');
   return muc('Bát tự (tứ trụ)', [
     ...(['năm', 'tháng', 'ngày', 'giờ'] as const).map((ten, i) => tru(ten, b.tru[i] ?? null)),
     `Nhật chủ ${b.nhatChu}.`,
@@ -163,7 +165,9 @@ function batTu(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
     huongHop(tongLuanBT(b, p).flatMap((d) => d.loi).find((l) => l.startsWith('Cách dùng phổ biến')) ?? null, tr.chinh.cungPhi),
     `Không vong: ${b.khongVong}. Khởi vận ${String(b.khoiVan.nam)} năm ${String(b.khoiVan.thang)} tháng ${String(b.khoiVan.ngay)} ngày `
       + `sau khi sinh, đi ${b.thuan ? 'thuận' : 'nghịch'}.`,
-    `Đại vận (tuổi mụ bắt đầu, can chi, năm bắt đầu): ${b.daiVan.map((v) => `${String(v.tuoi)} tuổi ${v.canChi} (${String(v.batDau.nam)})`).join('; ')}.`,
+    `Đại vận (tuổi mụ và năm bắt đầu): ${['đã qua', 'đang chạy', 'sắp tới'].map((g) => [g, b.daiVan.filter((v) => giai(v) === g)] as const)
+      .filter(([, ds]) => ds.length > 0).map(([g, ds]) => `${g} ${ds.map((v) => `${String(v.tuoi)} tuổi ${v.canChi} (${String(v.batDau.nam)})`).join(', ')}`)
+      .join('; ')}.`,
     van === undefined ? 'Hôm nay chưa vào đại vận nào.'
       : `Đại vận đang chạy ${van.canChi}: can là ${van.thapThan[0]}, chi (can chính ẩn ${van.tang}) là ${van.thapThan[1]}`
         + `${vanLuan === undefined ? '' : `; app luận: ${KET_CHU[vanLuan.ket] ?? ''}`}.`,
@@ -204,8 +208,11 @@ function soHoc(hs: HoSo, ngayXem: NgayDuong): string {
       `Lời chốt của app: ${tomTat(tongLuanTS(t, sinh).filter((d) => d.tieuDe.startsWith('Số chủ đạo') || d.tieuDe === 'Kết hợp'))} `
         + `Vận: ${vanTS(t, sinh, ngayXem).loi.filter((x, i) => i === 0 || x.startsWith('Năm cá nhân')).map((x) => cham(cau(x, 80))).join(' ')}`,
     ]),
-    muc(`Nhịp sinh học hôm nay (ngày thứ ${String(n.ngay)} kể từ ngày sinh)`, [
-      n.nhip.map((x) => `${x.ten} ${x.phanTram > 0 ? '+' : ''}${String(x.phanTram)}% ${x.len ? 'đang lên' : 'đang xuống'}`
+    // Ghi muc + qua dinh / qua day (do 03/11: AI doc "+90% đang xuống" thanh "giảm nhẹ"); bo so ngay tu ngay sinh cho vua han muc.
+    muc('Nhịp sinh học hôm nay', [
+      n.nhip.map((x) => `${x.ten} ${x.phanTram > 0 ? '+' : ''}${String(x.phanTram)}% `
+        + `${x.phanTram >= 50 ? 'cao' : x.phanTram > 0 ? 'hơi cao' : x.phanTram === 0 ? 'ở giữa' : x.phanTram > -50 ? 'hơi thấp' : 'thấp'}, `
+        + (x.phanTram > 0 && !x.len ? 'đã qua đỉnh' : x.phanTram < 0 && x.len ? 'đã qua đáy' : x.len ? 'đang lên' : 'đang xuống')
         + (x.nguy ? ' (ngày đổi dấu)' : '')).join('; ') + '.',
     ]),
   ].join('\n\n');
