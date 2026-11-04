@@ -796,7 +796,15 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   Ngũ Quỷ → dòng màu – hướng gửi AI thêm "Vênh Bát trạch: hướng … là … (xấu) — hướng nhà, cửa theo Bát trạch" (`huongHop`, cả lượt đầu
   lẫn hỏi màu; thước `tests/AIHoiSau.test.ts`); (2) gia4 mục "Hôm nay" kể lá chiêm tinh lúc sinh như hôm nay → dặn trong yêu cầu
   lượt đầu; (3) tên lạ "Vệ Thần" (dữ liệu ghi Sao Thiên Vương) — máy dò theo từ điển không bắt tên ngoài từ điển; (4) đọc ngược nhịp
-  sinh học ("+90 % đang xuống" thành "giảm nhẹ"), lấy đại vận Phu Thê 24–33 đã qua nói chuyện vợ chồng hiện tại. (3), (4) chưa sửa.
+  sinh học ("+90 % đang xuống" thành "giảm nhẹ"), lấy đại vận Phu Thê 24–33 đã qua nói chuyện vợ chồng hiện tại. (3), (4) sửa 04/11, đo lại đêm 05/11.
+- Sửa 04/11 (thước `tests/AI.test.ts`): (4) nhịp sinh học ghi mức (≥ 50 % cao, 1–49 % hơi cao; âm: hơi thấp, ≤ −50 % thấp) và
+  "đã qua đỉnh" / "đã qua đáy"; 12 cung tử vi ghi "(đã qua)" cạnh đại vận đã qua; bát tự chia đại vận "đã qua · đang chạy · sắp tới".
+  Bù chỗ: bỏ số ngày từ ngày sinh (nhịp), "Năm xem … tuổi mụ" (trùng mục Người xem) — hồ sơ giả 10/05/1990: 8.968 → 8.980 ký tự, lượt
+  đầu vẫn xin 3.000 token, hỏi thêm vẫn giữ lời tổng hợp. (3) `timBia` thêm bắt tên lạ: cụm ≥ 2 chữ viết hoa có chữ tiếng Việt không có
+  trong dữ liệu, lời dặn, câu người hỏi (so không kể hoa thường, chỗ đặt dấu, i/y); bỏ qua chữ mở câu, tiêu đề, chữ toàn ASCII, tên
+  chung `TEN_CHUNG` (nước, lễ, thứ, sách, phái). Chưa bắt: tên lạ đứng đầu câu ("Vệ Thần ở nhà 8…"). App và `do-ai.ts` gửi kèm câu hỏi
+  cho máy dò (bẫy "Sao Chiron…" không tính bịa). Đo đêm 05/11: tên máy dò in ra đọc tay — tên chung chưa có trong `TEN_CHUNG` là bắt
+  nhầm, không phải AI bịa.
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.

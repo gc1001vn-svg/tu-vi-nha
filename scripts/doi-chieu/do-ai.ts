@@ -73,7 +73,9 @@ async function goi(moHinh: string, nhan: Pick<Lan, 'hs' | 'loai' | 'hoi'>, duLie
     try {
       const kq = await goiAI(khoa, duLieu, tin, () => undefined, new AbortController().signal, { moHinh });
       dung += kq.token === undefined ? uoc : kq.token.vao + kq.token.ra;
-      const x: Lan = { moHinh, ...nhan, chu: kq.chu, bia: [...new Set(timBia(kq.chu, duLieuBia, tuDien).map((b) => b.tu))],
+      // Nhu app: ten nguoi hoi tu go (cau bay "Sao Chiron…") khong tinh la bia.
+      const daGui = [duLieuBia, ...tin.filter((m) => m.role === 'user').map((m) => m.content)].join('\n');
+      const x: Lan = { moHinh, ...nhan, chu: kq.chu, bia: [...new Set(timBia(kq.chu, daGui, tuDien).map((b) => b.tu))],
         giay: (Date.now() - bd) / 1000, ket: kq.ket, ...(kq.token === undefined ? {} : { token: { ...kq.token } }),
         ...(kq.dauVet === undefined ? {} : { dauVet: kq.dauVet }) };
       lan.push(x);

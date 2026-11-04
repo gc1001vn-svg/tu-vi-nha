@@ -5,6 +5,7 @@ import { vuaHanMuc } from '../src/giaoDien/ai/goi.ts';
 import { cau, duLieuNguoi, duLieuQue, duLieuTarot } from '../src/loi/ai/duLieu.ts';
 import { LOI_DAN, YEU_CAU } from '../src/loi/ai/loiDan.ts';
 import { TU_NGUOI, timBia } from '../src/loi/ai/kiemBia.ts';
+import { soNgay, tuSoNgay } from '../src/loi/amLich.ts';
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 import * as kinhDich from '../src/loi/kinhDich.ts';
 import * as kinhDichChu from '../src/loi/kinhDichChu.ts';
@@ -31,6 +32,37 @@ describe('goi du lieu gui AI', () => {
     // khong gio sinh: tu vi chua lap duoc, cac mon khac van co loi chot
     expect(phan.call(null, 'Bát tự').length > 0 && du(hs({ gioSinh: null })).includes('Lời chốt của app')).toBe(true);
     expect([cau('Câu một. Câu hai.'), cau('a '.repeat(80)).endsWith('…'), cau('Ngắn.')]).toEqual(['Câu một', true, 'Ngắn']);
+  });
+
+  test('moc thoi gian ro (do AI that 03/11): nhip sinh hoc ghi muc, qua dinh / qua day; dai van ghi da qua, dang chay', () => {
+    const dong = (d: string, dau: string): string => d.split('\n').find((x) => x.startsWith(dau)) ?? '';
+    const ngay = (xem: { nam: number; thang: number; ngay: number }): string => duLieuNguoi(hs(), tinhHoSo(hs()), xem, undefined);
+    // AI doc "+90% đang xuống" thanh "giảm nhẹ": ghi muc (cao) va qua dinh.
+    expect(dong(du(hs()), 'Thể chất')).toBe('Thể chất -52% thấp, đã qua đáy; Cảm xúc -22% hơi thấp, đang xuống; Trí tuệ +10% hơi cao, đã qua đỉnh (ngày đổi dấu).');
+    expect(dong(ngay({ nam: 2026, thang: 11, ngay: 1 }), 'Thể chất')).toMatch(/^Thể chất \+94% cao, đã qua đỉnh;/u);
+    // Ca chu ky 33 ngay: muc khop so; qua dinh chi khi duong, qua day chi khi am.
+    for (let i = 0; i < 34; i++) {
+      for (const x of dong(ngay(tuSoNgay(soNgay(XEM) + i)), 'Thể chất').slice(0, -1).split('; ')) {
+        const m = /^(?:Thể chất|Cảm xúc|Trí tuệ) ([+-]?\d+)% (cao|hơi cao|ở giữa|hơi thấp|thấp), (đã qua đỉnh|đã qua đáy|đang lên|đang xuống)( \(ngày đổi dấu\))?$/u.exec(x);
+        const p = Number(m?.[1]), muc = { cao: p >= 50, 'hơi cao': p > 0 && p < 50, 'ở giữa': p === 0, 'hơi thấp': p < 0 && p > -50, thấp: p <= -50 };
+        expect([x, m !== null && muc[m[2] as keyof typeof muc] && (m[3] === 'đã qua đỉnh' ? p > 0 : m[3] === 'đã qua đáy' ? p < 0 : true)]).toEqual([x, true]);
+      }
+    }
+    // Dai van: AI lay dai van Phu Thê 24–33 da qua noi chuyen vo chong hien tai (ho so gia0 do that, sinh 27/10/1957 00:30).
+    const gia0 = du(hs({ ngaySinh: '1957-10-27', gioSinh: '00:30' }));
+    expect(dong(gia0, '- Phu Thê')).toContain('đại vận 24–33 tuổi (đã qua)');
+    for (const d of [du(hs()), gia0]) {
+      const tuoi = Number(/(\d+) tuổi mụ\.\n/u.exec(d)?.[1]);
+      for (const [, a = '', b = '', ghi = ''] of d.matchAll(/đại vận (\d+)–(\d+) tuổi( \(đã qua\)| \(đang chạy\))?/gu)) {
+        expect([a, ghi]).toEqual([a, Number(b) < tuoi ? ' (đã qua)' : Number(a) <= tuoi ? ' (đang chạy)' : '']);
+      }
+    }
+    expect(dong(du(hs()), 'Đại vận (')).toBe('Đại vận (tuổi mụ và năm bắt đầu): đã qua 10 tuổi Nhâm Ngọ (1999), 20 tuổi Quý Mùi (2009); '
+      + 'đang chạy 30 tuổi Giáp Thân (2019); sắp tới 40 tuổi Ất Dậu (2029), 50 tuổi Bính Tuất (2039), 60 tuổi Đinh Hợi (2049), 70 tuổi Mậu Tý (2059), 80 tuổi Kỷ Sửu (2069).');
+    // Tre chua vao dai van bat tu dau: chi co van sap toi.
+    const tre = du(hs({ ngaySinh: '2023-03-01', gioSinh: '08:00' }));
+    expect([dong(tre, 'Đại vận (').startsWith('Đại vận (tuổi mụ và năm bắt đầu): sắp tới 9 tuổi Quý Sửu (2031), '), dong(tre, 'Đại vận (').includes('đã qua'),
+      tre.includes('Hôm nay chưa vào đại vận nào.')]).toEqual([true, false, true]);
   });
 
   test('du 9 muc, dung so may tinh, khong ten nguoi, khong muc nao loi, ~8 nghin token tro xuong', () => {
@@ -87,6 +119,16 @@ describe('do chu bia', () => {
     const loi = `Năm nay gặp sao ${vang}, lại thêm hạn; ${coSan[0] ?? ''} thì ổn. Năm Đinh Mão xa rồi; la hầu viết thường; Mộ một chữ.`;
     expect(timBia(loi, d, [...TU_NGUOI, 'Mộ'])).toEqual([{ tu: vang, vt: loi.indexOf(vang) }, { tu: 'Đinh Mão', vt: loi.indexOf('Đinh Mão') }]);
     expect(timBia('Tử Vi Đẩu Số', 'Tử Vi', ['Tử Vi Đẩu'])).toEqual([{ tu: 'Tử Vi Đẩu', vt: 0 }]);
-    expect(timBia('Nhà Tử Vinh', 'x', ['Tử Vi'])).toEqual([]);
+    expect(timBia('Nhà Tử Vinh', 'Vinh', ['Tử Vi'])).toEqual([]);
+  });
+
+  test('ten la ngoai tu dien (do AI that 03/11: "Vệ Thần", du lieu ghi Sao Thiên Vương): bat; chu thuong, chu mo cau, ten chung, cach viet khac thi khong', () => {
+    const loi = '## Tính Cách\nTheo Tử Vi, Mệnh vô chính diệu nên mượn sao cung đối. Nhờ Thái Dương ở Quan Lộc sáng, công danh thuận. '
+      + 'Sao Vệ Thần ở nhà 8, còn sao Vệ Thần "bảo vệ" tiền bạc; Sao Thiên Vương (Vệ Thần) nghịch hành.\n'
+      + '- **Chiêm tinh:** Mặt Trời Kim Ngưu, Bắc Giao Điểm (North Node) ở Bảo Bình; Sao Thuỷ nghịch hành; Hoả Tinh đắc.\n'
+      + '- Năm Tân Tị 2001 đã qua; Tết Nguyên Đán năm sau rơi vào Thứ Bảy. Đây là quan niệm dân gian Việt Nam.';
+    expect(timBia(loi, d, TU_NGUOI)).toEqual([...loi.matchAll(/Vệ Thần/gu)].map((m) => ({ tu: 'Vệ Thần', vt: m.index })));
+    // Ten nguoi hoi tu go (cau bay) khong tinh la bia: noi goi gui kem cau hoi (`phien.ts`, `do-ai.ts`).
+    expect(timBia('Dữ liệu app tính chưa có sao Vệ Thần.', `${d}\nSao Vệ Thần của tôi ở đâu?`, TU_NGUOI)).toEqual([]);
   });
 });

@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 04/11/2026 — rà đầu phiên; đo AI phần còn lại hẹn 01:00 05/11; đợt 9 chờ anh thử mục 3.
+Cập nhật: 04/11/2026 — sửa lỗi đọc AI (3), (4); đo AI phần còn lại hẹn 01:00 05/11; đợt 9 chờ anh thử mục 3.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -21,8 +21,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 ## 2. Việc kế
 
 - **Xong: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn; lời chốt vào AI (mục 41); hỏi thêm theo việc (mục 42).
-  Đo AI thật 03/11 một phần (mục 42) — **còn**: hỏi sâu, Kiều, đo so 23/10 — **hẹn 01:00 05/11** (anh chọn 04/11; lịch hẹn
-  chưa từng thử: không chạy thì phiên sau đo tay, lúc đêm). Sau: đợt 9 — chờ anh thử mục 3 (04/11: chưa thử).
+  Đo AI thật 03/11 một phần; lỗi đọc (3), (4) sửa 04/11 (mục 42) — **còn đo**: tổng hợp (sau sửa), hỏi sâu, Kiều, so 23/10 —
+  **hẹn 01:00 05/11** (lịch hẹn chưa từng thử: không chạy thì phiên sau đo tay, lúc đêm). Sau: đợt 9 — chờ anh thử mục 3.
 
 ## 3. Cần anh
 
@@ -39,7 +39,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - Chỉ tay (mục 27): máy dò chưa ai chấm, chụp lại đổi ~1/4 ô, chưa thử Safari iPhone; Nhật – Hàn đọc trích đoạn, thiếu sách Việt cổ.
 - La bàn: bắc từ hay bắc thật chưa rõ (VN lệch <2°, anh so không lệch; mục 20).
 - Hạn tháng chưa so Altuvi; Mệnh chủ/Thân chủ theo *Toàn Thư*; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
-- AI: lượt đầu chỉ lời chốt gọn; hỏi thêm (nhận bằng từ khoá) mới có lời đủ; gán sai cung ~1/10; vài lỗi đọc còn lại (mục 42).
+- AI: lượt đầu chỉ lời chốt gọn; hỏi thêm (nhận bằng từ khoá) mới có lời đủ; gán sai cung ~1/10; máy dò tên lạ chưa bắt tên đứng đầu câu, có thể bắt nhầm tên chung (mục 42).
 - Tử vi tháng, ngày đếm sao Tân Biên; bát tự chưa so lá mẫu; thần số chưa có số tên.
 - Tướng mặt: ngưỡng tạm (15 ảnh Đông Á, 1 người Việt); Nhật, Hàn, hiện đại đọc qua trích đoạn; kết đo trên mặt giả.
 - Dưới 10 tuổi: hạn, Kim Lâu, Hoang Ốc "Chưa xét". Chọn ngày: kỵ tục chỉ hạ Được (mục 39).
