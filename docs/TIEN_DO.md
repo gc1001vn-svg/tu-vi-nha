@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 03/11/2026 — lời giải 14 môn xong; hỏi thêm AI theo việc, bói Kiều AI (mục 42).
+Cập nhật: 04/11/2026 — rà đầu phiên; đo AI phần còn lại hẹn 01:00 05/11; đợt 9 chờ anh thử mục 3.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -21,7 +21,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 ## 2. Việc kế
 
 - **Xong: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn; lời chốt vào AI (mục 41); hỏi thêm theo việc (mục 42).
-  Đo AI thật 03/11 một phần (mục 42) — **còn**: hỏi sâu, Kiều, đo so 23/10. Sau: đợt 9.
+  Đo AI thật 03/11 một phần (mục 42) — **còn**: hỏi sâu, Kiều, đo so 23/10 — **hẹn 01:00 05/11** (anh chọn 04/11; lịch hẹn
+  chưa từng thử: không chạy thì phiên sau đo tay, lúc đêm). Sau: đợt 9 — chờ anh thử mục 3 (04/11: chưa thử).
 
 ## 3. Cần anh
 
@@ -29,11 +30,9 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - **Hỏi thêm AI** "tháng này ngày nào tốt để cưới?": có nêu đúng ngày app chọn không.
 - **Thử chỉ tay**: chụp ảnh → đường màu có nằm trên nếp tay không.
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
-- **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng; đã gộp `main`; tên đủ có `claude/` trước):
-  `determined-galileo-xz2mc5` (còn ngày sinh thật — nên xoá), `nifty-johnson-b0rxcq`, `luu-han-loi-giai`,
-  `loi-giai-de-hieu`, `nguon-phat-dao`, `kinh-goc-cuu-dieu`, `ngoc-hap-ky`, `dot-4-kinh-dich`, `blissful-sagan-ur507y`,
-  `sleepy-davinci-hezr5a`, `friendly-noether-rzz6tw`, `tuong-mat-luan`, `chi-tay-luan`, `kinh-dich-luan`, `tarot-luan`,
-  `tuoi-hop-luan`, `boi-kieu-luan`, `chon-ngay-luan`, `phi-tinh-luan`, `ai-loi-chot`, `do-ai-ban-cuoi`. Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches.
+- **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 26 nhánh, kiểm 04/11 đều đã nằm
+  trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em. `claude/determined-galileo-xz2mc5` còn ngày sinh thật — xoá trước.
+  Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches.
 
 ## 4. Nợ, chỗ chưa chắc
 
