@@ -805,6 +805,12 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   chung `TEN_CHUNG` (nước, lễ, thứ, sách, phái). Chưa bắt: tên lạ đứng đầu câu ("Vệ Thần ở nhà 8…"). App và `do-ai.ts` gửi kèm câu hỏi
   cho máy dò (bẫy "Sao Chiron…" không tính bịa). Đo đêm 05/11: tên máy dò in ra đọc tay — tên chung chưa có trong `TEN_CHUNG` là bắt
   nhầm, không phải AI bịa.
+- **AI thật 05/11 01:00 giờ VN** (lịch hẹn; gpt-oss-120b; gia0, gia4; ngày xem 23/10/2026; `tong,sau,kieu`): **33.567 token**, không chạm
+  hạn mức ngày. Tổng hợp 2/2, máy dò tên bịa 0/8 lượt (không in tên nào); bói Kiều 2/2; hỏi sâu máy chấm 2/4 — **chấm lại 4/4**: mô hình
+  chèn khoảng trắng hẹp U+202F ("Phu Thê", "25 / 10"), máy chấm so chuỗi trơn nên trượt nhầm. Đọc tay: (4) hết — gia0 nhịp "hơi thấp"
+  đọc đúng, chỉ nói đại vận đang chạy; (2) **còn** — gia4 mục "Hôm nay" kể lá lúc sinh, bỏ nhịp hôm nay; (5) mới — gia0 dặn "tránh Kim
+  Lâu, Hoang Ốc, Tam Tai" dù đều không phạm (lời chốt "Làm nhà: không phạm Kim Lâu, Hoang Ốc xấu, Tam Tai…" dễ đọc thành phạm).
+  Đo so bản 23/10 (`ea3f70a`, bẫy "màu sơn nhà" ×3, gia4): qua 1/3, chuẩn hoá vẫn 1/3 → **do mô hình**.
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.

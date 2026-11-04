@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 04/11/2026 — sửa lỗi đọc AI (3), (4); đo AI phần còn lại hẹn 01:00 05/11; đợt 9 chờ anh thử mục 3.
+Cập nhật: 05/11/2026 — đo AI thật đủ phần (lịch hẹn 01:00, mục 42); đợt 9 chờ anh thử mục 3.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -21,8 +21,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 ## 2. Việc kế
 
 - **Xong: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn; lời chốt vào AI (mục 41); hỏi thêm theo việc (mục 42).
-  Đo AI thật 03/11 một phần; lỗi đọc (3), (4) sửa 04/11 (mục 42) — **còn đo**: tổng hợp (sau sửa), hỏi sâu, Kiều, so 23/10 —
-  **hẹn 01:00 05/11** (lịch hẹn chưa từng thử: không chạy thì phiên sau đo tay, lúc đêm). Sau: đợt 9 — chờ anh thử mục 3.
+  Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4 (chấm lại), Kiều 2/2; lỗi (3), (4) hết; bẫy "màu sơn nhà" tụt do
+  mô hình. **Còn** (chờ anh duyệt): máy chấm, máy dò bỏ khoảng trắng hẹp U+202F; lỗi (2), (5). Sau: đợt 9 — chờ anh thử mục 3.
 
 ## 3. Cần anh
 
