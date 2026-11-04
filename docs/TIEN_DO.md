@@ -30,8 +30,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - **Hỏi thêm AI** "tháng này ngày nào tốt để cưới?": có nêu đúng ngày app chọn không.
 - **Thử chỉ tay**: chụp ảnh → đường màu có nằm trên nếp tay không.
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
-- **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 26 nhánh, kiểm 04/11 đều đã nằm
-  trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em. `claude/determined-galileo-xz2mc5` còn ngày sinh thật — xoá trước.
+- **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 25 nhánh, kiểm 04/11 đều đã nằm
+  trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em.
   Xoá ở https://github.com/gc1001vn-svg/tu-vi-nha/branches.
 
 ## 4. Nợ, chỗ chưa chắc
