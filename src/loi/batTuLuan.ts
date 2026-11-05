@@ -200,6 +200,13 @@ export function phanTich(b: BatTu): PhanTich {
   return { n, hanh, nhomW, thanW, lo, loCan, tyLe, muc, tong: tongNhom, chuyenVuong, hy, lyDo, dieuHau, coGoc, canGiup, cach, cachKet: thanhBai };
 }
 
+/** Nhom dung than: hanh dieu hau truoc (khi co), roi nhom dung theo phu uc. */
+const nhomDung = (p: PhanTich): number[] => {
+  const dh = p.dieuHau === null ? null : m5(p.dieuHau - hanhCan(p.n));
+  return [...(dh === null ? [] : [dh]), ...[0, 1, 2, 3, 4].filter((g) => p.hy[g] === 1 && g !== dh)];
+};
+/** Hanh dung than (0 Moc … 4 Thuy), cung thu tu loi "Hành hợp nhất" — cho doan "Nói gọn" (`noiGon.ts`). */
+export const hanhDung = (p: PhanTich): number[] => nhomDung(p).map((g) => hanhNhom(p.n, g));
 /** Hanh cua nhom `g` voi nhat chu `n`. */
 const hanhNhom = (n: number, g: number): number => m5(hanhCan(n) + g);
 const dsHanh = (p: PhanTich, f: (v: number) => boolean): string => [0, 1, 2, 3, 4].filter((g) => f(p.hy[g] ?? 0))
@@ -242,8 +249,7 @@ export function tongLuanBT(b: BatTu, p: PhanTich = phanTich(b)): DoanLuan[] {
   const goc = cacChi(b).filter(([, z]) => (TANG[z] ?? []).some((c) => nhom(p.n, c) === 0)).map(([i]) => TRU[i] ?? '');
   const the = p.tong !== null ? THAN_MUC.tong(NHOM_TEN[p.tong] ?? '') : p.chuyenVuong ? THAN_MUC.chuyen : THAN_MUC.muc[p.muc] ?? '';
   // Dung than: hanh dieu hau dung truoc (khi co), roi nhom dung theo phu uc.
-  const dh = p.dieuHau === null ? null : m5(p.dieuHau - hanhCan(p.n));
-  const dung = [...(dh === null ? [] : [dh]), ...[0, 1, 2, 3, 4].filter((g) => p.hy[g] === 1 && g !== dh)];
+  const dung = nhomDung(p);
   const ky = [0, 1, 2, 3, 4].filter((g) => (p.hy[g] ?? 0) < 0);
   // Net tinh: hai thap than nang nhat (tu 1 tro len); nhom vang hoan toan.
   const troi = [...p.thanW.keys()].filter((k) => (p.thanW[k] ?? 0) >= 1)

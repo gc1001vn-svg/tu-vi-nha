@@ -10,7 +10,10 @@ import { luanNha, tongLuanCT, vanCT } from '../../loi/chiemTinhLuan.ts';
 import { NHA_TEN } from '../../loi/chiemTinhNhaLoi.ts';
 import { TUAN_TRANG, gioVN, gocChieuQua, khoangNghich, ngayVN, phutUtcTuMs, sapNghich, trangDoiCung, tuanTrang } from '../../loi/chiemTinhNgay.ts';
 import type { HoSo } from '../../loi/hoSo.ts';
+import { noiGonChiemTinh } from '../../loi/noiGon.ts';
+import { THUAT_NGU_CHIEM_TINH } from '../../loi/thuatNgu.ts';
 import { el } from '../chung.ts';
+import { chiTietRanh, giaiThuatNgu, hopNoiGon } from './deHieu.ts';
 import { KY_HIEU } from './kyHieu.ts';
 import './chiemTinh.css';
 
@@ -133,37 +136,42 @@ export function veChiemTinh(hs: HoSo, lechNuoc: number | undefined): Node[] {
 
   const noi = r.noi === null ? 'không có toạ độ'
     : `toạ độ tỉnh lỵ ${r.noi.ten} (${so1(r.noi.viDo)}° Bắc, ${so1(r.noi.kinhDo)}° Đông)`;
-  return [
+  const nay = phutUtcTuMs(Date.now()); // "bay gio" lay o giao dien, loi nhan qua tham so (luat 2)
+  // Thu tu doc cho nguoi thuong (QUY_UOC muc 43): "Nói gọn" → loi luan; banh xe, bang do, goc chieu, cach tinh → "Chi tiết cho người rành".
+  const ra: Node[] = [
+    hopNoiGon(noiGonChiemTinh(ls, r.phut, nay).cau),
     el('div', { class: 'ct-ba' }, ...ba.map((t) => el('span', {}, t))),
     ...r.phuongAn.map((p) => el('p', { class: 'canh-bao' }, `${p.lyDo}: ${p.khac}.`)),
     ...r.ghiChu.map((g) => el('p', { class: 'canh-bao' }, g)),
-    veBanhXe(ls, gc, `Bánh xe lá số: ${ba.join(', ')}`),
-    el('p', { class: 'ghi-chu' }, 'Đường xanh: góc thuận (lục hợp, tam hợp); đường đỏ: góc nghịch (vuông, đối).'),
-    bang,
     // Tong luan (ke hoach chiem tinh 02/11): chi loi chot; nguon, ly do o docs/LUAN_CHIEM_TINH.md.
     el('details', { class: 'ct-them ct-tong', open: '' }, el('summary', {}, 'Tổng luận lá số'),
-      ...tongLuanCT(ls).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
-      el('p', { class: 'ghi-chu' }, 'Claude tổng hợp nhiều trường phái chiêm tinh phương Tây (cổ điển và hiện đại) rồi chốt lời; chỉ để '
-        + 'tham khảo.')),
-    // Van 12 thang toi (tang 3): "bay gio" lay o giao dien, loi nhan qua tham so (luat 2).
+      ...tongLuanCT(ls).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))])),
+    // Van 12 thang toi (tang 3).
     el('details', { class: 'ct-them ct-tong', open: '' }, el('summary', {}, 'Vận 12 tháng tới'),
-      ...vanCT(ls, r.phut, phutUtcTuMs(Date.now())).loi.map((l) => el('p', {}, l)),
-      el('p', { class: 'ghi-chu' }, 'Xét hành tinh chậm (Mộc, Thổ, Thiên Vương, Hải Vương, Diêm Vương) tạo góc với các điểm chính của lá số trong '
-        + '12 tháng tới (sai số 2° cho Mộc, Thổ; 1,5° cho ba sao xa). Claude tổng hợp rồi chốt lời; chỉ để tham khảo.')),
+      ...vanCT(ls, r.phut, nay).loi.map((l) => el('p', {}, l))),
     // Luan tung nha (tang 2): moi nha mot muc gap; can gio sinh va toa do.
-    el('h3', {}, 'Luận từng nhà'),
+    el('h3', {}, 'Luận từng nhà (12 mảng đời)'),
     ...(ls.nha === null ? [el('p', { class: 'ghi-chu' }, 'Cần giờ sinh và nơi sinh trong nước để có 12 nhà.')]
       : NHA_TEN.map((t, i) => el('details', { class: 'ct-them ct-tong' },
         el('summary', {}, `Nhà ${String(i + 1)} · ${t} · ${CUNG[cungCua(ls.nha?.[i] ?? 0)] ?? ''}`),
         ...luanNha(ls, i + 1).map((l) => el('p', {}, l))))),
-    el('h3', {}, 'Lời giải từng điểm'), ...loiGiai, hanhTinh,
-    // Goc chieu thuong 20–30 dong: gap lai cho khoi khoi dai, bam moi mo.
-    el('details', { class: 'ct-them' }, el('summary', {}, `Góc chiếu (${String(gc.length)}) — lệch càng nhỏ càng mạnh`),
-      gc.length === 0 ? el('p', {}, 'Không có góc chiếu chính nào.') : goc),
-    el('p', { class: 'ghi-chu' }, `Chiêm tinh nhiệt đới, hệ nhà Placidus, Bắc Giao Điểm trung bình, sai số góc 8° (lục hợp 6°); ${noi}. `
-      + `Vị trí tính bằng thư viện astronomy-engine, đã so 300 lá với Swiss Ephemeris (lệch dưới 2′). ${LOI}`),
-    el('p', { class: 'ghi-chu' }, `Tên Anh 12 cung: ${CUNG.map((c, i) => `${c} – ${CUNG_ANH[i] ?? ''}`).join(', ')}.`),
+    el('details', { class: 'ct-them ct-tong' }, el('summary', {}, 'Lời giải từng điểm (Mặt Trời, Mặt Trăng, các hành tinh)'), ...loiGiai, hanhTinh),
+    chiTietRanh(
+      veBanhXe(ls, gc, `Bánh xe lá số: ${ba.join(', ')}`),
+      el('p', {}, 'Đường xanh: góc thuận (lục hợp, tam hợp); đường đỏ: góc nghịch (vuông, đối).'),
+      bang,
+      el('h4', {}, `Góc chiếu (${String(gc.length)}) — lệch càng nhỏ càng mạnh`),
+      gc.length === 0 ? el('p', {}, 'Không có góc chiếu chính nào.') : goc,
+      el('p', {}, 'Vận 12 tháng: xét hành tinh chậm (Mộc, Thổ, Thiên Vương, Hải Vương, Diêm Vương) tạo góc với các điểm chính của lá số '
+        + 'trong 12 tháng tới (sai số 2° cho Mộc, Thổ; 1,5° cho ba sao xa).'),
+      el('p', {}, `Chiêm tinh nhiệt đới, hệ nhà Placidus, Bắc Giao Điểm trung bình, sai số góc 8° (lục hợp 6°); ${noi}. `
+        + 'Vị trí tính bằng thư viện astronomy-engine, đã so 300 lá với Swiss Ephemeris (lệch dưới 2′).'),
+      el('p', {}, `Tên Anh 12 cung: ${CUNG.map((c, i) => `${c} – ${CUNG_ANH[i] ?? ''}`).join(', ')}.`)),
+    el('p', { class: 'ghi-chu' }, 'Lời giải do Claude tổng hợp nhiều trường phái chiêm tinh phương Tây (cổ điển và hiện đại) rồi soạn lại, '
+      + 'chốt lời; chỉ để tham khảo.'),
   ];
+  giaiThuatNgu(ra, THUAT_NGU_CHIEM_TINH);
+  return ra;
 }
 
 /** Khoi "Chiem tinh hom nay": bau troi luc mo khoi; co ho so thi them Mat Trang qua nha va goc chieu voi la so (orb 1°). */

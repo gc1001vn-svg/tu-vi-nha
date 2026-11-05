@@ -33,6 +33,9 @@ export function phamVi(i: number, k: number): number | null {
 }
 
 /** Tong trong so theo nhom: `nhom(kinh)` → chi so nhom. */
+/** Trong so 4 nguyen to (Lua, Dat, Khi, Nuoc) nhu loi "Nguyên tố, thể, khí chất" — cho doan "Nói gọn". */
+export const demNguyenTo = (ls: LaSo): number[] => dem(ls, 4, (x) => cungCua(x) % 4);
+
 function dem(ls: LaSo, so: number, nhom: (k: number) => number): number[] {
   const t = new Array<number>(so).fill(0);
   ls.diem.slice(0, 10).forEach((d, i) => { t[nhom(d.kinh)] = (t[nhom(d.kinh)] ?? 0) + (TRONG[i] ?? 0); });
@@ -87,7 +90,7 @@ export function tongLuanCT(ls: LaSo): DoanLuan[] {
       : trung === undefined ? BA_KHAC_THE : `Hai trong ba điểm chính cùng thể ${THE[trung] ?? ''}: nét ${(THE[trung] ?? '').toLowerCase()} rõ hơn cả.`);
   }
 
-  const to = dem(ls, 4, (x) => cungCua(x) % 4), the = dem(ls, 3, (x) => cungCua(x) % 3), tong = to.reduce((a, b) => a + b, 0);
+  const to = demNguyenTo(ls), the = dem(ls, 3, (x) => cungCua(x) % 3), tong = to.reduce((a, b) => a + b, 0);
   const iTo = to.indexOf(Math.max(...to)), iThe = the.indexOf(Math.max(...the)), duong = (to[0] ?? 0) + (to[2] ?? 0);
   const ngt = [...(Math.max(...to) / tong >= 0.35 ? [TO_TROI[iTo] ?? ''] : []), ...to.flatMap((w, i) => (w < 1 ? [TO_THIEU[i] ?? ''] : [])),
     ...(Math.max(...the) / tong >= 0.4 ? [THE_TROI[iThe] ?? ''] : []),

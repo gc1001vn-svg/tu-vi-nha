@@ -821,6 +821,34 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Hạn mức ngày Groq tính trượt 24 giờ: ~3,5 lượt đo sáng 03/11 (02:45–03:30 UTC) chưa hồi hết lúc đo chiều — số dùng của
   người nhà không tách được. Lần sau đo cách lượt trước ≥ 24 giờ; thăm trước, còn dưới ~100.000 thì hoãn.
 
+## 43. Lời giải dễ hiểu cho người thường — đợt 1: Tử vi, Bát tự, Chiêm tinh (kế hoạch 05/11 `2026-11-05-loi-giai-de-hieu.md`; `src/loi/noiGon.ts`, `src/loi/thuatNgu.ts`, `src/giaoDien/khoi/deHieu.ts`)
+
+- **"Nói gọn"** đầu khối: 3–5 câu lời thường (mạnh ở đâu, cần lưu ý gì, giai đoạn này nên làm gì), Claude soạn mới. Mỗi câu lấy
+  **đúng điểm, đúng ngưỡng** mà lời luận bên dưới dùng nên kết không vênh: tử vi — `diemMenh` (thế Mệnh), `diemCung` ≥ `NGUONG_CUNG.tot`
+  (tối đa 2 mặt mạnh) / < `kem` (tối đa 2 mặt cần để tâm; không có mặt mạnh thì nêu cung điểm cao nhất "khá nhất"), kết đại vận + năm;
+  bát tự — mức thân vượng nhược, việc "thuận" / "phải để tâm" của `luanViec`, hành dụng thần đầu (`hanhDung`), kết vận + năm;
+  chiêm tinh — cung Mặt Trời, nguyên tố trội (≥ 35 % như lời "… trội"), nhà ≥ `NGUONG_NHA.tot` / < `kem` (tối đa 2), kết `vanCT`.
+  Lời khuyên giai đoạn theo cặp [kết 10 năm]|[kết năm], cùng ý bảng `GHEP` của tử vi, bát tự.
+- **Thuật ngữ** giải nghĩa lần đầu gặp trong khối, theo thứ tự đọc: phần đang mở trước, mục gập sau; bỏ qua tiêu đề, lá số, bảng,
+  hình, chữ nhỏ, "Nói gọn", phần cho người rành. Mỗi môn một bảng (cùng chữ khác nghĩa: "tam hợp" tử vi là ba cung, chiêm tinh là góc
+  120°). Chèn "(nghĩa)" sau chữ; đang cuối ngoặc thì ", tức …"; giữa ngoặc thì để lần gặp sau (tránh ngoặc lồng); đã có ngoặc giải
+  nghĩa ngay sau thì để nguyên. Độ sáng "miếu", "vượng" chỉ bắt sau tên sao (không bắt "thịnh vượng"). Bấm cung: phần cung giải
+  nghĩa lại từ đầu (một lần đọc mới).
+- **"Chi tiết cho người rành"** (đóng sẵn) cuối khối: tử vi — cách tính hạn (Tân Biên), Lưu Thái Tuế, cách Toàn Thư (Đẩu Quân),
+  9 sao lưu; bát tự — bảng 4 trụ, không vong, khởi vận, câu "Xét ba điều các sách cùng dùng…", giải nghĩa thập thần; chiêm tinh —
+  bánh xe, bảng độ (kèm tên Anh), danh sách góc chiếu, sai số, hệ nhà, nguồn số. Lá số tử vi và bấm cung giữ nguyên chỗ.
+- Đại vận, năm tử vi gập sẵn (kết đã ở tiêu đề và "Nói gọn"); "Lời giải từng điểm" chiêm tinh gập sẵn. Câu "Claude tổng hợp… chỉ để
+  tham khảo" **một lần** cuối khối. Đại vận bắt đầu từ **85 tuổi** trở đi gộp một dòng "quá tuổi thọ thường, không kể".
+- Hạn tháng, ngày: số sao nói bằng lời — lệch ≤ 10 % "gần ngang nhau, hơi nghiêng về …", ≤ 30 % "nghiêng về …", hơn nữa "phần lớn
+  là …", số đếm để trong ngoặc.
+- **Không đổi** lời luận trong lõi (dữ liệu gửi AI giữ nguyên, đo 05/11): mọi thay đổi ở giao diện; lõi chỉ thêm `hanhDung`,
+  `demNguyenTo` (dùng lại trong `tongLuanBT`, `tongLuanCT`, kết quả không đổi).
+- Thước `tests/NoiGon.test.ts` (30 hồ sơ giả × 3 khối): "Nói gọn" 3–5 câu, ≤ 600 ký tự (đo 05/11: tử vi 289–388, bát tự 354–491,
+  chiêm tinh 232–312), không chữ trong ba bảng thuật ngữ, ≥ 20 đoạn khác nhau / 30, kết khớp lời luận; thuật ngữ gặp trong lời luận
+  được giải nghĩa 93 % (phần còn lại chỉ gặp giữa ngoặc), không ngoặc lồng hai tầng.
+- Đọc thử bằng máy (hồ sơ giả 10/05/1990 06:14 Hà Nội, chữ hiện ra khi mở khối, chưa bấm mục gập): tử vi 8.020 → 5.852 ký tự trên mục
+  "Chi tiết", bát tự 4.160 → 4.048, chiêm tinh 8.051 → 5.208; câu "tham khảo" 4 / 2 / 3 → 1 / 1 / 1.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|

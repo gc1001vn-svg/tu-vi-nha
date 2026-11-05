@@ -1,0 +1,6 @@
+/* Hop "Nói gọn" dau khoi va muc "Chi tiết cho người rành" (deHieu.ts). */
+.noi-gon { margin: 8px 0 12px; padding: 10px 12px; border-left: 3px solid var(--vang); background: var(--vien); border-radius: 6px; }
+.noi-gon b { display: block; color: var(--vang); margin-bottom: 4px; }
+.noi-gon p { margin: 0; line-height: 1.5; }
+.chi-tiet-ranh { margin-top: 14px; border-top: 1px dashed var(--vien); padding-top: 6px; }
+.chi-tiet-ranh > summary { color: var(--mo); cursor: pointer; }
