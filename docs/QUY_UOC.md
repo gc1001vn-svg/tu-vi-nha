@@ -815,6 +815,10 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   giữ độ dài — dùng ở máy dò `timBia` và máy chấm (`coNoiChuaCo`, `coNhac`; `coNhac` bỏ cách quanh "/" giữa hai số); (2) thiếu giờ: dữ
   liệu tử vi ghi "không có nhật hạn hôm nay — mục Hôm nay dùng nhịp sinh học hôm nay…"; (5) lời chốt "Làm nhà: Kim Lâu, Hoang Ốc, Tam
   Tai đều không phạm…". Lượt 05/11 chấm lại bằng máy chấm mới: hỏi sâu 4/4. Còn đo lại tổng hợp cho (2), (5).
+- **AI thật 06/11 01:10 giờ VN** (lịch hẹn; `tong`, gia0, gia4): **8.893 token**; tổng hợp 2/2, bịa 0. (2) **hết** — gia4 mục "Hôm nay" dùng
+  nhịp sinh học, đọc đúng (thể chất, trí tuệ rất thấp, cảm xúc rất cao), không kể lá lúc sinh. (5) **đỡ, chưa hết** — 2/3 câu nói đúng
+  "không phạm", còn một câu "Tránh các hoạt động lớn liên quan đến Kim Lâu, Hoang Ốc, Tam Tai" (có lẽ AI ghép lời chốt "việc lớn nên
+  chậm và chắc" — do Kế Đô, Địa Võng — với ba mục không phạm).
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.
