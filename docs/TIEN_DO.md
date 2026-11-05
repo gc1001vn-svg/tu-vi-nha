@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 05/11/2026 — đo AI 01:00; sửa máy chấm, lỗi (2), (5) (mục 42); đợt 9 chờ anh thử mục 3.
+Cập nhật: 05/11/2026 — anh thử 3 việc (AI ngày cưới khớp); sửa lời giải dễ hiểu (mục 2).
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -22,13 +22,13 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 - **Xong: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn; lời chốt vào AI (mục 41); hỏi thêm theo việc (mục 42).
   Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2; lỗi (3), (4) hết; bẫy "màu sơn nhà" tụt do mô hình.
-  Sửa 05/11: máy chấm, máy dò bỏ khoảng trắng hẹp; lỗi (2), (5) — **còn đo lại tổng hợp** (đêm, cách 05/11 01:00 ≥ 24 giờ). Sau: đợt 9.
+  Sửa 05/11: máy chấm, máy dò bỏ khoảng trắng hẹp; lỗi (2), (5) — **còn đo lại tổng hợp** (đêm, cách 05/11 01:00 ≥ 24 giờ).
+- **Đang làm: lời giải dễ hiểu** (`docs/ke-hoach/2026-11-05-loi-giai-de-hieu.md`): Tử vi, Bát tự, Chiêm tinh; sau: 11 khối
+  kia, máy dò chỉ tay, đợt 9.
 
 ## 3. Cần anh
 
-- **Đọc lời giải các môn của anh** (14 môn ở mục 2): chỗ sai, khó hiểu, chung chung thì báo em.
-- **Hỏi thêm AI** "tháng này ngày nào tốt để cưới?": có nêu đúng ngày app chọn không.
-- **Thử chỉ tay**: chụp ảnh → đường màu có nằm trên nếp tay không.
+- **Đọc lại 3 khối Tử vi, Bát tự, Chiêm tinh** khi đợt 1 lời giải dễ hiểu xong (mục 2).
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 25 nhánh, kiểm 04/11 đều đã nằm
   trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em.
@@ -36,7 +36,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 4. Nợ, chỗ chưa chắc
 
-- Chỉ tay (mục 27): máy dò chưa ai chấm, chụp lại đổi ~1/4 ô, chưa thử Safari iPhone; Nhật – Hàn đọc trích đoạn, thiếu sách Việt cổ.
+- Chỉ tay (mục 27): máy dò chạy trên iPhone (anh 05/11) nhưng gán nhầm đường (đường đời không vòng gò ngón cái, thiếu đường
+  tình); chụp lại đổi ~1/4 ô; Nhật – Hàn đọc trích đoạn, thiếu sách Việt cổ.
 - La bàn: bắc từ hay bắc thật chưa rõ (VN lệch <2°, anh so không lệch; mục 20).
 - Hạn tháng chưa so Altuvi; Mệnh chủ/Thân chủ theo *Toàn Thư*; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
 - AI: lượt đầu chỉ lời chốt gọn; hỏi thêm (nhận bằng từ khoá) mới có lời đủ; gán sai cung ~1/10; máy dò tên lạ chưa bắt tên đứng đầu câu, có thể bắt nhầm tên chung (mục 42).
