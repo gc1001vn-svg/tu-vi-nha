@@ -42,13 +42,15 @@ const TEN_CHUNG = 'Trung Quốc, Phương Đông, Phương Tây, Tết Nguyên �
   + 'Thứ Bảy, Chủ Nhật, Lịch Vạn Niên, Tử Vi Đẩu Số, Huyền Không, Kinh Dịch, Truyện Kiều, Đoạn Trường Tân Thanh, Nguyễn Du';
 /** Vi tri sau `truoc` la dau cau (dau bai, xuong dong, sau . ! ? : …), bo qua dau cach, dau dong (- * #), ngoac mo, ngoac kep. */
 const dauCau = (truoc: string): boolean => /(?:^|[\n.!?:…])[\s*_#>"“”'‘’`([\-–—•]*$/u.test(truoc);
+/** Moi khoang trang (U+202F, U+00A0…) ve dau cach thuong, giu do dai (`vt` khong lech): do AI that 05/11 gpt-oss chen U+202F giua "Phu Thê". */
+export const cachThuong = (s: string): string => s.replace(/\p{Zs}/gu, ' ');
 
 /**
  * Ten bia trong `loi`: ten `tuDien` (dung chu hoa, tron chu) ma `duLieu` khong co, va ten la (xem dau file); `vt` la vi tri trong `loi`.
  * `duLieu`: moi chu da gui AI (du lieu, cau nguoi hoi) — ten nguoi dung tu go ("Sao Chiron?") khong phai AI bia.
  */
 export function timBia(loi: string, duLieu: string, tuDien: readonly string[]): Bia[] {
-  const chu = loi.normalize('NFC'), co = duLieu.normalize('NFC');
+  const chu = cachThuong(loi.normalize('NFC')), co = cachThuong(duLieu.normalize('NFC'));
   const tu = [...new Set(tuDien.map((t) => t.normalize('NFC')).filter((t) => t.includes(' ')))].sort((a, b) => b.length - a.length);
   const re = new RegExp(`(?<![${chuCai}])(?:${tu.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})(?![${chuCai}])`, 'gu');
   const theoTuDien = tu.length === 0 ? [] : [...chu.matchAll(re)].filter((m) => !co.includes(m[0])).map((m) => ({ tu: m[0], vt: m.index }));

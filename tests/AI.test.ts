@@ -91,7 +91,8 @@ describe('goi du lieu gui AI', () => {
 
   test('khong ro gio: tu vi bao can gio, chiem tinh ghi tinh 12 gio trua; sinh nuoc ngoai: ghi mui gio, bo cung Moc', () => {
     const k = du(hs({ gioSinh: null }));
-    expect([k.includes('chưa lập được lá số tử vi'), k.includes('12 giờ trưa'), k.includes('Cung Mọc ')]).toEqual([true, true, false]);
+    expect([k.includes('chưa lập được lá số tử vi'), k.includes('không có nhật hạn hôm nay'), k.includes('12 giờ trưa'), k.includes('Cung Mọc ')])
+      .toEqual([true, true, true, false]);
     const n = du(hs({ noiSinh: NUOC_NGOAI, muiGio: 'Europe/Paris' }), 120);
     expect([n.includes('múi giờ Europe/Paris'), n.includes('Cung Mọc ')]).toEqual([true, false]);
   });
@@ -130,5 +131,8 @@ describe('do chu bia', () => {
     expect(timBia(loi, d, TU_NGUOI)).toEqual([...loi.matchAll(/Vệ Thần/gu)].map((m) => ({ tu: 'Vệ Thần', vt: m.index })));
     // Ten nguoi hoi tu go (cau bay) khong tinh la bia: noi goi gui kem cau hoi (`phien.ts`, `do-ai.ts`).
     expect(timBia('Dữ liệu app tính chưa có sao Vệ Thần.', `${d}\nSao Vệ Thần của tôi ở đâu?`, TU_NGUOI)).toEqual([]);
+    // Do AI that 05/11: gpt-oss chen U+202F giua chu — ten la, ten tu dien van bat, vi tri giu nguyen.
+    expect(timBia(loi.replace(/Vệ Thần/gu, 'Vệ Thần'), d, TU_NGUOI)).toEqual(timBia(loi, d, TU_NGUOI));
+    expect(timBia('Gặp sao La Hầu.', 'không có', ['La Hầu'])).toEqual([{ tu: 'La Hầu', vt: 8 }]);
   });
 });

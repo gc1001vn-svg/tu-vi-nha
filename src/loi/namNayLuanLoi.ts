@@ -40,7 +40,7 @@ export const HAN_Y = (ten: string): string => `Hạn ${ten}: năm nào ai cũng 
 
 export const VIEC = {
   nho: 'Dưới 10 tuổi mụ: các bảng làm nhà, cưới hỏi chưa xét.',
-  nhaDuoc: 'Làm nhà: không phạm Kim Lâu, Hoang Ốc xấu, Tam Tai — theo tục là đứng tên làm được.',
+  nhaDuoc: 'Làm nhà: Kim Lâu, Hoang Ốc, Tam Tai đều không phạm — theo tục là đứng tên làm được.',
   nhaKieng: (ds: string): string => `Làm nhà: phạm ${ds} — theo tục kiêng đứng tên làm nhà năm nay; cần làm thì tục thường mượn tuổi một `
     + 'người không phạm đứng ra động thổ.',
   cuoiKimLau: 'Cưới hỏi: phạm Kim Lâu — tục xét theo tuổi cô dâu; nữ sắp cưới thì nhiều nhà dời năm hoặc chọn ngày kỹ.',

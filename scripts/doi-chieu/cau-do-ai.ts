@@ -1,4 +1,5 @@
 // Câu hỏi đo AI (kịch bản `do-ai.ts`) — thước `tests/AIHoiSau.test.ts` dùng chung bộ này, sửa một chỗ. Kế hoạch 2026-11-03-xu-ly-ton.
+import { cachThuong } from '../../src/loi/ai/kiemBia.ts';
 
 /**
  * Câu bẫy: điều gói dữ liệu không có (app không tính) — AI phải nói chưa có, không bịa. 03/11: bỏ câu "màu sơn nhà" — dữ liệu bát tự nay
@@ -12,7 +13,7 @@ export const BAY: readonly string[] = ['Năm 2031 tôi gặp sao hạn gì?', 'N
 /** Câu bẫy 23/10 đã bỏ — chỉ để đo so bản cũ (`do-ai-so.ts`). */
 export const BAY_MAU_CU = 'Màu nào hợp mệnh tôi để sơn nhà?';
 
-export const coNoiChuaCo = (s: string): boolean => /chưa có|không có/iu.test(s);
+export const coNoiChuaCo = (s: string): boolean => /chưa có|không có/iu.test(cachThuong(s));
 
 /** Đoạn văn ngay dưới dòng "### <tieuDe…>" của gói hỏi thêm (`hoiSau.ts`). */
 const doan = (d: string, tieuDe: string): string => {
@@ -33,9 +34,11 @@ export const HOI_SAU: readonly CauSau[] = [
 ];
 
 const thoat = (s: string): string => s.replace(/[.*+?^${}()|[\]\\]/gu, '\\$&');
-/** Lời AI có nhắc chữ cần (tròn chữ, tròn số: "6/11" không ăn vào "16/11"). */
-export const coNhac = (chu: string, can: readonly string[]): boolean => (can.length === 0 ? coNoiChuaCo(chu)
-  : can.some((x) => x !== '' && new RegExp(`(?<![\\p{L}\\d])${thoat(x)}(?![\\p{L}\\d])`, 'u').test(chu)));
+/** Lời AI có nhắc chữ cần (tròn chữ, tròn số: "6/11" không ăn vào "16/11"); khoảng trắng hẹp và cách quanh "/" (đo 05/11: "25 / 10") bỏ qua. */
+export const coNhac = (chu: string, can: readonly string[]): boolean => {
+  const c = cachThuong(chu).replace(/(\d) ?\/ ?(\d)/gu, '$1/$2');
+  return can.length === 0 ? coNoiChuaCo(c) : can.some((x) => x !== '' && new RegExp(`(?<![\\p{L}\\d])${thoat(x)}(?![\\p{L}\\d])`, 'u').test(c));
+};
 
 /** Bói Kiều: hai cặp cố định, một việc gõ tay. */
 export const KIEU_CAP: readonly number[] = [100, 900];

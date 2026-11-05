@@ -11,7 +11,7 @@ import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 import { queKieu, SO_CAP } from '../src/loi/kieu.ts';
 import * as luanKieu from '../src/loi/kieuLuan.ts';
 import { TINH } from '../src/loi/tinh.ts';
-import { BAY, HOI_SAU } from '../scripts/doi-chieu/cau-do-ai.ts';
+import { BAY, HOI_SAU, coNhac, coNoiChuaCo } from '../scripts/doi-chieu/cau-do-ai.ts';
 
 const saiChu = (v: string): string | null => (v.trim() === '' || v.trim() !== v || /\s{2}/u.test(v) || /undefined|NaN|\.\./u.test(v) ? 'rong / thua cach'
   : v.normalize('NFC') !== v ? 'chua NFC' : /(?<![qQ])(o[àáảãạ]|o[èéẻẽẹ]|u[ỳýỷỹỵ])(?!\p{L})/iu.test(v) ? 'dau kieu moi'
@@ -129,5 +129,12 @@ describe('mau, huong hanh hop venh Bat trach (do AI that 03/11)', () => {
       expect(dong).toBeDefined();
       for (const m of (dong ?? '').matchAll(/hướng (\p{L}+) là (\p{L}+ \p{L}+) \(xấu\)/gu)) expect(d).toContain(`${m[1] ?? ''}: ${m[2] ?? ''} (xấu)`);
     }
+  });
+});
+
+describe('may cham do AI', () => {
+  test('khoang trang hep U+202F (do AI that 05/11: "Phu Thê", "25 / 10") van la co nhac; "6/11" khong an vao "16/11"', () => {
+    expect([coNhac('Lá số “Phu Thê” tốt', ['Phu Thê']), coNhac('Ngày 25 / 10 tốt', ['25/10']), coNhac('Ngày 16/11', ['6/11']),
+      coNoiChuaCo('App chưa có dữ liệu')]).toEqual([true, true, false, true]);
   });
 });

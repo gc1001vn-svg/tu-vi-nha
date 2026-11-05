@@ -87,7 +87,9 @@ const PHU_LON = new Set(['Tả Phù', 'Hữu Bật', 'Văn Xương', 'Văn Khúc
 function tuVi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   const kq = tr.chinh;
   const ls = tinhTuVi(hs, kq, ngayXem);
-  if (ls === 'canChonGio') return muc('Tử vi', ['Không rõ giờ sinh nên chưa lập được lá số tử vi (cần giờ sinh).']);
+  // Do AI that 05/11: thieu gio, AI ke la chiem tinh luc sinh vao muc "Hôm nay" — chi ro muc do dua vao dau.
+  if (ls === 'canChonGio') return muc('Tử vi', ['Không rõ giờ sinh nên chưa lập được lá số tử vi (cần giờ sinh); không có nhật hạn hôm nay '
+    + '— mục Hôm nay dùng nhịp sinh học hôm nay, không dùng lá chiêm tinh lúc sinh.']);
   const lh = tinhLuuHan(ls, kq.am.thang, ngayXem);
   const tenCung = (chi: number): string => `${ls.cung[chi]?.ten ?? ''} (${tenChi(chi)})`;
   const cung = ls.cung.map((c) => {

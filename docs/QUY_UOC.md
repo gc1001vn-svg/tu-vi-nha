@@ -811,6 +811,10 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   đọc đúng, chỉ nói đại vận đang chạy; (2) **còn** — gia4 mục "Hôm nay" kể lá lúc sinh, bỏ nhịp hôm nay; (5) mới — gia0 dặn "tránh Kim
   Lâu, Hoang Ốc, Tam Tai" dù đều không phạm (lời chốt "Làm nhà: không phạm Kim Lâu, Hoang Ốc xấu, Tam Tai…" dễ đọc thành phạm).
   Đo so bản 23/10 (`ea3f70a`, bẫy "màu sơn nhà" ×3, gia4): qua 1/3, chuẩn hoá vẫn 1/3 → **do mô hình**.
+- Sửa 05/11 (thước `tests/AI.test.ts`, `tests/AIHoiSau.test.ts`): `cachThuong` (`kiemBia.ts`) đổi mọi khoảng trắng `\p{Zs}` về dấu cách,
+  giữ độ dài — dùng ở máy dò `timBia` và máy chấm (`coNoiChuaCo`, `coNhac`; `coNhac` bỏ cách quanh "/" giữa hai số); (2) thiếu giờ: dữ
+  liệu tử vi ghi "không có nhật hạn hôm nay — mục Hôm nay dùng nhịp sinh học hôm nay…"; (5) lời chốt "Làm nhà: Kim Lâu, Hoang Ốc, Tam
+  Tai đều không phạm…". Lượt 05/11 chấm lại bằng máy chấm mới: hỏi sâu 4/4. Còn đo lại tổng hợp cho (2), (5).
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.
