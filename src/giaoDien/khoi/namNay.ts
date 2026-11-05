@@ -5,7 +5,10 @@
  */
 import { NGUON_SAO_HAN, namNay, type Muc } from '../../loi/namNay.ts';
 import { luanNamNay } from '../../loi/namNayLuan.ts';
+import { noiGonNamNay } from '../../loi/noiGonMon.ts';
+import { THUAT_NGU_NAM_NAY } from '../../loi/thuatNgu.ts';
 import { el, khoi, type VeKhoi } from '../chung.ts';
+import { chiTietRanh, giaiThuatNgu, hopNoiGon } from './deHieu.ts';
 import './namNay.css';
 
 export const LOI_SOAN = 'Lời do Claude soạn lại theo quan niệm dân gian.';
@@ -16,18 +19,21 @@ export const dongMuc = (nhan: string, m: Muc): HTMLElement =>
     el('span', { class: 'dong-muc-nghia' }, m.nghia));
 
 export const veKhoiNamNay: VeKhoi = (hs, tr, ngayXem) => {
-  const k = tr.chinh;
-  const n = namNay(hs, k, ngayXem);
-  return khoi(`Năm ${n.canChi} ${String(n.namAm)} — tuổi mụ ${String(n.tuoiMu)}`, true,
+  const kq = tr.chinh;
+  const n = namNay(hs, kq, ngayXem);
+  const k = khoi(`Năm ${n.canChi} ${String(n.namAm)} — tuổi mụ ${String(n.tuoiMu)}`, true,
+    hopNoiGon(noiGonNamNay(n).cau),
     dongMuc('Sao', n.sao), dongMuc('Hạn', n.han), dongMuc('Kim Lâu', n.kimLau), dongMuc('Hoang Ốc', n.hoangOc),
     dongMuc('Tam Tai', n.tamTai), dongMuc('Thái Tuế', n.thaiTue),
     ...luanNamNay(n).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
     el('details', { class: 'giai-nam' }, el('summary', {}, `Giải nghĩa sao ${n.sao.ten}, hạn ${n.han.ten}`),
       ...[n.sao, n.han].filter((m) => m.giai !== undefined).map((m) => el('p', {}, el('b', {}, m.ten), ` — ${m.giai ?? ''}`)),
-      n.han.giai === undefined ? el('p', {}, `Hạn: ${n.han.nghia}`) : null,
-      el('p', { class: 'dong-muc-chu' }, NGUON_SAO_HAN)),
-    tr.khac.some((p) => p.ketQua.am.nam !== k.am.nam)
+      n.han.giai === undefined ? el('p', {}, `Hạn: ${n.han.nghia}`) : null),
+    tr.khac.some((p) => p.ketQua.am.nam !== kq.am.nam)
       && el('p', { class: 'canh-bao' }, 'Giờ sinh sát Tết: nếu tính sang năm âm khác thì các mục trên đổi theo.'),
-    el('p', { class: 'dong-muc-chu' }, `Theo tuổi mụ, năm âm tính từ Tết. ${LOI_SOAN} Phần tổng quan: Claude gộp các mục theo mức các `
-      + 'nguồn cùng nói rồi chốt lời; chỉ để tham khảo.'));
+    chiTietRanh(el('p', {}, 'Theo tuổi mụ (tuổi thật cộng một), năm âm tính từ Tết. Phần tổng quan gộp các mục theo mức các nguồn cùng nói.'),
+      el('p', {}, NGUON_SAO_HAN)),
+    el('p', { class: 'dong-muc-chu ghi-chu' }, `${LOI_SOAN.replace(/\.$/u, '')}, gộp các mục rồi chốt lời; chỉ để tham khảo.`));
+  giaiThuatNgu([k], THUAT_NGU_NAM_NAY);
+  return k;
 };

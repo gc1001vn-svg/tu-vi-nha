@@ -10,7 +10,10 @@ import { xemLoBan, type DoanCung } from '../loi/loBan.ts';
 import { docSoDoGo } from '../loi/nhap.ts';
 import { phiTinh, type Ban, type HuongKy, type O } from '../loi/phiTinh.ts';
 import { luanPhiTinh } from '../loi/phiTinhLuan.ts';
+import { CHON, noiGonTuLuan } from '../loi/noiGonMon.ts';
+import { THUAT_NGU_PHI_TINH } from '../loi/thuatNgu.ts';
 import { el, homNay7, khoi, tinh } from './chung.ts';
+import { chiTietRanh, giaiThuatNgu, hopNoiGon, veLuan } from './khoi/deHieu.ts';
 import { dongMuc, LOI_SOAN } from './khoi/namNay.ts';
 
 export interface PhongThuy {
@@ -239,7 +242,10 @@ const dongKy = (k: HuongKy): HTMLElement => dongMuc(k.ten,
 function vePhiTinh(): HTMLElement {
   const p = phiTinh(homNay7());
   const d = p.tiet.ngay;
-  return khoi(`Phi tinh năm ${p.canChiNam}, tháng này`, false,
+  const luan = luanPhiTinh(p), ng = noiGonTuLuan(luan, CHON.phiTinh);
+  // Thu tu doc cho nguoi thuong (QUY_UOC muc 44): "Nói gọn" → luoi, huong ky → loi chot; Van 9, cach ve luoi → nguoi ranh.
+  const k = khoi(`Phi tinh năm ${p.canChiNam}, tháng này`, false,
+    hopNoiGon(ng.cau),
     el('p', {}, el('b', {}, `Năm ${p.canChiNam}`), ` (đổi năm ở Lập Xuân, khoảng 4/2): ${p.nam.o['Giữa'].ten} vào giữa.`),
     veLuoi(p.nam, `Phi tinh năm ${p.canChiNam}`),
     ...LUOI.map((h) => dongMuc(h, { ten: `${p.nam.o[h].ten} (${p.nam.o[h].tenHuyenKhong})`, mucDo: p.nam.o[h].tot ? 'tot' : 'xau', nghia: p.nam.o[h].nghia })),
@@ -247,10 +253,15 @@ function vePhiTinh(): HTMLElement {
     el('p', {}, el('b', {}, 'Tháng này'), ` (từ tiết ${p.tiet.ten} ${String(d.ngay)}/${String(d.thang)}): ${p.thang.o['Giữa'].ten} vào giữa.`),
     veLuoi(p.thang, 'Phi tinh tháng này'),
     // Loi chot (ke hoach 2026-11-03-phi-tinh; ly do: docs/LUAN_PHI_TINH.md).
-    ...luanPhiTinh(p).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((l) => el('p', {}, l))]),
+    ...veLuan(luan.filter((x) => !x.tieuDe.startsWith('Vận 9')), ng.dung),
     el('p', { class: 'ghi-chu' }, 'Lưới đặt Nam ở trên, Bắc ở dưới như bảng phi tinh trong sách. Đứng giữa nhà: phía nào ứng ô đó. '
-      + 'Sao tháng cùng nghĩa sao năm, tác động nhẹ hơn. Tốt/xấu từng sao theo Huyền Không (thư viện lunar); Thái Tuế, Tuế Phá, '
-      + `Tam Sát theo chi năm. La bàn ở trên tự báo khi hướng đo trùng hướng kỵ. ${LOI_SOAN}`));
+      + 'La bàn ở trên tự báo khi hướng đo trùng hướng kỵ.'),
+    chiTietRanh(...veLuan(luan.filter((x) => x.tieuDe.startsWith('Vận 9'))),
+      el('p', {}, 'Sao tháng cùng nghĩa sao năm, tác động nhẹ hơn. Tốt/xấu từng sao theo Huyền Không (thư viện lunar); Thái Tuế, Tuế Phá, '
+        + 'Tam Sát theo chi năm.')),
+    el('p', { class: 'ghi-chu' }, `${LOI_SOAN.replace(/\.$/u, '')}; chỉ để tham khảo.`));
+  giaiThuatNgu([k], THUAT_NGU_PHI_TINH);
+  return k;
 }
 
 export function vePhongThuy(ctx: PhongThuy): HTMLElement {

@@ -35,7 +35,7 @@ const chuDoan = (que: number, loai: 'thoan' | 'hao' | 'dung', hao: number): stri
   : loai === 'thoan' ? QUE[que - 1]?.thoan ?? '' : QUE[que - 1]?.hao[hao - 1] ?? '');
 
 /** Tuong que: ve dau loi giai que (truoc dau ":"), vd "Trời chồng lên trời". */
-const tuong = (so: number): string => `${QUE[so - 1]?.tenDu ?? ''} — ${(GIAI[so - 1]?.que ?? '').split(':')[0]?.toLowerCase() ?? ''}`;
+const tuong = (so: number): string => `${QUE[so - 1]?.tenDu ?? ''} — ${(GIAI[so - 1]?.que ?? '').split(/[:.]/u)[0]?.toLowerCase() ?? ''}`;
 
 const TOT_MH = new Set(['dungSinhThe', 'theKhacDung', 'tyHoa']);
 

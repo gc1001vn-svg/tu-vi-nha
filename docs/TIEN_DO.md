@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 05/11/2026 — xong lời giải dễ hiểu đợt 1 (Tử vi, Bát tự, Chiêm tinh; QUY_UOC mục 43), chờ anh đọc.
+Cập nhật: 05/11/2026 — xong lời giải dễ hiểu cả 14 môn (QUY_UOC mục 43, 44), chờ anh đọc 11 môn đợt 2.
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -23,12 +23,12 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - **Xong: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn; lời chốt vào AI (mục 41); hỏi thêm theo việc (mục 42).
   Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đã sửa lỗi (2), (5) — **còn đo lại tổng hợp** (đêm,
   cách 05/11 01:00 ≥ 24 giờ).
-- **Xong đợt 1 lời giải dễ hiểu** (mục 43): "Nói gọn" đầu khối, giải nghĩa thuật ngữ lần đầu, "Chi tiết cho người rành".
-  Anh gật thì làm 11 khối kia cùng cách; rồi máy dò chỉ tay, đợt 9.
+- **Xong lời giải dễ hiểu 14 môn** (mục 43 Tử vi, Bát tự, Chiêm tinh — anh gật 05/11; mục 44 11 môn còn lại). Kế: máy dò chỉ
+  tay gán nhầm đường (mục 4), rồi đợt 9.
 
 ## 3. Cần anh
 
-- **Đọc lại 3 khối Tử vi, Bát tự, Chiêm tinh** trên iPhone (thẻ "Của tôi"): dễ hiểu chưa, còn chữ nào vấp.
+- **Đọc 11 môn đợt 2** trên iPhone: "Của tôi" (Năm nay, Hướng, Tuổi hợp, Thần số, Tướng mặt, Chỉ tay), Gieo quẻ, Chọn ngày, Phi tinh.
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 25 nhánh, kiểm 04/11 đều đã nằm
   trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em.

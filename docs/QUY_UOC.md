@@ -849,6 +849,31 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Đọc thử bằng máy (hồ sơ giả 10/05/1990 06:14 Hà Nội, chữ hiện ra khi mở khối, chưa bấm mục gập): tử vi 8.020 → 5.852 ký tự trên mục
   "Chi tiết", bát tự 4.160 → 4.048, chiêm tinh 8.051 → 5.208; câu "tham khảo" 4 / 2 / 3 → 1 / 1 / 1.
 
+## 44. Lời giải dễ hiểu — đợt 2: 11 môn còn lại (anh đọc đợt 1 ngày 05/11: "ổn, làm tiếp"; `src/loi/noiGonMon.ts`)
+
+- Cùng cách mục 43 cho Thần số, Hướng nhà, Năm nay, Tuổi hợp, Tướng mặt, Chỉ tay (thẻ "Của tôi"), Kinh Dịch, Tarot, bói Kiều (thẻ
+  "Gieo quẻ"), Chọn ngày (thẻ "Hôm nay"), Phi tinh (thẻ "Phong thủy"). Nhịp sinh học không thuộc 14 môn lời giải, để nguyên.
+- "Nói gọn" hai cách: môn **đã có lời chốt** (Kinh Dịch, Tarot, Kiều, tướng mặt, chỉ tay, chọn ngày, phi tinh) lấy **đúng câu** kết và
+  câu việc nên làm từ lời luận (`noiGonTuLuan`, bảng `CHON`; bỏ chữ "Kết: "), các câu đó không hiện lại bên dưới; thuật ngữ trong
+  đoạn này giải nghĩa ngay tại đó (đoạn đọc đầu tiên). Môn **chưa có câu tóm** (năm nay, hướng nhà, tuổi hợp, thần số) Claude soạn
+  câu mới từ cùng dữ liệu, ngưỡng của lời luận; thần số bỏ hai câu đã lên "Nói gọn" khỏi "Tổng luận".
+- "Chi tiết cho người rành": thần số — bảng 4 đỉnh cao, cách tính; năm nay — tuổi mụ, nguồn sao hạn (Đại Chính tạng…); hướng nhà —
+  câu "Nhiều trang Việt tính nhóm nhà theo hướng…"; tuổi hợp — "Chỗ tục Việt khác sách"; tướng mặt — bảng số đo, sai số, so với
+  ảnh mẫu (từng nét chỉ còn chữ Tốt / Cần lưu ý); Kinh Dịch — cách lấy quẻ Mai Hoa, luật chọn đoạn, nguồn Kanripo; chọn ngày — mục
+  "Căn cứ", cách xếp Tốt / Được / Tránh; phi tinh — mục "Vận 9", cách chấm sao. Câu "chỉ để tham khảo" một lần mỗi khối / mỗi lần gieo.
+- Giải nghĩa: mỗi môn một bảng (`THUAT_NGU_*` trong `thuatNgu.ts`); không chèn vào dòng mục tự giải nghĩa (`.dong-muc`), lưới phi
+  tinh, hình quẻ, ô chọn.
+- Sửa lõi 1 chỗ: tên tượng quẻ ở "Diễn tiến" cắt ở dấu ":" **hoặc "."** — quẻ không có ":" trong lời giải (vd Truân) trước ra cả đoạn
+  có ".." (lỗi có sẵn, thước mới bắt). Dữ liệu gửi AI đổi đúng câu đó; thước AI vẫn đạt.
+- Thước `tests/NoiGonMon.test.ts` (11 môn × 30 ca giả: hồ sơ giả, quẻ / lá / câu / khung tay / mặt rút theo LCG hạt cố định):
+  "Nói gọn" 1–5 câu, ≤ 600 ký tự (đo: 70–557), câu soạn mới không chữ môn chưa kèm nghĩa, câu lấy từ lời chốt có chữ môn được giải
+  nghĩa 88 % (453/513; còn lại nằm giữa ngoặc), ≥ 20 đoạn khác nhau / 30 (năm nay ≥ 15; tuổi hợp = số con giáp), kết khớp lời luận;
+  chèn nghĩa không lồng ngoặc.
+- Đọc thử bằng máy (hồ sơ giả 10/05/1990, nhà hướng 135°; chữ hiện ra trên mục "Chi tiết"): năm nay 1.804 → 2.079 ký tự (thêm
+  "Nói gọn", nghĩa), hướng 2.975 → 3.010, tuổi 1.463 → 1.415, thần số 2.080 → 2.003, chọn ngày 6.187 → 5.032, phi tinh 3.511 → 3.179,
+  Kinh Dịch 2.178 → 1.826, Kiều 1.782 → 1.829, Tarot 1.967 → 1.656; câu "tham khảo" mỗi khối 1 (Tarot 2 → 1; chọn ngày, phi tinh
+  0 → 1). Tướng mặt, chỉ tay cần ảnh / chọn ô: chỉ đo qua thước.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|

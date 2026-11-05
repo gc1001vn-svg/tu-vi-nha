@@ -8,7 +8,10 @@ import type { DoanLuan } from '../../loi/chiemTinhLuan.ts';
 import type { HoSo } from '../../loi/hoSo.ts';
 import { nhipSinhHoc, tenSo, thanSo } from '../../loi/soHoc.ts';
 import { bieuDoTS, tongLuanTS, vanTS } from '../../loi/soHocLuan.ts';
+import { noiGonThanSo } from '../../loi/noiGonMon.ts';
+import { THUAT_NGU_THAN_SO } from '../../loi/thuatNgu.ts';
 import { el, khoi, type VeKhoi } from '../chung.ts';
+import { chiTietRanh, giaiThuatNgu, hopNoiGon } from './deHieu.ts';
 import './soHoc.css';
 
 const LOI = 'Lời do Claude soạn lại theo quan niệm phổ biến.';
@@ -26,22 +29,31 @@ const THU_TU_O = [3, 6, 9, 2, 5, 8, 1, 4, 7];
 
 export const veKhoiThanSo: VeKhoi = (hs, _tr, ngayXem) => {
   const sinh = ngaySinh(hs), t = thanSo(sinh, ngayXem), v = vanTS(t, sinh, ngayXem);
-  return khoi('Thần số học', false, el('div', { class: 'so-hoc' },
+  // Thu tu doc cho nguoi thuong (QUY_UOC muc 44): "Nói gọn" → loi luan; bang dinh cao, cach tinh → "Chi tiết cho người rành".
+  const ng = noiGonThanSo(t);
+  // Hai cau dau loi so chu dao da len "Nói gọn": bo khoi doan "Tổng luận" cho khoi lap.
+  const bot = (d: DoanLuan): DoanLuan => ({ ...d, loi: d.loi.map((l) => ng.dung.reduce((x, c) => x.replace(c, ''), l).trim()).filter((l) => l !== '') });
+  const k = khoi('Thần số học', false, el('div', { class: 'so-hoc' },
+    hopNoiGon(ng.cau),
     el('div', { class: 'sh-lon' }, el('span', { class: 'sh-so' }, tenSo(t.chuDao)), el('span', {}, 'số chủ đạo')),
-    phan('Tổng luận', ...tongLuanTS(t, sinh).flatMap(doan)),
+    phan('Tổng luận', ...tongLuanTS(t, sinh).map(bot).flatMap(doan)),
     el('div', { class: 'sh-luoi', role: 'group', 'aria-label': 'Biểu đồ ngày sinh' },
       ...THU_TU_O.map((k) => el('span', {}, String(k).repeat(t.luoi[k - 1] ?? 0)))),
     el('p', { class: 'sh-chu-thich' }, 'Biểu đồ ngày sinh: mỗi chữ số trong ngày sinh vào đúng ô của nó (bỏ số 0). '
       + 'Hàng trên 3-6-9 thiên về trí óc, giữa 2-5-8 tình cảm, dưới 1-4-7 thể chất.'),
     phan('Biểu đồ ngày sinh', ...bieuDoTS(t).flatMap(doan)),
-    phan('Vận: đỉnh cao, năm, tháng',
+    phan('Vận: đỉnh cao, năm, tháng', ...v.loi.map((l) => el('p', {}, l))),
+    chiTietRanh(
+      el('h4', {}, 'Bốn đỉnh cao trong đời'),
       el('ul', {}, ...v.dinh.map((x, i) => el('li', i === v.dang ? { class: 'dang' } : {},
         `Đỉnh ${String(i + 1)}: ${String(x.tu)}–${x.den === null ? '…' : String(x.den)} tuổi · số ${String(x.so)} · thử thách ${String(x.thuThach)}`
           + (i === v.dang ? ' (đang đi qua)' : '')))),
-      ...v.loi.map((l) => el('p', {}, l))),
-    el('p', { class: 'sh-chu-thich' }, 'Số chủ đạo: cộng mọi chữ số ngày sinh dương lịch (cách phổ biến ở Việt Nam). Năm cá nhân đổi ngày 01/01. '
-      + 'Claude tổng hợp nhiều trường phái thần số học (Pythagoras hiện đại phương Tây, bản Việt) rồi chốt lời; thần số học không có '
-      + 'cơ sở khoa học, chỉ để tham khảo.')));
+      el('p', {}, 'Số chủ đạo: cộng mọi chữ số ngày sinh dương lịch (cách phổ biến ở Việt Nam). Năm cá nhân đổi ngày 01/01. Các trường phái '
+        + 'tổng hợp: Pythagoras hiện đại phương Tây, bản Việt.')),
+    el('p', { class: 'sh-chu-thich ghi-chu' }, 'Lời giải do Claude tổng hợp nhiều trường phái thần số học rồi soạn lại, chốt lời; thần số học '
+      + 'không có cơ sở khoa học, chỉ để tham khảo.')));
+  giaiThuatNgu([k], THUAT_NGU_THAN_SO);
+  return k;
 };
 
 export const veKhoiNhipSinhHoc: VeKhoi = (hs, _tr, ngayXem) => {

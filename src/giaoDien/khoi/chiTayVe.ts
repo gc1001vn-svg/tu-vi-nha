@@ -6,7 +6,10 @@
 import { CAC_DUONG, DOAN_CHUONG, GIAI, KHUNG, type Duong, type KhungChiTay, type Luat } from '../../loi/chiTay.ts';
 import { luanTay, tungO } from '../../loi/chiTayLuan.ts';
 import type { GioiTinh } from '../../loi/hoSo.ts';
+import { CHON, noiGonTuLuan } from '../../loi/noiGonMon.ts';
+import { THUAT_NGU_TAY } from '../../loi/thuatNgu.ts';
 import { el, khoiNap } from '../chung.ts';
+import { giaiThuatNgu, hopNoiGon, veLuan } from './deHieu.ts';
 import './chiTay.css';
 
 /** Hinh mau ban tay phai nhin long ban tay (ngon cai ben phai); tay trai thi lat guong bang CSS. Mau trung chu chu thich. */
@@ -37,15 +40,20 @@ function veTungO(k: KhungChiTay): HTMLElement[] {
 }
 
 function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh): Node[] {
-  return [
-    el('h3', {}, 'Lời giải (Claude tổng hợp từ nhiều sách, nhiều nước rồi chốt; tham khảo)'),
-    ...luanTay(k).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]),
+  const luan = luanTay(k), ng = noiGonTuLuan(luan, CHON.tay);
+  const ra: Node[] = [
+    hopNoiGon(ng.cau),
+    el('h3', {}, 'Lời giải'),
+    ...veLuan(luan, ng.dung),
     ...veTungO(k),
+    el('p', { class: 'ghi-chu' }, 'Lời giải do Claude tổng hợp từ nhiều sách, nhiều nước rồi soạn lại, chốt lời; chỉ để tham khảo.'),
     // Nap thang phien.ts, khong qua `khoiAI`: file nap luoi nay nhap ai/index.ts thi Vite tach goi mo app thanh 4 file (do 28/10).
     khoiNap('AI diễn giải và dự đoán (Groq, miễn phí)', 'ai',
       () => import('../ai/phien.ts').then((m) => m.vePhien(`chiTay:${gioiTinh}:${JSON.stringify(k)}`, { loai: 'chiTay', k, gioiTinh }))),
     el('p', { class: 'ghi-chu' }, 'AI chỉ diễn giải các ô đã chọn và luật app tra, không xem tay.'),
   ];
+  giaiThuatNgu(ra, THUAT_NGU_TAY);
+  return ra;
 }
 
 /** Nhac duoi anh may do — so do: QUY_UOC muc 27. */

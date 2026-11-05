@@ -154,3 +154,100 @@ export function coThuatNgu(chu: string, bang: readonly ThuatNgu[]): string[] {
   const re = regexBang(bang);
   return [...chu.matchAll(re)].map((m) => m[0]);
 }
+
+// ---- Dot 2 (QUY_UOC muc 44): 11 mon con lai ----
+
+export const THUAT_NGU_NAM_NAY: readonly ThuatNgu[] = [
+  t('Thái Tuế', 'sao chủ của năm; năm trùng, xung, hình… với tuổi gọi là phạm'),
+  t('Tam Tai', 'ba năm liền theo tuổi bị coi là xấu'),
+  t('Kim Lâu', 'tục kiêng làm nhà, cưới hỏi vào một số tuổi'),
+  t('Hoang Ốc', 'tục xem tuổi có hợp làm nhà không'),
+  t('Mật tông', 'một dòng Phật giáo'),
+];
+
+export const THUAT_NGU_HUONG: readonly ThuatNgu[] = [
+  t('Bát trạch', 'cách xem hướng nhà theo tám hướng và năm sinh'),
+  t('tứ trạch', 'nhóm nhà: nhà Đông tứ trạch hợp người Đông tứ mệnh, Tây hợp Tây', '(?:Đông|Tây) tứ trạch', { hoa: true }),
+  t('phương', 'khu vực trong nhà, nhìn từ giữa nhà ra', 'phương(?= (?:tốt|xấu))'),
+  t('tọa', 'phía sau lưng nhà', 'tọa(?= nhà)'),
+  t('mệnh quái', 'quẻ theo năm sinh, định hướng hợp mình'),
+];
+
+export const THUAT_NGU_TUOI: readonly ThuatNgu[] = [
+  t('tam hợp', 'ba tuổi cách nhau 4 năm, hợp nhau'),
+  t('lục hợp', 'từng cặp tuổi hợp đôi'),
+  t('tương hình', 'hai tuổi hay làm khó nhau'),
+  t('lục hại', 'cặp tuổi ngấm ngầm hại nhau'),
+  t('lục xung', 'hai tuổi cách nhau 6 năm, đối nhau'),
+  t('tự hình', 'cùng tuổi mà dễ khắc nhau'),
+  t('Địa chi', '12 con giáp'),
+  t('cung phi', 'quẻ theo năm sinh, dùng xem hướng nhà'),
+];
+
+export const THUAT_NGU_THAN_SO: readonly ThuatNgu[] = [
+  t('Mũi tên', 'ba ô thẳng hàng trên biểu đồ cùng có số, hoặc cùng trống', 'Mũi tên', { hoa: true }),
+  t('Đỉnh cao', 'một chặng lớn của đời'),
+  t('Thử thách', 'bài học phải vượt trong chặng đó', 'Thử thách', { hoa: true }),
+  t('Năm cá nhân', 'con số riêng của năm với mình, đổi ngày 1/1'),
+  t('Tháng cá nhân', 'con số riêng của tháng với mình'),
+  t('Mặt phẳng', 'một hàng của biểu đồ: trí óc, tình cảm hay thể chất', 'Mặt phẳng', { hoa: true }),
+];
+
+export const THUAT_NGU_KINH_DICH: readonly ThuatNgu[] = [
+  t('quẻ chủ', 'quẻ gieo được, nói việc lúc này'),
+  t('quẻ hỗ', 'quẻ ẩn bên trong, nói quá trình'),
+  t('quẻ biến', 'quẻ có được khi các hào động đổi, nói chiều hướng'),
+  t('hào động', 'vạch đang đổi — chỗ cần đọc'),
+  t('hào', 'một trong sáu vạch của quẻ, đếm từ dưới lên', 'hào(?= (?:\\d|ứng))'),
+  t('trung', 'đứng giữa quẻ trên hoặc quẻ dưới', '(?<=\\()trung(?=\\))'),
+  t('sai vị', 'vạch âm dương không hợp chỗ đứng'),
+  t('đắc vị', 'vạch âm dương hợp chỗ đứng'),
+  t('Thể', 'phần quẻ chỉ mình', 'Thể(?= \\p{Lu})', { hoa: true }),
+  t('Dụng', 'phần quẻ chỉ việc', 'Dụng(?= \\p{Lu}\\p{Ll})', { hoa: true }),
+];
+
+export const THUAT_NGU_TAROT: readonly ThuatNgu[] = [
+  t('ẩn chính', '22 lá lớn, chỉ việc lớn, bước ngoặt', 'lá ẩn chính'),
+  t('ẩn phụ', '56 lá nhỏ, chỉ việc hằng ngày', 'lá ẩn phụ'),
+  t('lá ngược', 'lá rút ra bị lộn ngược: nghĩa yếu đi hoặc đảo lại', 'lá ngược'),
+];
+
+export const THUAT_NGU_KIEU: readonly ThuatNgu[] = [
+  t('lục bát', 'cặp câu sáu chữ, tám chữ'),
+];
+
+export const THUAT_NGU_MAT: readonly ThuatNgu[] = [
+  t('Ba đình', 'ba phần của mặt: trán; từ mày tới chóp mũi; từ dưới mũi tới cằm'),
+  t('thượng đình', 'phần trán'),
+  t('trung đình', 'từ mày tới chóp mũi'),
+  t('hạ đình', 'từ dưới mũi tới cằm'),
+  t('quan', 'năm bộ phận chính: mày, mắt, mũi, miệng, tai', '(?<=bốn |năm )quan'),
+  t('ấn đường', 'khoảng giữa hai lông mày'),
+  t('năm hình', 'năm dáng mặt xếp theo ngũ hành'),
+  t('thần khí', 'vẻ sống động, ánh mắt'),
+];
+
+export const THUAT_NGU_TAY: readonly ThuatNgu[] = [
+  t('đoạn chưởng', 'đường trí và đường tình nhập làm một'),
+  t('gò', 'chỗ thịt nổi dưới gốc ngón', 'gò(?= \\p{L})'),
+];
+
+export const THUAT_NGU_CHON_NGAY: readonly ThuatNgu[] = [
+  t('Hoàng Đạo', 'ngày có thần tốt trông, nên làm việc'),
+  t('Hắc Đạo', 'ngày có thần xấu trông, nên tránh việc lớn'),
+  t('sao Đức', 'sao tốt, giải được cái xấu nhẹ', '(?:Thiên Đức, Nguyệt Đức(?:,| hoặc) Thiên Xá|[Ss]ao Đức)'),
+  t('xung tuổi', 'ngày có con giáp đối với tuổi mình'),
+  t('Khổng Minh', 'cách xem ngày xuất hành tương truyền của Khổng Minh'),
+  t('Lý Thuần Phong', 'cách xem giờ xuất hành của Lý Thuần Phong'),
+];
+
+export const THUAT_NGU_PHI_TINH: readonly ThuatNgu[] = [
+  t('vào giữa', 'sao đứng ô giữa, chủ khí cả năm hoặc cả tháng'),
+  t('Thái Tuế', 'phía của sao chủ năm'),
+  t('Tuế Phá', 'phía đối diện Thái Tuế'),
+  t('Tam Sát', 'ba phía xấu theo năm'),
+  t('Vận 9', 'chặng 20 năm 2024–2043 theo cách xem này'),
+  t('sao vượng', 'sao mạnh nhất của vận'),
+  t('Nhất Bạch', 'sao số 1'), t('Nhị Hắc', 'sao số 2'), t('Tam Bích', 'sao số 3'), t('Tứ Lục', 'sao số 4'), t('Ngũ Hoàng', 'sao số 5'),
+  t('Lục Bạch', 'sao số 6'), t('Thất Xích', 'sao số 7'), t('Bát Bạch', 'sao số 8'), t('Cửu Tử', 'sao số 9'),
+];

@@ -10,9 +10,12 @@ import type { DoanDoc, Gieo, Hao, MaiHoaGio } from '../loi/kinhDich.ts';
 import type * as Chu from '../loi/kinhDichChu.ts';
 import type * as Giai from '../loi/kinhDichGiai.ts';
 import type * as Luan from '../loi/kinhDichLuan.ts';
+import { CHON, THEM_KINH_DICH, noiGonTuLuan } from '../loi/noiGonMon.ts';
+import { THUAT_NGU_KIEU, THUAT_NGU_KINH_DICH, THUAT_NGU_TAROT } from '../loi/thuatNgu.ts';
 import { khoiAI } from './ai/index.ts';
 import { el } from './chung.ts';
 import './gieoQue.css';
+import { chiTietRanh, giaiThuatNgu, hopNoiGon, veLuan } from './khoi/deHieu.ts';
 import { LOI_SOAN } from './khoi/namNay.ts';
 
 type KinhDich = typeof Tinh & typeof Chu & typeof Giai & typeof Luan;
@@ -53,21 +56,25 @@ function veQueDich(k: KinhDich, g: Gieo, mh: MaiHoaGio | null): HTMLElement {
     el('p', {}, `Thể ${k.quai(mh.the).ten} (${k.quai(mh.the).hanh}), Dụng ${k.quai(mh.dung).ten} (${k.quai(mh.dung).hanh}): `,
       el('b', { class: mh.quanHe === 'theSinhDung' || mh.quanHe === 'dungKhacThe' ? 'loi' : 'am' }, k.LUAN[mh.quanHe].ten), ` — ${k.LUAN[mh.quanHe].loi}`),
   ];
-  return el('div', {},
+  const luan = k.luanQue(g, mh), ng = noiGonTuLuan(luan, CHON.kinhDich, [THEM_KINH_DICH]);
+  // Thu tu doc cho nguoi thuong (QUY_UOC muc 44): "Nói gọn" → que → loi tung doan → luan; cach lay que Mai Hoa, nguon → nguoi ranh.
+  const ra = el('div', {},
+    hopNoiGon(ng.cau),
     el('p', { class: 'am' }, `Quẻ chủ: ${ten(g.chu)}`),
     veHinh(g.hao),
     el('p', {}, g.dong.length === 0 ? 'Không có hào động.' : `Hào động: ${g.dong.map((h) => `${String(h)} (${k.tenHao(g.chu, h)})`).join(', ')}.`),
     g.bien === null ? null : el('p', {}, `Quẻ biến: ${ten(g.bien)}`),
     el('p', {}, `Quẻ hỗ: ${ten(g.ho)}`),
-    ...maiHoa,
     coLoiQue ? null : el('div', { class: 'dong' }, el('span', { class: 'nhan' }, 'Ý quẻ chủ'), el('span', {}, k.GIAI[g.chu - 1]?.que ?? ''),
       el('small', { class: 'ghi-chu' }, `Nguyên văn: ${chuQue?.thoan ?? ''}`)),
-    el('p', { class: 'ghi-chu' }, 'Đoạn nên đọc theo số hào động (luật Chu Hy):'),
     ...doan.map(veDoan),
-    el('p', { class: 'ghi-chu' }, `Nguyên văn theo bản Kanripo (bỏ dấu câu). Lời giải: ${LOI_SOAN}`),
-    el('h3', {}, 'Luận quẻ (Claude tổng hợp nhiều nhà chú giải rồi chốt; tham khảo)'),
-    ...k.luanQue(g, mh).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]),
+    el('h3', {}, 'Luận quẻ'),
+    ...veLuan(luan, ng.dung),
+    chiTietRanh(...maiHoa, el('p', {}, 'Đoạn nên đọc chọn theo số hào động (luật Chu Hy). Nguyên văn theo bản Kanripo (bỏ dấu câu).')),
+    el('p', { class: 'ghi-chu' }, `${LOI_SOAN} Luận quẻ: Claude tổng hợp nhiều nhà chú giải rồi chốt lời; chỉ để tham khảo.`),
     khoiAI('AI giải quẻ', `que:${String(++soLanGieo)}`, { loai: 'que', k, g, mh }));
+  giaiThuatNgu([ra], THUAT_NGU_KINH_DICH);
+  return ra;
 }
 
 function veKinhDich(): HTMLElement {
@@ -117,14 +124,18 @@ function veQueKieu(q: QueKieu): HTMLElement {
 function veLuanKieu(luan: typeof import('../loi/kieuLuan.ts'), q: QueKieu): { readonly the: HTMLElement; readonly viec: () => number } {
   const chon = el('select', { 'aria-label': 'Việc đang hỏi' }, ...luan.TEN_MUC.map((t, i) => el('option', { value: String(i) }, t)));
   const noi = el('div', {});
+  const noiGon = el('div', {});
   const ve = (): void => {
-    noi.replaceChildren(...luan.luanKieu(q, Number(chon.value)).flatMap((d) => [el('h4', {}, d.tieuDe),
-      ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]));
+    const d = luan.luanKieu(q, Number(chon.value)), ng = noiGonTuLuan(d, CHON.kieu);
+    noiGon.replaceChildren(hopNoiGon(ng.cau));
+    noi.replaceChildren(...veLuan(d, ng.dung),
+      el('p', { class: 'ghi-chu' }, 'Luận quẻ: Claude tổng hợp cách bói Kiều xưa rồi soạn lại, chốt lời; chỉ để tham khảo.'));
+    giaiThuatNgu([noiGon, noi], THUAT_NGU_KIEU);
   };
   chon.addEventListener('change', ve);
   ve();
-  return { the: el('div', {}, el('h3', {}, 'Luận quẻ (Claude tổng hợp cách bói Kiều xưa rồi chốt; tham khảo)'),
-    el('label', { class: 'chon-viec' }, 'Việc đang hỏi: ', chon), noi), viec: () => Number(chon.value) };
+  return { the: el('div', {}, el('label', { class: 'chon-viec' }, 'Việc đang hỏi: ', chon), noiGon, el('h3', {}, 'Luận quẻ'), noi),
+    viec: () => Number(chon.value) };
 }
 
 function veBoiKieu(): HTMLElement {
@@ -175,10 +186,14 @@ function veTarot(): HTMLElement {
         const t: Tarot = { ...bai, ...luan };
         const viTri = t.TRAI[kieu].viTri;
         const rut = t.rutBai([...crypto.getRandomValues(new Uint32Array(2 * viTri.length))], viTri.length, oNguoc.checked);
-        ketQua.replaceChildren(el('div', { class: 'cac-la' }, ...rut.map((r, i) => veLa(t, r.so, r.nguoc, viTri[i] ?? ['', '']))),
-          el('h3', {}, 'Luận trải bài (Claude tổng hợp nhiều sách rồi chốt; tham khảo)'),
-          ...t.luanTarot(kieu, rut).flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]),
+        const lt = t.luanTarot(kieu, rut), ng = noiGonTuLuan(lt, CHON.tarot);
+        ketQua.replaceChildren(hopNoiGon(ng.cau), el('div', { class: 'cac-la' }, ...rut.map((r, i) => veLa(t, r.so, r.nguoc, viTri[i] ?? ['', '']))),
+          el('h3', {}, 'Luận trải bài'),
+          ...veLuan(lt, ng.dung),
+          el('p', { class: 'ghi-chu' }, 'Luận trải bài và nghĩa lá: Claude tổng hợp nhiều sách (Waite 1910, cách đọc phổ biến) rồi soạn lại, '
+            + 'chốt lời; chỉ để tham khảo.'),
           khoiAI('AI đọc trải bài', `tarot:${String(++soLanGieo)}`, { loai: 'tarot', t, kieu, rut }));
+        giaiThuatNgu([ketQua], THUAT_NGU_TAROT);
       }, (e: unknown) => { ketQua.replaceChildren(loi(e)); });
     });
     return n;
@@ -189,8 +204,7 @@ function veTarot(): HTMLElement {
     el('div', { class: 'nut-hang' }, nut('motLa', 'Rút 1 lá'), nut('baLa', 'Rút 3 lá'), nut('thapTu', 'Thập tự Celtic (10 lá)')),
     el('label', { class: 'chon-nguoc' }, oNguoc, ' Dùng lá ngược (lá rút ra có thể bị lộn ngược, đọc nghĩa ngược)'),
     ketQua,
-    el('p', { class: 'ghi-chu' }, 'Tên Anh là tên chính vì tên Việt mỗi nơi gọi một khác. Nghĩa lá do Claude soạn lại theo sách của Waite (1910) '
-      + 'và cách đọc phổ biến; chỉ để tham khảo.'));
+    el('p', { class: 'ghi-chu' }, 'Tên Anh là tên chính vì tên Việt mỗi nơi gọi một khác.'));
 }
 
 export function veGieoQue(): HTMLElement {

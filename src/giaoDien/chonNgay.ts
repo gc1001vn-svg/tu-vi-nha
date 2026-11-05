@@ -6,8 +6,17 @@ import { dinhDangNgay, type NgayDuong } from '../loi/amLich.ts';
 import { canhBaoNam, chonNgay, VIEC, type NgayChon, type Viec } from '../loi/chonNgay.ts';
 import { coKyTuc, luanThang } from '../loi/chonNgayLuan.ts';
 import type { HoSo } from '../loi/hoSo.ts';
+import { CHON, noiGonTuLuan } from '../loi/noiGonMon.ts';
+import { THUAT_NGU_CHON_NGAY } from '../loi/thuatNgu.ts';
 import { el, khoi, THU, tinh } from './chung.ts';
+import { chiTietRanh, giaiThuatNgu, hopNoiGon, veLuan } from './khoi/deHieu.ts';
 import { LOI_SOAN } from './khoi/namNay.ts';
+
+/** Cach xep Tot / Duoc / Tranh, nguon nen – kieng: chu nghe → muc cho nguoi ranh (QUY_UOC muc 44). */
+const CACH_XEP = 'Tốt: ngày Hoàng Đạo, lịch ghi nên làm việc này, không phạm ngày kỵ nào (kể cả kỵ tục). Tránh: Nguyệt Kỵ '
+  + 'hoặc ngày xung tuổi. Ngày chỉ phạm kỵ tục (Tam Nương, Dương Công Kỵ, Sát Chủ Dương, Thọ Tử) là Được, có ghi "tục kiêng". Còn lại '
+  + 'là Được. Nên/kiêng theo hoàng lịch Trung Hoa; hai bộ hoàng lịch máy so được chỉ trùng nhau khoảng 6/10 ở mục kiêng, nên lịch ghi '
+  + 'kiêng chỉ hạ xuống Được. Xuất hành: ngày Khổng Minh, giờ Lý Thuần Phong theo sách và lịch Việt.';
 
 const NHAN = { tot: 'Tốt', duoc: 'Được', tranh: 'Tránh' } as const;
 const LOP = { tot: 'hop', duoc: 'binh', tranh: 'xung' } as const;
@@ -40,14 +49,17 @@ export function veChonNgay(toi: HoSo | undefined, homNay: NgayDuong): HTMLElemen
     const nam = oNam.value.trim() !== '' && Number.isInteger(so) && so >= 1900 && so <= 2100 ? so : undefined;
     nhanThang.textContent = `Tháng ${String(thang.thang)}/${String(thang.nam)}`;
     const ds = chonNgay(viec, thang.nam, thang.thang, nam === undefined ? undefined : (nam + 8) % 12);
-    ketQua.replaceChildren(
+    const luan = luanThang(viec, ds), ng = noiGonTuLuan(luan, CHON.chonNgay);
+    ketQua.replaceChildren(hopNoiGon(ng.cau),
       ...(oNam.value.trim() !== '' && nam === undefined ? [el('p', { class: 'loi' }, 'Năm sinh cần từ 1900 tới 2100 — đang không xét tuổi.')] : []),
       ...(nam === undefined ? [] : canhBaoNam(viec, nam, thang.nam, thang.thang).map((c) =>
         el('p', { class: 'canh-bao' }, `Năm ${String(c.namAm)} tuổi mụ ${String(c.tuoiMu)} phạm ${c.ten} (${c.muc.ten}): ${c.muc.nghia}`))),
-      // Loi chot thang (ke hoach 2026-11-03-chon-ngay; ly do: docs/LUAN_CHON_NGAY.md), roi tung ngay.
-      ...luanThang(viec, ds).flatMap((d, i) => [el('h4', {}, d.tieuDe), ...d.loi.map((l, j) => el('p', {}, i === 0 && j === 1 ? el('b', {}, l) : l))]),
+      // Loi chot thang (ke hoach 2026-11-03-chon-ngay; ly do: docs/LUAN_CHON_NGAY.md), roi tung ngay; "Căn cứ" → nguoi ranh.
+      ...veLuan(luan.filter((d) => d.tieuDe !== 'Căn cứ'), ng.dung),
       el('h4', {}, 'Từng ngày'),
-      ...ds.map(veNgay));
+      ...ds.map(veNgay),
+      chiTietRanh(...veLuan(luan.filter((d) => d.tieuDe === 'Căn cứ')), el('p', {}, CACH_XEP)));
+    giaiThuatNgu([ketQua], THUAT_NGU_CHON_NGAY);
   };
   const nutThang = (chu: string, buoc: number): HTMLElement => {
     const n = el('button', { type: 'button', 'aria-label': buoc < 0 ? 'Tháng trước' : 'Tháng sau' }, chu);
@@ -67,11 +79,7 @@ export function veChonNgay(toi: HoSo | undefined, homNay: NgayDuong): HTMLElemen
       el('label', { class: 'cot' }, 'Năm sinh âm lịch (sinh trước Tết thì lùi một năm; để trống thì không xét tuổi)', oNam)),
     el('div', { class: 'nut-hang' }, nutThang('‹', -1), nhanThang, nutThang('›', 1)),
     ketQua,
-    el('p', { class: 'ghi-chu' }, 'Tốt: ngày Hoàng Đạo, lịch ghi nên làm việc này, không phạm ngày kỵ nào (kể cả kỵ tục). Tránh: Nguyệt Kỵ '
-      + 'hoặc ngày xung tuổi. Ngày chỉ phạm kỵ tục (Tam Nương, Dương Công Kỵ, Sát Chủ Dương, Thọ Tử) là Được, có ghi "tục kiêng". Còn lại '
-      + 'là Được. Nên/kiêng theo hoàng lịch Trung Hoa; hai bộ hoàng '
-      + 'lịch máy so được chỉ trùng nhau khoảng 6/10 ở mục kiêng, nên lịch ghi kiêng chỉ hạ xuống Được. Xuất hành: ngày Khổng Minh, giờ '
-      + `Lý Thuần Phong theo sách và lịch Việt. Năm sinh sửa ở đây không lưu. ${LOI_SOAN}`));
+    el('p', { class: 'ghi-chu' }, `Năm sinh sửa ở đây không lưu. ${LOI_SOAN.replace(/\.$/u, '')}; chỉ để tham khảo.`));
   k.addEventListener('toggle', () => { if (ketQua.childElementCount === 0) ve(); });
   return k;
 }

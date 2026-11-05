@@ -5,7 +5,10 @@
  */
 import { CAC_KHOA, GIAI, SO_ANH_MAU, dangSo, giaiMat, soVoiMau } from '../../loi/tuongMatGiai.ts';
 import { IT_NHAT, luanMat, mucXet, netChot } from '../../loi/tuongMatLuan.ts';
+import { CHON, noiGonTuLuan } from '../../loi/noiGonMon.ts';
+import { THUAT_NGU_MAT } from '../../loi/thuatNgu.ts';
 import { el } from '../chung.ts';
+import { chiTietRanh, giaiThuatNgu, hopNoiGon, veLuan } from './deHieu.ts';
 import { MAT_DA_DO } from './tuongMat.ts';
 import type { KetQuaMat } from './tuongMatMp.ts';
 import './tuongMat.css';
@@ -14,27 +17,36 @@ const so = (x: number, le = 2): string => x.toFixed(le).replace('.', ',');
 
 function veKetQua(k: KetQuaMat): Node[] {
   const g = giaiMat(k), co = CAC_KHOA.filter((khoa) => g.loi[khoa] !== null), luan = luanMat(k), muc = mucXet(k);
-  return [
-    el('table', {}, el('tbody', {}, ...CAC_KHOA.map((khoa) => el('tr', {},
-      el('th', { scope: 'row' }, GIAI[khoa].ten, el('small', {}, GIAI[khoa].y)), el('td', {}, dangSo(khoa, k.so[khoa])))))),
-    el('p', { class: 'ghi-chu' }, `Sai số ước ±${so(k.lech, 1)} % (trung bình 10 lần đo: 5 cỡ khung, ảnh và ảnh lật gương). `
-      + `Đầu quay ngang ${so(k.goc.quay, 0)}°, ngẩng/cúi ${so(k.goc.ngua, 0)}°. Tải thư viện ${so(k.taiMs / 1000, 1)} giây, `
-      + `đo ${so(k.doMs / 1000, 1)} giây.`),
+  const ng = luan === null ? null : noiGonTuLuan(luan, CHON.mat);
+  // Thu tu doc cho nguoi thuong (QUY_UOC muc 44): "Nói gọn" → loi giai → tung net; bang so do, sai so, so voi mau → nguoi ranh.
+  const ra: Node[] = [
+    ...(ng === null ? [] : [hopNoiGon(ng.cau)]),
     ...g.canhBao.map((c) => el('p', { class: 'canh-bao' }, c)),
     ...(luan === null ? [] : [
-      el('h3', {}, 'Lời giải (Claude tổng hợp từ nhiều sách, nhiều nước rồi chốt; tham khảo)'),
-      ...luan.flatMap((d) => [el('h4', {}, d.tieuDe), ...d.loi.map((c, i) => el('p', {}, i === 0 && d.tieuDe === 'Tổng luận' ? el('b', {}, c) : c))]),
+      el('h3', {}, 'Lời giải'),
+      ...veLuan(luan, ng?.dung),
       ...(co.length < IT_NHAT ? [] : [
         el('h3', {}, 'Từng nét'),
-        el('p', { class: 'ghi-chu' }, `So với ${String(SO_ANH_MAU)} ảnh chân dung người Đông Á (Nhật, Hàn, Hoa, Việt) mặt tự nhiên đo cùng máy.`),
         el('ul', {}, ...co.map((khoa) => {
           const n = netChot(khoa, muc), d = n?.d ?? 0;
-          return el('li', {}, el('b', {}, `${GIAI[khoa].ten} ${dangSo(khoa, k.so[khoa])}: `),
-            el('span', { class: `nhan nhan-${String(Math.sign(d))}` }, d > 0 ? 'Tốt' : d < 0 ? 'Cần lưu ý' : 'Trung tính'), ` ${n?.y ?? ''}.`,
-            el('small', {}, ` ${soVoiMau(khoa, k.so[khoa])}`));
+          return el('li', {}, el('b', {}, `${GIAI[khoa].ten}: `),
+            el('span', { class: `nhan nhan-${String(Math.sign(d))}` }, d > 0 ? 'Tốt' : d < 0 ? 'Cần lưu ý' : 'Trung tính'), ` ${n?.y ?? ''}.`);
         }))])]),
-    el('p', { class: 'ghi-chu' }, 'Số đo này (không có ảnh) được gửi kèm cho "AI tổng hợp mọi môn" nếu đo xong trước khi AI trả lời lần đầu.'),
+    chiTietRanh(
+      el('table', {}, el('tbody', {}, ...CAC_KHOA.map((khoa) => el('tr', {},
+        el('th', { scope: 'row' }, GIAI[khoa].ten, el('small', {}, GIAI[khoa].y)), el('td', {}, dangSo(khoa, k.so[khoa])))))),
+      el('p', {}, `Sai số ước ±${so(k.lech, 1)} % (trung bình 10 lần đo: 5 cỡ khung, ảnh và ảnh lật gương). `
+        + `Đầu quay ngang ${so(k.goc.quay, 0)}°, ngẩng/cúi ${so(k.goc.ngua, 0)}°. Tải thư viện ${so(k.taiMs / 1000, 1)} giây, `
+        + `đo ${so(k.doMs / 1000, 1)} giây.`),
+      co.length < IT_NHAT ? null : el('p', {}, `So với ${String(SO_ANH_MAU)} ảnh chân dung người Đông Á (Nhật, Hàn, Hoa, Việt) mặt tự nhiên `
+        + 'đo cùng máy:'),
+      co.length < IT_NHAT ? null : el('ul', {}, ...co.map((khoa) => el('li', {}, `${GIAI[khoa].ten} ${dangSo(khoa, k.so[khoa])}: `
+        + soVoiMau(khoa, k.so[khoa]))))),
+    el('p', { class: 'ghi-chu' }, 'Số đo này (không có ảnh) được gửi kèm cho "AI tổng hợp mọi môn" nếu đo xong trước khi AI trả lời lần đầu. '
+      + 'Lời giải do Claude tổng hợp từ nhiều sách, nhiều nước rồi soạn lại, chốt lời; chỉ để tham khảo.'),
   ];
+  giaiThuatNgu(ra, THUAT_NGU_MAT);
+  return ra;
 }
 
 export function veTuongMat(khoa: string): Node[] {
