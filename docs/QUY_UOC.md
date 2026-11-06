@@ -823,6 +823,9 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Sửa 06/11 (thước `tests/AI.test.ts`): sáu mục năm nay gửi AI gom nhóm (`gomMuc`): "Xấu: …. Vừa: …. Tốt, không cần kiêng: …" thay
   "(tốt)" / "(xấu)" từng mục — ngắn hơn cách cũ (gói hồ sơ giả 10/05/1990 sát hạn mức: thêm dòng 156 ký tự thì lượt đầu tụt
   còn 2.955 token ra). (5) đo lại đêm khác.
+- **AI thật 07/11 01:10 giờ VN** (lịch hẹn; `tong`, gia0, gia4): **8.639 token**; tổng hợp 2/2, bịa 0. (2) vẫn hết — gia4 "Hôm nay" chỉ
+  dùng nhịp sinh học, đọc đúng số. (5) **đỡ, chưa sạch** — không còn câu "tránh/kiêng", nhưng gia0 còn câu "Những công việc không nên
+  làm: Kim Lâu, Hoang Ốc, Tam Tai (đều “không phạm”)" — xếp nhầm nhóm rồi tự ghi chú; máy soi đêm chỉ bắt "tránh|kiêng".
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.

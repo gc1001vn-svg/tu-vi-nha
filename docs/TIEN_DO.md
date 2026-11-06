@@ -21,8 +21,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 ## 2. Việc kế
 
 - **Xong: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn; lời chốt vào AI (mục 41); hỏi thêm theo việc (mục 42).
-  Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đo lại 06/11: lỗi (2) hết; (5) còn dặn kiêng mục không
-  phạm — sửa 06/11 (gom mục Xấu / Tốt), **còn đo lại**.
+  Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đo lại 06/11: lỗi (2) hết; (5) đỡ, chưa sạch
+  (07/11 còn xếp ba mục không phạm vào "không nên làm").
 - **Xong lời giải dễ hiểu 14 môn** (QUY_UOC mục 43, 44; anh gật cả hai đợt 05/11).
 - **Xong máy dò chỉ tay** (mục 45; anh thử iPhone ổn 06/11). **Chờ duyệt: đuôi đường trí**
   (`docs/ke-hoach/2026-11-06-duoi-duong-tri.md`); sau: đợt 9.
