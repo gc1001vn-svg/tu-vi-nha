@@ -13,7 +13,7 @@ import type * as KinhDichTinh from '../kinhDich.ts';
 import type * as KinhDichChu from '../kinhDichChu.ts';
 import type * as KinhDichGiai from '../kinhDichGiai.ts';
 import { xemLaBan } from '../laBan.ts';
-import { namNay, type Muc } from '../namNay.ts';
+import { namNay } from '../namNay.ts';
 import { nhipSinhHoc, tenSo, thanSo } from '../soHoc.ts';
 import type * as TarotMod from '../tarot.ts';
 import type * as TarotLuan from '../tarotLuan.ts';
@@ -126,13 +126,21 @@ function tuVi(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   ]);
 }
 
+/** Sau muc nam nay gom theo Xấu / Vừa / Tốt (do AI that 06/11: ghi "(tốt)" tung muc, AI van dan kieng ca muc khong pham); ngan hon cach cu — goi sat han muc. */
+export function gomMuc(ds: readonly (readonly [string, string, string])[]): string {
+  const nhom = (ten: string, la: (d: string) => boolean): string[] => {
+    const x = ds.filter(([, , d]) => la(d)).map(([nhan, t]) => `${nhan} ${t}`);
+    return x.length === 0 ? [] : [`${ten}: ${x.join('; ')}.`];
+  };
+  return [...nhom('Xấu', (d) => d === 'xau'), ...nhom('Vừa', (d) => d !== 'xau' && d !== 'tot'), ...nhom('Tốt, không cần kiêng', (d) => d === 'tot')].join(' ');
+}
+
 function nam(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {
   const n = namNay(hs, tr.chinh, ngayXem);
-  const dong = (nhan: string, m: Muc): string => `${nhan} ${m.ten} (${m.mucDo === 'tot' ? 'tốt' : m.mucDo === 'xau' ? 'xấu' : 'vừa'})`;
   const l = luanNamNay(n);
   return muc(`Năm nay (năm âm ${n.canChi} ${String(n.namAm)}, ${String(n.tuoiMu)} tuổi mụ, tính từ Tết)`, [
-    `${[dong('Sao chiếu mệnh', n.sao), dong('Hạn', n.han), dong('Kim Lâu', n.kimLau), dong('Hoang Ốc', n.hoangOc),
-      dong('Tam Tai', n.tamTai), dong('Thái Tuế', n.thaiTue)].join('; ')}.`,
+    gomMuc(([['Sao chiếu mệnh', n.sao], ['Hạn', n.han], ['Kim Lâu', n.kimLau], ['Hoang Ốc', n.hoangOc], ['Tam Tai', n.tamTai], ['Thái Tuế', n.thaiTue]] as const)
+      .map(([nhan, m]) => [nhan, m.ten, m.mucDo] as const)),
     `Lời chốt của app: ${cham(cau(l[0]?.loi[0] ?? '', 120))} Việc lớn: ${cham((l[1]?.loi ?? []).map((x) => cau(x, 70)).join('; '))}`,
   ]);
 }

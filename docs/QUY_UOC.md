@@ -819,6 +819,9 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   nhịp sinh học, đọc đúng (thể chất, trí tuệ rất thấp, cảm xúc rất cao), không kể lá lúc sinh. (5) **đỡ, chưa hết** — 2/3 câu nói đúng
   "không phạm", còn một câu "Tránh các hoạt động lớn liên quan đến Kim Lâu, Hoang Ốc, Tam Tai" (có lẽ AI ghép lời chốt "việc lớn nên
   chậm và chắc" — do Kế Đô, Địa Võng — với ba mục không phạm).
+- Sửa 06/11 (thước `tests/AI.test.ts`): sáu mục năm nay gửi AI gom nhóm (`gomMuc`): "Xấu: …. Vừa: …. Tốt, không cần kiêng: …" thay
+  "(tốt)" / "(xấu)" từng mục — ngắn hơn cách cũ (gói hồ sơ giả 10/05/1990 sát hạn mức: thêm dòng 156 ký tự thì lượt đầu tụt
+  còn 2.955 token ra). (5) đo lại đêm khác.
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.

@@ -2,7 +2,7 @@
  * AI dot 7 phan 1 — phan khong can mang: goi du lieu gui di (du cac mon, khong ten), do chu bia. Ngay sinh GIA. Ke hoach: `docs/ke-hoach/2026-10-23-dot-7.md`.
  */
 import { vuaHanMuc } from '../src/giaoDien/ai/goi.ts';
-import { cau, duLieuNguoi, duLieuQue, duLieuTarot } from '../src/loi/ai/duLieu.ts';
+import { cau, duLieuNguoi, duLieuQue, duLieuTarot, gomMuc } from '../src/loi/ai/duLieu.ts';
 import { LOI_DAN, YEU_CAU } from '../src/loi/ai/loiDan.ts';
 import { TU_NGUOI, timBia } from '../src/loi/ai/kiemBia.ts';
 import { soNgay, tuSoNgay } from '../src/loi/amLich.ts';
@@ -95,6 +95,12 @@ describe('goi du lieu gui AI', () => {
       .toEqual([true, true, true, false]);
     const n = du(hs({ noiSinh: NUOC_NGOAI, muiGio: 'Europe/Paris' }), 120);
     expect([n.includes('múi giờ Europe/Paris'), n.includes('Cung Mọc ')]).toEqual([true, false]);
+  });
+
+  test('nam nay: gom muc Xấu / Vừa / Tốt, không cần kiêng (do AI that 06/11: AI dan kieng ca muc khong pham)', () => {
+    expect(gomMuc([['Sao chiếu mệnh', 'Kế Đô', 'xau'], ['Hạn', 'Địa Võng', 'xau'], ['Kim Lâu', 'Không phạm', 'tot'], ['Tam Tai', 'Năm thứ 2/3', 'vua']]))
+      .toBe('Xấu: Sao chiếu mệnh Kế Đô; Hạn Địa Võng. Vừa: Tam Tai Năm thứ 2/3. Tốt, không cần kiêng: Kim Lâu Không phạm.');
+    expect(du(hs()).split('\n').some((x) => /^(?:Xấu|Vừa|Tốt, không cần kiêng): /u.test(x))).toBe(true);
   });
 
   test('que, trai bai: ten que, hao dong, doan nen doc kem nguyen van; la, vi tri, xuoi nguoc', () => {

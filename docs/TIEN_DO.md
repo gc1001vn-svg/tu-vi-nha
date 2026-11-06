@@ -21,8 +21,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 ## 2. Việc kế
 
 - **Xong: lời giải chuyên gia** (`docs/ke-hoach/2026-11-0*.md`): 14 môn; lời chốt vào AI (mục 41); hỏi thêm theo việc (mục 42).
-  Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đo lại 06/11: lỗi (2) hết; (5) còn một câu dặn
-  "tránh … Kim Lâu, Hoang Ốc, Tam Tai" dù không phạm.
+  Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đo lại 06/11: lỗi (2) hết; (5) còn dặn kiêng mục không
+  phạm — sửa 06/11 (gom mục Xấu / Tốt), **còn đo lại**.
 - **Xong lời giải dễ hiểu 14 môn** (mục 43 Tử vi, Bát tự, Chiêm tinh — anh gật 05/11; mục 44 11 môn còn lại). Kế: máy dò chỉ
   tay gán nhầm đường (mục 4), rồi đợt 9.
 
