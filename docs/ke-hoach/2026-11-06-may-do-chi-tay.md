@@ -5,6 +5,7 @@
 - Hỏi: anh gửi 2–3 ảnh lòng bàn tay (ảnh đã thử 05/11 + 1–2 lần chụp lại) để đo? → Đáp: gửi. Ảnh chỉ nằm trong máy ảo phiên
   làm việc, không vào repo, xoá khi xong (luật 1 `CLAUDE.md`).
 - Hỏi: ô máy không chắc (sát ranh dài / vừa, rõ / mờ) để trống hay vẫn điền? → Đáp: để trống — chỉ điền ô máy đo chắc.
+- Hỏi: gật kế hoạch? → Đáp (anh, 06/11): "Gật phương án A, làm luôn" (tin chưa kèm ảnh: đo bằng ảnh mạng trước, ảnh anh gửi sau thì đo thêm).
 - Claude thử máy dò hiện tại 06/11 (bản dựng thật, Chromium) trên ảnh mạng giấy phép mở (Commons; Flickr qua Openverse): **lặp
   đúng lỗi của anh 2/2 ảnh lòng bàn tay rõ** — đường đời chạy ngang theo đường trí rồi đổ thẳng xuống giữa lòng tay, không vòng gò
   ngón cái; ảnh **mu bàn tay** vẫn bị vẽ "chỉ tay"; ảnh bàn tay đầy khung có lúc báo "không thấy tay" (đệm viền thì thấy).

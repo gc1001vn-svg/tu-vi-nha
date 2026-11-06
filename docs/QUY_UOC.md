@@ -605,7 +605,8 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   4 ảnh × bản gốc / bản tăng tương phản: đường thẳng tắp, cách đều, sai chỗ, kể cả ảnh có đường vẽ sẵn; đảo thứ tự ngón, đặt đường
   đời bên mép ngón út. Thử (1–2 ảnh) bật suy nghĩ, bảo tả bằng lời trước: không khá hơn → AI không định vị được chỉ tay, bỏ. Mã đọc
   ảnh, kịch bản đo ảnh: commit bc12f33 trên nhánh `claude/phan-3-ezkdpm` (dùng lại khi Groq có mô hình đọc ảnh mới).
-- **Máy tự dò** (`src/loi/chiTayDo.ts` lõi thuần, `src/giaoDien/khoi/chiTayMp.ts`; 01/11): MediaPipe Hand Landmarker (mô hình
+- **Máy tự dò** (`src/loi/chiTayDo.ts` lõi thuần, `src/giaoDien/khoi/chiTayMp.ts`; 01/11 — **sửa lại 06/11, cách mới và số đo ở
+  mục 45**; đoạn này và đoạn đo 01/11 dưới đây là bản cũ): MediaPipe Hand Landmarker (mô hình
   `hand_landmarker` float16 bản 1, 7,8 MB, Apache-2.0, trong `public/mediapipe/`; WASM dùng chung tướng mặt, không cài sẵn) tìm
   21 mốc bàn tay, ngưỡng 0,3 (mặc định 0,5); từ chối ảnh hai bàn tay, không thấy tay, tay nhỏ (cổ tay – gốc ngón giữa = L < 0,2
   cạnh dài ảnh). Xoay, lật ảnh về khung chuẩn: gốc ở cổ tay, trục dọc tới gốc ngón giữa, ngón cái bên phải (tay trái lật gương),
@@ -880,6 +881,34 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   "Nói gọn", nghĩa), hướng 2.975 → 3.010, tuổi 1.463 → 1.415, thần số 2.080 → 2.003, chọn ngày 6.187 → 5.032, phi tinh 3.511 → 3.179,
   Kinh Dịch 2.178 → 1.826, Kiều 1.782 → 1.829, Tarot 1.967 → 1.656; câu "tham khảo" mỗi khối 1 (Tarot 2 → 1; chọn ngày, phi tinh
   0 → 1). Tướng mặt, chỉ tay cần ảnh / chọn ô: chỉ đo qua thước.
+
+## 45. Máy dò chỉ tay sửa 06/11 — hết gán nhầm đường (kế hoạch `2026-11-06-may-do-chi-tay.md`; `src/loi/chiTayDo.ts`, `src/giaoDien/khoi/chiTayMp.ts`)
+- **Vì sao**: anh thử trên iPhone 05/11 — đường đời không vòng gò ngón cái, thiếu đường tình, chụp lại đổi ~1/4 ô. Kế hoạch ghi
+  máy cũ lặp đúng lỗi đường đời 2/2 ảnh rõ — **đo bằng đáp án thì không đúng**: đường đời cũ trên "Right Hand Palm" khớp 4/5 điểm;
+  lỗi đo được là đường trí bám nếp gấp khe ngón cái, đường tình trượt sang đường trí; ảnh mu bàn tay vẫn bị vẽ "chỉ tay".
+- **Bộ đo** (`scripts/doi-chieu/dap-an-chi-tay.json`; kịch bản `do-chi-tay-dap-an.mjs` chạy bản dựng thật trong Chromium): 13 ảnh
+  Commons / Flickr giấy phép mở, ảnh để ngoài repo (repo ghi tên, tác giả, giấy phép): 8 lòng tay, 4 mu tay, 1 hai tay. Đáp án điểm
+  (Claude đánh trước khi sửa, chỉ điểm chắc) trên 2 ảnh: 3 đường "Right Hand Palm", nếp ngang "Single transverse". Đường đúng khi
+  ≥ 2/3 điểm cách vết ≤ 0,06 L. Chụp lại = mỗi ảnh 5 bản nhiễu (xoay ±5°, thu 0,85, sáng 0,75 / 1,25), tính trên ô cả hai cùng điền.
+- **Đổi**: (1) mu bàn tay: chiều hình học (tích cổ tay→gốc trỏ × cổ tay→gốc út) ngược tay MediaPipe đoán (điểm ≥ 0,6) → từ chối
+  (đo: khớp 7/7 ảnh lòng tay, ngược 4/4 ảnh mu tay); ảnh khác tay cần xem (nam tả nữ hữu) → nhắc, vẫn dò; mốc lệch dáng (ngoài khoảng
+  đo trên 11 ảnh, nới ~50 %) → nhắc chụp thẳng. Thử đệm viền khi không thấy tay: ảnh duy nhất gặp ra mốc sai hoàn toàn → bỏ.
+  (2) Bản đồ nếp trên log độ sáng, giữ hướng nếp; quy hoạch động cộng nếp × (0,3 + 0,7·cos² lệch hướng nếp – hướng bước); điểm nếp
+  chặn trần 2,5 lần ngưỡng (nếp gấp đậm không lấn đường thật). (3) Thứ tự: đời (góc 95°–230° quanh gò ngón cái, bán kính 0,15–0,65 L)
+  → trí (nằm trên đường đời, trừ 0,10 L gần đầu đời; đi xuống phạt 0,4, lên 1,0 / điểm ảnh) → tình (dải dưới gốc ngón sâu 0,30 L phía
+  út, 0,18 L phía trỏ, trên đường trí ≥ 0,05 L) → sự nghiệp (tránh cả đường quy hoạch của đường đời). (4) Đoạn nếp: bỏ khúc hai đầu
+  yếu hơn 0,35 lần phần còn lại (vết không vượt đầu nếp). (5) Ô sát ranh để trống: dài đời 0,15 / 0,45 L ± 0,04; vòng: giữa + 0,10
+  ± 0,04; dài trí ± 0,04 L; dài tình ± 0,1 khoảng gốc ngón giữa – trỏ; cong 0,15 ± 0,04; dính 0,10 ± 0,03; đứt 0,05 ± 0,015; rõ / mờ
+  ± 12 %, đủ dài ± 25 %; sự nghiệp yếu hơn 0,4 lần trung vị ba đường kia → không có, 0,4–0,6 → trống. Chỉ tay ngang: không có đường
+  tình riêng (yếu hơn 0,45 lần đường trí; 0,45–0,6 trống) + trí rõ, tới phía ngón út, cuối cách gốc ngón ≤ 0,30 L, **gần thẳng**
+  (lệch dây cung < 0,045 L; gãy khúc như "Hand female 2/3" → trống). (6) Vẽ vết mượt (trung bình 7 điểm); ô tính trên vết thô.
+- **Số đo 06/11, máy cũ → mới** (7 ảnh lòng tay đo được; "My left hand's palm" — tay nghiêng — cả hai không thấy tay): đường theo
+  đáp án đúng 3/5 → 5/5; mu bàn tay, hai tay bị chặn 1/5 → 5/5; báo chỉ tay ngang 4/7 → 1/7 (đúng ảnh nếp ngang); chụp lại trùng
+  81 % → 91 % ô; ô trống 0 → 37 % (ảnh rõ nhất "Right Hand Palm" 8/16, phần lớn ô "đứt" và sự nghiệp); hai bàn tay khác nhau trùng
+  65 % → 70 % ô; dò chậm nhất 0,63 → 0,72 giây (máy ảo). Thước tổng hợp `tests/ChiTayDo.test.ts` thêm 4 ca, máy cũ trượt 3.
+- **Còn yếu**: đuôi đường trí phía ngón út có khi nhảy sang nếp khác ("Right Hand Palm": 4/5 điểm đúng, đuôi lệch); ô "dài" đường
+  trí 7/7 ảnh ra "dài", "đầu dính" 6/7 ra "tách" — có thể thiên lệch, chưa có đáp án chấm; ô trống 37 % vượt mức 1/3 kế hoạch đặt —
+  báo anh, không nới ngưỡng; bộ ảnh nhỏ, đáp án một người đánh, không để riêng được ảnh kiểm; chưa đo ảnh anh.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

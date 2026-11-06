@@ -9,7 +9,7 @@ import napSimd from '@mediapipe/tasks-vision/vision_wasm_internal.js?url';
 import wasmSimd from '@mediapipe/tasks-vision/vision_wasm_internal.wasm?url';
 import napCu from '@mediapipe/tasks-vision/vision_wasm_nosimd_internal.js?url';
 import wasmCu from '@mediapipe/tasks-vision/vision_wasm_nosimd_internal.wasm?url';
-import { CAO, KHUNG_ANH, RONG, doChiTay, type Diem, type KetQuaDo } from '../../loi/chiTayDo.ts';
+import { CAO, KHUNG_ANH, RONG, doChiTay, mocHopLe, type Diem, type KetQuaDo, type MocTay } from '../../loi/chiTayDo.ts';
 
 /** Doi mo hinh thi doi ten file (service worker giu ban cu theo ten). */
 const MO_HINH = `${import.meta.env.BASE_URL}mediapipe/hand_landmarker_f16_v1.task`;
@@ -17,7 +17,17 @@ const CANH_MAX = 1024;
 /** Cung mau hinh mau trong `chiTayVe.ts`. */
 const MAU = { heart: '#d33', head: '#27c', life: '#2a2', fate: '#a3c' } as const;
 
-export type KetQuaTay = KetQuaDo & { readonly anh: string; readonly taiMs: number; readonly doMs: number };
+/** `vetAnh`, `co`, `L`: vet theo diem anh dang do (canh dai ≤ CANH_MAX), co anh, do dai L (diem anh) — cho kich ban do so dap an. */
+export type KetQuaTay = KetQuaDo & {
+  readonly anh: string; readonly taiMs: number; readonly doMs: number;
+  readonly vetAnh: Readonly<Record<keyof KetQuaDo['vet'], readonly Diem[]>>; readonly co: readonly [number, number]; readonly L: number;
+  /** Khung chuan tren anh dang do (goc co tay, hai truc don vi) va moc da dua ve khung chuan — cho kich ban do. */
+  readonly khungAnh: { readonly o: Diem; readonly xv: Diem; readonly yv: Diem }; readonly mocChuan: MocTay;
+  /** MediaPipe doan tay + chieu hinh hoc + tay can xem — de nhan mu ban tay, nham tay. */
+  readonly tay: { readonly nhan: string; readonly diem: number; readonly chieu: 'trai' | 'phai'; readonly gioi: 'nam' | 'nu' };
+  /** Loi nhac khong chan (vd anh la tay phai trong khi xem tay trai). */
+  readonly nhac?: string;
+};
 
 function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContext2D] {
   const c = document.createElement('canvas');
@@ -28,7 +38,14 @@ function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContex
   return [c, g];
 }
 
-export async function doAnhTay(f: File, khiDo: () => void): Promise<KetQuaTay> {
+/** Tim tay → moc (0–1 theo anh `nho`), MediaPipe doan tay nao + diem. Thu 06/11 khong thay tay thi dem vien 25 % roi tim lai: anh
+ * duy nhat gap ("My left hand's palm", tay nghieng) ra moc sai hoan toan → bo, giu bao "khong thay tay — chup thang". */
+function timTay(hl: HandLandmarker, nho: HTMLCanvasElement): { moc: { x: number; y: number }[][]; nhan: string; diem: number } {
+  const r = hl.detect(nho);
+  return { moc: r.landmarks, nhan: r.handedness[0]?.[0]?.categoryName ?? '', diem: r.handedness[0]?.[0]?.score ?? 0 };
+}
+
+export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 'nam'): Promise<KetQuaTay> {
   const url = URL.createObjectURL(f);
   const goc = new Image();
   goc.src = url;
@@ -52,14 +69,20 @@ export async function doAnhTay(f: File, khiDo: () => void): Promise<KetQuaTay> {
       { baseOptions: { modelAssetPath: MO_HINH }, numHands: 2, minHandDetectionConfidence: 0.3, minHandPresenceConfidence: 0.3 });
     const taiMs = performance.now() - bd;
     khiDo();
-    const r = hl.detect(nho);
-    if (r.landmarks.length > 1) throw new Error('Ảnh có hai bàn tay — chụp một bàn tay thôi.');
-    const m = r.landmarks[0];
+    const r = timTay(hl, nho);
+    if (r.moc.length > 1) throw new Error('Ảnh có hai bàn tay — chụp một bàn tay thôi.');
+    const m = r.moc[0];
     if (m === undefined) throw new Error('Không thấy bàn tay trong ảnh — chụp lại: xoè cả bàn tay, đủ sáng, chụp thẳng.');
     const p = (k: number): Diem => ({ x: (m[k]?.x ?? 0) * w, y: (m[k]?.y ?? 0) * h });
     // Khung chuan: goc o co tay (0), truc y toi goc ngon giua (9), truc x vuong goc, chieu ve phia ngon cai (2).
     const o = p(0), L = Math.hypot(p(9).x - o.x, p(9).y - o.y);
     if (L / Math.max(w, h) < 0.2) throw new Error('Bàn tay quá nhỏ trong ảnh — chụp gần hơn, lòng bàn tay chiếm gần hết khung.');
+    // Chieu hinh hoc: tich (co → goc tro) × (co → goc ut), truc y anh huong xuong; < 0 la dang long tay PHAI (ngon cai ben phai khi
+    // ngon huong len) — hoac mu tay trai. MediaPipe doan tay theo dang ve ngoai (do 06/11: khop chieu 7/7 anh long tay, nguoc 4/4 anh mu
+    // tay) → nguoc nhau la mu ban tay.
+    const tich = (p(5).x - o.x) * (p(17).y - o.y) - (p(5).y - o.y) * (p(17).x - o.x), chieu = tich < 0 ? 'phai' : 'trai';
+    const tayMp = r.nhan === 'Left' ? 'trai' : r.nhan === 'Right' ? 'phai' : null;
+    if (tayMp !== null && r.diem >= 0.6 && tayMp !== chieu) throw new Error('Ảnh có vẻ là mu bàn tay — chụp lòng bàn tay (mặt có chỉ tay).');
     const yv = { x: (p(9).x - o.x) / L, y: (p(9).y - o.y) / L };
     let xv = { x: -yv.y, y: yv.x };
     if ((p(2).x - o.x) * xv.x + (p(2).y - o.y) * xv.y < 0) xv = { x: -xv.x, y: -xv.y };
@@ -77,18 +100,23 @@ export async function doAnhTay(f: File, khiDo: () => void): Promise<KetQuaTay> {
     for (let k = 0; k < xam.length; k++) xam[k] = (0.299 * (d[4 * k] ?? 0) + 0.587 * (d[4 * k + 1] ?? 0) + 0.114 * (d[4 * k + 2] ?? 0)) / 255;
     const mocChuan = { co: veChuan(p(0)), caiGoc: veChuan(p(1)), caiKhop: veChuan(p(2)), tro: veChuan(p(5)), giua: veChuan(p(9)),
       apUt: veChuan(p(13)), ut: veChuan(p(17)) };
-    const kq = doChiTay(xam, mocChuan);
+    if (!mocHopLe(mocChuan)) throw new Error('Bàn tay chụp nghiêng hoặc ngón co — chụp lại: để máy song song lòng bàn tay, xoè đều các ngón.');
+    const kq = doChiTay(xam, mocChuan), canXem = gioi === 'nam' ? 'trai' : 'phai';
     gNho.lineWidth = Math.max(3, L * 0.012);
     gNho.lineCap = 'round';
+    const vetAnh = { life: kq.vet.life.map(veAnh), head: kq.vet.head.map(veAnh), heart: kq.vet.heart.map(veAnh), fate: kq.vet.fate.map(veAnh) };
     for (const [ten, mau] of Object.entries(MAU) as [keyof typeof MAU, string][]) {
-      const v = kq.vet[ten].map(veAnh);
+      const v = vetAnh[ten];
       if (v.length < 2) continue;
       gNho.strokeStyle = mau;
       gNho.beginPath();
       v.forEach((q, k) => { if (k === 0) gNho.moveTo(q.x, q.y); else gNho.lineTo(q.x, q.y); });
       gNho.stroke();
     }
-    return { ...kq, anh: nho.toDataURL('image/jpeg', 0.85), taiMs, doMs: performance.now() - bd - taiMs };
+    return { ...kq, anh: nho.toDataURL('image/jpeg', 0.85), taiMs, doMs: performance.now() - bd - taiMs, vetAnh, co: [w, h], L,
+      khungAnh: { o, xv, yv }, mocChuan, tay: { nhan: r.nhan, diem: r.diem, chieu, gioi },
+      ...(chieu === canXem ? {} : { nhac: `Ảnh là tay ${chieu === 'trai' ? 'trái' : 'phải'}, app xem tay ${canXem === 'trai' ? 'trái' : 'phải'} `
+        + `(nam tả nữ hữu) — máy vẫn dò, nhưng nên chụp tay ${canXem === 'trai' ? 'trái' : 'phải'}.` }) };
   } finally {
     hl?.close();
     for (const c of [nho, chuan]) { c.width = 0; c.height = 0; } // Safari giu bo nho canvas toi luc don rac

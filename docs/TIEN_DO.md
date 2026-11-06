@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 06/11/2026 — anh gật lời giải dễ hiểu 14 môn; kế hoạch máy dò chỉ tay chờ duyệt (mục 2).
+Cập nhật: 06/11/2026 — máy dò chỉ tay sửa xong (QUY_UOC mục 45), chờ anh thử trên iPhone (mục 3).
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -16,7 +16,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 - "Gieo quẻ": Kinh Dịch, bói Kiều, tarot 78 lá (mục 24) · "Hôm nay": "Chọn ngày theo việc" (mục 17–19), "Chiêm tinh hôm nay".
 - "Phong thủy" (mục 20–22): la bàn + lưu hướng nhà · thước Lỗ Ban · phi tinh năm/tháng, hướng kỵ năm.
 - AI Groq miễn phí (mục 25, 41, 42): "AI tổng hợp" + hỏi đáp dưới mỗi người, quẻ, tarot, bói Kiều · chỉ tay (mục 27): chụp ảnh → máy tự dò 4
-  đường (ảnh không rời máy) điền sẵn ô, hoặc tự chọn → luật kèm mức tin → AI.
+  đường (ảnh không rời máy) điền sẵn ô, ô không chắc để trống, hoặc tự chọn → luật kèm mức tin → AI.
 
 ## 2. Việc kế
 
@@ -24,11 +24,11 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đo lại 06/11: lỗi (2) hết; (5) còn dặn kiêng mục không
   phạm — sửa 06/11 (gom mục Xấu / Tốt), **còn đo lại**.
 - **Xong lời giải dễ hiểu 14 môn** (QUY_UOC mục 43, 44; anh gật cả hai đợt 05/11).
-- **Chờ duyệt: máy dò chỉ tay** (`docs/ke-hoach/2026-11-06-may-do-chi-tay.md`); sau: đợt 9.
+- **Xong máy dò chỉ tay** (mục 45: 5/5 đường đúng đáp án, chặn 5/5 mu tay, chụp lại giữ 91 % ô); sau: đợt 9.
 
 ## 3. Cần anh
 
-- **Máy dò chỉ tay**: gật kế hoạch (mục 2); gửi vào chat 2–3 ảnh lòng bàn tay (ảnh thử 05/11 + chụp lại) — không vào repo.
+- **Máy dò chỉ tay**: thử trên iPhone (đường đời vòng gò ngón cái? có đường tình?); muốn em đo thêm thì gửi 2–3 ảnh vào chat.
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 25 nhánh, kiểm 04/11 đều đã nằm
   trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em.
@@ -36,8 +36,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 4. Nợ, chỗ chưa chắc
 
-- Chỉ tay (mục 27): máy dò chạy trên iPhone (anh 05/11) nhưng gán nhầm đường (đường đời không vòng gò ngón cái, thiếu đường
-  tình); chụp lại đổi ~1/4 ô; Nhật – Hàn đọc trích đoạn, thiếu sách Việt cổ.
+- Chỉ tay (mục 45): ô trống 37 % (> 1/3); đuôi đường trí có khi nhảy nếp; ô dài trí luôn "dài" — chưa chấm; đo 2 ảnh có
+  đáp án; Nhật – Hàn đọc trích đoạn, thiếu sách Việt cổ.
 - La bàn: bắc từ hay bắc thật chưa rõ (VN lệch <2°, anh so không lệch; mục 20).
 - Hạn tháng chưa so Altuvi; Mệnh chủ/Thân chủ theo *Toàn Thư*; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).
 - AI: lượt đầu chỉ lời chốt gọn; hỏi thêm (nhận bằng từ khoá) mới có lời đủ; gán sai cung ~1/10; máy dò tên lạ chưa bắt tên đứng đầu câu, có thể bắt nhầm tên chung (mục 42).

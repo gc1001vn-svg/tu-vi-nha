@@ -56,10 +56,10 @@ function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh): Node[] {
   return ra;
 }
 
-/** Nhac duoi anh may do — so do: QUY_UOC muc 27. */
-const DO_SAI = 'Máy dò mới đúng phần nào, chưa ai chấm đúng sai (thử 01/11 trên 4 ảnh mẫu): đường vẽ thường đúng vùng nhưng chưa bám '
-  + 'sát nếp; ảnh nghiêng, hai tay chồng nhau thì đường trí, đường sự nghiệp lệch hẳn. Đường màu lệch khỏi nếp tay thì sửa ô của '
-  + 'đường đó; không thấy đường màu nào là máy không tìm ra — tự chọn.';
+/** Nhac duoi anh may do — so do: QUY_UOC muc 27, 45. */
+const DO_SAI = 'Máy dò chấm thử 06/11 trên 7 ảnh mạng (ít ảnh — chưa bảo đảm mọi bàn tay): 2 ảnh có đáp án thì cả 5 đường đánh dấu '
+  + 'đều vẽ đúng; chụp lại (xoay, xa gần, sáng tối) giữ ~9/10 ô. Ô máy không chắc để "— chọn —": tự chọn theo hình mẫu. Đuôi đường trí '
+  + '(phía ngón út) có khi nhảy sang nếp khác — xem lại ô "dài" của đường trí. Đường màu lệch khỏi nếp tay thì sửa ô của đường đó.';
 
 /** Gia tri trong o chon (chuoi) → gia tri khung. */
 const docGia = (s: string): string | boolean | null => (s === '' ? null : s === 'true' ? true : s === 'false' ? false : s);
@@ -123,10 +123,10 @@ export function veChiTay(gioiTinh: GioiTinh): Node[] {
     nutAnh.disabled = true;
     anhKet.replaceChildren(el('p', { class: 'ghi-chu' }, 'Đang tải thư viện tìm bàn tay (lần đầu khoảng 21 MB)…'));
     import('./chiTayMp.ts')
-      .then((m) => m.doAnhTay(f, () => { anhKet.replaceChildren(el('p', { class: 'ghi-chu' }, 'Đang dò…')); }))
+      .then((m) => m.doAnhTay(f, () => { anhKet.replaceChildren(el('p', { class: 'ghi-chu' }, 'Đang dò…')); }, gioiTinh))
       .then((k) => {
         anhKet.replaceChildren(el('img', { class: 'anh-do', src: k.anh, alt: 'Ảnh tay, các đường máy dò được tô màu theo hình mẫu' }),
-          el('p', { class: 'canh-bao' }, DO_SAI));
+          ...(k.nhac === undefined ? [] : [el('p', { class: 'canh-bao' }, k.nhac)]), el('p', { class: 'canh-bao' }, DO_SAI));
         datKhung(k.khung);
       }, (e: unknown) => { anhKet.replaceChildren(el('p', { class: 'loi' }, e instanceof Error ? e.message : String(e))); })
       .finally(() => { nutAnh.disabled = false; });
