@@ -4,7 +4,7 @@
  * nguoi xem xac nhan, sua. Cach lam: ban do nep tren LOG do sang (bong do khong lam mat nep) — tri rieng lon nhat cua Hessian, hai co,
  * giu ca HUONG nep → moi duong mot quy hoach dong, chi cong nep chay CUNG HUONG buoc di (bo nep nhan cat ngang) → tim theo thu tu
  * duong doi (quanh go ngon cai) → duong tri (chung dau voi duong doi) → duong tinh (BAT BUOC nam tren duong tri) → su nghiep → do o;
- * o sat ranh de trong (null) cho nguoi xem tu chon. Thuan: khong trinh duyet, dong ho, ngau nhien. Nguong: QUY_UOC muc 27, 45.
+ * o sat ranh de trong (null) cho nguoi xem tu chon. Thuan: khong trinh duyet, dong ho, ngau nhien. Nguong: QUY_UOC muc 27, 45, 46.
  *
  * Khung chuan: goc toa do o co tay (moc 0), truc y huong ve goc ngon giua (moc 9), don vi L = khoang co tay → goc ngon giua; truc x
  * huong ve phia ngon cai (tay trai da lat guong). Diem anh (i, j): x = X0 + (i + 0,5)/PX, y = Y1 − (j + 0,5)/PX.
@@ -263,29 +263,57 @@ export function doChiTay(xam: Float32Array, moc: MocTay): KetQuaDo {
     (b, j) => (trongGo({ x: xI(triI0 - b), y: yJ(j) }) ? -1 : diemNep(triI0 - b, j)), (d) => (d > 0 ? 0.4 * d : 1.0 * -d),
     (b, j) => [triI0 - b, j], (b, j) => huongO(triI0 - b, j));
   const rTri = triJ.map((j, b) => (trongGo({ x: xI(triI0 - b), y: yJ(j) }) ? 0 : nep(triI0 - b, j)));
-  const dTri = doanNep(rTri, nguong, ho(0.08), 0.35 * nTri);
-  const vTri = vet(dTri, (b) => ({ x: xI(triI0 - b), y: yJ(triJ[b] ?? 0) }));
-  /** Hang (j) cua duong tri tai cot i — chi trong doan nep da giu. */
-  const triTai = (i: number): number | undefined => {
+  const dTri0 = doanNep(rTri, nguong, ho(0.08), 0.35 * nTri);
+  /** Hang (j) cua duong tri tai cot i — chi trong doan nep `d`. */
+  const taiTheo = (d: [number, number, number] | null) => (i: number): number | undefined => {
     const b = triI0 - i;
-    return dTri === null || b < dTri[0] || b > dTri[1] ? undefined : triJ[b];
+    return d === null || b < d[0] || b > d[1] ? undefined : triJ[b];
   };
 
   // 3) Duong tinh: cot tu mep ngon ut toi qua goc ngon tro 0,06 L, dai tu tren duong goc ngon 0,06 L xuong 0,30 L (phia ngon ut) nong dan
   // con 0,18 L (phia ngon tro — dap an 06/11: duong tinh o day chi cach goc ngon ~0,08 L), VA cach tren duong tri ≥ 0,05 L (ma cu tim
   // duong tinh truoc nen nua phia ngon tro hay nhay sang duong tri). Cong len ve phia ngon tro thi phat nhe, troi xuong phat nang.
-  // Doan phai bat dau trong 35 % dau (mep ngon ut).
+  // Doan phai bat dau trong 35 % dau (mep ngon ut). `tai`: duong tri dang giu (cot nao khong co duong tri thi khong buoc).
   const tinhI0 = Math.round(iX(moc.ut.x - 0.1)), tinhI1 = Math.round(iX(moc.tro.x + 0.06)), nTinh = Math.max(1, tinhI1 - tinhI0);
   const tinhLo = (b: number): number => Math.round(jY(mcpY(xI(tinhI0 + b)) + 0.06));
   const sauTinh = (x: number): number => 0.3 - 0.12 * Math.min(1, Math.max(0, (x - moc.ut.x) / (moc.tro.x - moc.ut.x || NHO)));
-  const tinhHi = (b: number): number => {
-    const x = xI(tinhI0 + b), t = triTai(tinhI0 + b), duoi = Math.round(jY(mcpY(x) - sauTinh(x)));
-    return Math.max(tinhLo(b) + 2, t === undefined ? duoi : Math.min(duoi, Math.round(t - 0.05 * px)));
+  const timTinh = (tai: (i: number) => number | undefined): { J: number[]; r: number[]; d: [number, number, number] | null } => {
+    const hi = (b: number): number => {
+      const x = xI(tinhI0 + b), t = tai(tinhI0 + b), duoi = Math.round(jY(mcpY(x) - sauTinh(x)));
+      return Math.max(tinhLo(b) + 2, t === undefined ? duoi : Math.min(duoi, Math.round(t - 0.05 * px)));
+    };
+    const J = quyHoach(nTinh, tinhLo, hi, (b, j) => diemNep(tinhI0 + b, j), (d) => (d < 0 ? 0.4 * -d : 1.0 * d),
+      (b, j) => [tinhI0 + b, j], (b, j) => huongO(tinhI0 + b, j));
+    const r = J.map((j, b) => nep(tinhI0 + b, j));
+    return { J, r, d: doanNep(r, nguong, ho(0.08), 0.35 * nTinh) };
   };
-  const tinhJ = quyHoach(nTinh, tinhLo, tinhHi, (b, j) => diemNep(tinhI0 + b, j), (d) => (d < 0 ? 0.4 * -d : 1.0 * d),
-    (b, j) => [tinhI0 + b, j], (b, j) => huongO(tinhI0 + b, j));
-  const rTinh = tinhJ.map((j, b) => nep(tinhI0 + b, j));
-  const dTinh = doanNep(rTinh, nguong, ho(0.08), 0.35 * nTinh);
+
+  // Duoi vong (ke hoach 2026-11-06-duoi-duong-tri.md): quy hoach bat vet tri di du moi cot toi mep ngon ut — het nep tri van phai bam nep
+  // khac (anh "Right Hand Palm": vet xuong thap nhat roi vong nguoc len 0,10 L, chay theo dau duong tinh toi mep tay; duong tinh bi day len).
+  // Cho thap nhat cua vet (sau 30 % dau) ma sau do vet vong len ≥ 0,05 L (sau cho thap nhat vet khong xuong lai duoc nua) → do lai duong
+  // tinh khi bo duoi; duong tinh chay doc duoi (chung ≥ 0,10 L, cach ≤ 0,03 L) thi duoi la cua duong tinh: duong tri dung o cho thap
+  // nhat. Khong chung → giu duoi (co the la duong tri cong len that — it gap), o "dai" duong tri de trong. Khong co duoi vong: nhu cu.
+  const kCat = ((): number | undefined => {
+    if (dTri0 === null) return undefined;
+    const y = Array.from({ length: dTri0[1] - dTri0[0] + 1 }, (_, k) => yJ(triJ[dTri0[0] + k] ?? 0));
+    const kMin = y.lastIndexOf(Math.min(...y));
+    return kMin >= 0.3 * y.length && Math.max(...y.slice(kMin)) - (y[kMin] ?? 0) >= 0.05 ? kMin : undefined;
+  })();
+  let dTri = dTri0, tinh = timTinh(taiTheo(dTri0)), duoiNgo = false;
+  if (dTri0 !== null && kCat !== undefined) {
+    let c = dTri0[0] + kCat, hoLon = 0, g = 0;
+    while (c > dTri0[0] && (rTri[c] ?? 0) < nguong) c--;
+    for (let b = dTri0[0]; b <= c; b++) { g = (rTri[b] ?? 0) < nguong ? g + 1 : 0; hoLon = Math.max(hoLon, g); }
+    const dCat: [number, number, number] = [dTri0[0], c, hoLon], t2 = timTinh(taiTheo(dCat));
+    let chung = 0;
+    for (let b = c + 1; b <= dTri0[1]; b++) {
+      const bt = triI0 - b - tinhI0, jt = t2.d !== null && bt >= t2.d[0] && bt <= t2.d[1] ? t2.J[bt] : undefined;
+      if (jt !== undefined && Math.abs(jt - (triJ[b] ?? 0)) <= 0.03 * px) chung += 1;
+    }
+    if (chung / px >= 0.1) { dTri = dCat; tinh = t2; } else duoiNgo = true;
+  }
+  const vTri = vet(dTri, (b) => ({ x: xI(triI0 - b), y: yJ(triJ[b] ?? 0) }));
+  const { J: tinhJ, r: rTinh, d: dTinh } = tinh;
   const vTinh = vet(dTinh, (b) => ({ x: xI(tinhI0 + b), y: yJ(tinhJ[b] ?? 0) }));
 
   // 4) Duong su nghiep: hang tu tren co tay len, lech truc giua ≤ 0,22 L, toi duoi goc ngon; cam di sat duong doi (≤ 0,07 L) — tinh ca
@@ -340,7 +368,7 @@ export function doChiTay(xam: Float32Array, moc: MocTay): KetQuaDo {
   const eT = ngang === true ? eTri : eTinh, roT = ngang === true ? roTri : roTinh;
   const tLen = eT === undefined ? 0 : (eT.x - moc.giua.x) / (moc.tro.x - moc.giua.x || NHO);
   const dauTri = sTri, cuoiTri = eTri;
-  const daiTri = cuoiTri === undefined ? null : ((): 'long' | 'medium' | 'short' | null => {
+  const daiTri = cuoiTri === undefined || duoiNgo ? null : ((): 'long' | 'medium' | 'short' | null => {
     const dai = moc.ut.x + 0.25 * (moc.apUt.x - moc.ut.x), ngan = (moc.giua.x + moc.apUt.x) / 2;
     if (Math.abs(cuoiTri.x - dai) < 0.04 || Math.abs(cuoiTri.x - ngan) < 0.04) return null;
     return cuoiTri.x <= dai ? 'long' : cuoiTri.x >= ngan ? 'short' : 'medium';

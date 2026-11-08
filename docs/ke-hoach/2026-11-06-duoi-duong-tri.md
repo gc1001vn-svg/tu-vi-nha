@@ -2,6 +2,7 @@
 
 - Hỏi: việc kế sau máy dò chỉ tay (QUY_UOC mục 45) → Đáp (anh, 06/11): "Thử rồi, ổn, làm tiếp đuôi đường trí".
 - Ô đuôi không chắc: theo chốt kế hoạch trước — để trống, không đoán.
+- Hỏi: gật kế hoạch? → Đáp (anh, 08/11): "Xứ lý với phương án tối ưu nhất" → làm phương án A (đề xuất).
 - Claude soi 06/11 trên 7 ảnh mạng (bản đang chạy): ảnh "Right Hand Palm" (có đáp án) đường trí đổ dốc xuống
   tới (−0,18; 0,47 L), nhưng vết bỏ đường trí ở chỗ thấp nhất (−0,15; 0,64), **vòng ngược lên 0,10 L** rồi chạy theo đầu
   đường tình phía ngón út tới mép tay — đường tình bị đẩy lên trên, mất đầu thật. Vì quy hoạch bắt vết đường trí đi đủ

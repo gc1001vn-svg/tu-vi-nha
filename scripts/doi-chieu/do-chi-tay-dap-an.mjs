@@ -5,6 +5,7 @@
 //    ghi "khong co" ma may ve (dap an chi danh diem CHAC — Claude danh truoc khi sua may do, khong sua theo ket qua may);
 //  - 5 ban nhieu (xoay ±5°, thu 0,85, toi 0,75, sang 1,25) → % o trung voi ban goc (bo o trong o mot trong hai), % o trong;
 //  - o trung giua cac ban tay KHAC nhau (cao = may doan rap khuon).
+//  - duoi duong tri (them 08/11): vet tri NHAY sang dap an duong tinh; o "dai" theo `duoiTri`; phan duoi co giu qua ban nhieu.
 // Anh `rieng: true` (de rieng) chi bao so tong khi co `--ca-rieng`; luc chinh may do khong chay.
 //   npm run build && NODE_PATH=$(npm root -g) node scripts/doi-chieu/do-chi-tay-dap-an.mjs <thu_muc_anh> [--dist <dist>] [--ca-rieng]
 //     [--them <dap_an_rieng.json>]   (them anh khong vao repo, vd anh nguoi nha: cung khuon, file nam ngoai repo)
@@ -67,6 +68,40 @@ const kc = (p, v) => {
   return m;
 };
 
+/**
+ * Duoi duong tri (ke hoach 2026-11-06-duoi-duong-tri.md), tren ban goc hoac ban nhieu (`n`: diem dap an xoay / thu theo cung canvas):
+ *  - NHAY: vet tri chay doc dap an duong tinh — ≥ 0,05 L vet cach duong tinh ≤ 0,04 L ma cach dap an duong tri > 0,06 L (chi xet anh
+ *    co dap an ca hai duong, khong phai chi tay ngang);
+ *  - o "dai" duong tri so voi `duoiTri` — `cuoi`: diem cuoi chac; `toiIt`: duong tri toi it nhat toi day — cung nguong voi loi may do
+ *    (moc ngon: ut + 1/4 khoang ut → ap ut; giua khoang giua → ap ut), diem dap an sat nguong ± 0,04 L thi nhan ca hai bac.
+ */
+const THU = ['short', 'medium', 'long'];
+const phanDuoi = (a, g, n = {}) => {
+  const [w, h] = g.co, L = g.L, goc = ((n.xoay ?? 0) * Math.PI) / 180, s = n.thu ?? 1;
+  const ve = ([x, y]) => { // diem dap an (0–1 anh goc) → diem anh dang do, qua phep xoay / thu quanh tam canvas
+    const dx = (x - 0.5) * w, dy = (y - 0.5) * h;
+    return { x: w / 2 + s * (Math.cos(goc) * dx - Math.sin(goc) * dy), y: h / 2 + s * (Math.sin(goc) * dx + Math.cos(goc) * dy) };
+  };
+  const kq = { nhay: null, lop: null, moTa: [] }, daTri = a.duong?.head, daTinh = a.duong?.heart, vTri = g.vetAnh.head;
+  if (Array.isArray(daTri) && Array.isArray(daTinh) && JSON.stringify(daTri) !== JSON.stringify(daTinh)) {
+    const pTri = daTri.map(ve), pTinh = daTinh.map(ve);
+    kq.nhay = vTri.filter((q) => kc(q, pTinh) <= 0.04 * L && kc(q, pTri) > 0.06 * L).length / 160; // vet cach nhau ~1/160 L
+    kq.moTa.push(kq.nhay >= 0.05 ? `đuôi trí NHẢY sang đường tình ${kq.nhay.toFixed(2)} L` : 'đuôi trí không nhảy');
+  }
+  if (a.duoiTri !== undefined) {
+    const p = ve(a.duoiTri.cuoi ?? a.duoiTri.toiIt), { o, xv } = g.khungAnh, m = g.mocChuan;
+    const X = ((p.x - o.x) * xv.x + (p.y - o.y) * xv.y) / L;
+    const nDai = m.ut.x + 0.25 * (m.apUt.x - m.ut.x), nNgan = (m.giua.x + m.apUt.x) / 2;
+    const lop = X <= nDai ? 'long' : X >= nNgan ? 'short' : 'medium', satDai = Math.abs(X - nDai) < 0.04, satNgan = Math.abs(X - nNgan) < 0.04;
+    const nhan = a.duoiTri.cuoi !== undefined ? (satDai ? ['medium', 'long'] : satNgan ? ['short', 'medium'] : [lop])
+      : THU.slice(THU.indexOf(satDai ? 'medium' : satNgan ? 'short' : lop));
+    const may = g.khung.duong.head.length;
+    kq.lop = may === null ? 'trong' : nhan.includes(may) ? 'dung' : 'sai';
+    kq.moTa.push(`ô dài trí ${may ?? 'trống'} (đáp án ${nhan.join('/')}) ${{ trong: 'trống', dung: 'đúng', sai: 'SAI' }[kq.lop]}`);
+  }
+  return kq;
+};
+
 const b = await chromium.launch();
 try {
   const p = await b.newPage();
@@ -96,6 +131,7 @@ try {
 
   const tong = { dung: 0, sai: 0, thieu: 0, thua: 0, khongCo: 0, theoDuong: {} }, on = [0, 0], tr = [0, 0], dau = [], thoiGian = [];
   const tuChoi = { dung: 0, sot: 0 }, ngang = { bao: 0, anh: 0, saiDapAn: 0 };
+  const duoi = { nhay: 0, coHai: 0, dung: 0, sai: 0, trong: 0, giu: [0, 0] }; // giu: phan duoi ban nhieu trung ban goc
   for (const a of DS) {
     if (!existsSync(join(thuMuc, a.ten))) { console.log(`${a.ten}: chua tai`); continue; }
     const g = await doTep(a, {});
@@ -129,18 +165,26 @@ try {
       tong[x] += 1; td[x] += 1;
       return `${d} ${x === 'dung' ? 'đúng' : 'SAI'} ${String(gan)}/${String(da.length)}`;
     });
+    const dg = phanDuoi(a, g);
+    if (dg.nhay !== null) { duoi.coHai += 1; if (dg.nhay >= 0.05) duoi.nhay += 1; }
+    if (dg.lop !== null) duoi[dg.lop] += 1;
     const nh = [];
     for (const [ten, n] of nhanh ? [] : NHIEU) {
       const r = await doTep(a, n);
       if (r.loi !== undefined) { nh.push(`${ten}: lỗi`); continue; }
       const [t, n2] = trung(g.khung, r.khung);
       on[0] += t; on[1] += n2;
+      const dn = phanDuoi(a, r, n);
+      if (dg.nhay !== null || dg.lop !== null) {
+        duoi.giu[1] += 1;
+        if ((dn.nhay === null || (dn.nhay >= 0.05) === (dg.nhay >= 0.05)) && dn.lop === dg.lop) duoi.giu[0] += 1;
+      }
       nh.push(`${ten} ${String(t)}/${String(n2)}`);
     }
     const [o0, o1] = trong(g.khung);
     tr[0] += o0; tr[1] += o1;
     if (a.rieng !== true) dau.push(g.khung);
-    console.log(`${tieu} ${ketDuong.join(' · ')} · trống ${String(o0)}/${String(o1)} · ${(g.doMs / 1000).toFixed(2)} s${g.nhac ? ` · nhắc: ${g.nhac}` : ''}`);
+    console.log(`${tieu} ${[...ketDuong, ...dg.moTa].join(' · ')} · trống ${String(o0)}/${String(o1)} · ${(g.doMs / 1000).toFixed(2)} s${g.nhac ? ` · nhắc: ${g.nhac}` : ''}`);
     console.log(`${' '.repeat(35)}nhiễu: ${nh.join(' · ')} · ${JSON.stringify(g.khung)}`);
   }
   const khac = [0, 0];
@@ -150,6 +194,8 @@ try {
     + ` · theo đường ${JSON.stringify(tong.theoDuong)}`);
   console.log(`Mu bàn tay, hai tay: từ chối / nhắc đúng ${String(tuChoi.dung)} · sót ${String(tuChoi.sot)} · báo chỉ tay ngang ${String(ngang.bao)}/${String(ngang.anh)} ảnh`
     + ` lòng tay (sai đáp án ${String(ngang.saiDapAn)})`);
+  console.log(`Đuôi trí: nhảy sang đường tình ${String(duoi.nhay)}/${String(duoi.coHai)} ảnh có đáp án hai đường · ô dài trí theo đáp án đuôi:`
+    + ` đúng ${String(duoi.dung)} · sai ${String(duoi.sai)} · trống ${String(duoi.trong)} · phán đuôi giữ qua bản nhiễu ${pt(duoi.giu)}`);
   console.log(`Chụp lại (5 bản nhiễu): ô trùng ${pt(on)} · ô trống ${pt(tr)} · giữa các bàn tay khác nhau ${pt(khac)}`
     + ` · dò ${thoiGian.length === 0 ? '—' : `${(Math.max(...thoiGian) / 1000).toFixed(2)} s chậm nhất`}`);
 } finally {

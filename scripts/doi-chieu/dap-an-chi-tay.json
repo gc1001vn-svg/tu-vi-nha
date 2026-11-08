@@ -1,5 +1,5 @@
 {
-  "ghiChu": "Dap an may do chi tay (ke hoach 2026-11-06-may-do-chi-tay.md). Anh tai vao thu muc tam, KHONG vao repo. Diem: toa do chuan hoa (0–1) theo anh, Claude danh 06/11 TRUOC khi sua may do, chi diem CHAC (anh lam ro bang chia nen mo, keo tuong phan; khong dung ban do nep cua may). duong: null = khong co; thieu khoa = khong danh (khong chac). gioi: tay can xem theo nam ta nu huu (anh tay trai → nam, tay phai → nu). cat: cat mot phan anh (anh hai ban tay). tuChoi: may phai tu choi hoac nhac chup lai (mu ban tay, hai tay).",
+  "ghiChu": "Dap an may do chi tay (ke hoach 2026-11-06-may-do-chi-tay.md). Anh tai vao thu muc tam, KHONG vao repo. Diem: toa do chuan hoa (0–1) theo anh, Claude danh 06/11 TRUOC khi sua may do, chi diem CHAC (anh lam ro bang chia nen mo, keo tuong phan; khong dung ban do nep cua may). duong: null = khong co; thieu khoa = khong danh (khong chac). gioi: tay can xem theo nam ta nu huu (anh tay trai → nam, tay phai → nu). cat: cat mot phan anh (anh hai ban tay). tuChoi: may phai tu choi hoac nhac chup lai (mu ban tay, hai tay). duoiTri (them 08/11, ke hoach 2026-11-06-duoi-duong-tri.md, danh truoc khi sua): cuoi = diem cuoi chac cua duong tri; toiIt = duong tri toi it nhat toi day.",
   "anh": [
     { "ten": "Right_Hand_Palm.png", "tieuDe": "Right Hand Palm", "tacGia": "Eyefive45", "giayPhep": "CC BY-SA 4.0",
       "trang": "https://commons.wikimedia.org/w/index.php?curid=127044270",
@@ -7,9 +7,10 @@
       "duong": {
         "life": [[0.573, 0.628], [0.521, 0.670], [0.479, 0.731], [0.441, 0.791], [0.428, 0.850]],
         "head": [[0.620, 0.581], [0.545, 0.600], [0.470, 0.643], [0.390, 0.682], [0.320, 0.749]],
-        "heart": [[0.300, 0.628], [0.380, 0.607], [0.440, 0.585], [0.500, 0.565], [0.560, 0.548]]
+        "heart": [[0.140, 0.656], [0.180, 0.651], [0.220, 0.645], [0.260, 0.637], [0.300, 0.628], [0.380, 0.607], [0.440, 0.585], [0.500, 0.565], [0.560, 0.548]]
       },
-      "ghiChuAnh": "Tay phai. Duong doi la cung rong; nep khe ngon cai (x 0,61–0,72, y 0,68) khong phai duong doi." },
+      "duoiTri": { "toiIt": [0.320, 0.749] },
+      "ghiChuAnh": "Tay phai. Duong doi la cung rong; nep khe ngon cai (x 0,61–0,72, y 0,68) khong phai duong doi. Them 08/11 (truoc khi sua duoi duong tri, anh lam mo van da): 4 diem duong tinh phia ngon ut x 0,14–0,26 — duong tinh chay toi mep tay o y ~0,66; duong tri toi it nhat toi diem dap an cuoi, diem cuoi that khong chac nen khong danh." },
     { "ten": "Single_transverse_palmar_crease_adult.jpg", "tieuDe": "Single transverse palmar crease adult", "tacGia": "WurdBendur",
       "giayPhep": "CC BY-SA 4.0", "trang": "https://commons.wikimedia.org/w/index.php?curid=3534279",
       "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Single_transverse_palmar_crease_adult.jpg/1280px-Single_transverse_palmar_crease_adult.jpg",
@@ -18,7 +19,8 @@
         "heart": [[0.112, 0.596], [0.187, 0.582], [0.267, 0.564], [0.347, 0.548], [0.400, 0.536]],
         "head": [[0.112, 0.596], [0.187, 0.582], [0.267, 0.564], [0.347, 0.548], [0.400, 0.536]]
       },
-      "ghiChuAnh": "Tay phai, chi tay ngang (ten anh): nep ngang la ca duong tinh lan duong tri. Duong doi BO khoi dap an (06/11): 4 diem danh luc dau doi sang khung chuan nam o x < 0 (giua long tay, phia ngon ut cua truc ngon giua) — cho cua duong su nghiep hon duong doi; khong chac nen bo, khong thay bang diem khac." },
+      "duoiTri": { "cuoi": [0.112, 0.596] },
+      "ghiChuAnh": "Tay phai, chi tay ngang (ten anh): nep ngang la ca duong tinh lan duong tri; nep cham mep tay phia ngon ut (diem cuoi, them 08/11). Duong doi BO khoi dap an (06/11): 4 diem danh luc dau doi sang khung chuan nam o x < 0 (giua long tay, phia ngon ut cua truc ngon giua) — cho cua duong su nghiep hon duong doi; khong chac nen bo, khong thay bang diem khac." },
     { "ten": "Hand_female_2.jpg", "tieuDe": "Hand female 2", "tacGia": "Sciencia58", "giayPhep": "CC BY-SA 4.0",
       "trang": "https://commons.wikimedia.org/w/index.php?curid=107062298",
       "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Hand_female_2.jpg/1280px-Hand_female_2.jpg", "gioi": "nam",

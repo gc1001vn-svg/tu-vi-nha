@@ -913,9 +913,27 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   đáp án đúng 3/5 → 5/5; mu bàn tay, hai tay bị chặn 1/5 → 5/5; báo chỉ tay ngang 4/7 → 1/7 (đúng ảnh nếp ngang); chụp lại trùng
   81 % → 91 % ô; ô trống 0 → 37 % (ảnh rõ nhất "Right Hand Palm" 8/16, phần lớn ô "đứt" và sự nghiệp); hai bàn tay khác nhau trùng
   65 % → 70 % ô; dò chậm nhất 0,63 → 0,72 giây (máy ảo). Thước tổng hợp `tests/ChiTayDo.test.ts` thêm 4 ca, máy cũ trượt 3.
-- **Còn yếu**: đuôi đường trí phía ngón út có khi nhảy sang nếp khác ("Right Hand Palm": 4/5 điểm đúng, đuôi lệch); ô "dài" đường
+- **Còn yếu**: đuôi đường trí phía ngón út có khi nhảy sang nếp khác ("Right Hand Palm": 4/5 điểm đúng, đuôi lệch — sửa 08/11,
+  mục 46); ô "dài" đường
   trí 7/7 ảnh ra "dài", "đầu dính" 6/7 ra "tách" — có thể thiên lệch, chưa có đáp án chấm; ô trống 37 % vượt mức 1/3 kế hoạch đặt —
   báo anh, không nới ngưỡng; bộ ảnh nhỏ, đáp án một người đánh, không để riêng được ảnh kiểm; chưa đo ảnh anh.
+
+## 46. Đuôi đường trí dừng đúng chỗ (kế hoạch 06/11 `2026-11-06-duoi-duong-tri.md`; anh 08/11: "Xứ lý với phương án tối ưu nhất" → phương án A)
+- **Vì sao**: vết đường trí phải đi đủ mọi cột tới mép ngón út, hết nếp trí vẫn bám nếp khác. "Right Hand Palm": vết xuống thấp nhất
+  rồi vòng ngược lên 0,10 L, chạy theo đầu đường tình phía ngón út tới mép tay; đường tình bị đẩy lên trên, mất đoạn đầu thật.
+- **Đáp án thêm 08/11** (Claude đánh trước khi sửa, trên ảnh làm mờ vân da): "Right Hand Palm" 4 điểm đường tình phía ngón út
+  (x 0,14–0,26) + đường trí tới ít nhất điểm đáp án cuối; "Single transverse" nếp ngang chạm mép tay. Kịch bản đo thêm phán đuôi:
+  NHẢY (≥ 0,05 L vết trí cách đáp án đường tình ≤ 0,04 L mà cách đáp án đường trí > 0,06 L), ô "dài" so đáp án đuôi, phán đuôi có
+  giữ qua 5 bản nhiễu. Tìm thêm ảnh mạng (15 truy vấn mới, sau 54 truy vấn 06/11): không ra ảnh dùng được → không để riêng được ảnh kiểm.
+- **Đổi**: chỗ thấp nhất của vết trí (lần chạm cuối, sau 30 % đầu) mà sau đó vết vòng lên ≥ 0,05 L → dò lại đường tình khi bỏ đuôi;
+  đường tình chạy dọc đuôi (chung ≥ 0,10 L, cách ≤ 0,03 L) → đuôi là của đường tình, đường trí dừng ở chỗ thấp nhất; không chung →
+  giữ đuôi (có thể đường trí cong lên thật), ô "dài" để trống. Không có đuôi vòng → không dò lại gì.
+- **Số đo 08/11, trước → sau**: đuôi trí nhảy sang đường tình 1/1 → 0/1; đường tình "Right Hand Palm" (9 điểm đáp án) SAI 4/9 →
+  đúng 8/9; đường theo đáp án đúng 4/5 → 5/5; ô "dài" đường trí theo đáp án đuôi đúng 2/2 → 2/2 ("Right Hand Palm" dài → vừa);
+  phán đuôi giữ qua bản nhiễu 60 % → 90 %; chụp lại trùng 91 % → 93 % ô; ô trống 37 % → 36 %; 6 ảnh còn lại không đổi ô nào (cả
+  5 bản nhiễu). Thước tổng hợp thêm 2 ca (vòng qua nếp nhánh sang đầu đường tình; đường trí cong lên thật) — mã 06/11 trượt cả 2.
+- **Còn yếu**: đáp án đuôi chỉ 2 ảnh; vết đi qua vân da mà không vòng vẫn có thể vượt đầu nếp (phương án B, chưa làm); đường trí
+  "Right Hand Palm" dừng ở chỗ vết rời nếp, chưa xuống tới điểm đáp án cuối (vẫn 4/5 điểm như trước).
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

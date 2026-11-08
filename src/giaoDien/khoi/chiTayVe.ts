@@ -56,10 +56,11 @@ function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh): Node[] {
   return ra;
 }
 
-/** Nhac duoi anh may do — so do: QUY_UOC muc 27, 45. */
-const DO_SAI = 'Máy dò chấm thử 06/11 trên 7 ảnh mạng (ít ảnh — chưa bảo đảm mọi bàn tay): 2 ảnh có đáp án thì cả 5 đường đánh dấu '
-  + 'đều vẽ đúng; chụp lại (xoay, xa gần, sáng tối) giữ ~9/10 ô. Ô máy không chắc để "— chọn —": tự chọn theo hình mẫu. Đuôi đường trí '
-  + '(phía ngón út) có khi nhảy sang nếp khác — xem lại ô "dài" của đường trí. Đường màu lệch khỏi nếp tay thì sửa ô của đường đó.';
+/** Nhac duoi anh may do — so do: QUY_UOC muc 27, 45, 46. */
+const DO_SAI = 'Máy dò chấm thử 08/11 trên 7 ảnh mạng (ít ảnh — chưa bảo đảm mọi bàn tay): 2 ảnh có đáp án thì cả 5 đường đánh dấu '
+  + 'đều vẽ đúng; chụp lại (xoay, xa gần, sáng tối) giữ ~9/10 ô. Ô máy không chắc để "— chọn —": tự chọn theo hình mẫu. Ô "dài" '
+  + 'đường trí vẫn nên tự xem lại (máy đã chặn kiểu đuôi vòng sang đường tình, chưa chặn hết kiểu khác). Đường màu lệch khỏi nếp tay '
+  + 'thì sửa ô của đường đó.';
 
 /** Gia tri trong o chon (chuoi) → gia tri khung. */
 const docGia = (s: string): string | boolean | null => (s === '' ? null : s === 'true' ? true : s === 'false' ? false : s);

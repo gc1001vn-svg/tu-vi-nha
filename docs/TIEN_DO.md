@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 06/11/2026 — anh thử máy dò chỉ tay ổn; kế hoạch đuôi đường trí chờ duyệt (mục 2).
+Cập nhật: 08/11/2026 — đuôi đường trí sửa xong (QUY_UOC mục 46), chờ anh thử trên iPhone (mục 3).
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -24,12 +24,11 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đo lại 06/11: lỗi (2) hết; (5) sửa gốc 08/11 (yêu cầu
   ép Lưu ý 3–5 câu) — **còn đo lại** (gia0 ×3, 01:10 09/11).
 - **Xong lời giải dễ hiểu 14 môn** (QUY_UOC mục 43, 44; anh gật cả hai đợt 05/11).
-- **Xong máy dò chỉ tay** (mục 45; anh thử iPhone ổn 06/11). **Chờ duyệt: đuôi đường trí**
-  (`docs/ke-hoach/2026-11-06-duoi-duong-tri.md`); sau: đợt 9.
+- **Xong máy dò chỉ tay** (mục 45, anh thử ổn 06/11) + **đuôi đường trí** (mục 46, 08/11); sau: đợt 9.
 
 ## 3. Cần anh
 
-- **Đuôi đường trí**: gật kế hoạch (mục 2).
+- **Đuôi đường trí**: thử trên iPhone — đường xanh dương dừng đúng chỗ nếp hết, không vắt sang đường tình.
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 25 nhánh, kiểm 04/11 đều đã nằm
   trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em.
@@ -37,7 +36,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 4. Nợ, chỗ chưa chắc
 
-- Chỉ tay (mục 45): ô trống 37 % (> 1/3); đuôi đường trí có khi vòng sang đường tình; đầu trí hay ra "tách" — chưa chấm;
+- Chỉ tay (mục 45, 46): ô trống 36 % (> 1/3); đầu trí hay ra "tách" — chưa chấm; đuôi trí qua vân da chưa chặn;
   đo 2 ảnh có đáp án; Nhật – Hàn đọc trích đoạn, thiếu sách Việt cổ.
 - La bàn: bắc từ hay bắc thật chưa rõ (VN lệch <2°, anh so không lệch; mục 20).
 - Hạn tháng chưa so Altuvi; Mệnh chủ/Thân chủ theo *Toàn Thư*; tuổi đại vận bát tự ghi tuổi mụ (chưa có nguồn Việt).

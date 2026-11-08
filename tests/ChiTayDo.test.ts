@@ -4,7 +4,9 @@
  * mot nep ngang suot ban tay thi la chi tay ngang. Them 06/11 (ke hoach `docs/ke-hoach/2026-11-06-may-do-chi-tay.md`) ba ca lap lai loi
  * thay tren anh that — ma cu truot ca ba: tinh mo + tri dam sat phia ngon tro + nep gap khe ngon cai rat dam; ranh dai / vua → o trong
  * (vet khong vuot dau nep); vet tri gay khuc, khong co duong tinh → chi tay ngang de trong. Them mot ca giu (ma cu cung qua): nep nhan
- * cat ngang duong doi. Anh that do o `scripts/doi-chieu/do-chi-tay-dap-an.mjs`.
+ * cat ngang duong doi. Them 08/11 (ke hoach `2026-11-06-duoi-duong-tri.md`) hai ca duoi duong tri — ma 06/11 truot ca hai: vet tri vong
+ * qua nep nhanh sang dau duong tinh → dung o cho thap nhat; duong tri cong len that, duong tinh rieng → giu duoi, o dai de trong.
+ * Anh that do o `scripts/doi-chieu/do-chi-tay-dap-an.mjs`.
  */
 import { CAO, KHUNG_ANH, RONG, doChiTay, type Diem, type MocTay } from '../src/loi/chiTayDo.ts';
 
@@ -108,5 +110,22 @@ describe('may tu do chi tay tren anh tong hop', () => {
     const gay = [{ x: 0.36, y: 0.8 }, { x: 0, y: 0.84 }, { x: -0.45, y: 0.64 }];
     const { khung: k } = doChiTay(anh([gay, DOI]), MOC);
     expect(k.simian).toBeNull();
+  });
+
+  test('duong tri doc xuong roi het, nep nhanh noi len dau duong tinh phia ngon ut → vet tri dung, khong vong sang duong tinh', () => {
+    // Loi anh "Right Hand Palm" (08/11): vet tri xuong thap nhat roi vong nguoc len (qua nep nhanh), chay theo dau duong tinh toi mep tay.
+    const tinh = [{ x: -0.48, y: 0.7 }, { x: -0.3, y: 0.745 }, { x: -0.1, y: 0.82 }, { x: 0.15, y: 0.9 }, { x: 0.28, y: 0.93 }];
+    const tri = [{ x: 0.34, y: 0.74 }, { x: 0.05, y: 0.66 }, { x: -0.2, y: 0.58 }, { x: -0.26, y: 0.52 }];
+    const nhanh = [{ x: -0.2, y: 0.58 }, { x: -0.3, y: 0.745 }];
+    const { khung: k, vet } = doChiTay(anh([tinh, tri, DOI, nhanh]), MOC);
+    expect([bam('tri', vet.head, tri), bam('tinh', vet.heart, tinh)]).toEqual([['tri', true, true], ['tinh', true, true]]);
+    expect([k.simian, k.duong.head.length]).toEqual([false, 'medium']);
+  });
+
+  test('duong tri cong len o cuoi, duong tinh rieng o tren → giu duoi cong, o dai duong tri de trong', () => {
+    const tri = [{ x: 0.34, y: 0.7 }, { x: 0.05, y: 0.6 }, { x: -0.18, y: 0.5 }, { x: -0.38, y: 0.62 }];
+    const { khung: k, vet } = doChiTay(anh([TINH, tri, DOI]), MOC);
+    expect([bam('tri', vet.head, tri), bam('tinh', vet.heart, TINH)]).toEqual([['tri', true, true], ['tinh', true, true]]);
+    expect(k.duong.head.length).toBeNull();
   });
 });
