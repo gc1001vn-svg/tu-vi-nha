@@ -830,6 +830,10 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   (Kim Lâu, Hoang Ốc, Tam Tai), lan cả mục Năm nay, Tình cảm. `YEU_CAU.nguoi`: "Lưu ý 1–3 câu", "Điều Tốt, không phạm thì đừng dặn
   kiêng."; nhóm `gomMuc` gọn "Tốt:"; bù chỗ bỏ "Viết lời", "Mục" (hồ sơ giả 10/05/1990 trước đó dư 28 ký tự). Máy soi đêm bắt thêm
   "không nên", "vi phạm", "tuân theo" (soi lại lượt 07/11: 2 câu dặn); đo gia0 ×3.
+- **AI thật 09/11 01:10 giờ VN** (lịch hẹn; `tong`; gia0 ×3, gia4): **19.508 token**; tổng hợp đủ, bịa 0. (2) vẫn hết. (5) **2/3 sạch**: cả 3
+  lần mục Năm nay nói đúng "không phạm Kim Lâu, Hoang Ốc, Tam Tai — làm nhà, cưới hỏi được"; lần 3 mục Lưu ý còn "nhớ tuân thủ các nghi
+  lễ không phạm Kim Lâu, Hoàng Ốc, Tam Tai để tránh xui xẻo" (lần 1, 2 có câu thừa "ưu tiên các việc không phạm…", "nếu tuân thủ nghi
+  lễ"). AI viết sai "Hoàng Ốc" 2/3 lần. Kịch bản đo gộp số hồ sơ trùng ("0,0,0,4" chỉ ra gia0 một lần; "0" là 0 hồ sơ, gia0 riêng: "1").
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.
