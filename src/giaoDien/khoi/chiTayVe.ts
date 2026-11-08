@@ -129,7 +129,15 @@ export function veChiTay(gioiTinh: GioiTinh): Node[] {
         anhKet.replaceChildren(el('img', { class: 'anh-do', src: k.anh, alt: 'Ảnh tay, các đường máy dò được tô màu theo hình mẫu' }),
           ...(k.nhac === undefined ? [] : [el('p', { class: 'canh-bao' }, k.nhac)]), el('p', { class: 'canh-bao' }, DO_SAI));
         datKhung(k.khung);
-      }, (e: unknown) => { anhKet.replaceChildren(el('p', { class: 'loi' }, e instanceof Error ? e.message : String(e))); })
+      }, (e: unknown) => {
+        // Loi sau khi da doc duoc anh (`LoiCoAnh` trong chiTayMp.ts — khong import tinh de khoi keo MediaPipe vao goi chinh): van hien
+        // anh de nguoi xem soi, tu chon o (anh bao 08/11: bi chan thi chi thay chu, khong xem duoc anh).
+        const anh = e instanceof Error && 'anh' in e && typeof e.anh === 'string' ? e.anh : undefined;
+        anhKet.replaceChildren(...(anh === undefined ? [] : [el('img', { class: 'anh-do', src: anh, alt: 'Ảnh vừa chụp — máy chưa dò được, chưa vẽ đường' })]),
+          el('p', { class: 'loi' }, e instanceof Error ? e.message : String(e)),
+          ...(anh === undefined ? [] : [el('p', { class: 'ghi-chu' }, 'Máy chưa dò được ảnh này nên chưa vẽ đường nào, chưa điền ô. Anh vẫn '
+            + 'soi ảnh để tự chọn từng ô theo hình mẫu bên dưới, hoặc chụp lại theo lời nhắc.')]));
+      })
       .finally(() => { nutAnh.disabled = false; });
   });
   const hinh = el('img', { class: 'hinh', alt: 'Hình mẫu: bốn đường chính trên lòng bàn tay',
@@ -138,8 +146,9 @@ export function veChiTay(gioiTinh: GioiTinh): Node[] {
   return [
     el('p', { class: 'ghi-chu' }, `Xem tay ${gioiTinh === 'nam' ? 'trái' : 'phải'} (nam tả nữ hữu — cách xem phổ biến ở Việt Nam; sách Tây `
       + 'xem cả hai tay). Cách dễ: chụp lòng bàn tay — máy dò 4 đường ngay trong máy (ảnh không gửi đi, không lưu), tô màu lên ảnh và '
-      + 'điền sẵn các ô bên dưới; anh xem đường màu có nằm đúng nếp tay không, ô nào sai thì chọn lại. Chụp: xoè thẳng cả bàn tay, chụp '
-      + 'thẳng từ trên xuống, đủ sáng, không bóng loá, lòng bàn tay chiếm gần hết khung. Hoặc tự chọn từng ô theo hình mẫu.'),
+      + 'điền sẵn các ô bên dưới; anh xem đường màu có nằm đúng nếp tay không, ô nào sai thì chọn lại. Chụp: đặt bàn tay ngửa trên mặt '
+      + 'bàn, xoè thẳng các ngón, cầm máy ngay phía trên, song song mặt bàn (chụp chéo thì máy dò sai hoặc không dò được); đủ sáng, '
+      + 'không bóng loá, lòng bàn tay chiếm gần hết khung. Hoặc tự chọn từng ô theo hình mẫu.'),
     el('div', { class: 'nut-hang' }, nutAnh), chonAnh, anhKet,
     hinh,
     el('p', { class: 'chu-thich' }, ...MAU.flatMap(([m, t], i) => [...(i > 0 ? [' · '] : []), el('span', { style: `color: ${m}` }, `● ${t}`)])),

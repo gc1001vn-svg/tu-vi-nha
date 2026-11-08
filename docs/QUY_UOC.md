@@ -935,6 +935,22 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Còn yếu**: đáp án đuôi chỉ 2 ảnh; vết đi qua vân da mà không vòng vẫn có thể vượt đầu nếp (phương án B, chưa làm); đường trí
   "Right Hand Palm" dừng ở chỗ vết rời nếp, chưa xuống tới điểm đáp án cuối (vẫn 4/5 điểm như trước).
 
+## 47. Ảnh bị máy chặn vẫn hiện để xem (kế hoạch 08/11 `2026-11-08-anh-chi-tay-bi-chan.md`; anh gật "A ngay, B sau")
+- **Anh báo 08/11**: chụp lòng bàn tay bằng camera thì chỉ hiện chữ "Bàn tay chụp nghiêng…", không xem được ảnh.
+- **Tái hiện** (app thật, trình duyệt giả iPhone 13; 7 ảnh lòng tay mẫu làm nghiêng phối cảnh như cầm máy chụp chéo tay mình,
+  4 hướng): 15° qua 28/28; 30° qua 26/28 (2 ảnh bị chặn nhầm "mu bàn tay"); 45° qua 16/28 (9 "chụp nghiêng", 2 "không thấy tay",
+  1 "mu bàn tay"). Bị chặn thì giao diện chỉ hiện chữ. Tắt bước chặn, đo trên 2 ảnh có đáp án: nghiêng 15–30° vẽ sai ít nhất một
+  đường 6/15 lần, 45° 6/6 lần — bước chặn "chụp nghiêng" (mục 45) chỉ bắt ca nặng; ảnh chụp chéo là gốc rễ.
+- **Đổi**: lỗi sau khi đã đọc được ảnh (chụp nghiêng, mu tay, không thấy tay, tay nhỏ, hai tay) mang theo ảnh thu nhỏ chưa vẽ đường
+  (`LoiCoAnh`, `chiTayMp.ts`) → khối Chỉ tay hiện ảnh + chữ báo + "máy chưa dò được, chưa điền ô — tự chọn theo hình mẫu". Lời nhắc
+  chụp (đầu khối, "chụp nghiêng", "mu bàn tay"): đặt bàn tay ngửa trên mặt bàn, xoè ngón, cầm máy ngay phía trên, song song mặt bàn.
+- **Đo**: vòng thử giao diện `scripts/doi-chieu/thu-khoi-chi-tay.mjs` — ảnh nghiêng 45° trước "KHÔNG CÓ ẢNH", sau hiện ảnh; 5/5 ca
+  (ảnh tốt, nghiêng 45°, nhận nhầm mu tay, mu tay thật, không thấy tay) đều hiện ảnh. Bộ đo `do-chi-tay-dap-an.mjs`: mọi kết quả dò,
+  mọi ô không đổi (chỉ lời báo mu tay dài thêm). Thử đơn vị không chạm được (thử chạy môi trường node, không có trang) → vòng thử
+  giao diện chạy tay khi sửa phần này.
+- **Còn**: ảnh chụp chéo vừa (15–30°) không bị chặn nhưng có thể vẽ sai → phương án B (nắn phối cảnh theo mốc tay), việc kế, cần
+  kế hoạch riêng; chưa thử Safari thật (máy ảo chỉ có Chromium).
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|

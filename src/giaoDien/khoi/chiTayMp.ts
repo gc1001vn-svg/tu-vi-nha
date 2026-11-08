@@ -38,6 +38,18 @@ function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContex
   return [c, g];
 }
 
+/**
+ * Loi do ma ANH DA DOC DUOC (thu nho, chua ve duong) — giao dien hien anh kem chu bao de nguoi xem soi va tu chon o (anh bao 08/11:
+ * anh chup camera bi chan "chup nghieng" thi chi thay chu, khong xem duoc anh — ke hoach `2026-11-08-anh-chi-tay-bi-chan.md`).
+ */
+export class LoiCoAnh extends Error {
+  readonly anh: string;
+  constructor(thu: string, anh: string) {
+    super(thu);
+    this.anh = anh;
+  }
+}
+
 /** Tim tay → moc (0–1 theo anh `nho`), MediaPipe doan tay nao + diem. Thu 06/11 khong thay tay thi dem vien 25 % roi tim lai: anh
  * duy nhat gap ("My left hand's palm", tay nghieng) ra moc sai hoan toan → bo, giu bao "khong thay tay — chup thang". */
 function timTay(hl: HandLandmarker, nho: HTMLCanvasElement): { moc: { x: number; y: number }[][]; nhan: string; diem: number } {
@@ -60,6 +72,7 @@ export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 
   const w = Math.round(goc.naturalWidth * ty), h = Math.round(goc.naturalHeight * ty);
   const [nho, gNho] = canvas(w, h), [chuan, gChuan] = canvas(RONG, CAO);
   gNho.drawImage(goc, 0, 0, w, h);
+  const chan = (thu: string): LoiCoAnh => new LoiCoAnh(thu, nho.toDataURL('image/jpeg', 0.85));
   const bd = performance.now();
   let hl: HandLandmarker | undefined;
   try {
@@ -70,19 +83,20 @@ export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 
     const taiMs = performance.now() - bd;
     khiDo();
     const r = timTay(hl, nho);
-    if (r.moc.length > 1) throw new Error('Ảnh có hai bàn tay — chụp một bàn tay thôi.');
+    if (r.moc.length > 1) throw chan('Ảnh có hai bàn tay — chụp một bàn tay thôi.');
     const m = r.moc[0];
-    if (m === undefined) throw new Error('Không thấy bàn tay trong ảnh — chụp lại: xoè cả bàn tay, đủ sáng, chụp thẳng.');
+    if (m === undefined) throw chan('Không thấy bàn tay trong ảnh — chụp lại: xoè cả bàn tay, đủ sáng, chụp thẳng.');
     const p = (k: number): Diem => ({ x: (m[k]?.x ?? 0) * w, y: (m[k]?.y ?? 0) * h });
     // Khung chuan: goc o co tay (0), truc y toi goc ngon giua (9), truc x vuong goc, chieu ve phia ngon cai (2).
     const o = p(0), L = Math.hypot(p(9).x - o.x, p(9).y - o.y);
-    if (L / Math.max(w, h) < 0.2) throw new Error('Bàn tay quá nhỏ trong ảnh — chụp gần hơn, lòng bàn tay chiếm gần hết khung.');
+    if (L / Math.max(w, h) < 0.2) throw chan('Bàn tay quá nhỏ trong ảnh — chụp gần hơn, lòng bàn tay chiếm gần hết khung.');
     // Chieu hinh hoc: tich (co → goc tro) × (co → goc ut), truc y anh huong xuong; < 0 la dang long tay PHAI (ngon cai ben phai khi
     // ngon huong len) — hoac mu tay trai. MediaPipe doan tay theo dang ve ngoai (do 06/11: khop chieu 7/7 anh long tay, nguoc 4/4 anh mu
     // tay) → nguoc nhau la mu ban tay.
     const tich = (p(5).x - o.x) * (p(17).y - o.y) - (p(5).y - o.y) * (p(17).x - o.x), chieu = tich < 0 ? 'phai' : 'trai';
     const tayMp = r.nhan === 'Left' ? 'trai' : r.nhan === 'Right' ? 'phai' : null;
-    if (tayMp !== null && r.diem >= 0.6 && tayMp !== chieu) throw new Error('Ảnh có vẻ là mu bàn tay — chụp lòng bàn tay (mặt có chỉ tay).');
+    if (tayMp !== null && r.diem >= 0.6 && tayMp !== chieu) throw chan('Ảnh có vẻ là mu bàn tay — chụp lòng bàn tay (mặt có chỉ tay). Nếu đúng là lòng bàn tay thì có thể do chụp '
+      + 'chéo: đặt tay ngửa trên mặt bàn, cầm máy ngay phía trên.');
     const yv = { x: (p(9).x - o.x) / L, y: (p(9).y - o.y) / L };
     let xv = { x: -yv.y, y: yv.x };
     if ((p(2).x - o.x) * xv.x + (p(2).y - o.y) * xv.y < 0) xv = { x: -xv.x, y: -xv.y };
@@ -100,7 +114,8 @@ export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 
     for (let k = 0; k < xam.length; k++) xam[k] = (0.299 * (d[4 * k] ?? 0) + 0.587 * (d[4 * k + 1] ?? 0) + 0.114 * (d[4 * k + 2] ?? 0)) / 255;
     const mocChuan = { co: veChuan(p(0)), caiGoc: veChuan(p(1)), caiKhop: veChuan(p(2)), tro: veChuan(p(5)), giua: veChuan(p(9)),
       apUt: veChuan(p(13)), ut: veChuan(p(17)) };
-    if (!mocHopLe(mocChuan)) throw new Error('Bàn tay chụp nghiêng hoặc ngón co — chụp lại: để máy song song lòng bàn tay, xoè đều các ngón.');
+    if (!mocHopLe(mocChuan)) throw chan('Bàn tay chụp chéo (máy không song song lòng tay) hoặc ngón co — máy chưa dò được. Chụp lại: đặt bàn tay '
+      + 'ngửa trên mặt bàn, xoè đều các ngón, cầm máy ngay phía trên, song song mặt bàn.');
     const kq = doChiTay(xam, mocChuan), canXem = gioi === 'nam' ? 'trai' : 'phai';
     gNho.lineWidth = Math.max(3, L * 0.012);
     gNho.lineCap = 'round';
