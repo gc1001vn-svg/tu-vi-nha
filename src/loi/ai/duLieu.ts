@@ -132,7 +132,7 @@ export function gomMuc(ds: readonly (readonly [string, string, string])[]): stri
     const x = ds.filter(([, , d]) => la(d)).map(([nhan, t]) => `${nhan} ${t}`);
     return x.length === 0 ? [] : [`${ten}: ${x.join('; ')}.`];
   };
-  return [...nhom('Xấu', (d) => d === 'xau'), ...nhom('Vừa', (d) => d !== 'xau' && d !== 'tot'), ...nhom('Tốt, không cần kiêng', (d) => d === 'tot')].join(' ');
+  return [...nhom('Xấu', (d) => d === 'xau'), ...nhom('Vừa', (d) => d !== 'xau' && d !== 'tot'), ...nhom('Tốt', (d) => d === 'tot')].join(' ');
 }
 
 function nam(hs: HoSo, tr: TinhRa, ngayXem: NgayDuong): string {

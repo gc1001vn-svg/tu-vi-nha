@@ -826,6 +826,10 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **AI thật 07/11 01:10 giờ VN** (lịch hẹn; `tong`, gia0, gia4): **8.639 token**; tổng hợp 2/2, bịa 0. (2) vẫn hết — gia4 "Hôm nay" chỉ
   dùng nhịp sinh học, đọc đúng số. (5) **đỡ, chưa sạch** — không còn câu "tránh/kiêng", nhưng gia0 còn câu "Những công việc không nên
   làm: Kim Lâu, Hoang Ốc, Tam Tai (đều “không phạm”)" — xếp nhầm nhóm rồi tự ghi chú; máy soi đêm chỉ bắt "tránh|kiêng".
+- Sửa 08/11 (anh: "xử lý chứ không để như vậy"): gốc là yêu cầu bắt mọi mục 3–5 câu — Lưu ý ít điều xấu nên AI độn tục kiêng quen
+  (Kim Lâu, Hoang Ốc, Tam Tai), lan cả mục Năm nay, Tình cảm. `YEU_CAU.nguoi`: "Lưu ý 1–3 câu", "Điều Tốt, không phạm thì đừng dặn
+  kiêng."; nhóm `gomMuc` gọn "Tốt:"; bù chỗ bỏ "Viết lời", "Mục" (hồ sơ giả 10/05/1990 trước đó dư 28 ký tự). Máy soi đêm bắt thêm
+  "không nên", "vi phạm", "tuân theo" (soi lại lượt 07/11: 2 câu dặn); đo gia0 ×3.
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.

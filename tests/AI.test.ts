@@ -97,10 +97,10 @@ describe('goi du lieu gui AI', () => {
     expect([n.includes('múi giờ Europe/Paris'), n.includes('Cung Mọc ')]).toEqual([true, false]);
   });
 
-  test('nam nay: gom muc Xấu / Vừa / Tốt, không cần kiêng (do AI that 06/11: AI dan kieng ca muc khong pham)', () => {
+  test('nam nay: gom muc Xấu / Vừa / Tốt (do AI that 06/11: AI dan kieng ca muc khong pham)', () => {
     expect(gomMuc([['Sao chiếu mệnh', 'Kế Đô', 'xau'], ['Hạn', 'Địa Võng', 'xau'], ['Kim Lâu', 'Không phạm', 'tot'], ['Tam Tai', 'Năm thứ 2/3', 'vua']]))
-      .toBe('Xấu: Sao chiếu mệnh Kế Đô; Hạn Địa Võng. Vừa: Tam Tai Năm thứ 2/3. Tốt, không cần kiêng: Kim Lâu Không phạm.');
-    expect(du(hs()).split('\n').some((x) => /^(?:Xấu|Vừa|Tốt, không cần kiêng): /u.test(x))).toBe(true);
+      .toBe('Xấu: Sao chiếu mệnh Kế Đô; Hạn Địa Võng. Vừa: Tam Tai Năm thứ 2/3. Tốt: Kim Lâu Không phạm.');
+    expect(du(hs()).split('\n').some((x) => /^(?:Xấu|Vừa|Tốt): /u.test(x))).toBe(true);
   });
 
   test('que, trai bai: ten que, hao dong, doan nen doc kem nguyen van; la, vi tri, xuoi nguoc', () => {

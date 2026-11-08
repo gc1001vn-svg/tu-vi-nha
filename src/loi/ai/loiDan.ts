@@ -20,8 +20,10 @@ const hoi = (cau: string): string => (cau.trim() === '' ? 'người hỏi không
 
 /** Yeu cau mo dau cho tung loai du lieu; cau hoi tiep theo la loi nguoi dung go. */
 export const YEU_CAU = {
-  nguoi: (): string => 'Viết lời tổng hợp mọi môn cho người trong DỮ LIỆU, các mục: Tính cách · Công việc, tiền bạc · Tình cảm, gia đình · '
-    + 'Sức khỏe · Năm nay · Hôm nay · Lưu ý. Mỗi mục 3–5 câu. Mục Hôm nay chỉ dùng dòng "hôm nay"; chiêm tinh là lá lúc sinh.',
+  // Do AI that 05–07/11: ep Lưu ý 3–5 cau thi AI don tuc kieng quen (Kim Lâu, Hoang Ốc, Tam Tai) du khong pham — ca o Năm nay, Tình cảm.
+  nguoi: (): string => 'Tổng hợp mọi môn cho người trong DỮ LIỆU, các mục: Tính cách · Công việc, tiền bạc · Tình cảm, gia đình · '
+    + 'Sức khỏe · Năm nay · Hôm nay · Lưu ý. Mỗi mục 3–5 câu; Lưu ý 1–3 câu. Hôm nay chỉ dùng dòng "hôm nay"; chiêm tinh là lá lúc sinh. '
+    + 'Điều Tốt, không phạm thì đừng dặn kiêng.',
   que: (cau: string): string => `Giải quẻ trong DỮ LIỆU cho ${hoi(cau)}. Các mục: Ý chính · Lời khuyên · Điều nên tránh. `
     + 'Dựa vào nguyên văn và lời app giải của các đoạn nên đọc.',
   tarot: (cau: string): string => `Đọc trải bài trong DỮ LIỆU cho ${hoi(cau)}. Các mục: Từng lá theo vị trí · Ý chung · Lời khuyên.`,
