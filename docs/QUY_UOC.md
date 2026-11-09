@@ -834,6 +834,11 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   lần mục Năm nay nói đúng "không phạm Kim Lâu, Hoang Ốc, Tam Tai — làm nhà, cưới hỏi được"; lần 3 mục Lưu ý còn "nhớ tuân thủ các nghi
   lễ không phạm Kim Lâu, Hoàng Ốc, Tam Tai để tránh xui xẻo" (lần 1, 2 có câu thừa "ưu tiên các việc không phạm…", "nếu tuân thủ nghi
   lễ"). AI viết sai "Hoàng Ốc" 2/3 lần. Kịch bản đo gộp số hồ sơ trùng ("0,0,0,4" chỉ ra gia0 một lần; "0" là 0 hồ sơ, gia0 riêng: "1").
+- Sửa 09/11 (anh chọn A — app tự kiểm lời AI): `danKiengSai` (`kiemBia.ts`) — tục kiêng dữ liệu ghi nhóm "Tốt:" (không phạm) mà một
+  câu AI nhắc kèm chữ dặn (tránh, kiêng, không nên, vi phạm, tuân theo/thủ, xui xẻo; bỏ qua "không cần kiêng"; so bỏ dấu thanh vì AI
+  viết "Hoàng Ốc") thì `phien.ts` hiện ngay dưới lời AI "Ghi chú của app: năm nay không phạm … — không cần kiêng vì các mục này."
+  Chạy lại 6 lời gia0 thật đã lưu (05–09/11): gắn ghi chú 5/6 — đủ 4 lời sai, thêm lần 09/11-2 ("nếu tuân thủ các nghi lễ"), để yên
+  lần sạch 09/11-1. Thước `tests/AI.test.ts`.
 - `system_fingerprint`: 5 lượt ra 5 dấu khác nhau trong 2 phút (fp_19b184c447, fp_e5b4e54fbb, fp_5082008e34, fp_b1dd3e7a63,
   fp_64b2f1c926; lượt thăm fp_c15aa9c1b7) → dấu đổi theo máy chủ, **không dùng được để biết Groq đổi mô hình**; tách nguyên nhân chỉ
   còn cách đo so bản 23/10.

@@ -4,7 +4,7 @@
 import { vuaHanMuc } from '../src/giaoDien/ai/goi.ts';
 import { cau, duLieuNguoi, duLieuQue, duLieuTarot, gomMuc } from '../src/loi/ai/duLieu.ts';
 import { LOI_DAN, YEU_CAU } from '../src/loi/ai/loiDan.ts';
-import { TU_NGUOI, timBia } from '../src/loi/ai/kiemBia.ts';
+import { TU_NGUOI, danKiengSai, timBia } from '../src/loi/ai/kiemBia.ts';
 import { soNgay, tuSoNgay } from '../src/loi/amLich.ts';
 import { tinhHoSo, type HoSo } from '../src/loi/hoSo.ts';
 import * as kinhDich from '../src/loi/kinhDich.ts';
@@ -140,5 +140,14 @@ describe('do chu bia', () => {
     // Do AI that 05/11: gpt-oss chen U+202F giua chu — ten la, ten tu dien van bat, vi tri giu nguyen.
     expect(timBia(loi.replace(/Vệ Thần/gu, 'Vệ Thần'), d, TU_NGUOI)).toEqual(timBia(loi, d, TU_NGUOI));
     expect(timBia('Gặp sao La Hầu.', 'không có', ['La Hầu'])).toEqual([{ tu: 'La Hầu', vt: 8 }]);
+  });
+
+  test('dan kieng sai: tuc du lieu ghi Tốt (khong pham) ma AI van dan kieng thi bat (do AI that 05–09/11); noi khong pham, khong can kieng thi khong', () => {
+    const d = gomMuc([['Sao chiếu mệnh', 'Kế Đô', 'xau'], ['Hạn', 'Địa Võng', 'xau'], ['Kim Lâu', 'Không phạm', 'tot'], ['Hoang Ốc', 'Nhất Cát', 'tot'],
+      ['Tam Tai', 'Không phạm', 'tot'], ['Thái Tuế', 'Không phạm', 'tot']]);
+    expect(danKiengSai('- Khi làm nhà, nhớ tuân thủ các nghi lễ không phạm Kim Lâu, Hoàng\u202FỐc, Tam Tai để tránh xui xẻo.', d)).toEqual(['Kim Lâu', 'Hoang Ốc', 'Tam Tai']);
+    expect(danKiengSai('## Năm nay\n- Những công việc không nên làm: Kim Lâu, Hoang Ốc, Tam Tai (đều “không phạm”).', d)).toEqual(['Kim Lâu', 'Hoang Ốc', 'Tam Tai']);
+    expect(danKiengSai('Năm nay không phạm Kim Lâu, Hoang Ốc, Tam Tai — làm nhà, cưới hỏi được, không cần kiêng. Việc lớn nên tránh vội vì Kế Đô.', d)).toEqual([]);
+    expect(danKiengSai('Tránh làm nhà vì Tam Tai.', gomMuc([['Tam Tai', 'Năm thứ 2/3', 'xau']]))).toEqual([]);
   });
 });

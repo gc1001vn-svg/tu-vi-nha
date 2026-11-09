@@ -5,7 +5,7 @@
  */
 import { duLieuChiTay, duLieuKieu, duLieuNguoi, duLieuQue, duLieuTarot } from '../../loi/ai/duLieu.ts';
 import { duLieuHoi } from '../../loi/ai/hoiSau.ts';
-import { TU_KIEU, TU_NGUOI, timBia } from '../../loi/ai/kiemBia.ts';
+import { TU_KIEU, TU_NGUOI, danKiengSai, timBia } from '../../loi/ai/kiemBia.ts';
 import { YEU_CAU } from '../../loi/ai/loiDan.ts';
 import { TU_CHI_TAY } from '../../loi/chiTay.ts';
 import { el } from '../chung.ts';
@@ -20,6 +20,8 @@ interface Luot {
   readonly hoi: string | null;
   dap: string;
   bia: readonly string[];
+  /** Tuc kieng du lieu ghi khong pham ma AI van dan kieng (`danKiengSai`): app gan ghi chu sua ngay duoi. */
+  kieng: readonly string[];
   ghiChu: string | null;
   xong: boolean;
 }
@@ -52,7 +54,7 @@ function taoPhien(cd: ChuDe): Phien {
 
 async function goi(p: Phien, gui: string, hoi: string | null): Promise<void> {
   const { khoa } = docAI();
-  const l: Luot = { gui, hoi, dap: '', bia: [], ghiChu: null, xong: false };
+  const l: Luot = { gui, hoi, dap: '', bia: [], kieng: [], ghiChu: null, xong: false };
   p.luot.push(l);
   if (khoa === null) {
     l.ghiChu = 'Chưa có khoá Groq: dán khoá (miễn phí) ở khối "AI (Groq)" cuối thẻ "Của tôi".';
@@ -83,6 +85,7 @@ async function goi(p: Phien, gui: string, hoi: string | null): Promise<void> {
     // Ten nguoi dung tu go trong cau hoi ("Sao Chiron ở đâu?") khong phai AI bia.
     const daGui = [p.duLieu, luot.duLieu ?? '', ...tin.filter((m) => m.role === 'user').map((m) => m.content)].join('\n');
     l.bia = [...new Set(timBia(kq.chu, daGui, p.tuDien).map((b) => b.tu))];
+    l.kieng = danKiengSai(kq.chu, daGui);
     l.ghiChu = (kq.ket === 'tuChoi' ? 'Groq chặn câu trả lời này. ' : kq.ket === 'quaDai' ? 'Câu trả lời quá dài nên bị cắt. ' : '')
       + `Mô hình ${kq.moHinh} qua Groq, miễn phí.`;
   } catch (e) {
@@ -136,6 +139,7 @@ export function vePhien(ma: string, cd: ChuDe): Node[] {
       if (l.hoi !== null) con.push(el('p', { class: 'ai-hoi' }, `Hỏi: ${l.hoi}`));
       con.push(el('div', { class: 'ai-dap' }, ...veChu(l.dap, l.bia)));
       if (l.bia.length > 0) con.push(el('p', { class: 'canh-bao' }, `Gạch chân: tên AI nêu mà dữ liệu app tính không có (${l.bia.join(', ')}) — đừng tin chỗ đó.`));
+      if (l.kieng.length > 0) con.push(el('p', { class: 'canh-bao' }, `Ghi chú của app: năm nay không phạm ${l.kieng.join(', ')} — không cần kiêng vì các mục này.`));
       if (l.ghiChu !== null) con.push(el('p', { class: l.dap === '' && l.xong ? 'loi' : 'ghi-chu' }, l.ghiChu));
     }
     if (dangChay) {

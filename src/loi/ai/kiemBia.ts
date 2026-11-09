@@ -67,3 +67,18 @@ export function timBia(loi: string, duLieu: string, tuDien: readonly string[]): 
   const chong = (a: Bia, b: Bia): boolean => a.vt < b.vt + b.tu.length && b.vt < a.vt + a.tu.length;
   return [...theoTuDien, ...la.filter((b) => !theoTuDien.some((a) => chong(a, b)))].sort((a, b) => a.vt - b.vt);
 }
+
+const TUC = ['Kim Lâu', 'Hoang Ốc', 'Tam Tai', 'Thái Tuế'];
+const DAN = /tránh|kiêng|không nên|vi phạm|tuân theo|tuân thủ|xui xẻo/iu;
+const boThanh = (s: string): string => s.normalize('NFD').replace(THANH, '').toLowerCase().normalize('NFC');
+
+/**
+ * Tuc kieng theo tuoi ma `duLieu` ghi o nhom "Tốt:" (`gomMuc`, khong pham) nhung cau nao do cua `loi` van dan kieng — do AI that 05–09/11
+ * ("nhớ tuân thủ các nghi lễ không phạm Kim Lâu, Hoàng Ốc, Tam Tai để tránh xui xẻo"), sua yeu cau van 1/3 lan sai. So bo dau thanh (AI viet "Hoàng Ốc").
+ */
+export function danKiengSai(loi: string, duLieu: string): string[] {
+  const tot = [...cachThuong(duLieu).matchAll(/(?:^|\. )Tốt: ([^\n]*)\.$/gmu)].flatMap((m) => (m[1] ?? '').split('; '));
+  const khong = TUC.filter((t) => tot.some((m) => m.startsWith(`${t} `)));
+  const cau = cachThuong(loi).split(/(?<=[.!?…])\s+|\n/u).map((c) => c.replace(/không (?:cần|phải) (?:kiêng|tránh)/giu, ''));
+  return khong.filter((t) => cau.some((c) => DAN.test(c) && boThanh(c).includes(boThanh(t))));
+}
