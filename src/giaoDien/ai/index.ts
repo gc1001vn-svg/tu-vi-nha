@@ -26,7 +26,7 @@ export type ChuDe =
     readonly mat: () => MatDo | undefined }
   | { readonly loai: 'que'; readonly k: typeof KinhDichTinh & typeof KinhDichChu & typeof KinhDichGiai & typeof KinhDichLuan; readonly g: KinhDichTinh.Gieo; readonly mh: KinhDichTinh.MaiHoaGio | null }
   | { readonly loai: 'tarot'; readonly t: Tarot; readonly kieu: keyof Tarot['TRAI']; readonly rut: readonly TarotMod.LaRut[] }
-  | { readonly loai: 'chiTay'; readonly k: KhungChiTay; readonly gioiTinh: GioiTinh }
+  | { readonly loai: 'chiTay'; readonly k: KhungChiTay; readonly gioiTinh: GioiTinh; readonly chuaChac?: readonly string[] }
   /** Que boi Kieu vua mo; `viec`: de muc dang chon o o "Việc đang hỏi" luc bam nut AI. */
   | { readonly loai: 'kieu'; readonly luan: typeof KieuLuan; readonly q: QueKieu; readonly viec: () => number };
 

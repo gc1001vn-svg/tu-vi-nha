@@ -633,7 +633,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   sát ngón cái, đứt · đường trí: rõ, dài (tới mép ngón út / dưới ngón áp út / dưới ngón giữa), thẳng / cong xuống, đầu dính / tách
   đường đời, đứt · đường tình: rõ, dài (tới dưới ngón trỏ / khe trỏ–giữa / dưới ngón giữa), đứt · đường sự nghiệp: rõ / mờ / không
   có, mọc từ cổ tay / đường đời / giữa lòng tay, đứt. Ô nào không chắc để "— chọn —" (= chưa chọn). Đường "không thấy / không có"
-  thì khoá các ô còn lại của đường đó.
+  thì khoá các ô còn lại của đường đó. **(09/11 bỏ bảng chọn ô — máy dò rồi hiện kết quả, mục 49.)**
 - **Quy luật** (`GIAI`, `DOAN_CHUONG`, `QUY_LUAT_CHUNG`, Claude soạn lại; 02/11 không hiện trên màn hình nữa — mục 34): mỗi giá trị = tên + câu chốt + **các nền cùng nói** + chỗ
   **vênh** + từng sách nói gì (gập lại). "Đúng nhất" = nhiều nền cùng nói nhất — **chưa có quy luật chỉ tay nào được khoa học chứng
   minh**. Đếm theo **nền** (Trung Hoa, Ấn Độ, Hy Lạp, Tây), không theo số sách: *Toàn Biên* chép lại nguyên đoạn "掌上三紋…" của
@@ -974,6 +974,22 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   tay nhỏ, hai tay) giữ nguyên. Khoảng mốc chưa đổi: đợi số thật từ ảnh anh rồi chỉnh đúng mốc lệch.
 - **Đo**: vòng thử giao diện (`thu-khoi-chi-tay.mjs --do-thu`): ảnh nghiêng 45° và ảnh bị nhận nhầm mu tay → hiện ảnh + dòng chi tiết
   + nút; bấm nút → có đường, cảnh báo, ô không đổi. Bộ đo cũ: không khác một dòng. Thước `mocNgoaiKhoang` thêm 1 ca (9/9).
+
+## 49. Máy không nhận ảnh chụp sát; bỏ bảng tự chọn ô (kế hoạch 09/11 `2026-11-09-khong-nhan-tay-bo-tu-chon.md`; anh gật cả hai)
+- **Anh 09/11**: "tôi test vẫn ko nhận. với bỏ chế độ làm bằng tay đi. sao mà có kiến thức để điền tay được".
+- **Tự thử** (app thật, trình duyệt giả iPhone): ảnh **chụp sát** — lòng tay đầy khung, ngón bị cắt bớt, đúng lời dặn cũ "lòng bàn tay
+  chiếm gần hết khung" — MediaPipe không thấy tay **25/28** ảnh (7 ảnh mẫu × 4 kiểu cắt theo khung bàn tay, làm trong thư mục tạm);
+  lỗi này chặn cứng, không có dòng chi tiết / nút "Vẫn dò thử" → khớp "vẫn ko nhận".
+- **Đổi**: (1) không thấy tay → thêm viền xám 30 / 60 / 100 % cạnh dài rồi tìm lại (`timTay`); thấy sau khi thêm viền thì kết quả ghi
+  "ảnh chụp sát — kém tin, nên chụp lại cả bàn tay"; mốc tìm lại vẫn qua bước kiểm dáng; thấy sau viền mà tay "nhỏ" → báo "không thấy rõ
+  bàn tay" (mốc sai, không phải tay nhỏ). Lời dặn chụp: đặt tay ngửa trên mặt bàn, máy ngay phía trên, **cả bàn tay nằm trọn trong
+  khung (đủ 5 ngón, cổ tay)**. (2) Bỏ bảng chọn ô: chụp ảnh → ảnh có đường + "Máy dò được" từng mục + lời giải + AI. Lõi trả thêm
+  `doan` (`xep(0)`: không có ranh, mỗi ô một đáp); ô mà `khung` (ranh như cũ, dùng để đo) để trống thì hiện kèm "máy chưa chắc" và
+  báo cho AI — **thay chốt 06/11 "ô không chắc để trống"** (anh chọn 09/11; chốt cũ tính lúc còn ô tự chọn). Vết vẽ theo `doan`.
+  "Vẫn dò thử" nay cũng ra kết quả, ghi "kém tin".
+- **Đo**: bộ ảnh chụp sát nhận 3/28 → 24/28 (3 vẫn không thấy tay, 1 nhận nhầm mu tay); 2 ảnh có đáp án, ảnh chụp sát dò được 6 lần:
+  3 đúng hết, 3 sai ≥ 1 đường → ảnh đủ bàn tay vẫn là chính. Bộ đo cũ: khác đúng 1 dòng (câu báo "không thấy rõ bàn tay"). Vòng
+  thử giao diện: 0 ô chọn; ảnh tốt, ảnh chụp sát, "Vẫn dò thử" đều ra "Máy dò được" + lời giải. Thước: thêm ca `doan` (14/14 hai tệp).
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

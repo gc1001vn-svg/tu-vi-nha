@@ -100,8 +100,11 @@ describe('may tu do chi tay tren anh tong hop', () => {
   test('duong doi tan sat ranh dai / vua, duong tinh tan sat ranh dai / vua → hai o do de trong, o khac van dien', () => {
     // Doi tan o y = 0,15 L (ranh dai / vua); tinh tan o 3/4 khoang goc ngon giua → goc ngon tro (ranh dai / vua).
     const doi = cung(TAM_DOI, 100, 201.6, 0.4, 0.38), tinh = [...TINH.slice(0, 3), { x: 0.225, y: 0.915 }];
-    const { khung: k } = doChiTay(anh([tinh, TRI, doi]), MOC);
+    const { khung: k, doan } = doChiTay(anh([tinh, TRI, doi]), MOC);
     expect([k.duong.life.length, k.duong.heart.length]).toEqual([null, null]);
+    // Bo che do tu chon o (09/11): o sat ranh van co doan cua may (giao dien ghi "may chua chac"); o chac giu nguyen.
+    expect([doan.duong.life.length, doan.duong.heart.length].every((v) => v !== null)).toBe(true);
+    expect([doan.duong.life.seen, doan.duong.head.seen, doan.duong.life.arc]).toEqual([k.duong.life.seen, k.duong.head.seen, k.duong.life.arc]);
     expect([k.duong.life.seen, k.duong.head.seen, k.duong.heart.seen, k.duong.life.arc]).not.toContain(null);
   });
 

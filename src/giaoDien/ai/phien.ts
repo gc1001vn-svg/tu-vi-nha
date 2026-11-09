@@ -43,7 +43,7 @@ const lamMoi = (p: Phien): void => { for (const f of p.nghe) f(); };
 
 const duLieuCua = (cd: ChuDe): string => (cd.loai === 'nguoi' ? duLieuNguoi(cd.hs, cd.tr, cd.ngayXem, cd.lechNuoc, cd.mat())
   : cd.loai === 'que' ? duLieuQue(cd.k, cd.g, cd.mh) : cd.loai === 'tarot' ? duLieuTarot(cd.t, cd.kieu, cd.rut)
-    : cd.loai === 'kieu' ? duLieuKieu(cd.luan, cd.q, cd.viec()) : duLieuChiTay(cd.k, cd.gioiTinh));
+    : cd.loai === 'kieu' ? duLieuKieu(cd.luan, cd.q, cd.viec()) : duLieuChiTay(cd.k, cd.gioiTinh, cd.chuaChac));
 
 function taoPhien(cd: ChuDe): Phien {
   const tuDien = cd.loai === 'nguoi' ? TU_NGUOI : cd.loai === 'que' ? [...TU_NGUOI, ...cd.k.QUE.map((q) => q.tenDu)]

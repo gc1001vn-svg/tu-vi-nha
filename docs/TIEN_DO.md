@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 09/11/2026 — chỉ tay: dòng chi tiết + nút "Vẫn dò thử" khi bị chặn (QUY_UOC mục 48), chờ anh báo số (mục 3).
+Cập nhật: 09/11/2026 — chỉ tay: nhận ảnh chụp sát, bỏ bảng tự chọn ô (QUY_UOC mục 49), chờ anh chụp thử (mục 3).
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -24,11 +24,11 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đo lại 06/11: lỗi (2) hết; (5) 09/11: app tự gắn ghi chú
   sửa khi AI dặn kiêng sai (mục 42).
 - **Xong lời giải dễ hiểu 14 môn** (QUY_UOC mục 43, 44; anh gật cả hai đợt 05/11).
-- **Máy dò chỉ tay** (mục 45–48): ảnh thẳng của anh vẫn bị chặn — đợi dòng chi tiết để chỉnh khoảng mốc; sau: đợt 9.
+- **Máy dò chỉ tay** (mục 45–49): ảnh chụp sát nay được nhận (kém tin); không còn ô tự chọn; sau: đợt 9.
 
 ## 3. Cần anh
 
-- **Chỉ tay**: bị chặn thì gõ lại dòng "Chi tiết để báo lỗi" cho em; "Vẫn dò thử" để có đường.
+- **Chỉ tay**: chụp cả bàn tay trên mặt bàn; còn bị chặn thì gõ lại dòng "Chi tiết để báo lỗi" cho em.
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 25 nhánh, kiểm 04/11 đều đã nằm
   trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em.

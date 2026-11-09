@@ -1,9 +1,10 @@
 /**
- * Noi dung khoi "Chi tay" (nap luoi tu `chiTay.ts`): hinh mau 4 duong + bang chon tung o (nguoi xem nhin tay minh) → quy luat tung o
- * kem muc tin (`src/loi/chiTay.ts`) → khoi AI dien giai, du doan (Groq; chi doc o da chon + luat). Khong chup anh: AI doc anh mien phi
- * cua Groq khong dinh vi duoc duong (do 28/10, QUY_UOC muc 27).
+ * Noi dung khoi "Chi tay" (nap luoi tu `chiTay.ts`): chup anh long ban tay → may tu do 4 duong ngay trong may (`chiTayMp.ts`, MediaPipe)
+ * → ve duong len anh, hien "May do duoc" tung muc (doan cua may; muc sat ranh ghi "may chua chac") → quy luat tung muc kem muc tin
+ * (`src/loi/chiTay.ts`) → khoi AI dien giai, du doan (Groq; chi doc ket qua may + luat). Khong con bang tu chon o: anh 09/11 "bo che do
+ * lam bang tay di. sao ma co kien thuc de dien tay duoc" (ke hoach `2026-11-09-khong-nhan-tay-bo-tu-chon.md`).
  */
-import { CAC_DUONG, DOAN_CHUONG, GIAI, KHUNG, type Duong, type KhungChiTay, type Luat } from '../../loi/chiTay.ts';
+import { CAC_DUONG, DOAN_CHUONG, GIAI, KHUNG, type KhungChiTay, type Luat } from '../../loi/chiTay.ts';
 import { luanTay, tungO } from '../../loi/chiTayLuan.ts';
 import type { GioiTinh } from '../../loi/hoSo.ts';
 import { CHON, noiGonTuLuan } from '../../loi/noiGonMon.ts';
@@ -22,24 +23,43 @@ const HINH = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 250"><g f
 <path d="M152 138 Q110 152 58 172" stroke="#27c"/><path d="M152 140 Q108 180 122 238" stroke="#2a2"/>
 <path d="M100 238 L108 112" stroke="#a3c"/></g></svg>`;
 
-/** Cach tim tung duong tren tay (mau theo hinh mau). */
-const CHO: Readonly<Record<Duong, string>> = {
-  life: 'đường cong vòng quanh gốc ngón cái (xanh lá)',
-  head: 'đường ngang giữa lòng bàn tay, đầu phía ngón cái (xanh dương)',
-  heart: 'đường ngang trên cùng, ngay dưới gốc các ngón (đỏ)',
-  fate: 'đường dọc giữa lòng bàn tay chạy lên ngón giữa — nhiều người không có (tím)',
-};
-
 const MAU: readonly [string, string][] = [['#d33', 'đường tình'], ['#27c', 'đường trí'], ['#2a2', 'đường đời'], ['#a3c', 'đường sự nghiệp']];
 
-/** Cau tom tung o da chon (nhan chot, khong ke sach). */
+/** Cau tom tung muc may do (nhan chot, khong ke sach). */
 function veTungO(k: KhungChiTay): HTMLElement[] {
   const t = tungO(k);
-  return t.length === 0 ? [] : [el('h3', {}, 'Từng ô đã chọn'),
+  return t.length === 0 ? [] : [el('h3', {}, 'Ý nghĩa từng mục'),
     el('ul', {}, ...t.map((x) => el('li', {}, el('b', {}, `${x.ten}: `), x.o.map((o) => o.y).join('; '), '.')))];
 }
 
-function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh): Node[] {
+/** O (khoa "simian", "duong.o") ma ban chac (`khung`) de trong vi sat ranh nhung may van doan (`doan`) — "may chua chac". */
+function oChuaChac(khung: KhungChiTay, doan: KhungChiTay): string[] {
+  const ra = khung.simian === null && doan.simian !== null ? ['simian'] : [];
+  for (const d of CAC_DUONG) {
+    const c = khung.duong[d] as Readonly<Record<string, unknown>>, g = doan.duong[d] as Readonly<Record<string, unknown>>;
+    for (const o of Object.keys(KHUNG[d])) if (c[o] === null && g[o] !== null && g[o] !== undefined) ra.push(`${d}.${o}`);
+  }
+  return ra;
+}
+
+/** "May do duoc": tung muc theo doan cua may, muc sat ranh ghi "may chua chac"; `keoTin`: canh bao ca ket qua (bo qua chan, anh sat). */
+function veMayDo(k: KhungChiTay, chuaChac: readonly string[], keoTin: readonly string[]): HTMLElement[] {
+  const ngo = (t: string): Node[] => (chuaChac.includes(t) ? [el('span', { class: 'chua-chac' }, ' (máy chưa chắc)')] : []);
+  const dong = CAC_DUONG.map((d) => {
+    const g = GIAI[d] as unknown as { ten: string; o: Record<string, { nhan: string; gia: Record<string, Luat> }> };
+    const doc = k.duong[d] as Readonly<Record<string, string | boolean | null>>;
+    const cac = Object.keys(KHUNG[d]).filter((o) => (o === 'seen' || doc['seen'] !== 'none') && doc[o] !== null && doc[o] !== undefined);
+    return el('li', {}, el('b', {}, `${g.ten}: `), ...cac.flatMap((o, i) => [...(i > 0 ? ['; '] : []),
+      `${g.o[o]?.nhan ?? o} — ${g.o[o]?.gia[String(doc[o])]?.nhan ?? String(doc[o])}`, ...ngo(`${d}.${o}`)]), '.');
+  });
+  return [el('h3', {}, 'Máy dò được'), ...keoTin.map((t) => el('p', { class: 'loi' }, t)),
+    el('ul', {}, el('li', {}, el('b', {}, 'Chỉ tay ngang: '), k.simian === null ? 'máy không xác định' : DOAN_CHUONG[k.simian ? 'true' : 'false'].nhan,
+      ...ngo('simian'), '.'), ...dong),
+    ...(chuaChac.length === 0 ? [] : [el('p', { class: 'ghi-chu' }, 'Mục ghi "máy chưa chắc": số đo nằm sát ranh giữa hai mức, máy chọn mức '
+      + 'gần hơn — kém tin hơn các mục khác; lời giải và AI bên dưới vẫn dùng mức máy chọn.')])];
+}
+
+function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh, chuaChac: readonly string[]): Node[] {
   const luan = luanTay(k), ng = noiGonTuLuan(luan, CHON.tay);
   const ra: Node[] = [
     hopNoiGon(ng.cau),
@@ -49,91 +69,48 @@ function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh): Node[] {
     el('p', { class: 'ghi-chu' }, 'Lời giải do Claude tổng hợp từ nhiều sách, nhiều nước rồi soạn lại, chốt lời; chỉ để tham khảo.'),
     // Nap thang phien.ts, khong qua `khoiAI`: file nap luoi nay nhap ai/index.ts thi Vite tach goi mo app thanh 4 file (do 28/10).
     khoiNap('AI diễn giải và dự đoán (Groq, miễn phí)', 'ai',
-      () => import('../ai/phien.ts').then((m) => m.vePhien(`chiTay:${gioiTinh}:${JSON.stringify(k)}`, { loai: 'chiTay', k, gioiTinh }))),
-    el('p', { class: 'ghi-chu' }, 'AI chỉ diễn giải các ô đã chọn và luật app tra, không xem tay.'),
+      () => import('../ai/phien.ts').then((m) => m.vePhien(`chiTay:${gioiTinh}:${JSON.stringify(k)}:${chuaChac.join(',')}`,
+        { loai: 'chiTay', k, gioiTinh, chuaChac }))),
+    el('p', { class: 'ghi-chu' }, 'AI chỉ diễn giải kết quả máy dò và luật app tra, không xem ảnh.'),
   ];
   giaiThuatNgu(ra, THUAT_NGU_TAY);
   return ra;
 }
 
-/** Nhac duoi anh may do — so do: QUY_UOC muc 27, 45, 46. */
-const DO_SAI = 'Máy dò chấm thử 08/11 trên 7 ảnh mạng (ít ảnh — chưa bảo đảm mọi bàn tay): 2 ảnh có đáp án thì cả 5 đường đánh dấu '
-  + 'đều vẽ đúng; chụp lại (xoay, xa gần, sáng tối) giữ ~9/10 ô. Ô máy không chắc để "— chọn —": tự chọn theo hình mẫu. Ô "dài" '
-  + 'đường trí vẫn nên tự xem lại (máy đã chặn kiểu đuôi vòng sang đường tình, chưa chặn hết kiểu khác). Đường màu lệch khỏi nếp tay '
-  + 'thì sửa ô của đường đó.';
-
-/** Gia tri trong o chon (chuoi) → gia tri khung. */
-const docGia = (s: string): string | boolean | null => (s === '' ? null : s === 'true' ? true : s === 'false' ? false : s);
-
-function oChon(nhan: string, gia: readonly unknown[], ten: (g: unknown) => string, doi: (g: string | boolean | null) => void): HTMLLabelElement {
-  const o = el('select', {}, el('option', { value: '' }, '— chọn —'), ...gia.map((g) => el('option', { value: String(g) }, ten(g))));
-  o.addEventListener('change', () => { doi(docGia(o.value)); });
-  return el('label', { class: 'chon' }, el('span', {}, nhan), o);
-}
+/** Nhac duoi anh may do — so do: QUY_UOC muc 27, 45–49. */
+const DO_SAI = 'Máy dò chấm thử trên 7 ảnh mạng (ít ảnh — chưa bảo đảm mọi bàn tay): 2 ảnh có đáp án thì cả 5 đường đánh dấu đều vẽ '
+  + 'đúng; chụp lại (xoay, xa gần, sáng tối) giữ ~9/10 kết quả. Soi ảnh: đường màu nào lệch khỏi nếp tay thì kết quả của đường đó kém tin '
+  + '— chụp lại cho rõ, thẳng.';
 
 export function veChiTay(gioiTinh: GioiTinh): Node[] {
-  const doc: { simian: boolean | null; duong: Record<string, Record<string, string | boolean | null>> } = {
-    simian: null, duong: Object.fromEntries(CAC_DUONG.map((d) => [d, Object.fromEntries(Object.keys(KHUNG[d]).map((o) => [o, null]))])),
-  };
   const ket = el('div', { 'aria-live': 'polite' });
-  const ve = (): void => { ket.replaceChildren(...veKetQua(structuredClone(doc) as unknown as KhungChiTay, gioiTinh)); };
-  /** O chon theo "duong.o" (va "simian") — may do xong thi dien san. */
-  const chon = new Map<string, HTMLSelectElement>();
-  const khoa = (d: string): void => { // duong "khong thay / khong co": cac o con lai khong dung
-    for (const [ten, s] of chon) if (ten.startsWith(`${d}.`) && ten !== `${d}.seen`) s.disabled = doc.duong[d]?.['seen'] === 'none';
-  };
-  const nhom = CAC_DUONG.map((d) => {
-    const g = GIAI[d] as unknown as { ten: string; o: Record<string, { nhan: string; gia: Record<string, Luat> }> };
-    const dd = doc.duong[d] ?? {};
-    const oDuong = (Object.entries(KHUNG[d]) as [string, readonly unknown[]][]).map(([ten, gia]) => {
-      const x = g.o[ten];
-      const o = oChon(x?.nhan ?? ten, gia, (v) => x?.gia[String(v)]?.nhan ?? String(v), (v) => { dd[ten] = v; khoa(d); ve(); });
-      const sel = o.querySelector('select');
-      if (sel !== null) chon.set(`${d}.${ten}`, sel);
-      return o;
-    });
-    return el('fieldset', {}, el('legend', {}, g.ten), el('p', { class: 'ghi-chu' }, `Tìm: ${CHO[d]}.`), ...oDuong);
-  });
-  const ngang = oChon('Đường trí và đường tình nhập làm một đường ngang suốt bàn tay?', [true, false],
-    (v) => DOAN_CHUONG[v === true ? 'true' : 'false'].nhan, (v) => { doc.simian = typeof v === 'boolean' ? v : null; ve(); });
-  const selNgang = ngang.querySelector('select');
-  if (selNgang !== null) chon.set('simian', selNgang);
-  const datKhung = (k: KhungChiTay): void => {
-    doc.simian = k.simian;
-    for (const d of CAC_DUONG) for (const [o, v] of Object.entries(k.duong[d]) as [string, string | boolean | null][]) {
-      const dd = doc.duong[d];
-      if (dd !== undefined) dd[o] = v;
-    }
-    for (const [ten, s] of chon) {
-      const [d = '', o = ''] = ten.split('.');
-      const v = ten === 'simian' ? doc.simian : doc.duong[d]?.[o] ?? null;
-      s.value = v === null ? '' : String(v);
-    }
-    for (const d of CAC_DUONG) khoa(d);
-    ve();
-  };
-  // Chup anh → may tu do (nap luoi `chiTayMp.ts`, MediaPipe) → ve duong len anh, dien san o.
+  // Chup anh → may tu do (nap luoi `chiTayMp.ts`, MediaPipe) → ve duong len anh, hien ket qua may do + loi giai.
   const anhKet = el('div', { 'aria-live': 'polite' });
   const chonAnh = el('input', { type: 'file', accept: 'image/*', hidden: '' });
   const nutAnh = el('button', { type: 'button', class: 'chinh' }, 'Chụp hoặc chọn ảnh lòng bàn tay — máy tự dò');
   nutAnh.addEventListener('click', () => { chonAnh.click(); });
-  /** Do anh `f`; `boQua`: nut "Van do thu" — do ca khi buoc chan mem (chup cheo, mu tay) le ra chan, khong dien o (ke hoach
-   * `2026-11-09-anh-thang-van-bi-chan.md`: anh thang tren mat ban cua anh van bi chan, chua biet moc nao). */
+  /** Do anh `f`; `boQua`: nut "Van do thu" — do ca khi buoc chan mem (chup cheo, mu tay) le ra chan, ket qua ghi kem tin (ke hoach
+   * `2026-11-09-anh-thang-van-bi-chan.md`). */
   const chay = (f: File, boQua: boolean): void => {
     nutAnh.disabled = true;
+    ket.replaceChildren();
     anhKet.replaceChildren(el('p', { class: 'ghi-chu' }, 'Đang tải thư viện tìm bàn tay (lần đầu khoảng 21 MB)…'));
     import('./chiTayMp.ts')
       .then((m) => m.doAnhTay(f, () => { anhKet.replaceChildren(el('p', { class: 'ghi-chu' }, 'Đang dò…')); }, gioiTinh, boQua))
       .then((k) => {
         anhKet.replaceChildren(el('img', { class: 'anh-do', src: k.anh, alt: 'Ảnh tay, các đường máy dò được tô màu theo hình mẫu' }),
-          ...(k.nhac === undefined ? [] : [el('p', { class: 'canh-bao' }, k.nhac)]),
-          ...(k.boQua === undefined ? [] : [el('p', { class: 'loi' }, `Đã dò bỏ qua bước chặn (${k.boQua}): đường có thể lệch — soi kỹ `
-            + 'từng đường trên ảnh. Máy không điền ô, anh tự chọn theo hình mẫu.')]),
-          el('p', { class: 'canh-bao' }, DO_SAI));
-        if (k.boQua === undefined) datKhung(k.khung);
+          ...(k.nhac === undefined ? [] : [el('p', { class: 'canh-bao' }, k.nhac)]), el('p', { class: 'canh-bao' }, DO_SAI));
+        const keoTin = [
+          ...(k.boQua === undefined ? [] : [`Đã dò bỏ qua bước chặn (${k.boQua}): đường có thể lệch — soi kỹ từng đường trên ảnh; mọi kết quả `
+            + 'dưới đây kém tin.']),
+          ...(k.sat === undefined ? [] : ['Ảnh chụp sát (ngón hoặc cổ tay bị cắt): máy phải thu nhỏ ảnh mới thấy tay — kết quả kém tin. Nên '
+            + 'chụp lại cho cả bàn tay nằm trọn trong khung.']),
+        ];
+        const chuaChac = oChuaChac(k.khung, k.doan);
+        ket.replaceChildren(...veMayDo(k.doan, chuaChac, keoTin), ...veKetQua(k.doan, gioiTinh, chuaChac));
       }, (e: unknown) => {
         // Loi sau khi da doc duoc anh (`LoiCoAnh` trong chiTayMp.ts — khong import tinh de khoi keo MediaPipe vao goi chinh): van hien
-        // anh de nguoi xem soi, tu chon o (anh bao 08/11); chan mem thi them dong chi tiet + nut "Van do thu" (09/11).
+        // anh (anh bao 08/11); chan mem thi them dong chi tiet + nut "Van do thu" (09/11).
         const loi = e instanceof Error ? e : new Error(String(e));
         const anh = 'anh' in loi && typeof loi.anh === 'string' ? loi.anh : undefined;
         const chiTiet = 'chiTiet' in loi && typeof loi.chiTiet === 'string' ? loi.chiTiet : undefined;
@@ -143,9 +120,8 @@ export function veChiTay(gioiTinh: GioiTinh): Node[] {
           el('p', { class: 'loi' }, loi.message),
           ...(chiTiet === undefined ? [] : [el('p', { class: 'ghi-chu' }, `Chi tiết để báo lỗi: ${chiTiet}.`)]),
           ...(nutThu === null ? [] : [nutThu]),
-          ...(anh === undefined ? [] : [el('p', { class: 'ghi-chu' }, 'Máy chưa dò được ảnh này nên chưa vẽ đường nào, chưa điền ô. Anh vẫn '
-            + 'soi ảnh để tự chọn từng ô theo hình mẫu bên dưới, hoặc chụp lại theo lời nhắc'
-            + (nutThu === null ? '.' : ', hoặc bấm "Vẫn dò thử" (máy vẽ đường, không điền ô).'))]));
+          ...(anh === undefined ? [] : [el('p', { class: 'ghi-chu' }, 'Máy chưa dò được ảnh này. Chụp lại theo lời nhắc'
+            + (nutThu === null ? '.' : ', hoặc bấm "Vẫn dò thử" (máy vẫn dò, kết quả kém tin).'))]));
       })
       .finally(() => { nutAnh.disabled = false; });
   };
@@ -157,18 +133,14 @@ export function veChiTay(gioiTinh: GioiTinh): Node[] {
   });
   const hinh = el('img', { class: 'hinh', alt: 'Hình mẫu: bốn đường chính trên lòng bàn tay',
     src: `data:image/svg+xml,${encodeURIComponent(HINH)}`, ...(gioiTinh === 'nam' ? { style: 'transform: scaleX(-1)' } : {}) });
-  ve();
   return [
     el('p', { class: 'ghi-chu' }, `Xem tay ${gioiTinh === 'nam' ? 'trái' : 'phải'} (nam tả nữ hữu — cách xem phổ biến ở Việt Nam; sách Tây `
-      + 'xem cả hai tay). Cách dễ: chụp lòng bàn tay — máy dò 4 đường ngay trong máy (ảnh không gửi đi, không lưu), tô màu lên ảnh và '
-      + 'điền sẵn các ô bên dưới; anh xem đường màu có nằm đúng nếp tay không, ô nào sai thì chọn lại. Chụp: đặt bàn tay ngửa trên mặt '
-      + 'bàn, xoè thẳng các ngón, cầm máy ngay phía trên, song song mặt bàn (chụp chéo thì máy dò sai hoặc không dò được); đủ sáng, '
-      + 'không bóng loá, lòng bàn tay chiếm gần hết khung. Hoặc tự chọn từng ô theo hình mẫu.'),
+      + 'xem cả hai tay). Chụp lòng bàn tay — máy dò 4 đường ngay trong máy (ảnh không gửi đi, không lưu), tô màu lên ảnh rồi giải từng '
+      + 'mục. Cách chụp: đặt bàn tay ngửa trên mặt bàn, xoè thẳng các ngón, cầm máy ngay phía trên, song song mặt bàn; cả bàn tay nằm '
+      + 'trọn trong khung (đủ 5 ngón và cổ tay); đủ sáng, không bóng loá.'),
     el('div', { class: 'nut-hang' }, nutAnh), chonAnh, anhKet,
     hinh,
     el('p', { class: 'chu-thich' }, ...MAU.flatMap(([m, t], i) => [...(i > 0 ? [' · '] : []), el('span', { style: `color: ${m}` }, `● ${t}`)])),
-    el('fieldset', {}, el('legend', {}, 'Chỉ tay ngang (đoạn chưởng)'), ngang),
-    ...nhom,
     ket,
   ];
 }

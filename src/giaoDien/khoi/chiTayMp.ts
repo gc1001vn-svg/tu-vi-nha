@@ -27,8 +27,10 @@ export type KetQuaTay = KetQuaDo & {
   readonly tay: { readonly nhan: string; readonly diem: number; readonly chieu: 'trai' | 'phai'; readonly gioi: 'nam' | 'nu' };
   /** Loi nhac khong chan (vd anh la tay phai trong khi xem tay trai). */
   readonly nhac?: string;
-  /** Co khi da do BO QUA buoc chan (nut "Van do thu"): buoc nao le ra chan — giao dien canh bao, khong dien o. */
+  /** Co khi da do BO QUA buoc chan (nut "Van do thu"): buoc nao le ra chan — giao dien canh bao ket qua kem tin. */
   readonly boQua?: string;
+  /** Anh chup sat: phai them vien moi thay tay (`timTay`) — ket qua kem tin, nen chup lai ca ban tay. */
+  readonly sat?: true;
 };
 
 function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContext2D] {
@@ -58,11 +60,31 @@ export class LoiCoAnh extends Error {
   }
 }
 
-/** Tim tay → moc (0–1 theo anh `nho`), MediaPipe doan tay nao + diem. Thu 06/11 khong thay tay thi dem vien 25 % roi tim lai: anh
- * duy nhat gap ("My left hand's palm", tay nghieng) ra moc sai hoan toan → bo, giu bao "khong thay tay — chup thang". */
-function timTay(hl: HandLandmarker, nho: HTMLCanvasElement): { moc: { x: number; y: number }[][]; nhan: string; diem: number } {
+/**
+ * Tim tay → moc (0–1 theo anh `nho`), MediaPipe doan tay nao + diem. Khong thay tay thi them vien xam 30 % / 60 % / 100 % canh dai roi
+ * tim lai (do 09/11: anh chup sat — long tay day khung, ngon bi cat, dung loi dan cu "long ban tay chiem gan het khung" — MediaPipe khong
+ * thay 25/28 anh, them vien thay 24/28; 06/11 mot anh tay nghieng them vien ra moc sai → nay moc tim lai van phai qua buoc kiem dang).
+ * `dem`: ty le vien da them (0 = khong them).
+ */
+function timTay(hl: HandLandmarker, nho: HTMLCanvasElement): { moc: { x: number; y: number }[][]; nhan: string; diem: number; dem: number } {
   const r = hl.detect(nho);
-  return { moc: r.landmarks, nhan: r.handedness[0]?.[0]?.categoryName ?? '', diem: r.handedness[0]?.[0]?.score ?? 0 };
+  if (r.landmarks.length > 0) return { moc: r.landmarks, nhan: r.handedness[0]?.[0]?.categoryName ?? '', diem: r.handedness[0]?.[0]?.score ?? 0, dem: 0 };
+  for (const k of [0.3, 0.6, 1]) {
+    const d = Math.round(k * Math.max(nho.width, nho.height)), [c, g] = canvas(nho.width + 2 * d, nho.height + 2 * d);
+    try {
+      g.fillStyle = '#808080';
+      g.fillRect(0, 0, c.width, c.height);
+      g.drawImage(nho, d, d);
+      const q = hl.detect(c);
+      if (q.landmarks.length > 0) {
+        return { moc: q.landmarks.map((m) => m.map((t) => ({ x: (t.x * c.width - d) / nho.width, y: (t.y * c.height - d) / nho.height }))),
+          nhan: q.handedness[0]?.[0]?.categoryName ?? '', diem: q.handedness[0]?.[0]?.score ?? 0, dem: k };
+      }
+    } finally {
+      c.width = 0; c.height = 0;
+    }
+  }
+  return { moc: [], nhan: '', diem: 0, dem: 0 };
 }
 
 /** `boQuaChan`: do ca khi buoc chan mem (chup cheo, mu tay) le ra chan — ket qua mang `boQua` (nut "Van do thu", ke hoach 09/11). */
@@ -95,11 +117,16 @@ export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 
     const r = timTay(hl, nho);
     if (r.moc.length > 1) throw chan('Ảnh có hai bàn tay — chụp một bàn tay thôi.');
     const m = r.moc[0];
-    if (m === undefined) throw chan('Không thấy bàn tay trong ảnh — chụp lại: xoè cả bàn tay, đủ sáng, chụp thẳng.');
+    if (m === undefined) throw chan('Không thấy bàn tay trong ảnh — chụp lại: đặt tay ngửa trên mặt bàn, cả bàn tay nằm trọn trong khung (đủ 5 ngón, cổ '
+      + 'tay), đủ sáng.');
     const p = (k: number): Diem => ({ x: (m[k]?.x ?? 0) * w, y: (m[k]?.y ?? 0) * h });
     // Khung chuan: goc o co tay (0), truc y toi goc ngon giua (9), truc x vuong goc, chieu ve phia ngon cai (2).
     const o = p(0), L = Math.hypot(p(9).x - o.x, p(9).y - o.y);
-    if (L / Math.max(w, h) < 0.2) throw chan('Bàn tay quá nhỏ trong ảnh — chụp gần hơn, lòng bàn tay chiếm gần hết khung.');
+    if (L / Math.max(w, h) < 0.2) {
+      // Chi thay tay sau khi them vien ma tay "nho" → moc tim lai sai (06/11, 09/11: anh tay nghieng "My left hand's palm"), khong phai tay nho.
+      throw chan(r.dem > 0 ? 'Không thấy rõ bàn tay trong ảnh — chụp lại: đặt tay ngửa trên mặt bàn, cả bàn tay nằm trọn trong khung '
+        + '(đủ 5 ngón, cổ tay), đủ sáng.' : 'Bàn tay quá nhỏ trong ảnh — chụp gần hơn, nhưng cả bàn tay vẫn nằm trọn trong khung.');
+    }
     // Chieu hinh hoc: tich (co → goc tro) × (co → goc ut), truc y anh huong xuong; < 0 la dang long tay PHAI (ngon cai ben phai khi
     // ngon huong len) — hoac mu tay trai. MediaPipe doan tay theo dang ve ngoai (do 06/11: khop chieu 7/7 anh long tay, nguoc 4/4 anh mu
     // tay) → nguoc nhau la mu ban tay.
@@ -152,7 +179,7 @@ export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 
     }
     return { ...kq, anh: nho.toDataURL('image/jpeg', 0.85), taiMs, doMs: performance.now() - bd - taiMs, vetAnh, co: [w, h], L,
       khungAnh: { o, xv, yv }, mocChuan, tay: { nhan: r.nhan, diem: r.diem, chieu, gioi },
-      ...(boQua.length === 0 ? {} : { boQua: boQua.join(', ') }),
+      ...(boQua.length === 0 ? {} : { boQua: boQua.join(', ') }), ...(r.dem > 0 ? { sat: true as const } : {}),
       ...(chieu === canXem ? {} : { nhac: `Ảnh là tay ${chieu === 'trai' ? 'trái' : 'phải'}, app xem tay ${canXem === 'trai' ? 'trái' : 'phải'} `
         + `(nam tả nữ hữu) — máy vẫn dò, nhưng nên chụp tay ${canXem === 'trai' ? 'trái' : 'phải'}.` }) };
   } finally {

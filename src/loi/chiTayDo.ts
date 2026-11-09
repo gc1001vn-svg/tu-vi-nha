@@ -22,7 +22,10 @@ export interface Diem { readonly x: number; readonly y: number }
 export interface MocTay { readonly co: Diem; readonly caiGoc: Diem; readonly caiKhop: Diem; readonly tro: Diem; readonly giua: Diem; readonly apUt: Diem; readonly ut: Diem }
 
 export interface KetQuaDo {
+  /** O sat ranh de trong (null) — dung de do, so sanh. */
   readonly khung: KhungChiTay;
+  /** Doan cua may cho moi o (khong de trong vi sat ranh); o nao `khung` trong ma `doan` co la "may chua chac". */
+  readonly doan: KhungChiTay;
   /** Doan nep may thay cua tung duong (rong = khong thay), da lam muot de ve de len anh. */
   readonly vet: { readonly life: readonly Diem[]; readonly head: readonly Diem[]; readonly heart: readonly Diem[]; readonly fate: readonly Diem[] };
 }
@@ -346,72 +349,80 @@ export function doChiTay(xam: Float32Array, moc: MocTay): KetQuaDo {
   // Do ro: doan ngan hon nguong dai coi nhu khong thay; trung binh nep so voi ranh "ro"; sat nguong (± 25 % do dai, ± 12 % do nep) → null.
   const tbDoan = (r: readonly number[], d: [number, number, number] | null): number =>
     (d === null ? 0 : r.slice(d[0], d[1] + 1).reduce((a, b) => a + b, 0) / (d[1] - d[0] + 1));
-  const ro = (r: readonly number[], d: [number, number, number] | null, buocL: number, toiThieu = 0.15): 'clear' | 'faint' | 'none' | null => {
-    const dai = d === null ? 0 : (d[1] - d[0]) * buocL;
-    if (dai < 0.75 * toiThieu) return 'none';
-    if (dai < 1.25 * toiThieu) return null;
-    return bac(tbDoan(r, d) / ranh, 1, 0.12, 'faint', 'clear');
-  };
-  const dut = (d: [number, number, number] | null): boolean | null => (d === null ? null : bac(d[2] / px, 0.05, 0.015, false, true));
   const buocGoc = (Math.PI / 180) * 0.4; // ~ do dai mot do tren cung ban kinh 0,4 L
   const cuoi = (v: readonly Diem[]): Diem | undefined => v[v.length - 1];
   const eTinh = cuoi(vTinh), sTri = vTri[0], eTri = cuoi(vTri), eDoi = cuoi(vDoi), sSu = vSu[0];
-  const roTinh = ro(rTinh, dTinh, 1 / px), roTri = ro(rTri, dTri, 1 / px);
-
-  // Chi tay ngang: tren duong tri KHONG co duong tinh rieng, ma duong tri ro, chay toi phia ngon ut va o dau ngon ut van cao (cach duong
-  // goc ngon ≤ 0,30 L — duong tri thuong cuoi thap hon nhieu). Ma cu 01/11 bao chi tay ngang 4/7 anh mau (dang le hiem), nen siet.
-  // "Khong co duong tinh rieng": khong thay doan nao, hoac doan tim duoc yeu hon 0,45 lan duong tri (nhieu nen); 0,45–0,6 la sat ranh.
   const caoCuoi = eTri === undefined ? Infinity : mcpY(eTri.x) - eTri.y;
   const tyTinh = tbDoan(rTinh, dTinh) / (tbDoan(rTri, dTri) || NHO);
-  const tinhVang = roTinh === 'none' || tyTinh < 0.45, tinhNgo = roTinh === null || (tyTinh >= 0.45 && tyTinh < 0.6);
   const toiUt = eTri !== undefined && eTri.x <= moc.apUt.x;
   // Chi tay ngang that la MOT nep gan thang (anh mau 06/11: lech khoi day cung 0,03 L). Vet tri gay khuc — hai nep noi nhau, nua phia
   // ngon cai nam ngang, nua phia ngon ut do xuong (anh "Hand female 2/3": lech 0,11 L) — co the la duong tri chiem mat duong tinh → chi
   // de trong. Thang < 0,045 L; 0,045–0,085 sat ranh; tu 0,085 la gay.
   const lechTri = sTri === undefined || eTri === undefined ? Infinity : Math.max(...vTri.map((q) =>
     Math.abs((q.x - sTri.x) * (eTri.y - sTri.y) - (q.y - sTri.y) * (eTri.x - sTri.x)) / (Math.hypot(eTri.x - sTri.x, eTri.y - sTri.y) || NHO)));
-  const ngangDu = roTri === 'clear' && toiUt && caoCuoi <= 0.3 && bac(lechTri, 0.065, 0.02, true, false) === true;
-  const ngangNgo = roTri === null || (toiUt && caoCuoi <= 0.36 && !ngangDu);
-  const ngang: boolean | null = tinhVang ? (ngangDu ? true : ngangNgo ? null : false) : tinhNgo && ngangDu ? null : false;
   // Su nghiep: doan dai ≥ 0,25 L va manh ≥ nua trung vi ba duong chinh — van da nhieu de thanh doan doc yeu giua long tay.
   const chinh = [tbDoan(rTinh, dTinh), tbDoan(rTri, dTri), tbDoan(rDoi, dDoi)].sort((x, y) => x - y)[1] ?? 0;
   const tySu = tbDoan(rSu, dSu) / (chinh || NHO);
-  const roSu = tySu < 0.4 ? 'none' : tySu < 0.6 ? null : ro(rSu, dSu, 1 / px, 0.25);
-  /** Co duong su nghiep chac (du manh, du dai) — xet duoc diem moc, dut, ke ca khi ro / mo con sat ranh. */
-  const coSu = roSu === 'clear' || roSu === 'faint' || (roSu === null && tySu >= 0.6 && dSu !== null && (dSu[1] - dSu[0]) / px >= 0.32);
-  const vTinhVe = ngang === true ? vTri : vTinh;
-  const eT = ngang === true ? eTri : eTinh, roT = ngang === true ? roTri : roTinh;
-  const tLen = eT === undefined ? 0 : (eT.x - moc.giua.x) / (moc.tro.x - moc.giua.x || NHO);
   const dauTri = sTri, cuoiTri = eTri;
-  const daiTri = cuoiTri === undefined || duoiNgo ? null : ((): 'long' | 'medium' | 'short' | null => {
-    const dai = moc.ut.x + 0.25 * (moc.apUt.x - moc.ut.x), ngan = (moc.giua.x + moc.apUt.x) / 2;
-    if (Math.abs(cuoiTri.x - dai) < 0.04 || Math.abs(cuoiTri.x - ngan) < 0.04) return null;
-    return cuoiTri.x <= dai ? 'long' : cuoiTri.x >= ngan ? 'short' : 'medium';
-  })();
-  const daiDoi = eDoi === undefined ? null : Math.abs(eDoi.y - 0.15) < 0.04 || Math.abs(eDoi.y - 0.45) < 0.04 ? null
-    : eDoi.y <= 0.15 ? 'long' : eDoi.y >= 0.45 ? 'short' : 'medium';
-  const daiTinh = eT === undefined ? null : Math.abs(tLen - 0.75) < 0.1 || Math.abs(tLen - 0.25) < 0.1 ? null
-    : tLen >= 0.75 ? 'long' : tLen >= 0.25 ? 'medium' : 'short';
-  const dauSu = sSu === undefined || !coSu ? null : ((): 'life' | 'wrist' | 'middle' | null => {
-    const kcDoi = Math.min(Infinity, ...vDoi.map((p) => Math.hypot(p.x - sSu.x, p.y - sSu.y)));
-    if (Math.abs(kcDoi - 0.1) < 0.02 || (kcDoi > 0.1 && Math.abs(sSu.y - 0.2) < 0.03)) return null;
-    return kcDoi < 0.1 ? 'life' : sSu.y <= 0.2 ? 'wrist' : 'middle';
-  })();
 
-  const khung: KhungChiTay = {
-    simian: ngang,
-    duong: {
-      life: { seen: ro(rDoi, dDoi, buocGoc), length: daiDoi,
-        arc: vDoi.length === 0 ? null : bac(Math.min(...vDoi.map((p) => p.x)), moc.giua.x + 0.1, 0.04, 'wide', 'narrow'), broken: dut(dDoi) },
-      head: { seen: roTri, length: daiTri,
-        shape: dauTri === undefined || cuoiTri === undefined ? null : bac(dauTri.y - cuoiTri.y, 0.15, 0.04, 'straight', 'curved'),
-        joined: dauTri === undefined || sDoi === undefined ? null : bac(Math.hypot(dauTri.x - sDoi.x, dauTri.y - sDoi.y), 0.1, 0.03, true, false),
-        broken: dut(dTri) },
-      heart: { seen: roT, length: daiTinh, broken: ngang === true ? dut(dTri) : dut(dTinh) },
-      fate: { seen: roSu, start: dauSu, broken: coSu ? dut(dSu) : null },
-    },
+  /**
+   * Xep o. `k` nhan moi bien "sat ranh": k = 1 → o sat ranh de trong (null) — `khung`, dung de do; k = 0 → khong co ranh, moi o mot dap
+   * (doan cua may) — `doan`, giao dien hien kem "may chua chac" o nhung o `khung` trong (anh 09/11 bo che do tu chon o: "sao ma co kien
+   * thuc de dien tay duoc"; ke hoach `2026-11-09-khong-nhan-tay-bo-tu-chon.md`).
+   */
+  const xep = (k: number): { khung: KhungChiTay; ngang: boolean | null; coSu: boolean } => {
+    const ro = (r: readonly number[], d: [number, number, number] | null, buocL: number, toiThieu = 0.15): 'clear' | 'faint' | 'none' | null => {
+      const dai = d === null ? 0 : (d[1] - d[0]) * buocL;
+      if (dai < (1 - 0.25 * k) * toiThieu) return 'none';
+      if (dai < (1 + 0.25 * k) * toiThieu) return null;
+      return bac(tbDoan(r, d) / ranh, 1, 0.12 * k, 'faint', 'clear');
+    };
+    const dut = (d: [number, number, number] | null): boolean | null => (d === null ? null : bac(d[2] / px, 0.05, 0.015 * k, false, true));
+    const roTinh = ro(rTinh, dTinh, 1 / px), roTri = ro(rTri, dTri, 1 / px);
+    // Chi tay ngang: tren duong tri KHONG co duong tinh rieng, ma duong tri ro, chay toi phia ngon ut va o dau ngon ut van cao (cach
+    // duong goc ngon ≤ 0,30 L — duong tri thuong cuoi thap hon nhieu). Ma cu 01/11 bao chi tay ngang 4/7 anh mau (dang le hiem), nen siet.
+    // "Khong co duong tinh rieng": khong thay doan nao, hoac doan tim duoc yeu hon 0,45 lan duong tri (nhieu nen); 0,45–0,6 la sat ranh.
+    const tinhVang = roTinh === 'none' || tyTinh < 0.525 - 0.075 * k, tinhNgo = roTinh === null || Math.abs(tyTinh - 0.525) < 0.075 * k;
+    const ngangDu = roTri === 'clear' && toiUt && caoCuoi <= 0.3 && bac(lechTri, 0.065, 0.02 * k, true, false) === true;
+    const ngangNgo = k > 0 && (roTri === null || (toiUt && caoCuoi <= 0.36 && !ngangDu));
+    const ngang: boolean | null = tinhVang ? (ngangDu ? true : ngangNgo ? null : false) : tinhNgo && ngangDu ? null : false;
+    const roSu = tySu < 0.5 - 0.1 * k ? 'none' : tySu < 0.5 + 0.1 * k ? null : ro(rSu, dSu, 1 / px, 0.25);
+    /** Co duong su nghiep chac (du manh, du dai) — xet duoc diem moc, dut, ke ca khi ro / mo con sat ranh. */
+    const coSu = roSu === 'clear' || roSu === 'faint' || (roSu === null && tySu >= 0.6 && dSu !== null && (dSu[1] - dSu[0]) / px >= 0.32);
+    const eT = ngang === true ? eTri : eTinh, roT = ngang === true ? roTri : roTinh;
+    const tLen = eT === undefined ? 0 : (eT.x - moc.giua.x) / (moc.tro.x - moc.giua.x || NHO);
+    const daiTri = cuoiTri === undefined || (duoiNgo && k > 0) ? null : ((): 'long' | 'medium' | 'short' | null => {
+      const dai = moc.ut.x + 0.25 * (moc.apUt.x - moc.ut.x), ngan = (moc.giua.x + moc.apUt.x) / 2;
+      if (Math.abs(cuoiTri.x - dai) < 0.04 * k || Math.abs(cuoiTri.x - ngan) < 0.04 * k) return null;
+      return cuoiTri.x <= dai ? 'long' : cuoiTri.x >= ngan ? 'short' : 'medium';
+    })();
+    const daiDoi = eDoi === undefined ? null : Math.abs(eDoi.y - 0.15) < 0.04 * k || Math.abs(eDoi.y - 0.45) < 0.04 * k ? null
+      : eDoi.y <= 0.15 ? 'long' : eDoi.y >= 0.45 ? 'short' : 'medium';
+    const daiTinh = eT === undefined ? null : Math.abs(tLen - 0.75) < 0.1 * k || Math.abs(tLen - 0.25) < 0.1 * k ? null
+      : tLen >= 0.75 ? 'long' : tLen >= 0.25 ? 'medium' : 'short';
+    const dauSu = sSu === undefined || !coSu ? null : ((): 'life' | 'wrist' | 'middle' | null => {
+      const kcDoi = Math.min(Infinity, ...vDoi.map((p) => Math.hypot(p.x - sSu.x, p.y - sSu.y)));
+      if (Math.abs(kcDoi - 0.1) < 0.02 * k || (kcDoi > 0.1 && Math.abs(sSu.y - 0.2) < 0.03 * k)) return null;
+      return kcDoi < 0.1 ? 'life' : sSu.y <= 0.2 ? 'wrist' : 'middle';
+    })();
+    return { ngang, coSu, khung: {
+      simian: ngang,
+      duong: {
+        life: { seen: ro(rDoi, dDoi, buocGoc), length: daiDoi,
+          arc: vDoi.length === 0 ? null : bac(Math.min(...vDoi.map((p) => p.x)), moc.giua.x + 0.1, 0.04 * k, 'wide', 'narrow'), broken: dut(dDoi) },
+        head: { seen: roTri, length: daiTri,
+          shape: dauTri === undefined || cuoiTri === undefined ? null : bac(dauTri.y - cuoiTri.y, 0.15, 0.04 * k, 'straight', 'curved'),
+          joined: dauTri === undefined || sDoi === undefined ? null : bac(Math.hypot(dauTri.x - sDoi.x, dauTri.y - sDoi.y), 0.1, 0.03 * k, true, false),
+          broken: dut(dTri) },
+        heart: { seen: roT, length: daiTinh, broken: ngang === true ? dut(dTri) : dut(dTinh) },
+        fate: { seen: roSu, start: dauSu, broken: coSu ? dut(dSu) : null },
+      },
+    } };
   };
-  return { khung, vet: { life: muot(vDoi), head: muot(vTri), heart: muot(vTinhVe), fate: coSu ? muot(vSu) : [] } };
+  const chac = xep(1), dd = xep(0);
+  // Vet ve theo doan cua may (giao dien hien doan): chi tay ngang thi duong tinh ve trung duong tri; su nghiep ve khi may doan la co.
+  return { khung: chac.khung, doan: dd.khung,
+    vet: { life: muot(vDoi), head: muot(vTri), heart: muot(dd.ngang === true ? vTri : vTinh), fate: dd.coSu ? muot(vSu) : [] } };
 }
 
 function vet(d: [number, number, number] | null, diem: (b: number) => Diem): Diem[] {

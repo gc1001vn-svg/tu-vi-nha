@@ -35,18 +35,22 @@ for (const a of ANH) {
   const kq = khoi.locator('img.anh-do, p.loi');
   await kq.first().waitFor({ timeout: 60000 });
   const anh = await khoi.locator('img.anh-do').evaluateAll((v) => v.map((i) => ({ nap: i.complete && i.naturalWidth > 0, tu: [i.naturalWidth, i.naturalHeight], hien: [Math.round(i.getBoundingClientRect().width), Math.round(i.getBoundingClientRect().height)], src: i.src.slice(0, 30) })));
-  const loi = await khoi.locator('p.loi').allTextContents();
+  const loi = await khoi.locator('p.loi').filter({ hasNotText: 'kém tin' }).allTextContents(); // canh bao kem tin nam trong ket qua, khong phai loi
   const chiTiet = (await khoi.locator('p.ghi-chu', { hasText: 'Chi tiết để báo lỗi' }).allTextContents()).join(' ');
   console.log(a.split('/').pop(), anh.length ? 'CO ANH ' + JSON.stringify(anh[0]) : 'KHONG CO ANH', loi.length ? '| loi: ' + loi.join(' / ') : '',
     chiTiet ? '\n   ' + chiTiet : '');
+  const tom = async () => { // ket qua may do: so o chon (phai 0), so muc "May do duoc", so muc "may chua chac", canh bao kem tin
+    const chon = await khoi.locator('select').count(), muc = await khoi.locator('h3:has-text("Máy dò được") + * li, h3:has-text("Máy dò được") ~ ul').first().locator('li').count().catch(() => 0);
+    const ngo = await khoi.locator('.chua-chac').count(), loiGiai = await khoi.locator('h3', { hasText: 'Lời giải' }).count();
+    const keo = (await khoi.locator('h3:has-text("Máy dò được") ~ p.loi').allTextContents()).map((t) => t.slice(0, 70)).join(' / ');
+    return `ô chọn ${chon} · mục máy dò ${muc} · chưa chắc ${ngo} · lời giải ${loiGiai ? 'có' : 'KHÔNG'}${keo ? ' · kém tin: ' + keo : ''}`;
+  };
+  if (await khoi.locator('h3', { hasText: 'Máy dò được' }).count() > 0) console.log('   → ' + await tom());
   const nut = khoi.getByRole('button', { name: /Vẫn dò thử/ });
   if (doThu && await nut.count() > 0) {
-    const truoc = await khoi.locator('select').evaluateAll((v) => v.map((x) => x.value).join(','));
     await nut.click();
-    await khoi.locator('p.loi', { hasText: 'Đã dò bỏ qua bước chặn' }).or(khoi.locator('p.loi', { hasNotText: 'Đã dò' })).first().waitFor({ timeout: 60000 });
-    const canh = (await khoi.locator('p.loi').allTextContents()).join(' / ');
-    const sau = await khoi.locator('select').evaluateAll((v) => v.map((x) => x.value).join(','));
-    console.log('   → vẫn dò thử:', canh.slice(0, 160), '| ô', truoc === sau ? 'không đổi' : 'BỊ ĐIỀN');
+    await khoi.locator('h3', { hasText: 'Máy dò được' }).or(khoi.locator('p.loi', { hasNotText: 'Đã dò' })).first().waitFor({ timeout: 60000 });
+    console.log('   → vẫn dò thử:', await tom());
   }
   await khoi.screenshot({ path: a.replace(/\.[a-z]+$/i, '') + '.khoi.png' }).catch(() => {});
 }

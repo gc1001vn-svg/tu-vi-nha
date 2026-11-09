@@ -20,7 +20,7 @@ import type * as TarotLuan from '../tarotLuan.ts';
 import { NUOC_NGOAI } from '../tinh.ts';
 import { luanTuoi } from '../tuoiHopLuan.ts';
 import type { SoDoMat } from '../tuongMat.ts';
-import { QUY_LUAT_CHUNG, giaiChiTay, mucTin, type KhungChiTay, type Luat } from '../chiTay.ts';
+import { GIAI as GIAI_TAY, QUY_LUAT_CHUNG, giaiChiTay, mucTin, type KhungChiTay, type Luat } from '../chiTay.ts';
 import { CAC_KHOA, GIAI, SO_ANH_MAU, dangSo, giaiMat, type MatDoGiai } from '../tuongMatGiai.ts';
 import { luanMat, mucXet, netChot } from '../tuongMatLuan.ts';
 import { luanTay } from '../chiTayLuan.ts';
@@ -329,15 +329,23 @@ export function duLieuTarot(t: Tarot, kieu: keyof Tarot['TRAI'], rut: readonly T
  * "neu… thi…" (do 28/10). Luat kem muc tin (dong thuan may nen, venh). Khong gui chi tiet tung sach (`loi`): man hinh da co, va de
  * luot dau con du token ra (`vuaHanMuc`).
  */
-export function duLieuChiTay(k: KhungChiTay, gioiTinh: GioiTinh): string {
+/** `chuaChac`: o may doan sat ranh ("simian", "life.length"…) — ghi "(máy chưa chắc)" canh o do (anh 09/11 bo che do tu chon o). */
+export function duLieuChiTay(k: KhungChiTay, gioiTinh: GioiTinh, chuaChac: readonly string[] = []): string {
   // Muc tin dat dau dong de AI chep nguyen vao dong du doan (dat cuoi dong thi 28/10 AI chi chep dung 2/72 dong).
   const tin = (l: Omit<Luat, 'nhan'>): string => `[${mucTin(l)}]`;
   const venh = (l: Omit<Luat, 'nhan'>): string => (l.venh === undefined ? '' : ` Vênh: ${l.venh}`);
   const g = giaiChiTay(k);
+  // Nhan "duong|o" cua o may chua chac (giaiChiTay tra nhan, khong tra khoa).
+  const ngo = new Set(chuaChac.map((t) => {
+    if (t === 'simian') return `${g[0]?.ten ?? ''}|Có không`;
+    const [d = '', o = ''] = t.split('.'), x = (GIAI_TAY as unknown as Record<string, { ten: string; o: Record<string, { nhan: string }> }>)[d];
+    return `${x?.ten ?? ''}|${x?.o[o]?.nhan ?? ''}`;
+  }));
   return [
-    muc('Bàn tay người xem (người xem tự chọn từng ô theo hình mẫu)', [
+    muc('Bàn tay người xem (máy dò từ ảnh chụp; "(máy chưa chắc)" là đoán sát ranh, kém tin)', [
       `- Tay xem: ${gioiTinh === 'nam' ? 'tay trái (nam)' : 'tay phải (nữ)'}, theo "nam tả nữ hữu".`,
-      ...g.map((m) => `- ${m.ten}: ${m.dong.map((d) => `${d.o} = ${d.luat?.nhan ?? 'chưa chọn'}`).join('; ')}.`),
+      ...g.map((m) => `- ${m.ten}: ${m.dong.map((d) => `${d.o} = ${d.luat?.nhan ?? 'chưa chọn'}${ngo.has(`${m.ten}|${d.o}`) ? ' (máy chưa chắc)' : ''}`)
+        .join('; ')}.`),
     ]),
     muc('Luật app tra cho từng ô đã chọn (mức tin ở đầu dòng)', g.flatMap((m) => m.dong.map((d) => (d.luat === null ? null
       : `- ${tin(d.luat)} ${m.ten} · ${d.o} = ${d.luat.nhan}: ${d.luat.chot}${venh(d.luat)}`)))),
