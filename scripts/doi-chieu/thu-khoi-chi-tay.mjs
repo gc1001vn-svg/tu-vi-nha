@@ -3,12 +3,13 @@
 // (anh hien, da nap, rong bao nhieu tren man) hay KHONG CO ANH, kem chu bao loi; chup khoi ra <anh>.khoi.png canh anh.
 // Anh bao 08/11: anh chup camera bi chan "chup nghieng" thi chi thay chu, khong xem duoc anh → ban sua phai ra CO ANH ca khi bi chan.
 // Anh de NGOAI repo (anh mang giay phep mo, vd ban lam nghieng cua anh trong dap-an-chi-tay.json).
-//   npm run build && NODE_PATH=$(npm root -g) node scripts/doi-chieu/thu-khoi-chi-tay.mjs dist <anh1> [anh2 ...]
+//   npm run build && NODE_PATH=$(npm root -g) node scripts/doi-chieu/thu-khoi-chi-tay.mjs dist <anh1> [anh2 ...] [--do-thu]
 import { existsSync, readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { extname, join } from 'node:path';
 const pw = createRequire(import.meta.url)('playwright');
-const [DIST, ...ANH] = process.argv.slice(2);
+const doThu = process.argv.includes('--do-thu'); // bi chan thi bam "Van do thu" (ke hoach 2026-11-09-anh-thang-van-bi-chan.md)
+const [DIST, ...ANH] = process.argv.slice(2).filter((a) => a !== '--do-thu');
 const KIEU = { '.js': 'text/javascript', '.wasm': 'application/wasm', '.task': 'application/octet-stream', '.html': 'text/html', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.json': 'application/json', '.webmanifest': 'application/manifest+json' };
 const b = await pw.chromium.launch();
 const ctx = await b.newContext({ ...pw.devices['iPhone 13'], serviceWorkers: 'block' });
@@ -35,7 +36,18 @@ for (const a of ANH) {
   await kq.first().waitFor({ timeout: 60000 });
   const anh = await khoi.locator('img.anh-do').evaluateAll((v) => v.map((i) => ({ nap: i.complete && i.naturalWidth > 0, tu: [i.naturalWidth, i.naturalHeight], hien: [Math.round(i.getBoundingClientRect().width), Math.round(i.getBoundingClientRect().height)], src: i.src.slice(0, 30) })));
   const loi = await khoi.locator('p.loi').allTextContents();
-  console.log(a.split('/').pop(), anh.length ? 'CO ANH ' + JSON.stringify(anh[0]) : 'KHONG CO ANH', loi.length ? '| loi: ' + loi.join(' / ') : '');
+  const chiTiet = (await khoi.locator('p.ghi-chu', { hasText: 'Chi tiết để báo lỗi' }).allTextContents()).join(' ');
+  console.log(a.split('/').pop(), anh.length ? 'CO ANH ' + JSON.stringify(anh[0]) : 'KHONG CO ANH', loi.length ? '| loi: ' + loi.join(' / ') : '',
+    chiTiet ? '\n   ' + chiTiet : '');
+  const nut = khoi.getByRole('button', { name: /Vẫn dò thử/ });
+  if (doThu && await nut.count() > 0) {
+    const truoc = await khoi.locator('select').evaluateAll((v) => v.map((x) => x.value).join(','));
+    await nut.click();
+    await khoi.locator('p.loi', { hasText: 'Đã dò bỏ qua bước chặn' }).or(khoi.locator('p.loi', { hasNotText: 'Đã dò' })).first().waitFor({ timeout: 60000 });
+    const canh = (await khoi.locator('p.loi').allTextContents()).join(' / ');
+    const sau = await khoi.locator('select').evaluateAll((v) => v.map((x) => x.value).join(','));
+    console.log('   → vẫn dò thử:', canh.slice(0, 160), '| ô', truoc === sau ? 'không đổi' : 'BỊ ĐIỀN');
+  }
   await khoi.screenshot({ path: a.replace(/\.[a-z]+$/i, '') + '.khoi.png' }).catch(() => {});
 }
 console.log('loi trang:', loiTrang.length ? loiTrang.join(' || ') : 'khong');

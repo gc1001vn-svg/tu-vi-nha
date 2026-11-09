@@ -28,14 +28,29 @@ export interface KetQuaDo {
 }
 
 /**
- * Moc tay co dung dang ban tay chup thang khong (khung chuan). Khoang cho phep: khoang do tren 11 anh mau 06/11 (long va mu tay, trai
- * va phai) noi rong ~50 %. Ngoai khoang = chup nghieng, ngon co, MediaPipe dat moc lech → do bua se sai duong.
+ * Moc tay nao nam ngoai dang ban tay chup thang (khung chuan). Khoang cho phep: khoang do tren 11 anh mau 06/11 (long va mu tay, trai
+ * va phai) noi rong ~50 %. Ngoai khoang = chup nghieng, ngon co, MediaPipe dat moc lech → do bua se sai duong. Tra tung moc lech bang chu
+ * (ten moc, gia tri, khoang can) de nguoi xem bao lai (anh 09/11: anh thang tren mat ban van bi chan, chua biet moc nao — ke hoach
+ * `2026-11-09-anh-thang-van-bi-chan.md`); rong = hop le.
  */
+export function mocNgoaiKhoang(m: MocTay): string[] {
+  const ra: string[] = [];
+  const so = (v: number): string => v.toFixed(2).replace('.', ',');
+  const xet = (ten: string, v: number, a: number, b: number): void => {
+    if (v < a || v > b) ra.push(`${ten} ${so(v)} (cần ${so(a)}–${so(b)})`);
+  };
+  xet('gốc ngón trỏ ngang', m.tro.x, 0.12, 0.45); xet('gốc ngón trỏ dọc', m.tro.y, 0.85, 1.15);
+  xet('gốc ngón áp út ngang', m.apUt.x, -0.38, -0.08); xet('gốc ngón áp út dọc', m.apUt.y, 0.75, 1.05);
+  xet('gốc ngón út ngang', m.ut.x, -0.62, -0.25); xet('gốc ngón út dọc', m.ut.y, 0.55, 0.98);
+  xet('gốc ngón cái ngang', m.caiGoc.x, 0.2, 0.62); xet('gốc ngón cái dọc', m.caiGoc.y, -0.08, 0.45);
+  xet('khớp ngón cái ngang', m.caiKhop.x, 0.35, 0.9); xet('khớp ngón cái dọc', m.caiKhop.y, 0.2, 0.85);
+  if (!(m.tro.x > m.apUt.x && m.apUt.x > m.ut.x)) ra.push('thứ tự gốc ngón trỏ – áp út – út sai');
+  return ra;
+}
+
+/** Moc tay co dung dang ban tay chup thang khong (`mocNgoaiKhoang` rong). */
 export function mocHopLe(m: MocTay): boolean {
-  const trong = (v: number, a: number, b: number): boolean => v >= a && v <= b;
-  return trong(m.tro.x, 0.12, 0.45) && trong(m.tro.y, 0.85, 1.15) && trong(m.apUt.x, -0.38, -0.08) && trong(m.apUt.y, 0.75, 1.05)
-    && trong(m.ut.x, -0.62, -0.25) && trong(m.ut.y, 0.55, 0.98) && trong(m.caiGoc.x, 0.2, 0.62) && trong(m.caiGoc.y, -0.08, 0.45)
-    && trong(m.caiKhop.x, 0.35, 0.9) && trong(m.caiKhop.y, 0.2, 0.85) && m.tro.x > m.apUt.x && m.apUt.x > m.ut.x;
+  return mocNgoaiKhoang(m).length === 0;
 }
 
 const iX = (x: number): number => (x - KHUNG_ANH.x0) * KHUNG_ANH.px - 0.5;

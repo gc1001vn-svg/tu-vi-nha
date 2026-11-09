@@ -9,7 +9,7 @@ import napSimd from '@mediapipe/tasks-vision/vision_wasm_internal.js?url';
 import wasmSimd from '@mediapipe/tasks-vision/vision_wasm_internal.wasm?url';
 import napCu from '@mediapipe/tasks-vision/vision_wasm_nosimd_internal.js?url';
 import wasmCu from '@mediapipe/tasks-vision/vision_wasm_nosimd_internal.wasm?url';
-import { CAO, KHUNG_ANH, RONG, doChiTay, mocHopLe, type Diem, type KetQuaDo, type MocTay } from '../../loi/chiTayDo.ts';
+import { CAO, KHUNG_ANH, RONG, doChiTay, mocNgoaiKhoang, type Diem, type KetQuaDo, type MocTay } from '../../loi/chiTayDo.ts';
 
 /** Doi mo hinh thi doi ten file (service worker giu ban cu theo ten). */
 const MO_HINH = `${import.meta.env.BASE_URL}mediapipe/hand_landmarker_f16_v1.task`;
@@ -27,6 +27,8 @@ export type KetQuaTay = KetQuaDo & {
   readonly tay: { readonly nhan: string; readonly diem: number; readonly chieu: 'trai' | 'phai'; readonly gioi: 'nam' | 'nu' };
   /** Loi nhac khong chan (vd anh la tay phai trong khi xem tay trai). */
   readonly nhac?: string;
+  /** Co khi da do BO QUA buoc chan (nut "Van do thu"): buoc nao le ra chan — giao dien canh bao, khong dien o. */
+  readonly boQua?: string;
 };
 
 function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContext2D] {
@@ -44,9 +46,15 @@ function canvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingContex
  */
 export class LoiCoAnh extends Error {
   readonly anh: string;
-  constructor(thu: string, anh: string) {
+  /** Dong "chi tiet de bao loi" (moc nao lech, bao nhieu) — anh 09/11: anh thang tren mat ban van bi chan, chua biet vi sao. */
+  readonly chiTiet: string | undefined;
+  /** Chan mem (chup cheo, mu tay): nguoi xem duoc bam "Van do thu" (`doAnhTay(…, true)`). */
+  readonly doThu: boolean;
+  constructor(thu: string, anh: string, chiTiet?: string, doThu = false) {
     super(thu);
     this.anh = anh;
+    this.chiTiet = chiTiet;
+    this.doThu = doThu;
   }
 }
 
@@ -57,7 +65,8 @@ function timTay(hl: HandLandmarker, nho: HTMLCanvasElement): { moc: { x: number;
   return { moc: r.landmarks, nhan: r.handedness[0]?.[0]?.categoryName ?? '', diem: r.handedness[0]?.[0]?.score ?? 0 };
 }
 
-export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 'nam'): Promise<KetQuaTay> {
+/** `boQuaChan`: do ca khi buoc chan mem (chup cheo, mu tay) le ra chan — ket qua mang `boQua` (nut "Van do thu", ke hoach 09/11). */
+export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 'nam', boQuaChan = false): Promise<KetQuaTay> {
   const url = URL.createObjectURL(f);
   const goc = new Image();
   goc.src = url;
@@ -72,7 +81,8 @@ export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 
   const w = Math.round(goc.naturalWidth * ty), h = Math.round(goc.naturalHeight * ty);
   const [nho, gNho] = canvas(w, h), [chuan, gChuan] = canvas(RONG, CAO);
   gNho.drawImage(goc, 0, 0, w, h);
-  const chan = (thu: string): LoiCoAnh => new LoiCoAnh(thu, nho.toDataURL('image/jpeg', 0.85));
+  const chan = (thu: string, chiTiet?: string, doThu = false): LoiCoAnh => new LoiCoAnh(thu, nho.toDataURL('image/jpeg', 0.85), chiTiet, doThu);
+  const boQua: string[] = [];
   const bd = performance.now();
   let hl: HandLandmarker | undefined;
   try {
@@ -95,8 +105,14 @@ export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 
     // tay) → nguoc nhau la mu ban tay.
     const tich = (p(5).x - o.x) * (p(17).y - o.y) - (p(5).y - o.y) * (p(17).x - o.x), chieu = tich < 0 ? 'phai' : 'trai';
     const tayMp = r.nhan === 'Left' ? 'trai' : r.nhan === 'Right' ? 'phai' : null;
-    if (tayMp !== null && r.diem >= 0.6 && tayMp !== chieu) throw chan('Ảnh có vẻ là mu bàn tay — chụp lòng bàn tay (mặt có chỉ tay). Nếu đúng là lòng bàn tay thì có thể do chụp '
-      + 'chéo: đặt tay ngửa trên mặt bàn, cầm máy ngay phía trên.');
+    if (tayMp !== null && r.diem >= 0.6 && tayMp !== chieu) {
+      if (!boQuaChan) {
+        throw chan('Ảnh có vẻ là mu bàn tay — chụp lòng bàn tay (mặt có chỉ tay). Nếu đúng là lòng bàn tay thì có thể do chụp '
+          + 'chéo: đặt tay ngửa trên mặt bàn, cầm máy ngay phía trên.', `máy đoán tay ${tayMp === 'trai' ? 'trái' : 'phải'} `
+          + `${r.diem.toFixed(2).replace('.', ',')}, dáng mốc là tay ${chieu === 'trai' ? 'trái' : 'phải'}`, true);
+      }
+      boQua.push('có thể là mu bàn tay');
+    }
     const yv = { x: (p(9).x - o.x) / L, y: (p(9).y - o.y) / L };
     let xv = { x: -yv.y, y: yv.x };
     if ((p(2).x - o.x) * xv.x + (p(2).y - o.y) * xv.y < 0) xv = { x: -xv.x, y: -xv.y };
@@ -114,8 +130,14 @@ export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 
     for (let k = 0; k < xam.length; k++) xam[k] = (0.299 * (d[4 * k] ?? 0) + 0.587 * (d[4 * k + 1] ?? 0) + 0.114 * (d[4 * k + 2] ?? 0)) / 255;
     const mocChuan = { co: veChuan(p(0)), caiGoc: veChuan(p(1)), caiKhop: veChuan(p(2)), tro: veChuan(p(5)), giua: veChuan(p(9)),
       apUt: veChuan(p(13)), ut: veChuan(p(17)) };
-    if (!mocHopLe(mocChuan)) throw chan('Bàn tay chụp chéo (máy không song song lòng tay) hoặc ngón co — máy chưa dò được. Chụp lại: đặt bàn tay '
-      + 'ngửa trên mặt bàn, xoè đều các ngón, cầm máy ngay phía trên, song song mặt bàn.');
+    const lech = mocNgoaiKhoang(mocChuan);
+    if (lech.length > 0) {
+      if (!boQuaChan) {
+        throw chan('Bàn tay chụp chéo (máy không song song lòng tay) hoặc ngón co — máy chưa dò được. Chụp lại: đặt bàn tay '
+          + 'ngửa trên mặt bàn, xoè đều các ngón, cầm máy ngay phía trên, song song mặt bàn.', lech.join('; '), true);
+      }
+      boQua.push('dáng bàn tay lệch thường');
+    }
     const kq = doChiTay(xam, mocChuan), canXem = gioi === 'nam' ? 'trai' : 'phai';
     gNho.lineWidth = Math.max(3, L * 0.012);
     gNho.lineCap = 'round';
@@ -130,6 +152,7 @@ export async function doAnhTay(f: File, khiDo: () => void, gioi: 'nam' | 'nu' = 
     }
     return { ...kq, anh: nho.toDataURL('image/jpeg', 0.85), taiMs, doMs: performance.now() - bd - taiMs, vetAnh, co: [w, h], L,
       khungAnh: { o, xv, yv }, mocChuan, tay: { nhan: r.nhan, diem: r.diem, chieu, gioi },
+      ...(boQua.length === 0 ? {} : { boQua: boQua.join(', ') }),
       ...(chieu === canXem ? {} : { nhac: `Ảnh là tay ${chieu === 'trai' ? 'trái' : 'phải'}, app xem tay ${canXem === 'trai' ? 'trái' : 'phải'} `
         + `(nam tả nữ hữu) — máy vẫn dò, nhưng nên chụp tay ${canXem === 'trai' ? 'trái' : 'phải'}.` }) };
   } finally {

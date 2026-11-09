@@ -964,6 +964,17 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   chụp chéo dò đúng phải giúp chụp thẳng từ đầu (camera trong app + thước thăng bằng) — máy ảo không đo được, phải dựng cách đo trên
   iPhone trước (luật "chưa đo được thì không sửa").
 
+## 48. Ảnh thẳng vẫn bị chặn: dòng chi tiết + nút "Vẫn dò thử" (kế hoạch 09/11 `2026-11-09-anh-thang-van-bi-chan.md`; anh gật A)
+- **Anh báo 09/11**: chụp theo lời nhắc mới (tay ngửa trên mặt bàn, máy ngay phía trên) vẫn bị chặn → lỗi không chỉ do chụp chéo.
+  Claude thử giả thuyết "lòng tay đầy khung, cổ tay ra ngoài ảnh": cắt 7 ảnh mẫu, mép dưới từ 0,3 L dưới tới 0,1 L trên cổ tay →
+  nhận 28/28, giả thuyết sai. Máy ảo không có ảnh tay anh → chưa biết mốc nào lệch.
+- **Đổi**: chặn mềm (chụp chéo / mốc lệch dáng, mu bàn tay) thêm dòng "Chi tiết để báo lỗi" — mốc nào lệch, giá trị, khoảng cần
+  (`mocNgoaiKhoang`, lõi; vd "gốc ngón út ngang -0,74 (cần -0,62–-0,25)"), hoặc "máy đoán tay trái 0,98, dáng mốc là tay phải" — và
+  nút "Vẫn dò thử (bỏ qua bước chặn)": dò, vẽ đường, cảnh báo đỏ "đường có thể lệch", **không điền ô**. Chặn cứng (không thấy tay,
+  tay nhỏ, hai tay) giữ nguyên. Khoảng mốc chưa đổi: đợi số thật từ ảnh anh rồi chỉnh đúng mốc lệch.
+- **Đo**: vòng thử giao diện (`thu-khoi-chi-tay.mjs --do-thu`): ảnh nghiêng 45° và ảnh bị nhận nhầm mu tay → hiện ảnh + dòng chi tiết
+  + nút; bấm nút → có đường, cảnh báo, ô không đổi. Bộ đo cũ: không khác một dòng. Thước `mocNgoaiKhoang` thêm 1 ca (9/9).
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|

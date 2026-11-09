@@ -117,28 +117,43 @@ export function veChiTay(gioiTinh: GioiTinh): Node[] {
   const chonAnh = el('input', { type: 'file', accept: 'image/*', hidden: '' });
   const nutAnh = el('button', { type: 'button', class: 'chinh' }, 'Chụp hoặc chọn ảnh lòng bàn tay — máy tự dò');
   nutAnh.addEventListener('click', () => { chonAnh.click(); });
+  /** Do anh `f`; `boQua`: nut "Van do thu" — do ca khi buoc chan mem (chup cheo, mu tay) le ra chan, khong dien o (ke hoach
+   * `2026-11-09-anh-thang-van-bi-chan.md`: anh thang tren mat ban cua anh van bi chan, chua biet moc nao). */
+  const chay = (f: File, boQua: boolean): void => {
+    nutAnh.disabled = true;
+    anhKet.replaceChildren(el('p', { class: 'ghi-chu' }, 'Đang tải thư viện tìm bàn tay (lần đầu khoảng 21 MB)…'));
+    import('./chiTayMp.ts')
+      .then((m) => m.doAnhTay(f, () => { anhKet.replaceChildren(el('p', { class: 'ghi-chu' }, 'Đang dò…')); }, gioiTinh, boQua))
+      .then((k) => {
+        anhKet.replaceChildren(el('img', { class: 'anh-do', src: k.anh, alt: 'Ảnh tay, các đường máy dò được tô màu theo hình mẫu' }),
+          ...(k.nhac === undefined ? [] : [el('p', { class: 'canh-bao' }, k.nhac)]),
+          ...(k.boQua === undefined ? [] : [el('p', { class: 'loi' }, `Đã dò bỏ qua bước chặn (${k.boQua}): đường có thể lệch — soi kỹ `
+            + 'từng đường trên ảnh. Máy không điền ô, anh tự chọn theo hình mẫu.')]),
+          el('p', { class: 'canh-bao' }, DO_SAI));
+        if (k.boQua === undefined) datKhung(k.khung);
+      }, (e: unknown) => {
+        // Loi sau khi da doc duoc anh (`LoiCoAnh` trong chiTayMp.ts — khong import tinh de khoi keo MediaPipe vao goi chinh): van hien
+        // anh de nguoi xem soi, tu chon o (anh bao 08/11); chan mem thi them dong chi tiet + nut "Van do thu" (09/11).
+        const loi = e instanceof Error ? e : new Error(String(e));
+        const anh = 'anh' in loi && typeof loi.anh === 'string' ? loi.anh : undefined;
+        const chiTiet = 'chiTiet' in loi && typeof loi.chiTiet === 'string' ? loi.chiTiet : undefined;
+        const nutThu = 'doThu' in loi && loi.doThu === true ? el('button', { type: 'button' }, 'Vẫn dò thử (bỏ qua bước chặn)') : null;
+        nutThu?.addEventListener('click', () => { chay(f, true); });
+        anhKet.replaceChildren(...(anh === undefined ? [] : [el('img', { class: 'anh-do', src: anh, alt: 'Ảnh vừa chụp — máy chưa dò được, chưa vẽ đường' })]),
+          el('p', { class: 'loi' }, loi.message),
+          ...(chiTiet === undefined ? [] : [el('p', { class: 'ghi-chu' }, `Chi tiết để báo lỗi: ${chiTiet}.`)]),
+          ...(nutThu === null ? [] : [nutThu]),
+          ...(anh === undefined ? [] : [el('p', { class: 'ghi-chu' }, 'Máy chưa dò được ảnh này nên chưa vẽ đường nào, chưa điền ô. Anh vẫn '
+            + 'soi ảnh để tự chọn từng ô theo hình mẫu bên dưới, hoặc chụp lại theo lời nhắc'
+            + (nutThu === null ? '.' : ', hoặc bấm "Vẫn dò thử" (máy vẽ đường, không điền ô).'))]));
+      })
+      .finally(() => { nutAnh.disabled = false; });
+  };
   chonAnh.addEventListener('change', () => {
     const f = chonAnh.files?.[0];
     chonAnh.value = ''; // chon lai dung anh cu van chay
     if (f === undefined) return;
-    nutAnh.disabled = true;
-    anhKet.replaceChildren(el('p', { class: 'ghi-chu' }, 'Đang tải thư viện tìm bàn tay (lần đầu khoảng 21 MB)…'));
-    import('./chiTayMp.ts')
-      .then((m) => m.doAnhTay(f, () => { anhKet.replaceChildren(el('p', { class: 'ghi-chu' }, 'Đang dò…')); }, gioiTinh))
-      .then((k) => {
-        anhKet.replaceChildren(el('img', { class: 'anh-do', src: k.anh, alt: 'Ảnh tay, các đường máy dò được tô màu theo hình mẫu' }),
-          ...(k.nhac === undefined ? [] : [el('p', { class: 'canh-bao' }, k.nhac)]), el('p', { class: 'canh-bao' }, DO_SAI));
-        datKhung(k.khung);
-      }, (e: unknown) => {
-        // Loi sau khi da doc duoc anh (`LoiCoAnh` trong chiTayMp.ts — khong import tinh de khoi keo MediaPipe vao goi chinh): van hien
-        // anh de nguoi xem soi, tu chon o (anh bao 08/11: bi chan thi chi thay chu, khong xem duoc anh).
-        const anh = e instanceof Error && 'anh' in e && typeof e.anh === 'string' ? e.anh : undefined;
-        anhKet.replaceChildren(...(anh === undefined ? [] : [el('img', { class: 'anh-do', src: anh, alt: 'Ảnh vừa chụp — máy chưa dò được, chưa vẽ đường' })]),
-          el('p', { class: 'loi' }, e instanceof Error ? e.message : String(e)),
-          ...(anh === undefined ? [] : [el('p', { class: 'ghi-chu' }, 'Máy chưa dò được ảnh này nên chưa vẽ đường nào, chưa điền ô. Anh vẫn '
-            + 'soi ảnh để tự chọn từng ô theo hình mẫu bên dưới, hoặc chụp lại theo lời nhắc.')]));
-      })
-      .finally(() => { nutAnh.disabled = false; });
+    chay(f, false);
   });
   const hinh = el('img', { class: 'hinh', alt: 'Hình mẫu: bốn đường chính trên lòng bàn tay',
     src: `data:image/svg+xml,${encodeURIComponent(HINH)}`, ...(gioiTinh === 'nam' ? { style: 'transform: scaleX(-1)' } : {}) });

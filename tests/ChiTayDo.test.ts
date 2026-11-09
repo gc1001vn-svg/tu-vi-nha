@@ -8,7 +8,7 @@
  * qua nep nhanh sang dau duong tinh → dung o cho thap nhat; duong tri cong len that, duong tinh rieng → giu duoi, o dai de trong.
  * Anh that do o `scripts/doi-chieu/do-chi-tay-dap-an.mjs`.
  */
-import { CAO, KHUNG_ANH, RONG, doChiTay, type Diem, type MocTay } from '../src/loi/chiTayDo.ts';
+import { CAO, KHUNG_ANH, RONG, doChiTay, mocNgoaiKhoang, type Diem, type MocTay } from '../src/loi/chiTayDo.ts';
 
 const MOC: MocTay = { co: { x: 0, y: 0 }, caiGoc: { x: 0.28, y: 0.18 }, caiKhop: { x: 0.5, y: 0.4 }, tro: { x: 0.3, y: 0.95 },
   giua: { x: 0, y: 1 }, apUt: { x: -0.2, y: 0.95 }, ut: { x: -0.38, y: 0.85 } };
@@ -127,5 +127,12 @@ describe('may tu do chi tay tren anh tong hop', () => {
     const { khung: k, vet } = doChiTay(anh([TINH, tri, DOI]), MOC);
     expect([bam('tri', vet.head, tri), bam('tinh', vet.heart, TINH)]).toEqual([['tri', true, true], ['tinh', true, true]]);
     expect(k.duong.head.length).toBeNull();
+  });
+
+  test('moc ngoai dang thuong → bao dung moc lech, gia tri, khoang can (dong "chi tiet de bao loi" 09/11); moc dung dang → rong', () => {
+    expect(mocNgoaiKhoang(MOC)).toEqual([]);
+    expect(mocNgoaiKhoang({ ...MOC, caiKhop: { x: 0.31, y: 0.4 } })).toEqual(['khớp ngón cái ngang 0,31 (cần 0,35–0,90)']);
+    expect(mocNgoaiKhoang({ ...MOC, ut: { x: -0.1, y: 0.85 } }))
+      .toEqual(['gốc ngón út ngang -0,10 (cần -0,62–-0,25)', 'thứ tự gốc ngón trỏ – áp út – út sai']);
   });
 });
