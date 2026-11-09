@@ -720,6 +720,7 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_CHI_TAY.md`** (khung, máy dò, AI, nguyên văn: mục 27). Tóm: thêm Tây cổ (Indagine),
   Desbarrolles, Saint-Germain, Nhật – Hàn (chỉ tay ngang); chỉ tay ngang không chấm điểm; sự nghiệp từ đường đời "gắn gia đình"; kết
   thuận ≥ 1,5, cần tự bồi đắp ≤ −2,5; 7 đoạn lời; màn hình bỏ mức tin, "từng sách nói gì" (AI vẫn nhận).
+- **09/11 viết lại** (mục 50): câu ghép theo từng bàn tay, mỗi câu ghi sách; kết = mảng mạnh nhất / cần giữ nhất; bỏ ngưỡng trên.
 
 ## 35. Luận quẻ Kinh Dịch — tổng hợp nhiều nhà chú giải, chốt một lời (kế hoạch 03/11; `src/loi/kinhDichLuan*.ts`)
 - Cách chốt, nguồn, chỗ vênh, số đo: **`docs/LUAN_KINH_DICH.md`** (nguyên văn, luật đọc: mục 18). Tóm: chấm chữ cát hung trong nguyên văn
@@ -990,6 +991,28 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
 - **Đo**: bộ ảnh chụp sát nhận 3/28 → 24/28 (3 vẫn không thấy tay, 1 nhận nhầm mu tay); 2 ảnh có đáp án, ảnh chụp sát dò được 6 lần:
   3 đúng hết, 3 sai ≥ 1 đường → ảnh đủ bàn tay vẫn là chính. Bộ đo cũ: khác đúng 1 dòng (câu báo "không thấy rõ bàn tay"). Vòng
   thử giao diện: 0 ô chọn; ảnh tốt, ảnh chụp sát, "Vẫn dò thử" đều ra "Máy dò được" + lời giải. Thước: thêm ca `doan` (14/14 hai tệp).
+
+## 50. Lời giải chỉ tay viết lại: câu ghép theo từng bàn tay, mỗi câu ghi sách (kế hoạch 09/11 `2026-11-09-loi-giai-chi-tay-nguon.md`; anh gật "Gật, làm")
+- **Anh 09/11**: "Có diễn giải những diễn giải ko tốt xem lại các nguồn" — chỗ chưa tốt: "Chung chung. Một số cái tôi đọc ko thấy hợp
+  lý nên tra thêm nguồn"; cả lời giải app lẫn AI; hướng: đọc thêm sách, ghi rõ nguồn.
+- **Đọc sách** (archive.org, bản hết bản quyền; nguyên văn, trang: `docs/LUAN_CHI_TAY.md`): Cheiro *Language of the Hand* chương III–XI,
+  Benham *Laws of Scientific Hand Reading* phần II chương III, V–VII, X, Saint-Germain tr. 119–120, Cheiro *Palmistry for All* (chỉ tay
+  ngang); chữ Hán *Toàn Biên* đọc 28/10. *Ma Y Thần Tướng*: Wikisource chặn lượt tra, chưa đọc.
+- **Đổi** (`chiTayLuan*.ts`): mỗi câu một ý, cuối câu ghi sách — "(theo X)" sách nói đúng ý đó, "(ghép ý X)" sách nói từng phần, app
+  ghép theo lời dặn của chính sách (Cheiro tr. 73: dấu lặp ở đường khác thì chắc hơn; Benham tr. 400: tự nghĩ ra các tổ hợp). Câu ghép
+  hai ô trở lên: dáng × độ dài đường trí; đầu đường trí × điểm đầu đường sự nghiệp; độ dài × chỗ đứt đường tình; vòng đường đời × độ
+  dài đường tình… **Kết** mới: mảng mạnh nhất / cần giữ nhất (sức bền, đầu óc, tình cảm, công việc) kèm lý do — thay ba mức "thuận /
+  bình thường / cần tự bồi đắp" (chung chung, rõ / mờ trên ảnh nặng quá). **Rõ / mờ** chỉ dùng khi so các đường với nhau (Benham tr.
+  362), trong kết chỉ ±0,25. Bỏ câu chọi nhau (vd "hợp việc sáng tạo" cạnh "nên chọn việc làm bằng tay chân"), câu "Máy và ô tự
+  chọn…", mục "Ý nghĩa từng mục" (câu tóm từng ô — chung chung, chọi với lời giải). Đường sự nghiệp không có: theo Benham (bác lối cũ
+  "đời nhạt" mà Cheiro còn giữ).
+- **AI**: mục "Lời chốt của app" gửi cả lời giải (trước chỉ đoạn Tổng luận), lời dặn thêm: lấy làm ý chính, nói đúng bàn tay đó, giữ
+  tên sách. Dữ liệu ca xấu nhất 7.300 ký tự → trần thước 7.000 → **7.500** (ước như `vuaHanMuc`: ~4.500 token vào + 3.000 ra < 8.000 /
+  phút).
+- **Đo** (3.000 bàn tay giả, `tests/LuanChiTay.test.ts`; trước → sau): câu ghi sách 0 → 100 %; lời giải có cặp ý chọi nhau 78 % → 0;
+  hai tay trùng câu 21 % → 8,5 %; câu gặp ở > 30 % bàn tay 23 → 0; số câu khác nhau 70 → 315; câu dựa ≥ 2 ô mỗi lời giải ít nhất 1 →
+  6; lật rõ ↔ mờ cả ba đường đổi kết luận 68 % → 17 %. Bàn tay giả chia đều là thước gần đúng; "ghép ý" là app suy, không phải sách nói
+  đúng cặp đó.
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

@@ -351,7 +351,9 @@ export function duLieuChiTay(k: KhungChiTay, gioiTinh: GioiTinh, chuaChac: reado
       : `- ${tin(d.luat)} ${m.ten} · ${d.o} = ${d.luat.nhan}: ${d.luat.chot}${venh(d.luat)}`)))),
     muc('Nghĩa từng đường theo các nền', g.map((m) => `- ${m.ten}: ${m.y}`)),
     muc('Quy luật chung', QUY_LUAT_CHUNG.map((l) => `- ${tin(l)} ${l.chot}${venh(l)}`)),
-    muc('Lời chốt của app (Claude tổng hợp nhiều nước)', luanTay(k).slice(0, 1).flatMap((d) => d.loi.map((x) => `- ${x}`))),
+    // 09/11: ca loi giai (tru loi dan co dinh) — moi cau ghep rieng cho ban tay nay, ghi sach trong ngoac (truoc chi gui doan Tong luan).
+    muc('Lời chốt của app (ghép riêng cho bàn tay này, sách trong ngoặc)', luanTay(k)
+      .filter((d) => d.tieuDe !== 'Nhìn cho đúng').map((d) => `- ${d.tieuDe}: ${d.loi.join(' ')}`)),
   ].join('\n\n');
 }
 

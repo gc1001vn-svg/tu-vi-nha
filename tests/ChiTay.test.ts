@@ -68,7 +68,9 @@ describe('du lieu gui AI dien giai, du doan', () => {
     const t = duLieuChiTay(trong, 'nu');
     expect([t.match(/ = chưa chọn/g)?.length, t.includes(' · ')]).toEqual([16, false]);
     expect(d.includes('không có ảnh')).toBe(false); // 28/10: chu nay lam AI tuong la khong co du lieu
-    expect(Math.max(...[0, 1, 2].map((i) => duLieuChiTay(khungThu(i), 'nam').length))).toBeLessThan(7000);
+    // 09/11: muc "Lời chốt" gui ca loi giai (truoc chi Tong luan) → tran 7.000 → 7.500 ky tu (ca xau nhat: moi duong deu dut, chi tay
+    // ngang). Uoc nhu `vuaHanMuc` (2,2 ky tu / token + 200): 7.500 ky tu + loi dan, yeu cau ~2.000 → ~4.500 token vao + 3.000 ra < 8.000 / phut.
+    expect(Math.max(...[0, 1, 2].map((i) => duLieuChiTay(khungThu(i), 'nam').length))).toBeLessThan(7500);
   });
 
   test('yeu cau co cac muc du doan; loi dan biet mon chi tay; ten duong, go ngoai khung bi gach chan', () => {

@@ -5,7 +5,7 @@
  * lam bang tay di. sao ma co kien thuc de dien tay duoc" (ke hoach `2026-11-09-khong-nhan-tay-bo-tu-chon.md`).
  */
 import { CAC_DUONG, DOAN_CHUONG, GIAI, KHUNG, type KhungChiTay, type Luat } from '../../loi/chiTay.ts';
-import { luanTay, tungO } from '../../loi/chiTayLuan.ts';
+import { luanTay } from '../../loi/chiTayLuan.ts';
 import type { GioiTinh } from '../../loi/hoSo.ts';
 import { CHON, noiGonTuLuan } from '../../loi/noiGonMon.ts';
 import { THUAT_NGU_TAY } from '../../loi/thuatNgu.ts';
@@ -24,13 +24,6 @@ const HINH = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 250"><g f
 <path d="M100 238 L108 112" stroke="#a3c"/></g></svg>`;
 
 const MAU: readonly [string, string][] = [['#d33', 'đường tình'], ['#27c', 'đường trí'], ['#2a2', 'đường đời'], ['#a3c', 'đường sự nghiệp']];
-
-/** Cau tom tung muc may do (nhan chot, khong ke sach). */
-function veTungO(k: KhungChiTay): HTMLElement[] {
-  const t = tungO(k);
-  return t.length === 0 ? [] : [el('h3', {}, 'Ý nghĩa từng mục'),
-    el('ul', {}, ...t.map((x) => el('li', {}, el('b', {}, `${x.ten}: `), x.o.map((o) => o.y).join('; '), '.')))];
-}
 
 /** O (khoa "simian", "duong.o") ma ban chac (`khung`) de trong vi sat ranh nhung may van doan (`doan`) — "may chua chac". */
 function oChuaChac(khung: KhungChiTay, doan: KhungChiTay): string[] {
@@ -65,8 +58,8 @@ function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh, chuaChac: readonly string[
     hopNoiGon(ng.cau),
     el('h3', {}, 'Lời giải'),
     ...veLuan(luan, ng.dung),
-    ...veTungO(k),
-    el('p', { class: 'ghi-chu' }, 'Lời giải do Claude tổng hợp từ nhiều sách, nhiều nước rồi soạn lại, chốt lời; chỉ để tham khảo.'),
+    el('p', { class: 'ghi-chu' }, 'Lời giải do Claude soạn lại từ sách tướng tay ghi trong ngoặc cuối mỗi câu: "theo …" là sách nói đúng ý '
+      + 'đó, "ghép ý …" là sách nói từng phần, app ghép lại cho bàn tay này. Chỉ để tham khảo.'),
     // Nap thang phien.ts, khong qua `khoiAI`: file nap luoi nay nhap ai/index.ts thi Vite tach goi mo app thanh 4 file (do 28/10).
     khoiNap('AI diễn giải và dự đoán (Groq, miễn phí)', 'ai',
       () => import('../ai/phien.ts').then((m) => m.vePhien(`chiTay:${gioiTinh}:${JSON.stringify(k)}:${chuaChac.join(',')}`,

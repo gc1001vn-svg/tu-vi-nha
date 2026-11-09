@@ -34,5 +34,6 @@ export const YEU_CAU = {
     + 'Từng đường · Dự đoán (tính cách; công việc, tiền bạc; tình cảm, gia đình; sức khoẻ, sức bền; các giai đoạn đời) · Lưu ý. Dùng đúng '
     + 'các ô đã chọn trong mục "Bàn tay người xem" và luật tương ứng, không viết kiểu "nếu… thì…". Mỗi dòng "- " trong mục Dự đoán mở '
     + 'đầu bằng mức tin trong ngoặc vuông chép từ luật đã dùng; luật một nền hay vênh thì nói rõ là chưa chắc. Ô chưa chọn thì nói '
-    + 'chưa có. Không nêu đường, gò nào DỮ LIỆU không có.',
+    + 'chưa có. Không nêu đường, gò nào DỮ LIỆU không có. Mục "Lời chốt của app" đã ghép riêng cho bàn tay này: lấy làm ý chính, '
+    + 'nói theo đúng bàn tay đó (đừng nói chung chung), dùng ý nào thì giữ tên sách trong ngoặc của ý đó.',
 } as const;
