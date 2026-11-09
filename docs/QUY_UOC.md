@@ -957,8 +957,12 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   (ảnh tốt, nghiêng 45°, nhận nhầm mu tay, mu tay thật, không thấy tay) đều hiện ảnh. Bộ đo `do-chi-tay-dap-an.mjs`: mọi kết quả dò,
   mọi ô không đổi (chỉ lời báo mu tay dài thêm). Thử đơn vị không chạm được (thử chạy môi trường node, không có trang) → vòng thử
   giao diện chạy tay khi sửa phần này.
-- **Còn**: ảnh chụp chéo vừa (15–30°) không bị chặn nhưng có thể vẽ sai → phương án B (nắn phối cảnh theo mốc tay), việc kế, cần
-  kế hoạch riêng; chưa thử Safari thật (máy ảo chỉ có Chromium).
+- **Còn**: ảnh chụp chéo vừa (15–30°) không bị chặn nhưng có thể vẽ sai; chưa thử Safari thật (máy ảo chỉ có Chromium).
+- **Thử nắn ảnh chụp chéo 09/11 — dừng, chưa sửa mã** (kế hoạch `2026-11-09-nan-anh-chup-cheo.md`): mốc 3D MediaPipe không đoán được
+  độ nghiêng (ảnh thẳng ra 7–25°, nghiêng 30° có ảnh ra 3°); mốc 2D trên ảnh nghiêng 30° lệch so với vị trí thật: cổ tay 0,068 L, gốc
+  ngón cái 0,080 L (4 gốc ngón ~0,03 L, nhưng gần thẳng hàng nên không cho biết độ nghiêng) → nắn theo mốc sẽ nắn sai. Muốn ảnh
+  chụp chéo dò đúng phải giúp chụp thẳng từ đầu (camera trong app + thước thăng bằng) — máy ảo không đo được, phải dựng cách đo trên
+  iPhone trước (luật "chưa đo được thì không sửa").
 
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |

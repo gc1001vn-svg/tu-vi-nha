@@ -24,7 +24,7 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đo lại 06/11: lỗi (2) hết; (5) 09/11: app tự gắn ghi chú
   sửa khi AI dặn kiêng sai (mục 42).
 - **Xong lời giải dễ hiểu 14 môn** (QUY_UOC mục 43, 44; anh gật cả hai đợt 05/11).
-- **Xong máy dò chỉ tay** (mục 45–47). **Việc kế: nắn phối cảnh ảnh chụp chéo** (anh gật 08/11, cần kế hoạch); sau: đợt 9.
+- **Xong máy dò chỉ tay** (mục 45–47). Nắn ảnh chụp chéo: thử 09/11, dừng (mốc tay lệch — mục 47); chờ anh chọn; sau: đợt 9.
 
 ## 3. Cần anh
 
