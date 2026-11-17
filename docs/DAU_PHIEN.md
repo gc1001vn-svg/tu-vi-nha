@@ -55,5 +55,6 @@ Unihan + từ điển `hanviet.csv`; khác thì mục phải ghi `lyDo`). Chỉ 
 
 ## G. Cho anh xem
 
-Máy ảo **không mở được trang thật** (`github.io` và mọi hosting bị chặn). Đã đẩy `main` thì đưa link
+Môi trường Giang **mở được trang thật** (Chromium tới `gc1001vn-svg.github.io` ra 200, đo 17/11): đẩy `main`, chờ
+Pages xong rồi tự mở xem; môi trường khác chặn mọi hosting. Đã đẩy `main` thì vẫn đưa link
 https://gc1001vn-svg.github.io/tu-vi-nha/ — số phiên bản ở chân trang cho anh biết đang xem bản nào.
