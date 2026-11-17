@@ -19,9 +19,42 @@
 // Fail-open: doc loi hoac du lieu hong thi cho qua, khong lam treo phien.
 // Ly do: quyet-dinh/2026-09-05-chua-do-duoc-thi-khong-sua.md
 
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 import { bat, goc, thoat } from './hook_chung.mjs';
+
+/**
+ * Repo con viec chua len remote: file chua commit, hay commit chua nam tren nhanh remote nao.
+ * Tren cloud soi ca repo anh em cung thu muc cha: phien nhieu repo dung o thu muc cha, luoi
+ * "uncommitted changes" cua may ao chi soi thu muc dang dung nen bo sot (ra 17/11).
+ */
+function con_do(root) {
+  const ds = [root];
+  if (process.env.CLAUDE_CODE_REMOTE === 'true') {
+    const cha = dirname(resolve(root));
+    try {
+      for (const m of readdirSync(cha, { withFileTypes: true })) {
+        const d = join(cha, m.name);
+        if (m.isDirectory() && resolve(d) !== resolve(root) && existsSync(join(d, '.git'))) ds.push(d);
+      }
+    } catch { /* khong doc duoc thu muc cha: chi soi repo mo phien */ }
+  }
+  const ra = [];
+  for (const r of ds) {
+    const git = (...a) => execFileSync('git', a, { cwd: r, encoding: 'utf8', timeout: 3000, stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    try {
+      const ban = git('status', '--porcelain').split('\n').filter(Boolean).length;
+      // Khong co remote thi khong co cho de day: chi tinh file chua commit.
+      const chua = git('remote') ? Number(git('rev-list', '--count', 'HEAD', '--not', '--remotes')) || 0 : 0;
+      const phan = [];
+      if (ban) phan.push(`${ban} file chua commit`);
+      if (chua) phan.push(`${chua} commit chua day`);
+      if (phan.length) ra.push(`${r}: ${phan.join(' · ')}`);
+    } catch { /* khong phai repo git, git hong hay qua 3 giay: bo qua repo nay — hook khong duoc treo phien */ }
+  }
+  return ra;
+}
 
 const ID = 'dung:chan-bao-xong';
 
@@ -127,6 +160,17 @@ process.stdin.on('end', () => {
       loi: 'Cau tra loi noi "xong" nhung khong co dong "De xuat:". Xong mot viec thi '
         + 'phai noi buoc ke - viec gi, vi sao, ton bao lau. That su het viec thi ghi '
         + '"De xuat: khong co - <ly do>".',
+    });
+    return;
+  }
+
+  // Bao xong ma viec con nam trong may ao: phien sau clone lai tu remote, khong thay — "lam xong quen" (ra 17/11).
+  const treo = con_do(goc());
+  if (treo.length) {
+    thoat(2, {
+      loi: 'Cau tra loi noi "xong" nhung con viec chua len remote:\n  ' + treo.join('\n  ')
+        + '\nCommit va day het, hoac tra file ve nguyen trang, roi moi bao xong. '
+        + 'Co y de lai thi noi ro ly do trong cau tra loi.',
     });
     return;
   }

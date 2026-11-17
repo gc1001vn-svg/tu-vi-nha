@@ -29,6 +29,10 @@ process.on('unhandledRejection', () => process.exit(0));
 // phien. Can mot phien that re thi ha muc, khong phai go hook ra khoi settings.
 if (!bat(ID, ['thuong', 'chat'])) process.exit(0);
 
+// Phien nhieu repo (17/11): thu muc dang dung la CHA cac ban clone — moi duong tuong doi duoi day tro
+// vao cho khong co gi, hook in "repo CHUA co lenh do". Ve repo chua script nay roi moi soi.
+try { process.chdir(goc()); } catch { /* khong vao duoc: soi thu muc dang dung nhu cu */ }
+
 const chay = (c) => { try { return execSync(c, { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim(); } catch { return ''; } };
 const d = [];
 
@@ -88,9 +92,11 @@ if (existsSync(pSet)) {
 //
 // Khong chan giua phien (lam code truoc, ghi nhat ky sau la binh thuong). Bat o
 // DAU phien sau: commit code moi hon commit tai lieu thi phien truoc da quen.
-if (nhanh && existsSync('docs/NHAT_KY')) {
+// 17/11: repo chi co file tien do, khong co thu muc nhat ky (tu-vi-nha) truoc day bi bo qua.
+if (nhanh && (existsSync('docs/NHAT_KY') || existsSync('docs/TIEN_DO.md'))) {
   const ngay = (c) => chay(c).slice(0, 10);
-  const code = ngay(`git log -1 --format=%cd --date=short -- . ':(exclude)docs' ':(exclude).claude' 2>/dev/null`);
+  // Commit chi dong bo do nghe tu ghi-nho (`cai_dat.mjs` chep script) khong phai sua code cua repo: khong tinh (17/11).
+  const code = ngay(`git log -1 --format=%cd --date=short --invert-grep --grep='^chore: dong bo do nghe' -- . ':(exclude)docs' ':(exclude).claude' 2>/dev/null`);
   const tl = ngay(`git log -1 --format=%cd --date=short -- docs/NHAT_KY docs/TIEN_DO.md 2>/dev/null`);
   if (code && tl && code > tl) {
     d.push(`phien truoc sua code ${code} ma nhat ky/tien do dung o ${tl} — doc git log roi ghi bu`);
