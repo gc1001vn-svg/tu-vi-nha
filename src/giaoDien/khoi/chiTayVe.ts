@@ -70,9 +70,9 @@ function veKetQua(k: KhungChiTay, gioiTinh: GioiTinh, chuaChac: readonly string[
   return ra;
 }
 
-/** Nhac duoi anh may do — so do: QUY_UOC muc 27, 45–49. */
-const DO_SAI = 'Máy dò chấm thử trên 7 ảnh mạng (ít ảnh — chưa bảo đảm mọi bàn tay): 2 ảnh có đáp án thì cả 5 đường đánh dấu đều vẽ '
-  + 'đúng; chụp lại (xoay, xa gần, sáng tối) giữ ~9/10 kết quả. Soi ảnh: đường màu nào lệch khỏi nếp tay thì kết quả của đường đó kém tin '
+/** Nhac duoi anh may do — so do: QUY_UOC muc 27, 45–51. */
+const DO_SAI = 'Máy dò chấm thử trên 7 ảnh mạng và 1 ảnh chụp bằng iPhone (ít ảnh — chưa bảo đảm mọi bàn tay): 3 ảnh có đáp án thì cả 8 '
+  + 'đường đánh dấu đều vẽ đúng; chụp lại (xoay, xa gần, sáng tối) giữ ~9/10 kết quả. Soi ảnh: đường màu nào lệch khỏi nếp tay thì kết quả của đường đó kém tin '
   + '— chụp lại cho rõ, thẳng.';
 
 export function veChiTay(gioiTinh: GioiTinh): Node[] {

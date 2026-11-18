@@ -6,6 +6,7 @@
  * (vet khong vuot dau nep); vet tri gay khuc, khong co duong tinh → chi tay ngang de trong. Them mot ca giu (ma cu cung qua): nep nhan
  * cat ngang duong doi. Them 08/11 (ke hoach `2026-11-06-duoi-duong-tri.md`) hai ca duoi duong tri — ma 06/11 truot ca hai: vet tri vong
  * qua nep nhanh sang dau duong tinh → dung o cho thap nhat; duong tri cong len that, duong tinh rieng → giu duoi, o dai de trong.
+ * Them 18/11 (QUY_UOC muc 51) ba ca chung dau doi – tri dai — ma cu truot ca ba: tri, tinh bam sai; chi tay ngang gia; cat duoi duong doi.
  * Anh that do o `scripts/doi-chieu/do-chi-tay-dap-an.mjs`.
  */
 import { CAO, KHUNG_ANH, RONG, doChiTay, mocNgoaiKhoang, type Diem, type MocTay } from '../src/loi/chiTayDo.ts';
@@ -132,6 +133,32 @@ describe('may tu do chi tay tren anh tong hop', () => {
     const { khung: k, vet } = doChiTay(anh([TINH, tri, DOI]), MOC);
     expect([bam('tri', vet.head, tri), bam('tinh', vet.heart, TINH)]).toEqual([['tri', true, true], ['tinh', true, true]]);
     expect(k.duong.head.length).toBeNull();
+  });
+
+  // Them 18/11 (anh thu iPhone: duong doi va duong tri chung dau ~0,25 L) — ma cu truot ca ba.
+  /** Doan chung dau doi – tri dai 0,22 L (cung 100°–132° cua duong doi), roi duong tri rieng toi diem `cuoi`. */
+  const chungDau = (cuoi: Diem): Diem[] => [...cung(TAM_DOI, 100, 132, 0.4, 0.4), cuoi];
+
+  test('chung dau doi – tri dai, duong tinh thang toi mep ngon ut → tri bam tu dau, tinh bam; ma cu tri, tinh deu truot', () => {
+    const tri = chungDau({ x: -0.16, y: 0.53 }), tinh = [{ x: 0.16, y: 0.88 }, { x: -0.15, y: 0.82 }, { x: -0.46, y: 0.74 }];
+    const { doan: k, vet } = doChiTay(anh([tinh, tri, DOI], [0.25, 0.35, 0.25]), MOC);
+    expect([bam('tri', vet.head, tri), bam('tinh', vet.heart, tinh)]).toEqual([['tri', true, true], ['tinh', true, true]]);
+    expect([k.simian, k.duong.head.joined]).toEqual([false, true]);
+  });
+
+  test('duong tinh thap, thang toi mep ngon ut; tri chung dau roi doc → hai duong, khong phai chi tay ngang (ma cu: chi tay ngang)', () => {
+    const tri = chungDau({ x: -0.12, y: 0.52 }), tinh = [{ x: 0.25, y: 0.83 }, { x: -0.47, y: 0.72 }];
+    const { khung, doan, vet } = doChiTay(anh([tinh, tri, DOI]), MOC);
+    expect([khung.simian, doan.simian, doan.duong.heart.seen]).toEqual([false, false, 'clear']);
+    expect([bam('tri', vet.head, tri), bam('tinh', vet.heart, tinh)]).toEqual([['tri', true, true], ['tinh', true, true]]);
+  });
+
+  test('dau chung rat dam, duoi duong doi mo sau quang ho 8° → van "dai" (ma cu so voi trung binh, cat duoi → "vua")', () => {
+    const r = (g: number): number => 0.4 - (0.02 * (g - 100)) / 125, chung = cung(TAM_DOI, 100, 130, 0.4, r(130));
+    const nep = [TINH, chung, [chung[chung.length - 1] ?? DOI[0] ?? MOC.co, { x: -0.15, y: 0.5 }], cung(TAM_DOI, 100, 188, 0.4, r(188)),
+      cung(TAM_DOI, 196, 225, r(196), 0.38)];
+    const { doan: k, vet } = doChiTay(anh(nep, [0.25, 0.45, 0.2, 0.2, 0.12]), MOC);
+    expect([k.duong.life.length, bam('doi', vet.life, DOI)]).toEqual(['long', ['doi', true, true]]);
   });
 
   test('moc ngoai dang thuong → bao dung moc lech, gia tri, khoang can (dong "chi tiet de bao loi" 09/11); moc dung dang → rong', () => {
