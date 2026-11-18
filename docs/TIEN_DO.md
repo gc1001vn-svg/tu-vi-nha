@@ -4,7 +4,7 @@
 > Kế hoạch: `docs/ke-hoach/2026-10-14-ke-hoach-tong.md` · thư viện + số đo: `docs/NGUON_MO.md` ·
 > quy ước tính: `docs/QUY_UOC.md` · lệnh riêng repo: `docs/DAU_PHIEN.md`. Trần cỡ file: `.claude/doc_dau_phien.txt`.
 
-Cập nhật: 09/11/2026 — chỉ tay: lời giải viết lại, câu ghép theo từng bàn tay, ghi sách (QUY_UOC mục 50); chờ anh đọc (mục 3).
+Cập nhật: 18/11/2026 — chỉ tay chạy trên iPhone (anh quay màn hình); 3 chỗ nghi lỗi, chờ anh xác nhận (mục 3).
 Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn một commit (`git merge --squash`).
 
 ## 1. Đang ở đâu
@@ -24,11 +24,11 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
   Đo AI thật 05/11 (mục 42): tổng hợp 2/2, bịa 0, hỏi sâu 4/4, Kiều 2/2. Đo lại 06/11: lỗi (2) hết; (5) 09/11: app tự gắn ghi chú
   sửa khi AI dặn kiêng sai (mục 42).
 - **Xong lời giải dễ hiểu 14 môn** (QUY_UOC mục 43, 44; anh gật cả hai đợt 05/11).
-- **Chỉ tay** (mục 45–50): nhận ảnh chụp sát, bỏ ô tự chọn; lời giải viết lại từ sách gốc, ghi sách từng câu. Sau: đợt 9.
+- **Chỉ tay** (mục 45–50): sửa 3 chỗ ở mục 3 khi anh xác nhận. Sau: đợt 9.
 
 ## 3. Cần anh
 
-- **Chỉ tay**: đọc lời giải mới trên bàn tay mình, câu nào thấy vô lý thì chép lại cho em; còn bị chặn thì gõ dòng "Chi tiết để báo lỗi".
+- **Chỉ tay** (18/11 ảnh qua). Nghi lỗi: (1) đường đời vẽ ngắn, chạy vào giữa, không vòng gò ngón cái; (2) không vẽ đường tình mà vẫn luận nó; (3) máy đoán chỉ tay ngang (chưa chắc) vẫn luận đường tình riêng. Anh nhìn tay thật: đường đời dài hay ngắn; một đường ngang hay hai?
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 25 nhánh, kiểm 04/11 đều đã nằm
   trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em.
