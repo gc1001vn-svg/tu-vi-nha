@@ -389,8 +389,7 @@ export function doChiTay(xam: Float32Array, moc: MocTay): KetQuaDo {
     const roSu = tySu < 0.5 - 0.1 * k ? 'none' : tySu < 0.5 + 0.1 * k ? null : ro(rSu, dSu, 1 / px, 0.25);
     /** Co duong su nghiep chac (du manh, du dai) — xet duoc diem moc, dut, ke ca khi ro / mo con sat ranh. */
     const coSu = roSu === 'clear' || roSu === 'faint' || (roSu === null && tySu >= 0.6 && dSu !== null && (dSu[1] - dSu[0]) / px >= 0.32);
-    const eT = ngang === true ? eTri : eTinh, roT = ngang === true ? roTri : roTinh;
-    const tLen = eT === undefined ? 0 : (eT.x - moc.giua.x) / (moc.tro.x - moc.giua.x || NHO);
+    const tLen = eTinh === undefined ? 0 : (eTinh.x - moc.giua.x) / (moc.tro.x - moc.giua.x || NHO);
     const daiTri = cuoiTri === undefined || (duoiNgo && k > 0) ? null : ((): 'long' | 'medium' | 'short' | null => {
       const dai = moc.ut.x + 0.25 * (moc.apUt.x - moc.ut.x), ngan = (moc.giua.x + moc.apUt.x) / 2;
       if (Math.abs(cuoiTri.x - dai) < 0.04 * k || Math.abs(cuoiTri.x - ngan) < 0.04 * k) return null;
@@ -398,7 +397,7 @@ export function doChiTay(xam: Float32Array, moc: MocTay): KetQuaDo {
     })();
     const daiDoi = eDoi === undefined ? null : Math.abs(eDoi.y - 0.15) < 0.04 * k || Math.abs(eDoi.y - 0.45) < 0.04 * k ? null
       : eDoi.y <= 0.15 ? 'long' : eDoi.y >= 0.45 ? 'short' : 'medium';
-    const daiTinh = eT === undefined ? null : Math.abs(tLen - 0.75) < 0.1 * k || Math.abs(tLen - 0.25) < 0.1 * k ? null
+    const daiTinh = eTinh === undefined ? null : Math.abs(tLen - 0.75) < 0.1 * k || Math.abs(tLen - 0.25) < 0.1 * k ? null
       : tLen >= 0.75 ? 'long' : tLen >= 0.25 ? 'medium' : 'short';
     const dauSu = sSu === undefined || !coSu ? null : ((): 'life' | 'wrist' | 'middle' | null => {
       const kcDoi = Math.min(Infinity, ...vDoi.map((p) => Math.hypot(p.x - sSu.x, p.y - sSu.y)));
@@ -414,7 +413,9 @@ export function doChiTay(xam: Float32Array, moc: MocTay): KetQuaDo {
           shape: dauTri === undefined || cuoiTri === undefined ? null : bac(dauTri.y - cuoiTri.y, 0.15, 0.04 * k, 'straight', 'curved'),
           joined: dauTri === undefined || sDoi === undefined ? null : bac(Math.hypot(dauTri.x - sDoi.x, dauTri.y - sDoi.y), 0.1, 0.03 * k, true, false),
           broken: dut(dTri) },
-        heart: { seen: roT, length: daiTinh, broken: ngang === true ? dut(dTri) : dut(dTinh) },
+        // Chi tay ngang = khong co duong tinh rieng (Benham: coi nhu vang). Truoc 18/11 lay vet tri lam duong tinh: do dai do o dau ngon
+        // ut nen luon "ngan", loi giai luan mot duong tinh khong co (anh thu iPhone 18/11).
+        heart: ngang === true ? { seen: 'none', length: null, broken: null } : { seen: roTinh, length: daiTinh, broken: dut(dTinh) },
         fate: { seen: roSu, start: dauSu, broken: coSu ? dut(dSu) : null },
       },
     } };

@@ -73,8 +73,10 @@ describe('may tu do chi tay tren anh tong hop', () => {
 
   test('mot nep ngang suot ban tay, khong co duong tinh, tri rieng → chi tay ngang; khong ve duong su nghiep → khong co', () => {
     const ngang = [{ x: -0.45, y: 0.72 }, { x: 0, y: 0.7 }, { x: 0.42, y: 0.66 }];
-    const { khung: k } = doChiTay(anh([ngang, DOI]), MOC);
+    const { khung: k, doan } = doChiTay(anh([ngang, DOI]), MOC);
     expect([k.simian, k.duong.fate.seen]).toEqual([true, 'none']);
+    // Khong suy duong tinh tu vet tri (truoc 18/11: "ngan" vi do o dau ngon ut) → loi giai khong luan duong tinh rieng.
+    for (const x of [k, doan]) expect(x.duong.heart).toEqual({ seen: 'none', length: null, broken: null });
   });
 
   test('tinh mo, tri dam vong sat len phia ngon tro, nep gap khe ngon cai rat dam → tinh van o tren, tri van bam nep tri', () => {
