@@ -1014,6 +1014,32 @@ Nguồn (máy): `ansaotuvi` an Mệnh, Thân từ tháng + giờ (`DiaBan.cungCh
   6; lật rõ ↔ mờ cả ba đường đổi kết luận 68 % → 17 %. Bàn tay giả chia đều là thước gần đúng; "ghép ý" là app suy, không phải sách nói
   đúng cặp đó.
 
+## 51. Thử iPhone 18/11: đường đời – đường trí chung đầu dài → hết "không thấy đường trí", hết chỉ tay ngang giả, giữ đuôi đường đời (`src/loi/chiTayDo.ts`)
+- **Anh báo 18/11** (quay màn hình iPhone): đường đời vẽ ngắn, chạy vào giữa; không vẽ đường tình mà vẫn luận; máy đoán chỉ tay ngang
+  (chưa chắc). Anh nhìn tay thật: đường đời dài, vòng xuống cổ tay; hai đường ngang riêng; không thấy câu lời giải nào sai. Ảnh tay
+  trái anh gửi lại (chỉ ở thư mục tạm, không vào repo): máy cũ báo "không thấy đường trí", đường đời "vừa".
+- **Đáp án** (Claude đánh trên ảnh anh trước khi sửa, chỉ điểm chắc, file ngoài repo): đường trí 5 điểm, đường tình 8, đường đời 5. Đoạn
+  giữa đường đời — nếp sâu sát gò ngón cái (đứt giữa chừng) hay nếp dọc giữa lòng tay (liền) — không chắc, không đánh.
+- **Gốc lỗi**: hai đường chung đầu ~0,25 L (luật cũ chỉ tha 0,10 L, mục 45). Vết đời đi hết đoạn chung rồi theo đường trí thêm ~0,1 L mới
+  rẽ xuống; đường trí phải nằm trên vết đời nên bị chặn: mất hẳn ("không thấy"), hay trèo lên đường tình — thẳng, chạm mép ngón út →
+  "chỉ tay ngang", đường tình "không thấy" (đúng lỗi hôm quay màn hình; tái hiện trên ảnh anh khi chỉ tha đoạn chung). Đuôi đường đời:
+  đoạn chung đậm gấp 5–19 lần ngưỡng kéo trung bình lên → đảo đuôi mờ thật gần cổ tay bị cắt.
+- **Đổi**: (1) tha đoạn chung tới hết 5 điểm đầu tiên vết đời dốc hơn 45°; (2) bỏ đảo hai đầu khi yếu hơn 0,35 lần **trung vị** phần còn
+  lại (cũ: trung bình); (3) bước kiểm chỉ tay ngang — chỉ khi máy sắp hiện "Có" (vết trí rõ, thẳng, tới phía ngón út, cuối cao; đường tình
+  vắng): dưới vết trí ≥ 0,05 L (sau đoạn chung) còn nếp ngang mạnh ≥ 0,5 lần, chạy tới ít nhất dưới ngón giữa, dò lại có đường tình ở
+  trên → nếp dưới là đường trí. Vết gãy khúc ("Hand female 2/3", để trống từ 06/11) không đụng. (4) Chỉ tay ngang → đường tình "không
+  thấy" (cũ lấy vết trí làm đường tình, độ dài đo ở đầu ngón út → luôn "ngắn", lời giải luận một đường tình không có).
+- **Số đo 18/11, máy cũ → mới** (Chromium, bản dựng thật, 7 ảnh mạng + ảnh anh): đường theo đáp án đúng 7/8 → 8/8 (ảnh anh: đường trí
+  0/5 → 4/5; đường đời 4/5, đường tình 6/8 giữ); ảnh anh hiện: đường trí "không thấy" → rõ, vừa, dốc, dính đường đời; đường đời "vừa" →
+  "dài" (sát ranh, ghi "máy chưa chắc"); 5 bản nhiễu ảnh anh trùng 45/45 ô. 6/7 ảnh mạng không đổi ô nào; "Single transverse" (chỉ tay
+  ngang thật, giữ "Có"): đường tình → "không thấy" (đổi 4), ô sự nghiệp sát ranh "trống" → "mờ, từ giữa lòng tay" (không có đáp án).
+  Chụp lại trùng 94 % → 93 %; ô trống 34 % giữ; giữa các bàn tay khác nhau 60 % → 64 %; phán đuôi giữ qua bản nhiễu 93 % → 67 % — 4 lần
+  lệch đều ở ảnh anh (máy cũ "ngắn" SAI đủ 5 bản nên "giữ"; máy mới bản gốc sát ranh để trống, 4 bản nhiễu ra "vừa" đúng đáp án). Thước
+  tổng hợp thêm 3 ca (đầu chung dài; chỉ tay ngang giả; đuôi mờ sau đầu chung đậm) — mã cũ trượt cả 3.
+- **Còn yếu**: đoạn giữa đường đời ảnh anh vẫn theo nếp dọc giữa lòng tay (máy chấm mạnh hơn nếp sát gò ngón cái); đầu đường tình phía
+  ngón trỏ có gai ngắn chúi xuống đầu đường đời (có từ trước); vết trí gãy khúc bám đường tình (thử tổng hợp) vẫn sai, máy chỉ để trống ô
+  chỉ tay ngang; không có ảnh hôm quay màn hình — sửa theo ảnh anh gửi lại và ca tổng hợp; chưa thử Safari thật.
+
 ## Bảng tuỳ chọn (tên gợi ý trong mã)
 | Tuỳ chọn | Giá trị | Mặc định | Môn |
 |---|---|---|---|
