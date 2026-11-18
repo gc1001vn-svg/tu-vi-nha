@@ -25,8 +25,8 @@ Trang: https://gc1001vn-svg.github.io/tu-vi-nha/ · gộp `main` kiểu dồn m�
 
 ## 3. Cần anh
 
-- **Chỉ tay** (sửa 18/11): mở app, chụp lại tay trái như hôm quay màn hình → phải thấy đường trí (xanh dương), đường tình (đỏ) riêng, đường
-  đời (xanh lá) dài tới gần cổ tay, "Chỉ tay ngang: Không". Nhìn tay thật: đoạn giữa đường đời đi sát gò ngón cái hay ra giữa lòng tay?
+- **Chỉ tay** (sửa 18/11): chụp lại tay trái → phải có đường trí (xanh dương), đường tình (đỏ) riêng, đường đời (xanh lá) dài gần cổ
+  tay, "Chỉ tay ngang: Không"; còn vạch tím chéo giả (ảnh 16:21) thì gửi ảnh gốc. Tay thật: giữa đường đời sát gò ngón cái hay ra giữa?
 - Còn chờ: tướng mặt camera trước; so cung Mọc với astro-seek.
 - **Xoá nhánh GitHub** (anh dặn 20/10: xoá một lần sau cùng): **mọi nhánh trừ `main`** — 25 nhánh, kiểm 04/11 đều đã nằm
   trong `main`; nhánh cập nhật sau 04/11 thì để lại, hỏi em.

@@ -158,12 +158,12 @@ function quyHoach(buoc: number, lo: (b: number) => number, hi: (b: number) => nu
 /**
  * Doan nep: cac doan lien tuc tren nguong (cho phep ho ≤ `ho` buoc), lay doan tong nep lon nhat trong so doan bat dau truoc buoc
  * `batDauToiDa` (neo dau duong: duong tinh tu mep ngon ut, duong tri tu dau duong doi…). Dao (khuc lien tren nguong) o hai dau yeu hon
- * 0,35 lan TRUNG VI phan con lai thi bo — vet chay qua dau nep that, nhat vai diem van da vua qua nguong (thuoc tong hop 06/11: vet doi,
- * vet tinh vuot dau nep 0,08–0,11 L → o dai / ngan lech ve "dai"). Trung vi, khong lay trung binh: anh thu iPhone 18/11, vet doi co doan
- * chung dau voi duong tri dam gap 5–19 lan nguong keo trung binh len, cat mat duoi mo that gan co tay (o dai "vua", anh noi "dai").
- * Tra [dau, cuoi, ho lon nhat] hay null.
+ * 0,35 lan trung binh phan con lai thi bo — vet chay qua dau nep that, nhat vai diem van da vua qua nguong (thuoc tong hop 06/11: vet doi,
+ * vet tinh vuot dau nep 0,08–0,11 L → o dai / ngan lech ve "dai"). `trungVi` (chi duong doi): so voi TRUNG VI — anh thu iPhone 18/11, vet
+ * doi co doan chung dau voi duong tri dam gap 5–19 lan nguong keo trung binh len, cat mat duoi mo that gan co tay (o dai "vua", anh noi
+ * "dai"); dung cho ca bon duong thi duong su nghiep dai ra thanh vach gia (anh chup iPhone 18/11 16:21). Tra [dau, cuoi, ho lon nhat] / null.
  */
-function doanNep(r: readonly number[], nguong: number, ho: number, batDauToiDa = Infinity): [number, number, number] | null {
+function doanNep(r: readonly number[], nguong: number, ho: number, batDauToiDa = Infinity, trungVi = false): [number, number, number] | null {
   let tot: [number, number, number] | null = null, totTong = 0;
   for (let a = 0; a < r.length && a <= batDauToiDa; a++) {
     if ((r[a] ?? 0) < nguong) continue;
@@ -184,7 +184,8 @@ function doanNep(r: readonly number[], nguong: number, ho: number, batDauToiDa =
       for (const q of dao.slice(i, j + 1)) { t += q.t; n += q.c - q.d + 1; }
       return t / Math.max(1, n);
     };
-    const tv = (i: number, j: number): number => { // nep trung vi cac dao i..j
+    const tv = (i: number, j: number): number => { // nep trung vi (hay trung binh) cac dao i..j
+      if (!trungVi) return tb(i, j);
       const v = dao.slice(i, j + 1).flatMap((q) => r.slice(q.d, q.c + 1)).sort((x, y) => x - y);
       return v[Math.floor(v.length / 2)] ?? 0;
     };
@@ -259,7 +260,7 @@ export function doChiTay(xam: Float32Array, moc: MocTay): KetQuaDo {
   const doiK = quyHoach(GOC, () => 0, () => Math.round(0.5 * px), (b, k) => { const [i, j] = viTriDoi(b, k); return diemNep(i, j); },
     (d) => 0.6 * Math.abs(d), viTriDoi, (b, k) => { const [i, j] = viTriDoi(b, k); return huongO(i, j); });
   const rDoi = doiK.map((k, b) => { const [i, j] = viTriDoi(b, k); return nep(i, j); });
-  const dDoi = doanNep(rDoi, nguong, 12, 0.4 * GOC);
+  const dDoi = doanNep(rDoi, nguong, 12, 0.4 * GOC, true);
   const vDoi = vet(dDoi, (b) => diemDoi(b, doiK[b] ?? 0));
   const sDoi = vDoi[0];
   /** Trong vong duong doi (go ngon cai): ban kinh nho hon ban kinh duong doi o cung goc. */
