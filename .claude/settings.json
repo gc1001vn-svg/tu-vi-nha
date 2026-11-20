@@ -143,7 +143,11 @@
     "small-business@synced": false,
     "claude-code-setup@synced": false,
     "data@synced": false,
-    "pdf-viewer@synced": false
+    "pdf-viewer@synced": false,
+    "superpowers@synced": false,
+    "mattpocock-skills@synced": false,
+    "code-review@synced": false,
+    "task-observer@synced": false
   },
   "permissions": {
     "allow": [
